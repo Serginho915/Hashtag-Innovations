@@ -1,10 +1,13 @@
 import Image from "next/image";
 
 
-export default function Home() {
+export default async function Home({ params }: {
+  params: Promise<{ lang: string }>
+}) {
+  const { lang } = await params;
   return (
     <>
-    <h1>Test</h1>
+      
     </>
   );
 }

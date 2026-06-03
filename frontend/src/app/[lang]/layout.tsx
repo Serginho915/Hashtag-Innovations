@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { EB_Garamond, Manrope } from "next/font/google";
-import { i18n } from "../Lib/i18n";
 import { Language } from "@/Types/Language";
-
+import "@/Styles/globals.scss";
 
 const ebgaramond = EB_Garamond({
   variable: "--font-eb-garamond",
@@ -31,7 +30,11 @@ export default async function RootLayout({
   const currentLang = lang as Language;
   return (
     <html lang={lang} className={`${ebgaramond.variable} ${manrope.variable}`}>
-      <body>{children}</body>
+      <body>
+        <main className="main-container">
+          {children}
+        </main>
+      </body>
     </html>
   );
 }

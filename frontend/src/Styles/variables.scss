@@ -1,0 +1,16 @@
+// Breakpoints map
+$breakpoints: (
+  desktop: 1440px,
+  laptop: 1200px,
+  tablet: 768px,
+  mobile: 480px
+);
+
+// Global color variables (examples)
+$bg-color: #ffffff;
+$text-color: #535362;
+
+
+// Font variables
+$font-eb-garamond: 'EB Garamond', serif;
+$font-manrope: 'Manrope', sans-serif;
