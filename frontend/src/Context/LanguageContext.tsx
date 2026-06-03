@@ -29,8 +29,6 @@ export const LanguageProvider: React.FC<{ children: ReactNode; initialLang: Lang
 
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang);
-    
-    // Replace the first path segment if it's an existing locale
     const segments = pathname.split('/');
     if (segments[1] === 'en' || segments[1] === 'bg') {
       segments[1] = lang;
