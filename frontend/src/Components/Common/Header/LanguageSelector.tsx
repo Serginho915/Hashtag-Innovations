@@ -2,7 +2,7 @@
 
 import React from "react";
 import styles from "./Header.module.scss";
-import { useLanguage } from "../../../Context/LanguageContext";
+import { useLanguage } from "../../../Hooks/useLanguage";
 
 export const LanguageSelector = () => {
   const { language, setLanguage } = useLanguage();
