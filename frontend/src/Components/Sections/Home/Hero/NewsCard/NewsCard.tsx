@@ -1,13 +1,17 @@
 import React from "react";
-import styles from "./Hero.module.scss";
+import styles from "./NewsCard.module.scss";
+import { translations } from "./translations";
 
 interface NewsCardProps {
   title: string;
   excerpt: string;
   authorLabel: string;
+  lang: string;
 }
 
-export const NewsCard = ({ title, excerpt, authorLabel }: NewsCardProps) => {
+export const NewsCard = ({ title, excerpt, authorLabel, lang }: NewsCardProps) => {
+  const t = translations[lang] || translations.en;
+
   return (
     <div className={styles.newsCard}>
       <div className={styles.newsCardContent}>
@@ -19,7 +23,7 @@ export const NewsCard = ({ title, excerpt, authorLabel }: NewsCardProps) => {
             <div className={styles.authorAvatar}></div>
           </div>
           <button className={styles.readButton}>
-            <span className={styles.readText}>Read</span>
+            <span className={styles.readText}>{t.read}</span>
             <div className={styles.readArrow}>
               <div className={styles.readArrowIcon}></div>
             </div>

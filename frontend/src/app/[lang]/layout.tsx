@@ -4,6 +4,7 @@ import { Language } from "@/Types/Language";
 import "@/Styles/globals.scss";
 import { Header } from "@/Components/Common/Header/Header";
 import { LanguageProvider } from "@/Context/LanguageContext";
+import { NavigationProvider } from "@/Context/NavigationContext";
 
 const ebgaramond = EB_Garamond({
   variable: "--font-eb-garamond",
@@ -34,10 +35,12 @@ export default async function RootLayout({
     <html lang={lang} className={`${ebgaramond.variable} ${manrope.variable}`}>
       <body>
         <LanguageProvider initialLang={currentLang}>
-          <Header />
-          <main className="main-container">
-            {children}
-          </main>
+          <NavigationProvider>
+            <Header />
+            <main className="main-container">
+              {children}
+            </main>
+          </NavigationProvider>
         </LanguageProvider>
       </body>
     </html>

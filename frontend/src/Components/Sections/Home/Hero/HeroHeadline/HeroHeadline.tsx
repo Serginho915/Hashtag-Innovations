@@ -1,16 +1,17 @@
 import React from "react";
-import styles from "./Hero.module.scss";
+import styles from "./HeroHeadline.module.scss";
+import { translations } from "./translations";
 
-const tabs = ["Events", "Mentors", "Experts", "Resources", "Insights"];
+export const HeroHeadline = ({ lang }: { lang: string }) => {
+  const t = translations[lang] || translations.bg;
 
-export const HeroHeadline = () => {
   return (
     <div className={styles.headlineWrapper}>
       <div className={styles.headline}>
-        Headline exmpl. Learn, Connect, Grow
+        {t.headline}
       </div>
       <div className={styles.tabs}>
-        {tabs.map((tab) => (
+        {t.tabs.map((tab: string) => (
           <div key={tab} className={styles.tab}>
             {tab}
           </div>

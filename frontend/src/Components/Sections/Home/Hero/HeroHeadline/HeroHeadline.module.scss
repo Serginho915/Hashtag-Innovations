@@ -1,0 +1,85 @@
+@use "../../../../../Styles/mixins" as *;
+
+/* ---------- Headline + Tabs ---------- */
+
+.headlineWrapper {
+  width: 1436px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+
+  @include laptop {
+    width: 100%;
+    align-self: stretch;
+  }
+}
+
+.headline {
+  text-align: center;
+  color: #363636;
+  font-size: 74px;
+  font-family: $font-eb-garamond;
+  font-weight: 700;
+  line-height: 74px;
+  word-wrap: break-word;
+
+  @include tablet {
+    font-size: 48px;
+    line-height: 52px;
+  }
+
+  @include mobile {
+    font-size: 36px;
+    line-height: 40px;
+  }
+}
+
+.navContainer {
+  align-self: stretch;
+}
+
+.tabs {
+  margin: 0;
+  list-style: none;
+  align-self: stretch;
+  padding: 12px 0;
+  border-bottom: 2px rgba(0, 0, 0, 0.10) solid;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 41px;
+
+  @include tablet {
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  @include mobile {
+    gap: 12px;
+  }
+}
+
+.tab {
+  text-align: center;
+  color: #363636;
+  font-size: 22px;
+  font-family: $font-manrope;
+  font-weight: 700;
+  word-wrap: break-word;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  @include tablet {
+    font-size: 18px;
+  }
+
+  @include mobile {
+    font-size: 16px;
+  }
+}

@@ -1,31 +1,31 @@
 import React from "react";
-import styles from "./Hero.module.scss";
+import styles from "./InsidePlatform.module.scss";
 import Image from "next/image";
+import { translations } from "./translations";
 
-export const InsidePlatform = () => {
+export const InsidePlatform = ({ lang }: { lang: string }) => {
+  const t = translations[lang] || translations.en;
+
   return (
     <div className={styles.insidePlatform}>
       {/* Section Label */}
       <div className={styles.sectionLabel}>
         <div className={styles.labelRow}>
           <div className={styles.dotBlue}></div>
-          <div className={styles.labelText}>Inside the platform</div>
+          <div className={styles.labelText}>{t.sectionLabel}</div>
         </div>
 
         {/* Description */}
         <div className={styles.descriptionBlock}>
           <div>
             <span className={styles.descriptionText}>
-              Hashtag Innovations is a modern platform designed for{" "}
+              {t.desc1}
             </span>
             <span className={styles.descriptionBold}>
-              business leaders, entrepreneurs, founders, and ambitious
-              professionals
+              {t.descBold}
             </span>
             <span className={styles.descriptionText}>
-              {" "}
-              seeking expert knowledge, strategic insights, and meaningful
-              industry connections.
+              {t.desc2}
             </span>
           </div>
 
@@ -55,7 +55,7 @@ export const InsidePlatform = () => {
               />
             </div>
             <div className={styles.trustedText}>
-              Trusted by 3,000+ ambitious professionals in Bulgaria
+              {t.trusted}
             </div>
           </div>
         </div>
@@ -67,7 +67,7 @@ export const InsidePlatform = () => {
           <div className={styles.slideImageWrapper}>
             <Image
               src="https://placehold.co/206x201"
-              alt="Feature slide"
+              alt={t.slideAlt}
               width={206}
               height={201}
               className={styles.slideImage}
@@ -77,7 +77,7 @@ export const InsidePlatform = () => {
             <div className={styles.slideTextBlock}>
               <div className={styles.slideNumber}>01/</div>
               <div className={styles.slideTitle}>
-                Explore upcoming business events.
+                {t.slideTitle}
               </div>
             </div>
           </div>

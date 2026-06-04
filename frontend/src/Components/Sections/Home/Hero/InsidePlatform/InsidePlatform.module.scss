@@ -1,0 +1,266 @@
+@use "../../../../../Styles/mixins" as *;
+
+/* ---------- Left Column: Inside the Platform ---------- */
+
+.insidePlatform {
+  flex: 1 1 0;
+  max-width: 493px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+
+  @include laptop {
+    max-width: 496px;
+  }
+
+  @include tablet {
+    max-width: 100%;
+  }
+}
+
+.sectionLabel {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.labelRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+}
+
+.dotBlue {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: #0F0FFF;
+}
+
+.labelText {
+  color: black;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+.descriptionBlock {
+  align-self: stretch;
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.descriptionText {
+  color: #363636;
+  font-size: 20px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  line-height: 28px;
+  word-wrap: break-word;
+}
+
+.descriptionBold {
+  color: #363636;
+  font-size: 24px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 28px;
+  word-wrap: break-word;
+}
+
+.trustedRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatarGroup {
+  height: 32px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  position: relative;
+  object-fit: cover;
+}
+
+.trustedText {
+  flex: 1 1 0;
+  padding: 0 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #5C5C70;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+/* --- Carousel Slide --- */
+
+.carouselWrapper {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.carouselSlide {
+  align-self: stretch;
+  height: 201px;
+  outline: 1px #C0C0D2 solid;
+  outline-offset: -1px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+
+  @include laptop {
+    height: 184px;
+    gap: 8px;
+  }
+}
+
+.slideImageWrapper {
+  overflow: hidden;
+  border-radius: 4px;
+  border-left: 1px black solid;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+
+  @include laptop {
+    border-radius: 3.49px;
+    border-left: 0.87px black solid;
+    align-self: stretch;
+    gap: 14px;
+  }
+}
+
+.slideImage {
+  width: 206px;
+  height: 201px;
+  object-fit: cover;
+  box-shadow:
+    0px 10.57px 10.57px -5.29px rgba(0, 0, 0, 0.04),
+    0px 21.14px 26.43px -5.29px rgba(0, 0, 0, 0.10);
+
+  @include laptop {
+    width: 180px;
+    height: 100%;
+  }
+}
+
+.slideContent {
+  flex: 1 1 0;
+  align-self: stretch;
+  padding: 8px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+
+  @include laptop {
+    padding: 16px 8px;
+  }
+}
+
+.slideTextBlock {
+  flex: 1 1 0;
+  padding: 8px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 16px;
+
+  @include laptop {
+    padding: 0;
+    gap: 8px;
+  }
+}
+
+.slideNumber {
+  color: #0F0FFF;
+  font-size: 24px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 28px;
+  word-wrap: break-word;
+}
+
+.slideTitle {
+  align-self: stretch;
+  color: #1F1F1F;
+  font-size: 22px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 26px;
+  word-wrap: break-word;
+
+  @include laptop {
+    font-size: 20px;
+    line-height: 24px;
+  }
+}
+
+/* --- Navigation Arrows --- */
+
+.arrowsRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.arrowsGroup {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+}
+
+.arrowButton {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}

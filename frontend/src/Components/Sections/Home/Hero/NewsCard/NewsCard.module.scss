@@ -1,0 +1,127 @@
+@use "../../../../../Styles/mixins" as *;
+
+/* --- Single News Card --- */
+
+.newsCard {
+  align-self: stretch;
+  overflow: hidden;
+  border-left: 3px #C0C0D2 solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.newsCardContent {
+  align-self: stretch;
+  padding-left: 16px;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.newsCardTitle {
+  align-self: stretch;
+  padding-right: 16px;
+  color: black;
+  font-size: 20px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+.newsCardExcerpt {
+  align-self: stretch;
+  color: #535362;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  line-height: 20px;
+  word-wrap: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.newsCardFooter {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.newsCardAuthor {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.newsCardAuthorLabel {
+  color: #5C5C70;
+  font-size: 12px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+.authorAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: #141414;
+}
+
+/* --- Read Button --- */
+
+.readButton {
+  padding-left: 12px;
+  background: white;
+  border-radius: 9999px;
+  outline: 2px #0F0FFF solid;
+  outline-offset: -2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.readText {
+  text-align: center;
+  color: #0F0FFF;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+.readArrow {
+  width: 32px;
+  height: 32px;
+  padding: 10px;
+  overflow: hidden;
+  border-radius: 44px;
+  outline: 2px #0F0FFF solid;
+  outline-offset: -2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.readArrowIcon {
+  flex: 1 1 0;
+  align-self: stretch;
+  background: #0F0FFF;
+}

@@ -1,0 +1,164 @@
+@use "../../../../../Styles/mixins" as *;
+
+/* ---------- Right Column: Latest News ---------- */
+
+.latestNews {
+  flex: 1 1 0;
+  align-self: stretch;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+
+  @include laptop {
+    max-width: 496px;
+    min-width: 393px;
+    overflow: hidden;
+    gap: 8px;
+  }
+
+  @include tablet {
+    max-width: 100%;
+    min-width: unset;
+  }
+}
+
+.newsHeader {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.newsHeaderRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @include laptop {
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+.newsLabelGroup {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.dotRed {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: #FF3333;
+}
+
+.labelText {
+  color: black;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+.newsDateGroup {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+
+  @include laptop {
+    flex: 1 1 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 4px;
+  }
+}
+
+.newsDateText {
+  color: black;
+  font-size: 14px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 18px;
+  word-wrap: break-word;
+
+  @include laptop {
+    font-size: 12px;
+  }
+}
+
+.newsDateDot {
+  width: 6px;
+  height: 6px;
+  background: #4A5565;
+  border-radius: 9999px;
+
+  @include laptop {
+    display: none;
+  }
+}
+
+/* --- News Cards List --- */
+
+.newsList {
+  align-self: stretch;
+  flex: 1 1 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+
+  @include laptop {
+    gap: 12px;
+  }
+}
+
+
+/* --- News scroll arrows --- */
+
+.newsArrowsRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrowsGroup {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+}
+
+.arrowButton {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}

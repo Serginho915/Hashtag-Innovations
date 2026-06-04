@@ -7,7 +7,7 @@ export default async function Home({ params }: {
   const { lang } = await params;
   return (
     <>
-      <Hero />
+      <Hero lang={lang} />
     </>
   );
 }

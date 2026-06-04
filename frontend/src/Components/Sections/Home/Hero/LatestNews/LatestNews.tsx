@@ -1,29 +1,11 @@
 import React from "react";
-import styles from "./Hero.module.scss";
-import { NewsCard } from "./NewsCard";
+import styles from "./LatestNews.module.scss";
+import { NewsCard } from "../NewsCard/NewsCard";
+import { translations } from "./translations";
 
-const newsItems = [
-  {
-    title: "Hashtag Innovations hosting a business networking event",
-    excerpt:
-      "Networking is getting more popular in Bulgaria. We decided to take part and help young professionals become more flexible and adaptive to social communication",
-    authorLabel: "by",
-  },
-  {
-    title: "Hashtag Innovations hosting a business networking event",
-    excerpt:
-      "Networking is getting more popular in Bulgaria. We decided to take part and help young professionals become more flexible and adaptive to social communication",
-    authorLabel: "by",
-  },
-  {
-    title: "Hashtag Innovations hosting a business networking event",
-    excerpt:
-      "Networking is getting more popular in Bulgaria. We decided to take part and help young professionals become more flexible and adaptive to social communication",
-    authorLabel: "from",
-  },
-];
+export const LatestNews = ({ lang }: { lang: string }) => {
+  const t = translations[lang] || translations.en;
 
-export const LatestNews = () => {
   return (
     <div className={styles.latestNews}>
       {/* Header */}
@@ -31,24 +13,25 @@ export const LatestNews = () => {
         <div className={styles.newsHeaderRow}>
           <div className={styles.newsLabelGroup}>
             <div className={styles.dotRed}></div>
-            <div className={styles.labelText}>Latest News</div>
+            <div className={styles.labelText}>{t.latestNews}</div>
           </div>
           <div className={styles.newsDateGroup}>
-            <div className={styles.newsDateText}>thursday, 14 May</div>
+            <div className={styles.newsDateText}>{t.date}</div>
             <div className={styles.newsDateDot}></div>
-            <div className={styles.newsDateText}>sofia, bulgaria</div>
+            <div className={styles.newsDateText}>{t.location}</div>
           </div>
         </div>
       </div>
 
       {/* News Cards */}
       <div className={styles.newsList}>
-        {newsItems.map((item, index) => (
+        {t.newsItems.map((item: any, index: number) => (
           <NewsCard
             key={index}
             title={item.title}
             excerpt={item.excerpt}
             authorLabel={item.authorLabel}
+            lang={lang}
           />
         ))}
       </div>
