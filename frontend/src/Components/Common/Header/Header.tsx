@@ -1,6 +1,9 @@
 import React from "react";
 import styles from "./Header.module.scss";
-import { LanguageSelector } from "./LanguageSelector";
+import { RightSection } from "./RightSection";
+import logoImage from "../../../../public/images/Logo.svg";
+import Image from "next/image";
+
 
 export const Header = () => {
   return (
@@ -8,19 +11,17 @@ export const Header = () => {
       <div className={styles.container}>
         <div className={styles.logoContainer}>
           <div className={styles.logo}>
-            <div className={styles.hash}>#</div>
+            <Image
+              src={logoImage}
+              alt="Logo"
+              width={20}
+              height={24}
+              className={styles.logoImage}
+            />
             <div className={styles.text}>innovations</div>
           </div>
         </div>
-
-        <div className={styles.rightSection}>
-          <div className={styles.sloganContainer}>
-            <div className={styles.slogan}>
-              Your all-in-one platform to empower your expertise
-            </div>
-            <LanguageSelector />
-          </div>
-        </div>
+        <RightSection />
       </div>
     </header>
   );

@@ -28,13 +28,9 @@
   gap: 2px;
 }
 
-.hash {
-  color: #fea4ea;
-  font-size: 26px;
-  font-family: "Hiragino Sans", sans-serif;
-  font-weight: 700;
-  line-height: 24px;
-  word-wrap: break-word;
+.logoImage {
+  width: 20px;
+  height: 24px;
 }
 
 .text {
@@ -124,4 +120,37 @@
   font-family: "Manrope", sans-serif;
   font-weight: 700;
   word-wrap: break-word;
+}
+
+.navContainer {
+  // height: 24px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 32px;
+  display: inline-flex;
+}
+
+.navLink {
+  text-decoration: none;
+}
+
+.navItemWrapper {
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+}
+
+.navText {
+  color: #4A5565;
+  font-size: 18px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  line-height: 24px;
+  word-wrap: break-word;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
