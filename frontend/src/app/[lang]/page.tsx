@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Hero } from "../../Components/Sections/Home/Hero/Hero";
 
 
 export default async function Home({ params }: {
@@ -7,7 +7,7 @@ export default async function Home({ params }: {
   const { lang } = await params;
   return (
     <>
-      
+      <Hero />
     </>
   );
 }

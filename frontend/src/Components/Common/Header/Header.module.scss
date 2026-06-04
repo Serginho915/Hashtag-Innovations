@@ -1,6 +1,12 @@
+@use "../../../Styles/variables" as *;
+@use "../../../Styles/mixins" as *;
+
 .header {
   width: 100%;
    border-bottom: 1px solid #4a5565;
+   position: sticky;
+   top: 100px;
+   z-index: 1000;
 }
 .container {
   width: 100%;
@@ -11,6 +17,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @include tablet {
+    padding: 8px 16px;
+  }
 }
 
 .logoContainer {
@@ -49,7 +59,7 @@
   gap: 16px;
 }
 
-.sloganContainer {
+.desktopContent {
   padding: 4px 0;
   display: flex;
   justify-content: center;
@@ -152,5 +162,119 @@
 
   &:hover {
     opacity: 0.8;
+  }
+}
+
+/* ==========================================================================
+   Mobile Burger & Dropdown
+   ========================================================================== */
+
+.burgerButton {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #000;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
+}
+
+.mobileMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 16px;
+  padding:  0 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.mobileLangContainer {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+}
+
+.mobileLangWrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+}
+
+.mobileLangOption {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+.activeLang {
+  background: #EBEBEB;
+  color: #0B0B0B;
+}
+
+.inactiveLang {
+  background: transparent;
+  outline: 1px solid #EBEBEB;
+  outline-offset: -1px;
+  color: #6E6E6E;
+}
+
+.mobileLangText {
+  text-align: center;
+  font-size: 14px;
+  font-family: "Manrope", sans-serif;
+  font-weight: 600;
+  word-wrap: break-word;
+}
+
+.mobileNavWrapper {
+  align-self: stretch;
+  border-left: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.mobileNavItem {
+  align-self: stretch;
+  padding: 8px 0 ;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.mobileNavText {
+  color: #4A5565;
+  font-size: 22px;
+  font-family: "Manrope", sans-serif;
+  font-weight: 500;
+  line-height: 28px;
+  word-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  .desktopContent {
+    display: none;
   }
 }

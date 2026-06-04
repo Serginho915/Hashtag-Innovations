@@ -1,0 +1,902 @@
+@use "../../../../Styles/mixins" as *;
+
+
+/* ==========================================================================
+   Hero Section
+   ========================================================================== */
+
+.hero {
+  align-self: stretch;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  background: white;
+  overflow: hidden;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 32px;
+}
+
+/* ---------- Headline + Tabs ---------- */
+
+.headlineWrapper {
+  width: 1436px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+
+  @include laptop {
+    width: 100%;
+    align-self: stretch;
+  }
+}
+
+.headline {
+  text-align: center;
+  color: #363636;
+  font-size: 74px;
+  font-family: $font-eb-garamond;
+  font-weight: 700;
+  line-height: 74px;
+  word-wrap: break-word;
+
+  @include tablet {
+    font-size: 48px;
+    line-height: 52px;
+  }
+
+  @include mobile {
+    font-size: 36px;
+    line-height: 40px;
+  }
+}
+
+.tabs {
+  align-self: stretch;
+  padding: 12px 0;
+  border-bottom: 2px rgba(0, 0, 0, 0.10) solid;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 41px;
+
+  @include tablet {
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  @include mobile {
+    gap: 12px;
+  }
+}
+
+.tab {
+  text-align: center;
+  color: #363636;
+  font-size: 22px;
+  font-family: $font-manrope;
+  font-weight: 700;
+  word-wrap: break-word;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  @include tablet {
+    font-size: 18px;
+  }
+
+  @include mobile {
+    font-size: 16px;
+  }
+}
+
+/* ---------- Content Grid (3 columns) ---------- */
+
+.contentGrid {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 16px;
+
+  @include tablet {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* ---------- Left Column: Inside the Platform ---------- */
+
+.insidePlatform {
+  flex: 1 1 0;
+  max-width: 493px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+
+  @include laptop {
+    max-width: 496px;
+  }
+
+  @include tablet {
+    max-width: 100%;
+  }
+}
+
+.sectionLabel {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.labelRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+
+  &Blue {
+    background: #0F0FFF;
+  }
+
+  &Red {
+    background: #FF3333;
+  }
+}
+
+.dotBlue {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: #0F0FFF;
+}
+
+.dotRed {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: #FF3333;
+}
+
+.labelText {
+  color: black;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+.descriptionBlock {
+  align-self: stretch;
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.descriptionText {
+  color: #363636;
+  font-size: 20px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  line-height: 28px;
+  word-wrap: break-word;
+}
+
+.descriptionBold {
+  color: #363636;
+  font-size: 24px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 28px;
+  word-wrap: break-word;
+}
+
+.trustedRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatarGroup {
+  height: 32px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  position: relative;
+  object-fit: cover;
+}
+
+.trustedText {
+  flex: 1 1 0;
+  padding: 0 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #5C5C70;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+/* --- Carousel Slide --- */
+
+.carouselWrapper {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.carouselSlide {
+  align-self: stretch;
+  height: 201px;
+  outline: 1px #C0C0D2 solid;
+  outline-offset: -1px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+
+  @include laptop {
+    height: 184px;
+    gap: 8px;
+  }
+}
+
+.slideImageWrapper {
+  overflow: hidden;
+  border-radius: 4px;
+  border-left: 1px black solid;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+
+  @include laptop {
+    border-radius: 3.49px;
+    border-left: 0.87px black solid;
+    align-self: stretch;
+    gap: 14px;
+  }
+}
+
+.slideImage {
+  width: 206px;
+  height: 201px;
+  object-fit: cover;
+  box-shadow:
+    0px 10.57px 10.57px -5.29px rgba(0, 0, 0, 0.04),
+    0px 21.14px 26.43px -5.29px rgba(0, 0, 0, 0.10);
+
+  @include laptop {
+    width: 180px;
+    height: 100%;
+  }
+}
+
+.slideContent {
+  flex: 1 1 0;
+  align-self: stretch;
+  padding: 8px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+
+  @include laptop {
+    padding: 16px 8px;
+  }
+}
+
+.slideTextBlock {
+  flex: 1 1 0;
+  padding: 8px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 16px;
+
+  @include laptop {
+    padding: 0;
+    gap: 8px;
+  }
+}
+
+.slideNumber {
+  color: #0F0FFF;
+  font-size: 24px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 28px;
+  word-wrap: break-word;
+}
+
+.slideTitle {
+  align-self: stretch;
+  color: #1F1F1F;
+  font-size: 22px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 26px;
+  word-wrap: break-word;
+
+  @include laptop {
+    font-size: 20px;
+    line-height: 24px;
+  }
+}
+
+/* --- Navigation Arrows --- */
+
+.arrowsRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.arrowsGroup {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+}
+
+.arrowButton {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+/* ---------- Right Two Columns Wrapper ---------- */
+
+.rightColumnsWrapper {
+  flex: 1 1 0;
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 16px;
+
+  @include laptop {
+    min-width: 700px;
+    justify-content: flex-start;
+  }
+
+  @include tablet {
+    min-width: unset;
+    flex-direction: column;
+  }
+}
+
+/* ---------- Middle Column: Upcoming Event ---------- */
+
+.upcomingEvent {
+  flex: 1 1 0;
+  max-width: 346px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+
+  @include laptop {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  @include tablet {
+    max-width: 100%;
+  }
+}
+
+.eventBrandRow {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.brandLogo {
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+.brandHash {
+  color: #0F0FFF;
+}
+
+.brandName {
+  color: black;
+}
+
+.eventImageWrapper {
+  align-self: stretch;
+  height: 169px;
+  border-radius: 6.29px;
+  position: relative;
+  overflow: hidden;
+}
+
+.eventImage {
+  width: 100%;
+  height: 169px;
+  object-fit: cover;
+  border-radius: 6.29px;
+}
+
+.eventImageBadge {
+  width: 39px;
+  height: 39px;
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  background: #FFFCFC;
+}
+
+.eventLabelRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+}
+
+.eventCard {
+  align-self: stretch;
+  outline: 2px #4A5565 solid;
+  outline-offset: -2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.eventCardInner {
+  align-self: stretch;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+
+  @include laptop {
+    padding: 12px;
+  }
+}
+
+.eventCardContent {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.eventTitle {
+  flex: 1 1 0;
+  color: black;
+  font-size: 24px;
+  font-family: $font-manrope;
+  font-weight: 700;
+  line-height: 32px;
+  word-wrap: break-word;
+}
+
+.eventSpeakerRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+}
+
+.eventSpeakerLabel {
+  color: black;
+  font-size: 14px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+.eventSpeakerName {
+  color: #0F0FFF;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+/* --- Discover More Button --- */
+
+.discoverButton {
+  flex: 1 1 0;
+  align-self: stretch;
+  padding-left: 12px;
+  background: #101828;
+  border-radius: 9999px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.discoverText {
+  flex: 1 1 0;
+  text-align: center;
+  color: white;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+.discoverArrow {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  overflow: hidden;
+  border-radius: 44px;
+  outline: 2px white solid;
+  outline-offset: -2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.discoverArrowIcon {
+  width: 13.48px;
+  height: 13.48px;
+  background: white;
+}
+
+.eventDescription {
+  flex: 1 1 0;
+  color: #5C5C70;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+.eventMetaRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.eventMetaItem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.eventMetaIcon {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  overflow: hidden;
+  color: #C0C0D2;
+}
+
+.eventMetaText {
+  color: black;
+  font-size: 14px;
+  font-family: $font-manrope;
+  font-weight: 700;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+/* ---------- Right Column: Latest News ---------- */
+
+.latestNews {
+  flex: 1 1 0;
+  align-self: stretch;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+
+  @include laptop {
+    max-width: 496px;
+    min-width: 393px;
+    overflow: hidden;
+    gap: 8px;
+  }
+
+  @include tablet {
+    max-width: 100%;
+    min-width: unset;
+  }
+}
+
+.newsHeader {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.newsHeaderRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @include laptop {
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+.newsLabelGroup {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.newsDateGroup {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+
+  @include laptop {
+    flex: 1 1 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 4px;
+  }
+}
+
+.newsDateText {
+  color: black;
+  font-size: 14px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 18px;
+  word-wrap: break-word;
+
+  @include laptop {
+    font-size: 12px;
+  }
+}
+
+.newsDateDot {
+  width: 6px;
+  height: 6px;
+  background: #4A5565;
+  border-radius: 9999px;
+
+  @include laptop {
+    display: none;
+  }
+}
+
+/* --- News Cards List --- */
+
+.newsList {
+  align-self: stretch;
+  flex: 1 1 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+
+  @include laptop {
+    gap: 12px;
+  }
+}
+
+/* --- Single News Card --- */
+
+.newsCard {
+  align-self: stretch;
+  overflow: hidden;
+  border-left: 3px #C0C0D2 solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.newsCardContent {
+  align-self: stretch;
+  padding-left: 16px;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.newsCardTitle {
+  align-self: stretch;
+  padding-right: 16px;
+  color: black;
+  font-size: 20px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+.newsCardExcerpt {
+  align-self: stretch;
+  color: #535362;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  line-height: 20px;
+  word-wrap: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.newsCardFooter {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.newsCardAuthor {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.newsCardAuthorLabel {
+  color: #5C5C70;
+  font-size: 12px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+.authorAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: #141414;
+}
+
+/* --- Read Button --- */
+
+.readButton {
+  padding-left: 12px;
+  background: white;
+  border-radius: 9999px;
+  outline: 2px #0F0FFF solid;
+  outline-offset: -2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.readText {
+  text-align: center;
+  color: #0F0FFF;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+.readArrow {
+  width: 32px;
+  height: 32px;
+  padding: 10px;
+  overflow: hidden;
+  border-radius: 44px;
+  outline: 2px #0F0FFF solid;
+  outline-offset: -2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.readArrowIcon {
+  flex: 1 1 0;
+  align-self: stretch;
+  background: #0F0FFF;
+}
+
+/* --- News scroll arrows --- */
+
+.newsArrowsRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
