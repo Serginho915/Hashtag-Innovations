@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./NewsCard.module.scss";
 import { translations } from "./translations";
+import { ReadButton } from "../../../../Common/Buttons/ReadButton/ReadButton";
 
 interface NewsCardProps {
   title: string;
@@ -22,12 +23,7 @@ export const NewsCard = ({ title, excerpt, authorLabel, lang }: NewsCardProps) =
             <div className={styles.newsCardAuthorLabel}>{authorLabel}</div>
             <div className={styles.authorAvatar}></div>
           </div>
-          <button className={styles.readButton}>
-            <span className={styles.readText}>{t.read}</span>
-            <div className={styles.readArrow}>
-              <div className={styles.readArrowIcon}></div>
-            </div>
-          </button>
+          <ReadButton text={t.read} />
         </div>
       </div>
     </div>

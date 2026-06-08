@@ -130,8 +130,29 @@
   gap: 8px;
 }
 
-.carouselSlide {
+.carouselTrack {
   align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory; /* Snap on scroll */
+  /* Hide scrollbar */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include laptop {
+    gap: 8px;
+  }
+}
+
+.carouselSlide {
+  flex: 0 0 100%; /* Take full width of track so only 1 slide is visible at a time */
   height: 201px;
   outline: 1px #C0C0D2 solid;
   outline-offset: -1px;
@@ -139,6 +160,7 @@
   justify-content: flex-start;
   align-items: center;
   gap: 16px;
+  scroll-snap-align: start; /* Snap each slide to the start */
 
   @include laptop {
     height: 184px;
@@ -230,37 +252,4 @@
   }
 }
 
-/* --- Navigation Arrows --- */
 
-.arrowsRow {
-  align-self: stretch;
-  display: inline-flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-.arrowsGroup {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 16px;
-}
-
-.arrowButton {
-  width: 24px;
-  height: 24px;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: black;
-
-  &:hover {
-    opacity: 0.7;
-  }
-}

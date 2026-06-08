@@ -3,17 +3,17 @@
 
 .header {
   width: 100%;
-   border-bottom: 1px solid #4a5565;
-   position: sticky;
-   top: 0px;
-   z-index: 1000;
+  border-bottom: 1px solid #4a5565;
+  position: sticky;
+  top: 0px;
+  z-index: 1000;
+  background: white;
 }
 .container {
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
   padding: 16px 44px;
-  background: white;
   display: flex;
   justify-content: space-between;
   align-items: center;

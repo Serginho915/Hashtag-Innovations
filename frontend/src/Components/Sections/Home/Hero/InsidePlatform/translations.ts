@@ -5,8 +5,13 @@ export const translations: Record<string, any> = {
     descBold: "business leaders, entrepreneurs, founders, and ambitious professionals",
     desc2: " seeking expert knowledge, strategic insights, and meaningful industry connections.",
     trusted: "Trusted by 3,000+ ambitious professionals in Bulgaria",
-    slideTitle: "Explore upcoming business events.",
     slideAlt: "Feature slide",
+    slides: [
+      { title: "Explore upcoming business events." },
+      { title: "Connect with industry leaders." },
+      { title: "Learn new skills and frameworks." },
+      { title: "Discover new job opportunities." },
+    ],
   },
   bg: {
     sectionLabel: "Вътре в платформата",
@@ -14,7 +19,12 @@ export const translations: Record<string, any> = {
     descBold: "бизнес лидери, предприемачи, основатели и амбициозни професионалисти",
     desc2: " търсещи експертни знания, стратегически прозрения и значими връзки в индустрията.",
     trusted: "Доверена от 3,000+ амбициозни професионалисти в България",
-    slideTitle: "Разгледайте предстоящите бизнес събития.",
     slideAlt: "Слайд с функции",
+    slides: [
+      { title: "Разгледайте предстоящите бизнес събития." },
+      { title: "Свържете се с лидери в индустрията." },
+      { title: "Научете нови умения и фреймуърци." },
+      { title: "Открийте нови възможности за работа." },
+    ],
   },
 };

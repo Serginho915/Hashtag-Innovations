@@ -5,10 +5,14 @@
 .latestNews {
   flex: 1 1 0;
   align-self: stretch;
-  display: inline-flex;
+  height: 1px;
+  /* TRICK: prevents expanding parent height */
+  min-height: 100%;
+  /* TRICK: takes parent height */
+  display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 16px;
 
   @include laptop {
@@ -19,6 +23,8 @@
   }
 
   @include tablet {
+    height: auto;
+    min-height: unset;
     max-width: 100%;
     min-width: unset;
   }
@@ -35,7 +41,7 @@
 
 .newsHeaderRow {
   align-self: stretch;
-  display: inline-flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
 
@@ -115,50 +121,25 @@
 .newsList {
   align-self: stretch;
   flex: 1 1 0;
-  overflow: hidden;
+  min-height: 0;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 16px;
+  padding-right: 4px;
+  /* Space for scrollbar */
+
+  /* Hide native scrollbar since we use custom arrows and indicator */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   @include laptop {
     gap: 12px;
   }
 }
 
-
-/* --- News scroll arrows --- */
-
-.newsArrowsRow {
-  align-self: stretch;
-  display: inline-flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.arrowsGroup {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 16px;
-}
-
-.arrowButton {
-  width: 24px;
-  height: 24px;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: black;
-
-  &:hover {
-    opacity: 0.7;
-  }
-}

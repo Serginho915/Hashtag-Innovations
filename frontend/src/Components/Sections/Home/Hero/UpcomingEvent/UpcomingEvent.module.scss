@@ -62,14 +62,7 @@
   border-radius: 6.29px;
 }
 
-.eventImageBadge {
-  width: 39px;
-  height: 39px;
-  position: absolute;
-  left: 4px;
-  top: 4px;
-  background: #FFFCFC;
-}
+
 
 .eventLabelRow {
   align-self: stretch;
@@ -164,54 +157,6 @@
   font-weight: 600;
   line-height: 20px;
   word-wrap: break-word;
-}
-
-/* --- Discover More Button --- */
-
-.discoverButton {
-  flex: 1 1 0;
-  align-self: stretch;
-  padding-left: 12px;
-  background: #101828;
-  border-radius: 9999px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  cursor: pointer;
-  border: none;
-  text-decoration: none;
-}
-
-.discoverText {
-  flex: 1 1 0;
-  text-align: center;
-  color: white;
-  font-size: 16px;
-  font-family: $font-manrope;
-  font-weight: 500;
-  line-height: 24px;
-  word-wrap: break-word;
-}
-
-.discoverArrow {
-  width: 40px;
-  height: 40px;
-  padding: 8px;
-  overflow: hidden;
-  border-radius: 44px;
-  outline: 2px white solid;
-  outline-offset: -2px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-.discoverArrowIcon {
-  width: 13.48px;
-  height: 13.48px;
-  background: white;
 }
 
 .eventDescription {

@@ -1,10 +1,55 @@
-import React from "react";
+"use client";
+
+import React, { useRef, useState, useEffect } from "react";
 import styles from "./LatestNews.module.scss";
 import { NewsCard } from "../NewsCard/NewsCard";
 import { translations } from "./translations";
+import { ScrollArrows } from "../../../../UI/ScrollArrows/ScrollArrows";
 
 export const LatestNews = ({ lang }: { lang: string }) => {
   const t = translations[lang] || translations.en;
+  const listRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const handleScroll = () => {
+    if (listRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = listRef.current;
+      const maxScroll = scrollHeight - clientHeight;
+      if (maxScroll <= 0) {
+        setScrollProgress(0);
+      } else {
+        setScrollProgress(scrollTop / maxScroll);
+      }
+    }
+  };
+
+  // Initial check in case content doesn't fill the container
+  useEffect(() => {
+    handleScroll();
+    window.addEventListener('resize', handleScroll);
+    return () => window.removeEventListener('resize', handleScroll);
+  }, []);
+
+  const [currentDate, setCurrentDate] = useState("");
+
+  useEffect(() => {
+    const today = new Date();
+    const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+    const locale = lang === 'bg' ? 'bg-BG' : 'en-GB';
+    setCurrentDate(today.toLocaleDateString(locale, options).toLowerCase());
+  }, [lang]);
+
+  const scrollUp = () => {
+    if (listRef.current) {
+      listRef.current.scrollBy({ top: -300, behavior: "smooth" });
+    }
+  };
+
+  const scrollDown = () => {
+    if (listRef.current) {
+      listRef.current.scrollBy({ top: 300, behavior: "smooth" });
+    }
+  };
 
   return (
     <div className={styles.latestNews}>
@@ -16,7 +61,7 @@ export const LatestNews = ({ lang }: { lang: string }) => {
             <div className={styles.labelText}>{t.latestNews}</div>
           </div>
           <div className={styles.newsDateGroup}>
-            <div className={styles.newsDateText}>{t.date}</div>
+            <div className={styles.newsDateText}>{currentDate || t.date}</div>
             <div className={styles.newsDateDot}></div>
             <div className={styles.newsDateText}>{t.location}</div>
           </div>
@@ -24,8 +69,8 @@ export const LatestNews = ({ lang }: { lang: string }) => {
       </div>
 
       {/* News Cards */}
-      <div className={styles.newsList}>
-        {t.newsItems.map((item: any, index: number) => (
+      <div className={styles.newsList} ref={listRef} onScroll={handleScroll}>
+        {t.newsItems.map((item: { title: string; excerpt: string; authorLabel: string }, index: number) => (
           <NewsCard
             key={index}
             title={item.title}
@@ -37,20 +82,12 @@ export const LatestNews = ({ lang }: { lang: string }) => {
       </div>
 
       {/* Scroll Arrows */}
-      <div className={styles.newsArrowsRow}>
-        <div className={styles.arrowsGroup}>
-          <button className={styles.arrowButton} aria-label="Scroll up">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="18 15 12 9 6 15"></polyline>
-            </svg>
-          </button>
-          <button className={styles.arrowButton} aria-label="Scroll down">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
-        </div>
-      </div>
+      <ScrollArrows 
+        progress={scrollProgress} 
+        onPrev={scrollUp} 
+        onNext={scrollDown} 
+        direction="vertical" 
+      />
     </div>
   );
 };

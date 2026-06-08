@@ -3,7 +3,7 @@
 /* ---------- Headline + Tabs ---------- */
 
 .headlineWrapper {
-  width: 1436px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -38,6 +38,10 @@
 
 .navContainer {
   align-self: stretch;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+    border-bottom: 2px rgba(0, 0, 0, 0.10) solid;
 }
 
 .tabs {
@@ -45,7 +49,6 @@
   list-style: none;
   align-self: stretch;
   padding: 12px 0;
-  border-bottom: 2px rgba(0, 0, 0, 0.10) solid;
   display: inline-flex;
   justify-content: center;
   align-items: center;

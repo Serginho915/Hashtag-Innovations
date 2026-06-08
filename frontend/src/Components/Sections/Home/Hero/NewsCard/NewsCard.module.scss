@@ -4,6 +4,7 @@
 
 .newsCard {
   align-self: stretch;
+  flex-shrink: 0;
   overflow: hidden;
   border-left: 3px #C0C0D2 solid;
   display: flex;
@@ -77,51 +78,4 @@
   border-radius: 9999px;
   overflow: hidden;
   background: #141414;
-}
-
-/* --- Read Button --- */
-
-.readButton {
-  padding-left: 12px;
-  background: white;
-  border-radius: 9999px;
-  outline: 2px #0F0FFF solid;
-  outline-offset: -2px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  cursor: pointer;
-  border: none;
-  text-decoration: none;
-}
-
-.readText {
-  text-align: center;
-  color: #0F0FFF;
-  font-size: 16px;
-  font-family: $font-manrope;
-  font-weight: 500;
-  line-height: 24px;
-  word-wrap: break-word;
-}
-
-.readArrow {
-  width: 32px;
-  height: 32px;
-  padding: 10px;
-  overflow: hidden;
-  border-radius: 44px;
-  outline: 2px #0F0FFF solid;
-  outline-offset: -2px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-.readArrowIcon {
-  flex: 1 1 0;
-  align-self: stretch;
-  background: #0F0FFF;
 }
