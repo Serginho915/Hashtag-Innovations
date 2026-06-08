@@ -5,7 +5,7 @@
 .insidePlatform {
   flex: 1 1 0;
   max-width: 493px;
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
@@ -15,8 +15,15 @@
     max-width: 496px;
   }
 
+  @include laptop-sm {
+    max-width: 100%;
+    min-width: 433px;
+    align-self: stretch;
+  }
+
   @include tablet {
     max-width: 100%;
+    min-width: unset;
   }
 }
 
@@ -52,6 +59,11 @@
   text-transform: uppercase;
   line-height: 24px;
   word-wrap: break-word;
+
+  @include tablet {
+    font-size: 14px;
+    line-height: 18px;
+  }
 }
 
 .descriptionBlock {
@@ -71,6 +83,11 @@
   font-weight: 500;
   line-height: 28px;
   word-wrap: break-word;
+
+  @include tablet {
+    font-size: 16px;
+    line-height: 22px;
+  }
 }
 
 .descriptionBold {
@@ -80,6 +97,11 @@
   font-weight: 600;
   line-height: 28px;
   word-wrap: break-word;
+
+  @include tablet {
+    font-size: 20px;
+    line-height: 24px;
+  }
 }
 
 .trustedRow {
@@ -166,6 +188,16 @@
     height: 184px;
     gap: 8px;
   }
+
+  @include laptop-sm {
+    height: 201px;
+    gap: 16px;
+  }
+
+  @include tablet {
+    height: 184px;
+    gap: 8px;
+  }
 }
 
 .slideImageWrapper {
@@ -183,6 +215,18 @@
     align-self: stretch;
     gap: 14px;
   }
+
+  @include laptop-sm {
+    border-radius: 4px;
+    border-left: 1px black solid;
+    gap: 16px;
+  }
+
+  @include tablet {
+    border-radius: 3.49px;
+    border-left: 0.87px black solid;
+    gap: 14px;
+  }
 }
 
 .slideImage {
@@ -194,6 +238,16 @@
     0px 21.14px 26.43px -5.29px rgba(0, 0, 0, 0.10);
 
   @include laptop {
+    width: 180px;
+    height: 100%;
+  }
+
+  @include laptop-sm {
+    width: 206px;
+    height: 201px;
+  }
+
+  @include tablet {
     width: 180px;
     height: 100%;
   }
@@ -211,6 +265,14 @@
   @include laptop {
     padding: 16px 8px;
   }
+
+  @include laptop-sm {
+    padding: 8px;
+  }
+
+  @include tablet {
+    padding: 16px 8px;
+  }
 }
 
 .slideTextBlock {
@@ -223,6 +285,16 @@
   gap: 16px;
 
   @include laptop {
+    padding: 0;
+    gap: 8px;
+  }
+
+  @include laptop-sm {
+    padding: 8px;
+    gap: 16px;
+  }
+
+  @include tablet {
     padding: 0;
     gap: 8px;
   }
@@ -247,6 +319,16 @@
   word-wrap: break-word;
 
   @include laptop {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  @include laptop-sm {
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  @include tablet {
     font-size: 20px;
     line-height: 24px;
   }

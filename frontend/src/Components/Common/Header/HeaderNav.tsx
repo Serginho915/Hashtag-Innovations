@@ -3,18 +3,12 @@
 import React from 'react'
 import Link from 'next/link'
 import styles from './Header.module.scss'
-import { useNavigation } from '../../../Context/NavigationContext'
 import { useLanguage } from '../../../Context/LanguageContext'
 import { translations } from './HeaderNavTranslations'
 
 export const HeaderNav = () => {
-  const { isHeroTabsVisible } = useNavigation();
   const { language } = useLanguage();
   const t = translations[language] || translations.en;
-
-  if (isHeroTabsVisible) {
-    return null;
-  }
 
   return (
     <nav className={styles.navContainer}>

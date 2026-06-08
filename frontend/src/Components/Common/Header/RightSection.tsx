@@ -5,11 +5,12 @@ import { LanguageSelector } from "./LanguageSelector";
 import styles from "./Header.module.scss";
 import { HeaderNav } from "./HeaderNav";
 import { useLanguage } from "../../../Hooks/useLanguage";
+import { useNavigation } from "../../../Context/NavigationContext";
 
 export const RightSection = () => {
-  const [isNavOpen, setIsNavOpen] = useState(false);
   const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
   const { language, setLanguage } = useLanguage();
+  const { isHeroTabsVisible } = useNavigation();
 
   const toggleBurgerMenu = () => {
     setBurgerMenuOpen(!burgerMenuOpen);
@@ -20,12 +21,13 @@ export const RightSection = () => {
   return (
     <div className={styles.rightSection}>
       <div className={styles.desktopContent}>
-        {!isNavOpen && (
+        {isHeroTabsVisible ? (
           <div className={styles.slogan}>
             Your all-in-one platform to empower your expertise
           </div>
+        ) : (
+          <HeaderNav />
         )}
-        {isNavOpen && <HeaderNav />}
         <LanguageSelector />
       </div>
 

@@ -5,7 +5,7 @@
 .upcomingEvent {
   flex: 1 1 0;
   max-width: 346px;
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
@@ -18,6 +18,7 @@
 
   @include tablet {
     max-width: 100%;
+    gap: 16px;
   }
 }
 
@@ -53,6 +54,10 @@
   border-radius: 6.29px;
   position: relative;
   overflow: hidden;
+
+  @include tablet {
+    height: 232px;
+  }
 }
 
 .eventImage {
@@ -87,6 +92,11 @@
   text-transform: uppercase;
   line-height: 24px;
   word-wrap: break-word;
+
+  @include tablet {
+    font-size: 14px;
+    line-height: 18px;
+  }
 }
 
 .eventCard {
@@ -111,6 +121,10 @@
   @include laptop {
     padding: 12px;
   }
+
+  @include tablet {
+    padding: 16px 20px;
+  }
 }
 
 .eventCardContent {
@@ -120,6 +134,10 @@
   justify-content: flex-start;
   align-items: flex-start;
   gap: 12px;
+
+  @include tablet {
+    gap: 16px;
+  }
 }
 
 .eventTitle {

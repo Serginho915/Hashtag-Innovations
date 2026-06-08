@@ -3,7 +3,6 @@ import styles from "./Header.module.scss";
 import { RightSection } from "./RightSection";
 import logoImage from "../../../../public/images/Logo.svg";
 import Image from "next/image";
-import { HeaderNav } from "./HeaderNav";
 
 
 export const Header = () => {
@@ -22,7 +21,6 @@ export const Header = () => {
             <div className={styles.text}>innovations</div>
           </div>
         </div>
-        <HeaderNav />
         <RightSection />
       </div>
     </header>

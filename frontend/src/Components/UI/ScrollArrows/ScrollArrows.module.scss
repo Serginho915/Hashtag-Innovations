@@ -1,3 +1,5 @@
+@use "../../../Styles/mixins" as *;
+
 .scrollArrowsRow {
   align-self: stretch;
   display: flex;

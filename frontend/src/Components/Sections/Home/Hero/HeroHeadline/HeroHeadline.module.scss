@@ -14,6 +14,14 @@
     width: 100%;
     align-self: stretch;
   }
+
+  @include laptop-sm {
+    gap: 12px;
+  }
+
+  @include tablet {
+    gap: 8px;
+  }
 }
 
 .headline {
@@ -25,9 +33,14 @@
   line-height: 74px;
   word-wrap: break-word;
 
+  @include laptop-sm {
+    font-size: 64px;
+    line-height: 64px;
+  }
+
   @include tablet {
-    font-size: 48px;
-    line-height: 52px;
+    font-size: 44px;
+    line-height: 54px;
   }
 
   @include mobile {
@@ -41,7 +54,12 @@
   align-items: center;
   display: flex;
   justify-content: center;
-    border-bottom: 2px rgba(0, 0, 0, 0.10) solid;
+  border-bottom: 2px rgba(0, 0, 0, 0.10) solid;
+  /* Stretch border beyond parent padding to full viewport width */
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  padding-left: calc(50vw - 50%);
+  padding-right: calc(50vw - 50%);
 }
 
 .tabs {
@@ -54,13 +72,20 @@
   align-items: center;
   gap: 41px;
 
+  @include laptop-sm {
+    padding: 8px 0;
+  }
+
   @include tablet {
-    gap: 20px;
-    flex-wrap: wrap;
+    padding: 8px;
+    justify-content: space-between;
+    display: flex;
+    width: 100%;
+    gap: 0;
   }
 
   @include mobile {
-    gap: 12px;
+    gap: 0;
   }
 }
 
@@ -78,8 +103,12 @@
     opacity: 0.7;
   }
 
-  @include tablet {
+  @include laptop-sm {
     font-size: 18px;
+  }
+
+  @include tablet {
+    font-size: 16px;
   }
 
   @include mobile {

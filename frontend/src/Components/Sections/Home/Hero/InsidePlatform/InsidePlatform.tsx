@@ -70,21 +70,21 @@ export const InsidePlatform = ({ lang }: { lang: string }) => {
           <div className={styles.trustedRow}>
             <div className={styles.avatarGroup}>
               <Image
-                src="https://placehold.co/32x32"
+                src="/images/avatars/avatar_1.png"
                 alt="User 1"
                 width={32}
                 height={32}
                 className={styles.avatar}
               />
               <Image
-                src="https://placehold.co/32x32"
+                src="/images/avatars/avatar_2.png"
                 alt="User 2"
                 width={32}
                 height={32}
                 className={styles.avatar}
               />
               <Image
-                src="https://placehold.co/32x32"
+                src="/images/avatars/avatar_3.png"
                 alt="User 3"
                 width={32}
                 height={32}
@@ -101,27 +101,37 @@ export const InsidePlatform = ({ lang }: { lang: string }) => {
       {/* Carousel */}
       <div className={styles.carouselWrapper}>
         <div className={styles.carouselTrack} ref={listRef} onScroll={handleScroll}>
-          {t.slides.map((slide: { title: string }, index: number) => (
-            <div key={index} className={styles.carouselSlide}>
-              <div className={styles.slideImageWrapper}>
-                <Image
-                  src={`https://placehold.co/206x201?text=Slide+${index + 1}`}
-                  alt={t.slideAlt}
-                  width={206}
-                  height={201}
-                  className={styles.slideImage}
-                />
-              </div>
-              <div className={styles.slideContent}>
-                <div className={styles.slideTextBlock}>
-                  <div className={styles.slideNumber}>0{index + 1}/</div>
-                  <div className={styles.slideTitle}>
-                    {slide.title}
+          {t.slides.map((slide: { title: string }, index: number) => {
+            const slideImages = [
+              "/images/platform/slide_events.png",
+              "/images/platform/slide_connect.png",
+              "/images/platform/slide_skills.png",
+              "/images/platform/slide_jobs.png"
+            ];
+            const slideSrc = slideImages[index] || slideImages[0];
+
+            return (
+              <div key={index} className={styles.carouselSlide}>
+                <div className={styles.slideImageWrapper}>
+                  <Image
+                    src={slideSrc}
+                    alt={t.slideAlt}
+                    width={206}
+                    height={201}
+                    className={styles.slideImage}
+                  />
+                </div>
+                <div className={styles.slideContent}>
+                  <div className={styles.slideTextBlock}>
+                    <div className={styles.slideNumber}>0{index + 1}/</div>
+                    <div className={styles.slideTitle}>
+                      {slide.title}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Arrows */}

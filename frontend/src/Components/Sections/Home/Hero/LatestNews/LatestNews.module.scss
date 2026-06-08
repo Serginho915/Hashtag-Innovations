@@ -9,6 +9,7 @@
   /* TRICK: prevents expanding parent height */
   min-height: 100%;
   /* TRICK: takes parent height */
+  min-width: 0; /* Allow flex shrinking */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -17,9 +18,16 @@
 
   @include laptop {
     max-width: 496px;
-    min-width: 393px;
     overflow: hidden;
     gap: 8px;
+  }
+
+  @include laptop-sm {
+    width: 100%;
+    min-width: 393px;
+    gap: 24px;
+    height: auto;
+    min-height: unset;
   }
 
   @include tablet {
@@ -27,6 +35,8 @@
     min-height: unset;
     max-width: 100%;
     min-width: unset;
+    overflow: visible;
+    gap: 24px;
   }
 }
 
@@ -49,6 +59,16 @@
     justify-content: flex-start;
     align-items: flex-start;
     gap: 12px;
+  }
+
+  @include laptop-sm {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  @include tablet {
+    justify-content: space-between;
+    align-items: center;
   }
 }
 
@@ -74,6 +94,16 @@
   text-transform: uppercase;
   line-height: 24px;
   word-wrap: break-word;
+
+  @include laptop-sm {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  @include tablet {
+    font-size: 14px;
+    line-height: 18px;
+  }
 }
 
 .newsDateGroup {
@@ -89,6 +119,19 @@
     align-items: flex-end;
     gap: 4px;
   }
+
+  @include laptop-sm {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  @include tablet {
+    flex: 1 1 0;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+  }
 }
 
 .newsDateText {
@@ -103,6 +146,10 @@
   @include laptop {
     font-size: 12px;
   }
+
+  @include tablet {
+    font-size: 12px;
+  }
 }
 
 .newsDateDot {
@@ -113,6 +160,14 @@
 
   @include laptop {
     display: none;
+  }
+
+  @include laptop-sm {
+    display: block;
+  }
+
+  @include tablet {
+    display: block;
   }
 }
 
@@ -140,6 +195,18 @@
 
   @include laptop {
     gap: 12px;
+  }
+
+  @include laptop-sm {
+    flex: none;
+    height: 480px;
+    overflow-y: auto;
+  }
+
+  @include tablet {
+    flex: none;
+    height: 400px;
+    overflow-y: auto;
   }
 }
 

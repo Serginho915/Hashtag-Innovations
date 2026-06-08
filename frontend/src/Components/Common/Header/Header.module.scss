@@ -18,6 +18,10 @@
   justify-content: space-between;
   align-items: center;
 
+  @include laptop {
+    padding: 16px 28px;
+  }
+
   @include tablet {
     padding: 8px 16px;
   }
@@ -133,10 +137,9 @@
 }
 
 .navContainer {
-  // height: 24px;
   justify-content: flex-start;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
   display: inline-flex;
 }
 
