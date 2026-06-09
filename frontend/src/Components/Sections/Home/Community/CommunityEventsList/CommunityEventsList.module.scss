@@ -1,0 +1,58 @@
+@use "../../../../../Styles/mixins" as *;
+@import "../../../../../Styles/variables";
+
+.noEvents {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: #5C5C70;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+}
+
+.eventsListContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+  width: 839px;
+  height: 600px;
+  overflow-y: auto;
+  //padding-right: 8px; /* For scrollbar */
+
+  /* Hide scrollbar */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  @include laptop {
+    flex: 1 1 0;
+    width: auto;
+  }
+
+  @include laptop-sm {
+    width: 100%;
+    align-items: stretch;
+  }
+}
+
+.eventsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  gap: 16px;
+  align-items: stretch;
+
+  > :only-child {
+    grid-column: 1 / -1;
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}

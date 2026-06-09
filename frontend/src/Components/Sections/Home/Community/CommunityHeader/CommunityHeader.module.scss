@@ -1,0 +1,103 @@
+@use "../../../../../Styles/mixins" as *;
+@import "../../../../../Styles/variables";
+
+.headerContainer {
+  align-self: stretch;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.headerRow {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @include mobile {
+    gap: 66px; // From the 4th breakpoint design
+    justify-content: flex-start;
+  }
+}
+
+.titleGroup {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+
+  @include desktop {
+    width: 455.50px;
+  }
+  @include laptop {
+    width: 455.50px;
+  }
+  @include laptop-sm {
+    width: 455.50px;
+  }
+  @include tablet {
+    width: auto;
+  }
+}
+
+.titleNumber, .titleText {
+  color: black;
+  font-size: 14px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+.actionsGroup {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+}
+
+.viewAll {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #F40A0A;
+  font-size: 14px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  text-decoration: none;
+  word-wrap: break-word;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.arrowsGroup {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+}
+
+.arrowIcon {
+  width: 39px;
+  height: 39px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}

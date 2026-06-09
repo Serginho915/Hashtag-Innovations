@@ -1,0 +1,42 @@
+@use "../../../Styles/mixins" as *;
+@import "../../../Styles/variables";
+
+.sectionTitleContainer {
+  align-self: stretch;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom: 2px black solid;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  display: inline-flex;
+
+  @include laptop-sm {
+    gap: 12px;
+  }
+}
+
+.sectionTitleText {
+  margin: 0;
+  text-align: center;
+  color: #363636;
+  font-size: 56px;
+  font-family: $font-eb-garamond;
+  font-weight: 700;
+  word-wrap: break-word;
+
+  /* Reset flex to default for desktop/laptop */
+  flex: none;
+
+  @include laptop-sm {
+    flex: 1 1 0;
+    font-size: 46px;
+    line-height: 64px;
+  }
+
+  @include tablet {
+    flex: 1 1 0;
+    font-size: 36px;
+    line-height: 44px;
+  }
+}

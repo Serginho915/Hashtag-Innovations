@@ -1,0 +1,95 @@
+@use "../../../../Styles/mixins" as *;
+
+.communitySection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background: white;
+
+  @include laptop {
+    //padding: 40px 16px;
+  }
+
+  @include tablet {
+    //padding: 32px 16px;
+  }
+}
+
+.communityContainer {
+  width: 100%;
+  max-width: 1440px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @include desktop {
+    gap: 17px;
+  }
+}
+
+.mainContentRow {
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 28px;
+
+  @include tablet {
+    gap: 16px;
+  }
+
+  @include mobile {
+    gap: 16px;
+  }
+}
+
+.eventsColumn {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0;
+
+  @include tablet {
+    gap: 16px;
+  }
+}
+
+.filtersAndEventsRow {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 44px;
+
+  @include laptop-sm {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.sidebarColumn {
+  width: 312px;
+  align-self: stretch;
+  padding-top: 24px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  @include laptop {
+    width: 285px;
+  }
+
+  @include laptop-sm {
+    display: none;
+  }
+}
+
+.sidebarPlaceholder {
+  flex: 1 1 0;
+  align-self: stretch;
+  background: #D9D9D9;
+}
