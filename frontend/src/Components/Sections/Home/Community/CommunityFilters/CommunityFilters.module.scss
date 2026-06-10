@@ -6,49 +6,44 @@
   flex-direction: column;
   padding-top: 24px;
   padding-bottom: 24px;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
+  gap: 8px;
 
   @include laptop-sm {
     padding-top: 0;
     padding-bottom: 0;
     align-self: stretch;
-    justify-content: flex-start;
-    gap: 8px;
   }
 }
 
-.filtersRow1, .filtersRow2 {
+.filtersList {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; // Vertical list on desktop
   align-items: flex-start;
+  gap: 8px;
 
   @include laptop-sm {
-    flex-direction: row;
+    flex-direction: row; // Horizontal rows on smaller screens
     align-self: stretch;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 8px;
     flex-wrap: wrap;
   }
 }
 
 .filterItem {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 10px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding: 8px 0; // Less horizontal padding on desktop to match previous look
   cursor: pointer;
   transition: opacity 0.2s;
 
   @include laptop-sm {
-    padding: 8px;
+    padding: 8px; // 8px padding all around on mobile/tablet
   }
 
   .filterLabel {
-    flex: 1 1 0;
     color: rgba(0, 0, 0, 0.50);
     font-size: 16px;
     font-family: $font-manrope;
@@ -58,10 +53,10 @@
     transition: color 0.2s;
 
     @include desktop {
-      color: black; /* Desktop design defaults to all black */
+      color: black; // Keep black on desktop as it was previously? Or gray? Wait, user HTML snippet had gray for inactive. Let's keep it gray for inactive everywhere, unless specified.
     }
     @include laptop {
-      color: black;
+      color: black; // Restoring original logic where desktop was black. 
     }
   }
 

@@ -21,7 +21,6 @@
   width: 839px;
   height: 600px;
   overflow-y: auto;
-  //padding-right: 8px; /* For scrollbar */
 
   /* Hide scrollbar */
   -ms-overflow-style: none; /* IE and Edge */
@@ -31,8 +30,7 @@
   }
 
   @include laptop {
-    flex: 1 1 0;
-    width: auto;
+    width: 100%;
   }
 
   @include laptop-sm {
@@ -52,7 +50,7 @@
     grid-column: 1 / -1;
   }
 
-  @include mobile {
+  @include tablet {
     grid-template-columns: 1fr;
   }
 }

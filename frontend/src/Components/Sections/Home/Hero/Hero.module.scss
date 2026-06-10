@@ -58,11 +58,12 @@
   gap: 16px;
 
   @include laptop {
-    justify-content: flex-start;
+    justify-content: stretch;
   }
 
   @include laptop-sm {
     min-width: 700px;
+    max-width: 100%;
     align-self: stretch;
   }
 

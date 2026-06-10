@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './CommunityFilters.module.scss';
-import { CommunityTag } from '../../../../../types/community';
+import { CommunityTag } from '../../../../../Types/community';
 
 export const filters: CommunityTag[] = [
   { id: 'on_site', label: 'On site' },
@@ -13,35 +13,28 @@ export const filters: CommunityTag[] = [
   { id: 'entertainment', label: 'Entertainment' }
 ];
 
+import { translations } from '../translations';
+
 interface CommunityFiltersProps {
   activeTag: string;
   onTagChange: (tagId: string) => void;
+  lang: string;
 }
 
-export const CommunityFilters: React.FC<CommunityFiltersProps> = ({ activeTag, onTagChange }) => {
+export const CommunityFilters: React.FC<CommunityFiltersProps> = ({ activeTag, onTagChange, lang }) => {
+  const t = translations[lang] || translations.bg;
+
   return (
     <div className={styles.filtersContainer}>
-      <div className={styles.filtersRow1}>
-        {filters.slice(0, 5).map((filter) => (
+      <div className={styles.filtersList}>
+        {filters.map((filter) => (
           <div 
             key={filter.id} 
             className={`${styles.filterItem} ${activeTag === filter.id ? styles.active : ''}`}
             onClick={() => onTagChange(filter.id)}
           >
             {activeTag === filter.id && <div className={styles.blueDot}></div>}
-            <div className={styles.filterLabel}>{filter.label}</div>
-          </div>
-        ))}
-      </div>
-      <div className={styles.filtersRow2}>
-        {filters.slice(5).map((filter) => (
-          <div 
-            key={filter.id} 
-            className={`${styles.filterItem} ${activeTag === filter.id ? styles.active : ''}`}
-            onClick={() => onTagChange(filter.id)}
-          >
-            {activeTag === filter.id && <div className={styles.blueDot}></div>}
-            <div className={styles.filterLabel}>{filter.label}</div>
+            <div className={styles.filterLabel}>{t.tags[filter.id] || filter.label}</div>
           </div>
         ))}
       </div>

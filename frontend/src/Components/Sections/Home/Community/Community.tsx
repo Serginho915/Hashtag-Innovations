@@ -6,7 +6,8 @@ import { SectionTitle } from '../../../UI/SectionTitle/SectionTitle';
 import { CommunityHeader } from './CommunityHeader/CommunityHeader';
 import { CommunityFilters } from './CommunityFilters/CommunityFilters';
 import { CommunityEventsList } from './CommunityEventsList/CommunityEventsList';
-import { CommunityEvent } from '../../../../types/community';
+import { CommunityEvent } from '../../../../Types/community';
+import { translations } from './translations';
 
 interface CommunityProps {
   lang: string;
@@ -16,85 +17,118 @@ const MOCK_EVENTS: CommunityEvent[] = [
   {
     id: "evt-1",
     title: "Business Innovation Summit 2026",
+    titleBg: "Среща на върха за бизнес иновации 2026",
     speaker: { id: "spk-1", name: "Andrew Nikolov" },
     description: "Connect with 500+ industry trailblazers at the Business Innovation Summit 2026. Explore AI, navigate digital transformation, and unlock strategic growth opportunities. Elevate your expertise and expand your network.",
+    descriptionBg: "Свържете се с 500+ лидери в индустрията на Business Innovation Summit 2026. Изследвайте ИИ, навигирайте дигиталната трансформация и отключете възможности за стратегически растеж.",
     date: "2026-08-20T10:00:00Z",
     displayDate: "Thursday, 20 Aug",
+    displayDateBg: "Четвъртък, 20 Авг",
     location: "LIVE, Sofia",
+    locationBg: "НА ЖИВО, София",
     imageSrc: "/images/community/summit_event.png",
-    tags: ["recommended", "business", "on_site"]
+    tags: ["recommended", "business", "on_site"],
+    price: "€33"
   },
   {
     id: "evt-2",
     title: "Future of Finance Forum",
+    titleBg: "Форум Бъдещето на Финансите",
     speaker: { id: "spk-2", name: "Sarah Jenkins" },
     description: "Discover the latest trends in fintech, decentralized finance, and banking innovations. Join top executives and visionaries to discuss what the next decade holds for the financial sector.",
+    descriptionBg: "Открийте най-новите тенденции във финтех, децентрализираните финанси и банковите иновации. Присъединете се към топ ръководители.",
     date: "2026-08-23T09:00:00Z",
     displayDate: "Sunday, 23 Aug",
+    displayDateBg: "Неделя, 23 Авг",
     location: "ONLINE",
+    locationBg: "ОНЛАЙН",
     imageSrc: "/images/community/finance_event.png",
     tags: ["recommended", "business", "online"]
   },
   {
     id: "evt-3",
     title: "Tech Leadership Workshop",
+    titleBg: "Работилница за Технологично Лидерство",
     speaker: { id: "spk-3", name: "David Chen" },
     description: "An intensive half-day workshop for emerging tech leaders. Learn how to build resilient teams, manage technical debt, and drive innovation within your organization.",
+    descriptionBg: "Интензивна полудневна работилница за нововъзникващи технологични лидери. Научете как да изграждате устойчиви екипи.",
     date: "2026-08-25T14:00:00Z",
     displayDate: "Tuesday, 25 Aug",
+    displayDateBg: "Вторник, 25 Авг",
     location: "LIVE, Sofia",
+    locationBg: "НА ЖИВО, София",
     imageSrc: "/images/community/tech_event.png",
-    tags: ["recommended", "top_speakers", "on_site"]
+    tags: ["recommended", "top_speakers", "on_site"],
+    price: "€15"
   },
   {
     id: "evt-4",
     title: "Past AI Conference",
+    titleBg: "Минала ИИ Конференция",
     speaker: { id: "spk-4", name: "Elena Rostova" },
     description: "This is a past event and should not be displayed in the list of upcoming events.",
+    descriptionBg: "Това е минало събитие и не трябва да се показва в списъка с предстоящи събития.",
     date: "2023-01-01T10:00:00Z",
     displayDate: "Monday, 1 Jan",
+    displayDateBg: "Понеделник, 1 Яну",
     location: "ONLINE",
+    locationBg: "ОНЛАЙН",
     imageSrc: "/images/community/ai_event.png",
     tags: ["recommended", "ai", "online"]
   },
   {
     id: "evt-5",
     title: "Startup Pitch Night",
+    titleBg: "Вечер на Стартиращите Компании",
     speaker: { id: "spk-5", name: "Michael Chang" },
     description: "Watch early-stage startups pitch their innovative ideas to top venture capitalists.",
+    descriptionBg: "Гледайте как стартиращи компании в ранен етап представят своите иновативни идеи пред топ рискови капиталисти.",
     date: "2026-09-10T18:00:00Z",
     displayDate: "Thursday, 10 Sep",
+    displayDateBg: "Четвъртък, 10 Сеп",
     location: "LIVE, London",
+    locationBg: "НА ЖИВО, Лондон",
     imageSrc: "/images/community/summit.png",
-    tags: ["business", "on_site"]
+    tags: ["business", "on_site"],
+    price: "€10"
   },
   {
     id: "evt-6",
     title: "Web3 & Blockchain Summit",
+    titleBg: "Среща на върха Web3 и Блокчейн",
     speaker: { id: "spk-6", name: "Sophia Martinez" },
     description: "Explore the future of decentralized internet and blockchain applications with industry leaders.",
+    descriptionBg: "Изследвайте бъдещето на децентрализирания интернет и блокчейн приложенията с лидери в индустрията.",
     date: "2026-09-15T10:00:00Z",
     displayDate: "Tuesday, 15 Sep",
+    displayDateBg: "Вторник, 15 Сеп",
     location: "ONLINE",
+    locationBg: "ОНЛАЙН",
     imageSrc: "/images/community/ai_event.png",
     tags: ["business", "online"]
   },
   {
     id: "evt-7",
     title: "Design Systems Masterclass",
+    titleBg: "Майсторски Клас по Дизайн Системи",
     speaker: { id: "spk-7", name: "Alex Rivera" },
     description: "A deep dive into creating scalable and maintainable design systems for enterprise applications.",
+    descriptionBg: "Дълбоко гмуркане в създаването на мащабируеми и лесни за поддръжка дизайн системи за корпоративни приложения.",
     date: "2026-09-20T14:00:00Z",
     displayDate: "Sunday, 20 Sep",
+    displayDateBg: "Неделя, 20 Сеп",
     location: "LIVE, Berlin",
+    locationBg: "НА ЖИВО, Берлин",
     imageSrc: "/images/community/summit.png",
-    tags: ["business", "on_site"]
+    tags: ["business", "on_site"],
+    price: "€49"
   }
 ];
 
 export const Community: React.FC<CommunityProps> = ({ lang }) => {
-  const [activeTag, setActiveTag] = useState<string>('recommended');
-  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const [activeTag, setActiveTag] = useState<string>('on_site');
+  const scrollRef = React.useRef<HTMLDivElement | null>(null) as React.RefObject<HTMLDivElement>;
+  const t = translations[lang] || translations.bg;
 
   const scrollUp = () => {
     scrollRef.current?.scrollBy({ top: -400, behavior: 'smooth' });
@@ -112,19 +146,25 @@ export const Community: React.FC<CommunityProps> = ({ lang }) => {
     const isUpcoming = eventDate >= now;
     const hasTag = event.tags.includes(activeTag);
     return isUpcoming && hasTag;
-  });
+  }).map(event => ({
+    ...event,
+    title: lang === 'bg' && event.titleBg ? event.titleBg : event.title,
+    description: lang === 'bg' && event.descriptionBg ? event.descriptionBg : event.description,
+    displayDate: lang === 'bg' && event.displayDateBg ? event.displayDateBg : event.displayDate,
+    location: lang === 'bg' && event.locationBg ? event.locationBg : event.location,
+  }));
 
   return (
     <section className={styles.communitySection}>
       <div className={styles.communityContainer}>
-        <SectionTitle title="Business Community & Gatherings" />
+        <SectionTitle title={t.title} />
         
         <div className={styles.mainContentRow}>
           <div className={styles.eventsColumn}>
             <CommunityHeader lang={lang} onScrollUp={scrollUp} onScrollDown={scrollDown} />
             
             <div className={styles.filtersAndEventsRow}>
-              <CommunityFilters activeTag={activeTag} onTagChange={setActiveTag} />
+              <CommunityFilters activeTag={activeTag} onTagChange={setActiveTag} lang={lang} />
               
               <CommunityEventsList events={filteredEvents} lang={lang} scrollRef={scrollRef} />
             </div>

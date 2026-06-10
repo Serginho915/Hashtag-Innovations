@@ -9,7 +9,8 @@
   /* TRICK: prevents expanding parent height */
   min-height: 100%;
   /* TRICK: takes parent height */
-  min-width: 0; /* Allow flex shrinking */
+  min-width: 393px;
+  max-width: 496px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -23,7 +24,6 @@
   }
 
   @include laptop-sm {
-    width: 100%;
     min-width: 393px;
     gap: 24px;
     height: auto;

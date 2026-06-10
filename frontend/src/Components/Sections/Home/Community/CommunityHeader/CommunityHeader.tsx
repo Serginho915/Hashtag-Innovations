@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from './CommunityHeader.module.scss';
 import Link from 'next/link';
+import { translations } from '../translations';
+import { SubTitle } from '../../../../UI/SubTitle/SubTitle';
 
 interface CommunityHeaderProps {
   lang: string;
@@ -9,16 +11,15 @@ interface CommunityHeaderProps {
 }
 
 export const CommunityHeader: React.FC<CommunityHeaderProps> = ({ lang, onScrollUp, onScrollDown }) => {
+  const t = translations[lang] || translations.bg;
+
   return (
     <div className={styles.headerContainer}>
       <div className={styles.headerRow}>
-        <div className={styles.titleGroup}>
-          <div className={styles.titleNumber}>01/</div>
-          <div className={styles.titleText}>EVENTS</div>
-        </div>
+        <SubTitle title={`01/ ${t.subtitle}`} className={styles.titleGroup} />
         <div className={styles.actionsGroup}>
           <Link href={`/${lang}/events`} className={styles.viewAll}>
-            VIEW ALL
+            {t.viewAll}
           </Link>
           <div className={styles.arrowsGroup}>
             <div 

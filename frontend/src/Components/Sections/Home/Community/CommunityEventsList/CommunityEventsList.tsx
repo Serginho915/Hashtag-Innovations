@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './CommunityEventsList.module.scss';
 import { CommunityEventCard } from '../CommunityEventCard/CommunityEventCard';
-import { CommunityEvent } from '../../../../../types/community';
+import { CommunityEvent } from '../../../../../Types/community';
 
 interface CommunityEventsListProps {
   events: CommunityEvent[];
@@ -29,6 +29,7 @@ export const CommunityEventsList: React.FC<CommunityEventsListProps> = ({ events
           location={topEvent.location}
           imageSrc={topEvent.imageSrc}
           lang={lang}
+          price={topEvent.price}
         />
       )}
 
@@ -45,6 +46,7 @@ export const CommunityEventsList: React.FC<CommunityEventsListProps> = ({ events
               location={event.location}
               imageSrc={gridEvents.length === 1 ? event.imageSrc : undefined}
               lang={lang}
+              price={event.price}
             />
           ))}
         </div>

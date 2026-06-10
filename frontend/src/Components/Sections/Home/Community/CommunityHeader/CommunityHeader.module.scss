@@ -41,14 +41,15 @@
   @include tablet {
     width: auto;
   }
-}
 
-.titleNumber, .titleText {
-  color: black;
-  font-size: 14px;
-  font-family: $font-manrope;
-  font-weight: 500;
-  word-wrap: break-word;
+  h3 {
+    color: black;
+    font-size: 14px;
+    font-family: $font-manrope;
+    font-weight: 500;
+    word-wrap: break-word;
+    margin: 0; /* Reset default h3 margins */
+  }
 }
 
 .actionsGroup {

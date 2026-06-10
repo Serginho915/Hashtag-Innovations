@@ -5,6 +5,7 @@
 .upcomingEvent {
   flex: 1 1 0;
   max-width: 346px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -14,7 +15,11 @@
   @include laptop {
     align-items: flex-start;
     gap: 12px;
+    max-width: 100%;
   }
+
+
+  
 
   @include tablet {
     max-width: 100%;
@@ -50,7 +55,7 @@
 
 .eventImageWrapper {
   align-self: stretch;
-  height: 169px;
+  height: 230px;
   border-radius: 6.29px;
   position: relative;
   overflow: hidden;
