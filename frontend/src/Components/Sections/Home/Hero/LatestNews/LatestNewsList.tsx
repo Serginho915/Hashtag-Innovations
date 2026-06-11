@@ -5,15 +5,7 @@ import styles from "./LatestNews.module.scss";
 import { NewsCard } from "../NewsCard/NewsCard";
 import { ScrollArrows } from "../../../../UI/ScrollArrows/ScrollArrows";
 
-interface NewsItem {
-  id: string;
-  title: string;
-  excerpt: string;
-  authorLabel: string;
-  authorId: string;
-  authorName?: string;
-  authorExpertId?: string;
-}
+import { NewsItem } from "../../../../../Types/news";
 
 interface LatestNewsListProps {
   news: NewsItem[];
@@ -62,9 +54,9 @@ export const LatestNewsList: React.FC<LatestNewsListProps> = ({ news, lang }) =>
             key={item.id}
             id={item.id}
             title={item.title}
-            excerpt={item.excerpt}
-            authorLabel={item.authorLabel}
-            authorId={item.authorId}
+            excerpt={item.excerpt || ''}
+            authorLabel={item.authorLabel || ''}
+            authorId={item.authorId || ''}
             authorName={item.authorName}
             authorExpertId={item.authorExpertId}
             lang={lang}

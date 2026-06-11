@@ -6,16 +6,7 @@ import Image from "next/image";
 
 import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink';
 
-interface TextbookItem {
-  id: string;
-  title: string;
-  excerpt: string;
-  authorLabel: string;
-  authorName: string;
-  authorExpertId?: string;
-  imageUrl: string;
-  pdfUrl: string;
-}
+import { TextbookItem } from "../../../../../Types/textbook";
 
 interface LearningMaterialsProps {
   materials: TextbookItem[];

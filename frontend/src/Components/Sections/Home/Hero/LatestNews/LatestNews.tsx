@@ -3,39 +3,16 @@ import styles from "./LatestNews.module.scss";
 import { translations } from "./translations";
 import { LatestNewsList } from "./LatestNewsList";
 
-import { MOCK_NEWS_EN, MOCK_NEWS_BG } from './mockData';
+import { NewsItem } from "../../../../../Types/news";
 
-interface NewsItem {
-  id: string;
-  title: string;
-  excerpt: string;
-  authorLabel: string;
-  authorId: string;
-  authorName?: string;
-  authorExpertId?: string;
+interface LatestNewsProps {
+  lang: string;
+  news: NewsItem[];
 }
 
-const fetchNewsFromApi = async (language: string): Promise<NewsItem[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      // Fallback to mock data if no real API
-      const items = language === 'bg' ? MOCK_NEWS_BG : MOCK_NEWS_EN;
-      const formattedItems = items.map((item: any, idx: number) => ({
-        ...item,
-        id: `news-${idx + 1}`,
-        authorId: `author-${idx + 1}`,
-        authorName: item.authorName,
-        authorExpertId: item.authorExpertId
-      }));
-      resolve(formattedItems);
-    }, 100); // simulate network delay
-  });
-};
-
-export const LatestNews = async ({ lang }: { lang: string }) => {
+export const LatestNews = ({ lang, news }: LatestNewsProps) => {
   const t = translations[lang] || translations.en;
-  
-  const news = await fetchNewsFromApi(lang);
+
 
   const today = new Date();
   const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };

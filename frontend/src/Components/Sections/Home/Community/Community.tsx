@@ -4,17 +4,15 @@ import { SectionTitle } from '../../../UI/SectionTitle/SectionTitle';
 import { translations } from './translations';
 import { CommunityInteractive } from './CommunityInteractive';
 
+import { CommunityEvent } from '../../../../Types/community';
+
 interface CommunityProps {
   lang: string;
+  events: CommunityEvent[];
 }
 
-import { MOCK_EVENTS } from './mockData';
-
-export const Community = async ({ lang }: CommunityProps) => {
+export const Community = async ({ lang, events }: CommunityProps) => {
   const t = translations[lang] || translations.bg;
-
-  // In a real app, this would be an API call
-  const events = MOCK_EVENTS;
 
   return (
     <section className={styles.communitySection}>

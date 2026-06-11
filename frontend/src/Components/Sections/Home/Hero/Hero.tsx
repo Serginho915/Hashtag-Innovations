@@ -5,7 +5,16 @@ import { InsidePlatform } from "./InsidePlatform/InsidePlatform";
 import { UpcomingEvent } from "./UpcomingEvent/UpcomingEvent";
 import { LatestNews } from "./LatestNews/LatestNews";
 
-export const Hero = ({ lang }: { lang: string }) => {
+import { NewsItem } from "../../../../Types/news";
+import { UpcomingEventData } from "../../../../Types/event";
+
+interface HeroProps {
+  lang: string;
+  news: NewsItem[];
+  upcomingEvents: UpcomingEventData[];
+}
+
+export const Hero = ({ lang, news, upcomingEvents }: HeroProps) => {
   return (
     <section className={styles.hero}>
       <HeroHeadline lang={lang} />
@@ -14,8 +23,8 @@ export const Hero = ({ lang }: { lang: string }) => {
         <InsidePlatform lang={lang} />
 
         <div className={styles.rightColumnsWrapper}>
-          <UpcomingEvent lang={lang} />
-          <LatestNews lang={lang} />
+          <UpcomingEvent lang={lang} events={upcomingEvents} />
+          <LatestNews lang={lang} news={news} />
         </div>
       </div>
     </section>

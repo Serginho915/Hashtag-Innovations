@@ -5,29 +5,24 @@ import { DiscoverButton } from "../../../../Common/Buttons/DiscoverButton/Discov
 import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink';
 import { CustomVideoPlayer } from "../../../../UI/CustomVideoPlayer/CustomVideoPlayer";
 
-import { MOCK_UPCOMING_EVENTS_EN, MOCK_UPCOMING_EVENTS_BG } from './mockData';
+import { UpcomingEventData } from "../../../../../Types/event";
 
-export interface EventData {
-  id: number;
-  title: string;
-  speakerName: string;
-  speakerExpertId?: string;
-  description: string;
-  dateIso: string;
-  location: string;
+interface UpcomingEventProps {
+  lang: string;
+  events: UpcomingEventData[];
 }
 
-export const UpcomingEvent = async ({ lang }: { lang: string }) => {
+export const UpcomingEvent = ({ lang, events }: UpcomingEventProps) => {
   const t = translations[lang] || translations.en;
-  const eventsData: EventData[] = lang === 'bg' ? MOCK_UPCOMING_EVENTS_BG : MOCK_UPCOMING_EVENTS_EN;
+  const eventsData = events;
 
   const now = new Date();
   
   // Find future events
-  const futureEvents = eventsData.filter((e: EventData) => new Date(e.dateIso) >= now);
+  const futureEvents = eventsData.filter((e: UpcomingEventData) => new Date(e.dateIso) >= now);
   
   // Sort by closest date
-  futureEvents.sort((a: EventData, b: EventData) => new Date(a.dateIso).getTime() - new Date(b.dateIso).getTime());
+  futureEvents.sort((a: UpcomingEventData, b: UpcomingEventData) => new Date(a.dateIso).getTime() - new Date(b.dateIso).getTime());
 
   // Fallback to the last event in array if no future events
   const nearestEvent = futureEvents.length > 0 ? futureEvents[0] : eventsData[eventsData.length - 1];

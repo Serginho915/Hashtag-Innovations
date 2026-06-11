@@ -5,30 +5,16 @@ import { SubTitle } from '../../../UI/SubTitle/SubTitle';
 import Link from 'next/link';
 import { translations } from './translations';
 
-import { MOCK_EXPERTS_EN, MOCK_EXPERTS_BG } from './mockData';
-
 import { ExpertCard } from './ExpertCard/ExpertCard';
+import { Expert } from '../../../../Types/expert';
 
-interface Expert {
-  id: string;
-  name: string;
-  role: string;
-  company: string;
-  imageUrl: string;
-  quote: string;
+interface FeaturedVoicesProps {
+  lang: string;
+  experts: Expert[];
 }
 
-const fetchExpertsFromApi = async (language: string): Promise<Expert[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(language === 'bg' ? MOCK_EXPERTS_BG : MOCK_EXPERTS_EN);
-    }, 100); // Simulate network delay
-  });
-};
-
-export const FeaturedVoices = async ({ lang }: { lang: string }) => {
+export const FeaturedVoices = ({ lang, experts }: FeaturedVoicesProps) => {
   const t = translations[lang] || translations.bg;
-  const experts = await fetchExpertsFromApi(lang);
 
   return (
     <section className={styles.section}>

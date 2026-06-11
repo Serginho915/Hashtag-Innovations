@@ -7,16 +7,7 @@ import Image from "next/image";
 import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink';
 import { translations } from "./translations";
 
-interface NewsItem {
-  id: string;
-  title: string;
-  excerpt: string;
-  authorLabel: string;
-  authorId: string;
-  authorName?: string;
-  authorExpertId?: string;
-  tags?: string[];
-}
+import { NewsItem } from "../../../../../Types/news";
 
 interface PopularInsightsProps {
   news: NewsItem[];
@@ -107,7 +98,7 @@ export const PopularInsights: React.FC<PopularInsightsProps> = ({ news, lang }) 
               key={article.id}
               id={article.id}
               title={article.title}
-              excerpt={article.excerpt}
+              excerpt={article.excerpt || ''}
               authorName={article.authorName || 'Andrey Nikolov'}
               authorLabel={article.authorLabel || t.by}
               authorExpertId={article.authorExpertId}

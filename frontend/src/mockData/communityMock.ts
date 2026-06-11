@@ -1,4 +1,4 @@
-import { CommunityEvent } from '../../../../Types/community';
+import { CommunityEvent } from '../Types/community';
 
 export const MOCK_EVENTS: CommunityEvent[] = [
   {
