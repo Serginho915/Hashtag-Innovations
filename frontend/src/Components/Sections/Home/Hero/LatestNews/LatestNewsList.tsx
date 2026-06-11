@@ -11,6 +11,8 @@ interface NewsItem {
   excerpt: string;
   authorLabel: string;
   authorId: string;
+  authorName?: string;
+  authorExpertId?: string;
 }
 
 interface LatestNewsListProps {
@@ -63,6 +65,8 @@ export const LatestNewsList: React.FC<LatestNewsListProps> = ({ news, lang }) =>
             excerpt={item.excerpt}
             authorLabel={item.authorLabel}
             authorId={item.authorId}
+            authorName={item.authorName}
+            authorExpertId={item.authorExpertId}
             lang={lang}
           />
         ))}

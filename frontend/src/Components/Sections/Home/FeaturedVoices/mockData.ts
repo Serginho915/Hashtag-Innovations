@@ -22,6 +22,14 @@ export const MOCK_EXPERTS_EN = [
     company: 'Airbnb',
     imageUrl: '/images/avatars/avatar_3.png',
     quote: '“Creating intuitive experiences bridging the gap between users and business goals.”'
+  },
+  {
+    id: 'expert-4',
+    name: 'Andrey Nikolov',
+    role: 'Founder & CEO at',
+    company: 'Hashtag Innovations',
+    imageUrl: '/images/avatars/avatar_1.png',
+    quote: '“Building the future of tech communities and fostering continuous innovation.”'
   }
 ];
 
@@ -49,5 +57,13 @@ export const MOCK_EXPERTS_BG = [
     company: 'Airbnb',
     imageUrl: '/images/avatars/avatar_3.png',
     quote: '„Създавам интуитивни преживявания, които свързват нуждите на потребителите с бизнес целите.“'
+  },
+  {
+    id: 'expert-4',
+    name: 'Андрей Николов',
+    role: 'Основател и изпълнителен директор в',
+    company: 'Hashtag Innovations',
+    imageUrl: '/images/avatars/avatar_1.png',
+    quote: '„Изграждам бъдещето на технологичните общности и насърчавам непрекъснатите иновации.“'
   }
 ];

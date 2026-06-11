@@ -4,6 +4,8 @@ import React, { useRef, useState, useEffect } from "react";
 import styles from "./LearningMaterials.module.scss";
 import Image from "next/image";
 
+import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink';
+
 interface TextbookItem {
   id: string;
   title: string;
@@ -56,8 +58,8 @@ export const LearningMaterials: React.FC<LearningMaterialsProps> = ({ materials,
                 <div className={styles.cardTitle}>{item.title}</div>
                 <div className={styles.cardExcerpt}>{item.excerpt}</div>
                 <div className={styles.authorRow}>
-                  <div className={styles.authorLabel}>Author:</div>
-                  <div className={styles.authorName}>{item.authorName}</div>
+                  <div className={styles.authorLabel}>{item.authorLabel || 'Author:'}</div>
+                  <AuthorLink name={item.authorName} expertId={item.authorExpertId} lang={lang} />
                 </div>
               </div>
             </div>

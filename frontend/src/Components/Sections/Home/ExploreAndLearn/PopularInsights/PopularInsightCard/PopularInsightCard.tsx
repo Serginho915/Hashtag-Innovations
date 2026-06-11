@@ -1,7 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
+import { AuthorLink } from '../../../../../UI/AuthorLink/AuthorLink';
 import styles from './PopularInsightCard.module.scss';
 import { ReadButton } from '../../../../../Common/Buttons/ReadButton/ReadButton';
+import { translations } from '../translations';
 
 interface PopularInsightCardProps {
   id: string;
@@ -9,6 +11,8 @@ interface PopularInsightCardProps {
   excerpt: string;
   authorName: string;
   authorLabel: string;
+  authorExpertId?: string;
+  lang?: string;
 }
 
 export const PopularInsightCard = ({
@@ -16,8 +20,12 @@ export const PopularInsightCard = ({
   title,
   excerpt,
   authorName,
-  authorLabel
+  authorLabel,
+  authorExpertId,
+  lang = 'en'
 }: PopularInsightCardProps) => {
+  const t = translations[lang] || translations.en;
+
   return (
     <div className={styles.insightCard}>
       <div className={styles.cardContent}>
@@ -33,8 +41,9 @@ export const PopularInsightCard = ({
             <div className={styles.authorAvatar}>
               <Image src="/images/avatar-1.png" alt={authorName} fill style={{ objectFit: 'cover' }} />
             </div>
+            <AuthorLink name={authorName} expertId={authorExpertId} lang={lang} />
           </div>
-          <ReadButton text="Read" />
+          <ReadButton text={t.read} />
         </div>
       </div>
     </div>

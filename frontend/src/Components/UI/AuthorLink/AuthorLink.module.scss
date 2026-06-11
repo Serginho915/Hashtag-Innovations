@@ -1,0 +1,29 @@
+@use "../../../Styles/mixins" as *;
+
+.authorLink {
+  color: #0F0FFF;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 20px;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.authorText {
+  color: black;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

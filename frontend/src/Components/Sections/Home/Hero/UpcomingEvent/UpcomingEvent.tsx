@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./UpcomingEvent.module.scss";
 import { translations } from "./translations";
 import { DiscoverButton } from "../../../../Common/Buttons/DiscoverButton/DiscoverButton";
+import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink';
 import { CustomVideoPlayer } from "../../../../UI/CustomVideoPlayer/CustomVideoPlayer";
 
 import { MOCK_UPCOMING_EVENTS_EN, MOCK_UPCOMING_EVENTS_BG } from './mockData';
@@ -10,6 +11,7 @@ export interface EventData {
   id: number;
   title: string;
   speakerName: string;
+  speakerExpertId?: string;
   description: string;
   dateIso: string;
   location: string;
@@ -17,7 +19,7 @@ export interface EventData {
 
 export const UpcomingEvent = async ({ lang }: { lang: string }) => {
   const t = translations[lang] || translations.en;
-  const eventsData = lang === 'bg' ? MOCK_UPCOMING_EVENTS_BG : MOCK_UPCOMING_EVENTS_EN;
+  const eventsData: EventData[] = lang === 'bg' ? MOCK_UPCOMING_EVENTS_BG : MOCK_UPCOMING_EVENTS_EN;
 
   const now = new Date();
   
@@ -71,7 +73,7 @@ export const UpcomingEvent = async ({ lang }: { lang: string }) => {
 
             <div className={styles.eventSpeakerRow}>
               <div className={styles.eventSpeakerLabel}>{t.speakerLabel}</div>
-              <div className={styles.eventSpeakerName}>{nearestEvent.speakerName}</div>
+              <AuthorLink name={nearestEvent.speakerName} expertId={nearestEvent.speakerExpertId} lang={lang} />
             </div>
 
             {/* Discover More Button */}

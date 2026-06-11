@@ -141,24 +141,20 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
-  gap: 29px;
+  gap: 8px;
+  width: 100%;
 }
 
 .authorLabel {
-  width: 51px;
   color: black;
   font-size: 14px;
   font-family: $font-manrope;
   font-weight: 500;
+  white-space: nowrap;
 }
 
-.authorName {
-  color: #0F0FFF;
-  font-size: 16px;
-  font-family: $font-manrope;
-  font-weight: 600;
-  line-height: 20px;
-}
+
+
 
 .boxFooter {
   align-self: stretch;

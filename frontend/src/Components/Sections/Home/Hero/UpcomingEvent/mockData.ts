@@ -10,34 +10,36 @@ export const MOCK_UPCOMING_EVENTS_EN = [
   {
     id: 2,
     title: "Business Innovation Summit 2026",
-    speakerName: "Andrew Nikolov",
+    speakerName: "Andrey Nikolov",
+    speakerExpertId: "expert-4",
     description: "Join 500+ leaders for insights on AI, digital transformation, and strategic growth...",
     dateIso: "2026-08-15T10:00:00Z", // Future date
     location: "On site, Sofia",
   },
   {
     id: 3,
-    title: "Web3 & Blockchain Future",
+    title: "Future of Digital Transformation",
     speakerName: "Michael Smith",
-    description: "Explore the decentralization of the web and new financial models.",
-    dateIso: "2026-10-10T10:00:00Z", // Further future date
-    location: "Online",
+    description: "Explore the newest tools helping organizations build scalable and resilient architectures.",
+    dateIso: "2026-09-20T10:00:00Z", // Future date
+    location: "On site, Plovdiv",
   }
 ];
 
 export const MOCK_UPCOMING_EVENTS_BG = [
   {
     id: 1,
-    title: "Минала Конференция 2025",
-    speakerName: "Jane Doe",
-    description: "Старо събитие, което вече е минало.",
-    dateIso: "2025-05-20T10:00:00Z",
-    location: "На място, Варна",
+    title: "AI & ML in Finance Conference 2024",
+    speakerName: "Джейн Доу",
+    description: "Навлизане дълбоко в това как алгоритмите за машинно обучение трансформират съвременното банкиране, управление на риска...",
+    dateIso: "2024-05-15T10:00:00Z", // Past date
+    location: "Онлайн",
   },
   {
     id: 2,
     title: "Business Innovation Summit 2026",
-    speakerName: "Andrew Nikolov",
+    speakerName: "Андрей Николов",
+    speakerExpertId: "expert-4",
     description: "Присъединете се към 500+ лидери за прозрения относно AI, дигитална трансформация и стратегически растеж...",
     dateIso: "2026-08-15T10:00:00Z",
     location: "На място, София",

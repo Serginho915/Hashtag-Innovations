@@ -4,18 +4,19 @@ export const MOCK_TEXTBOOKS_EN = [
     excerpt: "Discover the emerging technologies reshaping our future, from quantum computing to advanced AI models.",
     authorLabel: "by",
     authorName: "Dr. Alice Johnson",
-    authorExpertId: "alice-johnson",
     imageUrl: "/images/default_textbook_cover.png",
     pdfUrl: "#",
+    createdAt: "2023-11-20T10:00:00Z"
   },
   {
     title: "Mastering React 18 and Next.js App Router",
     excerpt: "A comprehensive deep dive into server components, streaming, and modern frontend architecture.",
     authorLabel: "by",
     authorName: "David Kim",
-    authorExpertId: "david-kim",
+    authorExpertId: "expert-1",
     imageUrl: "/images/default_textbook_cover.png",
     pdfUrl: "#",
+    createdAt: "2023-08-10T10:00:00Z"
   },
   {
     title: "UX/UI Design Patterns for Enterprise",
@@ -24,6 +25,7 @@ export const MOCK_TEXTBOOKS_EN = [
     authorName: "Jane Smith",
     imageUrl: "/images/default_textbook_cover.png",
     pdfUrl: "#",
+    createdAt: "2023-10-05T10:00:00Z"
   },
   {
     title: "Cybersecurity Basics for Developers",
@@ -32,6 +34,7 @@ export const MOCK_TEXTBOOKS_EN = [
     authorName: "Bob Brown",
     imageUrl: "/images/default_textbook_cover.png",
     pdfUrl: "#",
+    createdAt: "2023-09-01T10:00:00Z"
   },
 ];
 
@@ -41,18 +44,19 @@ export const MOCK_TEXTBOOKS_BG = [
     excerpt: "Открийте нововъзникващите технологии, които преоформят бъдещето ни - от квантови изчисления до напреднали AI модели.",
     authorLabel: "от",
     authorName: "Д-р Алис Джонсън",
-    authorExpertId: "alice-johnson",
     imageUrl: "/images/default_textbook_cover.png",
     pdfUrl: "#",
+    createdAt: "2023-11-20T10:00:00Z"
   },
   {
     title: "Усвояване на React 18 и Next.js App Router",
     excerpt: "Изчерпателно задълбочаване в сървърните компоненти, стрийминга и модерната фронтенд архитектура.",
     authorLabel: "от",
     authorName: "Дейвид Ким",
-    authorExpertId: "david-kim",
+    authorExpertId: "expert-1",
     imageUrl: "/images/default_textbook_cover.png",
     pdfUrl: "#",
+    createdAt: "2023-08-10T10:00:00Z"
   },
   {
     title: "UX/UI шаблони за дизайн за Enterprise",
@@ -61,6 +65,7 @@ export const MOCK_TEXTBOOKS_BG = [
     authorName: "Джейн Смит",
     imageUrl: "/images/default_textbook_cover.png",
     pdfUrl: "#",
+    createdAt: "2023-10-05T10:00:00Z"
   },
   {
     title: "Основи на киберсигурността за разработчици",
@@ -69,5 +74,6 @@ export const MOCK_TEXTBOOKS_BG = [
     authorName: "Боб Браун",
     imageUrl: "/images/default_textbook_cover.png",
     pdfUrl: "#",
+    createdAt: "2023-09-01T10:00:00Z"
   },
 ];

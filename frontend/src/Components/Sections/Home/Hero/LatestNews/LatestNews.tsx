@@ -11,6 +11,8 @@ interface NewsItem {
   excerpt: string;
   authorLabel: string;
   authorId: string;
+  authorName?: string;
+  authorExpertId?: string;
 }
 
 const fetchNewsFromApi = async (language: string): Promise<NewsItem[]> => {
@@ -21,7 +23,9 @@ const fetchNewsFromApi = async (language: string): Promise<NewsItem[]> => {
       const formattedItems = items.map((item: any, idx: number) => ({
         ...item,
         id: `news-${idx + 1}`,
-        authorId: `author-${idx + 1}`
+        authorId: `author-${idx + 1}`,
+        authorName: item.authorName,
+        authorExpertId: item.authorExpertId
       }));
       resolve(formattedItems);
     }, 100); // simulate network delay

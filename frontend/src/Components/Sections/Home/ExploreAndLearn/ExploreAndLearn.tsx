@@ -16,19 +16,23 @@ export const ExploreAndLearn = ({ lang }: ExploreAndLearnProps) => {
   
   // Mock API fetching for textbooks
   const textbooks = lang === 'bg' ? MOCK_TEXTBOOKS_BG : MOCK_TEXTBOOKS_EN;
-  const formattedTextbooks = textbooks.map((item, idx) => ({
-    ...item,
-    id: `textbook-${idx + 1}`
-  }));
+  const formattedTextbooks = textbooks
+    .map((item, idx) => ({
+      ...item,
+      id: `textbook-${idx + 1}`
+    }))
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   // Mock API fetching for blogs
   const blogs = lang === 'bg' ? MOCK_NEWS_BG : MOCK_NEWS_EN;
-  const formattedBlogs = blogs.map((item: any, idx: number) => ({
-    ...item,
-    id: `blog-${idx + 1}`,
-    authorId: `author-${idx + 1}`,
-    authorName: item.authorName || "Andrew Nikolov"
-  }));
+  const formattedBlogs = blogs
+    .map((item: any, idx: number) => ({
+      ...item,
+      id: `blog-${idx + 1}`,
+      authorId: `author-${idx + 1}`,
+      authorName: item.authorName || "Andrey Nikolov"
+    }))
+    .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   return (
     <section className={styles.exploreSection}>

@@ -40,7 +40,7 @@ export const FeaturedVoices = async ({ lang }: { lang: string }) => {
 
         {/* Cards Grid */}
         <ul className={styles.cardsGrid}>
-          {experts.map((expert) => (
+          {experts.slice(0, 3).map((expert) => (
             <li key={expert.id} style={{ display: 'contents' }}>
               <ExpertCard
                 id={expert.id}

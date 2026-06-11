@@ -28,7 +28,6 @@
 .titleWrapper {
   width: 100%;
   max-width: 1352px;
-  padding-top: 4px;
   padding-bottom: 20px;
   display: flex;
   flex-direction: column;
@@ -42,6 +41,7 @@
 .contentGrid {
   width: 100%;
   max-width: 1352px; /* Content shouldn't exceed 1352px */
+  height: 875px;
   display: flex;
   justify-content: flex-start;
   align-items: stretch;
@@ -49,6 +49,7 @@
 
   @include laptop-sm {
     flex-direction: column;
+    height: auto;
   }
 }
 

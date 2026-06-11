@@ -29,7 +29,6 @@ export const CommunityEventCard: React.FC<CommunityEventCardProps> = ({
   price,
 }) => {
   const eventUrl = `/${lang}/events/${eventId}`;
-  const speakerUrl = `/${lang}/experts/${speaker.id}`;
   const t = translations[lang] || translations.bg;
 
   return (
@@ -42,7 +41,7 @@ export const CommunityEventCard: React.FC<CommunityEventCardProps> = ({
               <h3 className={styles.title}>{title}</h3>
             </Link>
           </div>
-          
+
 
           {/* Meta (Date / Location / Price) */}
           <div className={styles.metaRow}>

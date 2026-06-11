@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./NewsCard.module.scss";
 import { translations } from "./translations";
 import { ReadButton } from "../../../../Common/Buttons/ReadButton/ReadButton";
+import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink';
 import Link from 'next/link';
 
 interface NewsCardProps {
@@ -10,12 +11,13 @@ interface NewsCardProps {
   excerpt: string;
   authorLabel: string;
   authorId: string;
+  authorName?: string;
+  authorExpertId?: string;
   lang: string;
 }
 
-export const NewsCard = ({ id, title, excerpt, authorLabel, authorId, lang }: NewsCardProps) => {
+export const NewsCard = ({ id, title, excerpt, authorLabel, authorId, authorName, authorExpertId, lang }: NewsCardProps) => {
   const t = translations[lang] || translations.en;
-  const authorUrl = `/${lang}/experts/${authorId}`;
   const articleUrl = `/${lang}/news/${id}`;
 
   return (
@@ -24,12 +26,13 @@ export const NewsCard = ({ id, title, excerpt, authorLabel, authorId, lang }: Ne
         <div className={styles.newsCardTitle}>{title}</div>
         <div className={styles.newsCardExcerpt}>{excerpt}</div>
         <div className={styles.newsCardFooter}>
-          <Link href={authorUrl} className={styles.authorLink}>
+          <div className={styles.authorLink}>
             <div className={styles.newsCardAuthor}>
               <div className={styles.newsCardAuthorLabel}>{authorLabel}</div>
               <div className={styles.authorAvatar}></div>
+              {authorName && <AuthorLink name={authorName} expertId={authorExpertId} lang={lang} />}
             </div>
-          </Link>
+          </div>
           <Link href={articleUrl} className={styles.readLink}>
             <ReadButton text={t.read} />
           </Link>
