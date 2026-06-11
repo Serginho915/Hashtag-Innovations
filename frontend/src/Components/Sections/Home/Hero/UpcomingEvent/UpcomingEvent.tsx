@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styles from "./UpcomingEvent.module.scss";
 import { translations } from "./translations";
 import { DiscoverButton } from "../../../../Common/Buttons/DiscoverButton/DiscoverButton";
@@ -17,37 +15,29 @@ export interface EventData {
   location: string;
 }
 
-export const UpcomingEvent = ({ lang }: { lang: string }) => {
+export const UpcomingEvent = async ({ lang }: { lang: string }) => {
   const t = translations[lang] || translations.en;
   const eventsData = lang === 'bg' ? MOCK_UPCOMING_EVENTS_BG : MOCK_UPCOMING_EVENTS_EN;
 
-  const [nearestEvent, setNearestEvent] = useState<EventData | null>(null);
-  const [formattedDate, setFormattedDate] = useState("");
+  const now = new Date();
+  
+  // Find future events
+  const futureEvents = eventsData.filter((e: EventData) => new Date(e.dateIso) >= now);
+  
+  // Sort by closest date
+  futureEvents.sort((a: EventData, b: EventData) => new Date(a.dateIso).getTime() - new Date(b.dateIso).getTime());
 
-  useEffect(() => {
-    const now = new Date();
-    
-    // Find future events
-    const futureEvents = eventsData.filter((e: EventData) => new Date(e.dateIso) >= now);
-    
-    // Sort by closest date
-    futureEvents.sort((a: EventData, b: EventData) => new Date(a.dateIso).getTime() - new Date(b.dateIso).getTime());
-
-    // Fallback to the last event in array if no future events
-    const selectedEvent = futureEvents.length > 0 ? futureEvents[0] : eventsData[eventsData.length - 1];
-    setNearestEvent(selectedEvent);
-
-    if (selectedEvent) {
-      const dateObj = new Date(selectedEvent.dateIso);
-      const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
-      const locale = lang === 'bg' ? 'bg-BG' : 'en-GB';
-      setFormattedDate(dateObj.toLocaleDateString(locale, options));
-    }
-  }, [eventsData, lang]);
+  // Fallback to the last event in array if no future events
+  const nearestEvent = futureEvents.length > 0 ? futureEvents[0] : eventsData[eventsData.length - 1];
 
   if (!nearestEvent) {
-    return null; // Or a loading skeleton
+    return null;
   }
+
+  const dateObj = new Date(nearestEvent.dateIso);
+  const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+  const locale = lang === 'bg' ? 'bg-BG' : 'en-GB';
+  const formattedDate = dateObj.toLocaleDateString(locale, options);
 
   return (
     <div className={styles.upcomingEvent}>

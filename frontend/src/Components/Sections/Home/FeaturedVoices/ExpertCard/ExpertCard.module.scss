@@ -1,0 +1,173 @@
+@use "../../../../../Styles/mixins" as *;
+@import "../../../../../Styles/variables";
+
+.card {
+  align-self: stretch;
+  padding: 16px;
+  background: white;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+  display: inline-flex;
+  flex: 1 1 0;
+
+  &:not(:last-child) {
+    @include desktop {
+      border-right: 1px solid #C0C0D2;
+    }
+
+    @include laptop {
+      border-right: 1px solid #C0C0D2;
+    }
+  }
+
+  @include laptop-sm {
+    flex: 0 0 calc(50% - 8px);
+    scroll-snap-align: start;
+  }
+
+  @include tablet {
+    flex: 1 1 auto;
+    padding: 0 4px;
+    border-right: none;
+  }
+}
+
+.cardContent {
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+  display: inline-flex;
+}
+
+.header {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  display: flex;
+
+  .name {
+    align-self: stretch;
+    color: #101828;
+    font-size: 20px;
+    font-family: $font-manrope;
+    font-weight: 700;
+    line-height: 22px;
+    word-wrap: break-word;
+
+    @include mobile {
+      font-size: 18px;
+    }
+  }
+
+  .roleRow {
+    align-self: stretch;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4px;
+    display: inline-flex;
+
+    .roleText {
+      color: #4A5565;
+      font-size: 18px;
+      font-family: $font-manrope;
+      font-weight: 400;
+      line-height: 18px;
+      word-wrap: break-word;
+    }
+
+    .companyText {
+      color: #6A7282;
+      font-size: 18px;
+      font-family: $font-manrope;
+      font-weight: 400;
+      line-height: 18px;
+      word-wrap: break-word;
+    }
+  }
+}
+
+.bodyRow {
+  flex: 1 1 0;
+  align-self: stretch;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 8px;
+  display: inline-flex;
+  min-height: 214px;
+
+  @include tablet {
+    min-height: 198px;
+  }
+
+  @include mobile {
+    min-height: 183px;
+  }
+}
+
+.imageWrapper {
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10.84px;
+  display: flex;
+
+  .image {
+    width: 214px;
+    height: 100%;
+    min-height: 214px;
+    border-radius: 3.12px;
+    object-fit: cover;
+
+    @include tablet {
+      width: 183px;
+      min-height: 198px;
+    }
+
+    @include mobile {
+      width: 183px;
+      min-height: 183px;
+    }
+  }
+}
+
+.textColumn {
+  flex: 1 1 0;
+  align-self: stretch;
+  padding-left: 8px;
+  padding-right: 8px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  display: inline-flex;
+
+  @include mobile {
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .quote {
+    align-self: stretch;
+    color: black;
+    font-size: 16px;
+    font-family: $font-manrope;
+    font-weight: 500;
+    word-wrap: break-word;
+    margin: 0;
+
+    @include mobile {
+      font-size: 14px;
+    }
+  }
+}
+
+.buttonWrapper {
+  align-self: stretch;
+  display: flex;
+}

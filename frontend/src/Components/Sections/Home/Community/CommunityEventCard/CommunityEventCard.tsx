@@ -43,18 +43,7 @@ export const CommunityEventCard: React.FC<CommunityEventCardProps> = ({
             </Link>
           </div>
           
-          {/* Speaker */}
-          <div className={styles.speakerRow}>
-            <span className={styles.speakerLabel}>{t.speaker}:</span>
-            {speaker.expertId ? (
-              <Link href={`/${lang}/voices/${speaker.expertId}`} className={styles.speakerLink}>
-                <span className={`${styles.speakerName} ${styles.expertBlue}`}>{speaker.name}</span>
-              </Link>
-            ) : (
-              <span className={`${styles.speakerName} ${styles.expertBlack}`}>{speaker.name}</span>
-            )}
-          </div>
-          
+
           {/* Meta (Date / Location / Price) */}
           <div className={styles.metaRow}>
             <div className={styles.metaLeft}>
