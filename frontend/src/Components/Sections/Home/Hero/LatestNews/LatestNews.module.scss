@@ -175,22 +175,22 @@
 
 .newsList {
   align-self: stretch;
-  flex: 1 1 0;
-  min-height: 0;
-  overflow-y: auto;
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
   gap: 16px;
-  padding-right: 4px;
-  /* Space for scrollbar */
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 
-  /* Hide native scrollbar since we use custom arrows and indicator */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  // Hide scrollbar for a cleaner look while keeping functionality
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none; // IE and Edge
   &::-webkit-scrollbar {
-    display: none;
+    display: none; // Chrome, Safari and Opera
   }
 
   @include laptop {

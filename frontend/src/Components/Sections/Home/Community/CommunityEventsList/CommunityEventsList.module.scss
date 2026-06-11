@@ -19,7 +19,8 @@
   align-items: flex-end;
   gap: 16px;
   width: 839px;
-  height: 600px;
+  max-height: 580px;
+  height: auto;
   overflow-y: auto;
 
   /* Hide scrollbar */

@@ -17,7 +17,7 @@ export const HeroHeadline = ({ lang }: { lang: string }) => {
       },
       {
         root: null,
-        rootMargin: "-80px 0px 0px 0px", // triggers when scrolling past the header
+        rootMargin: "-80px 0px 0px 0px",
         threshold: 0,
       }
     );

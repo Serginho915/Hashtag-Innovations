@@ -1,6 +1,7 @@
 export interface CommunitySpeaker {
   id: string;
   name: string;
+  expertId?: string; // If present, the speaker is an expert and their name should be a link.
 }
 
 export interface CommunityEvent {

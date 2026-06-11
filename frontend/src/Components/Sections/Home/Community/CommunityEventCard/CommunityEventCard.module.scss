@@ -114,11 +114,18 @@
 }
 
 .speakerName {
-  color: #0F0FFF;
   font-size: 18px;
   font-family: $font-manrope;
   font-weight: 600;
   line-height: 20px;
+}
+
+.expertBlue {
+  color: #0F0FFF;
+}
+
+.expertBlack {
+  color: black;
 }
 
 .speakerLink {
@@ -233,7 +240,7 @@
 
 .priceItem {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   gap: 8px;
 }
@@ -243,6 +250,9 @@
   height: 16px;
   position: relative;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .priceText {
@@ -286,6 +296,7 @@
   align-items: flex-end;
   gap: 4px;
   //margin-top: auto;
+
 
   @media (max-width: 480px) {
     order: 3;

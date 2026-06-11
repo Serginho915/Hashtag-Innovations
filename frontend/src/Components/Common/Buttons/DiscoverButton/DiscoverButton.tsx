@@ -4,11 +4,12 @@ import styles from "./DiscoverButton.module.scss";
 interface DiscoverButtonProps {
   text: string;
   onClick?: () => void;
+  variant?: 'dark' | 'blue';
 }
 
-export const DiscoverButton = ({ text, onClick }: DiscoverButtonProps) => {
+export const DiscoverButton = ({ text, onClick, variant = 'dark' }: DiscoverButtonProps) => {
   return (
-    <button className={styles.discoverButton} onClick={onClick}>
+    <button className={`${styles.discoverButton} ${styles[variant]}`} onClick={onClick}>
       <span className={styles.discoverText}>{text}</span>
       <div className={styles.discoverArrow}>
         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">

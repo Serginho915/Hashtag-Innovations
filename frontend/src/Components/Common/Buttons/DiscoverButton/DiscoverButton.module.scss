@@ -4,7 +4,6 @@
   flex: 1 1 0;
   align-self: stretch;
   padding-left: 12px;
-  background: #101828;
   border-radius: 9999px;
   display: flex;
   justify-content: center;
@@ -13,6 +12,14 @@
   cursor: pointer;
   border: none;
   text-decoration: none;
+
+  &.dark {
+    background: #101828;
+  }
+
+  &.blue {
+    background: #0F0FFF;
+  }
 }
 
 .discoverText {

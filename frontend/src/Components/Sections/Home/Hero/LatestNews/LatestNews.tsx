@@ -6,10 +6,46 @@ import { NewsCard } from "../NewsCard/NewsCard";
 import { translations } from "./translations";
 import { ScrollArrows } from "../../../../UI/ScrollArrows/ScrollArrows";
 
+import { MOCK_NEWS_EN, MOCK_NEWS_BG } from './mockData';
+
+interface NewsItem {
+  id: string;
+  title: string;
+  excerpt: string;
+  authorLabel: string;
+  authorId: string;
+}
+
 export const LatestNews = ({ lang }: { lang: string }) => {
   const t = translations[lang] || translations.en;
-  const listRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Mock API fetch function
+  const fetchNewsFromApi = async (language: string): Promise<NewsItem[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // Fallback to mock data if no real API
+        const items = language === 'bg' ? MOCK_NEWS_BG : MOCK_NEWS_EN;
+        const formattedItems = items.map((item: any, idx: number) => ({
+          ...item,
+          id: `news-${idx + 1}`,
+          authorId: `author-${idx + 1}`
+        }));
+        resolve(formattedItems);
+      }, 500); // simulate network delay
+    });
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchNewsFromApi(lang).then((data) => {
+      setNews(data);
+      setIsLoading(false);
+    });
+  }, [lang]);
 
   const handleScroll = () => {
     if (listRef.current) {
@@ -23,12 +59,13 @@ export const LatestNews = ({ lang }: { lang: string }) => {
     }
   };
 
-  // Initial check in case content doesn't fill the container
   useEffect(() => {
-    handleScroll();
-    window.addEventListener('resize', handleScroll);
-    return () => window.removeEventListener('resize', handleScroll);
-  }, []);
+    if (!isLoading) {
+      handleScroll();
+      window.addEventListener('resize', handleScroll);
+      return () => window.removeEventListener('resize', handleScroll);
+    }
+  }, [isLoading]);
 
   const [currentDate, setCurrentDate] = useState("");
 
@@ -69,17 +106,23 @@ export const LatestNews = ({ lang }: { lang: string }) => {
       </div>
 
       {/* News Cards */}
-      <div className={styles.newsList} ref={listRef} onScroll={handleScroll}>
-        {t.newsItems.map((item: { title: string; excerpt: string; authorLabel: string }, index: number) => (
-          <NewsCard
-            key={index}
-            title={item.title}
-            excerpt={item.excerpt}
-            authorLabel={item.authorLabel}
-            lang={lang}
-          />
-        ))}
-      </div>
+      <ul className={styles.newsList} ref={listRef} onScroll={handleScroll}>
+        {isLoading ? (
+          <div className={styles.loadingContainer}>Loading...</div>
+        ) : (
+          news.map((item) => (
+            <NewsCard
+              key={item.id}
+              id={item.id}
+              title={item.title}
+              excerpt={item.excerpt}
+              authorLabel={item.authorLabel}
+              authorId={item.authorId}
+              lang={lang}
+            />
+          ))
+        )}
+      </ul>
 
       {/* Scroll Arrows */}
       <ScrollArrows 

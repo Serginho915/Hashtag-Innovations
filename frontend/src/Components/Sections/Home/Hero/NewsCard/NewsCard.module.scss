@@ -52,9 +52,14 @@
 
 .newsCardFooter {
   align-self: stretch;
-  display: inline-flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
+
+  .authorLink, .readLink {
+    text-decoration: none;
+    color: inherit;
+  }
 }
 
 .newsCardAuthor {

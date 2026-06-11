@@ -6,6 +6,8 @@ import { translations } from "./translations";
 import { DiscoverButton } from "../../../../Common/Buttons/DiscoverButton/DiscoverButton";
 import { CustomVideoPlayer } from "../../../../UI/CustomVideoPlayer/CustomVideoPlayer";
 
+import { MOCK_UPCOMING_EVENTS_EN, MOCK_UPCOMING_EVENTS_BG } from './mockData';
+
 export interface EventData {
   id: number;
   title: string;
@@ -17,6 +19,7 @@ export interface EventData {
 
 export const UpcomingEvent = ({ lang }: { lang: string }) => {
   const t = translations[lang] || translations.en;
+  const eventsData = lang === 'bg' ? MOCK_UPCOMING_EVENTS_BG : MOCK_UPCOMING_EVENTS_EN;
 
   const [nearestEvent, setNearestEvent] = useState<EventData | null>(null);
   const [formattedDate, setFormattedDate] = useState("");
@@ -25,13 +28,13 @@ export const UpcomingEvent = ({ lang }: { lang: string }) => {
     const now = new Date();
     
     // Find future events
-    const futureEvents = t.events.filter((e: EventData) => new Date(e.dateIso) >= now);
+    const futureEvents = eventsData.filter((e: EventData) => new Date(e.dateIso) >= now);
     
     // Sort by closest date
     futureEvents.sort((a: EventData, b: EventData) => new Date(a.dateIso).getTime() - new Date(b.dateIso).getTime());
 
     // Fallback to the last event in array if no future events
-    const selectedEvent = futureEvents.length > 0 ? futureEvents[0] : t.events[t.events.length - 1];
+    const selectedEvent = futureEvents.length > 0 ? futureEvents[0] : eventsData[eventsData.length - 1];
     setNearestEvent(selectedEvent);
 
     if (selectedEvent) {
@@ -40,7 +43,7 @@ export const UpcomingEvent = ({ lang }: { lang: string }) => {
       const locale = lang === 'bg' ? 'bg-BG' : 'en-GB';
       setFormattedDate(dateObj.toLocaleDateString(locale, options));
     }
-  }, [t.events, lang]);
+  }, [eventsData, lang]);
 
   if (!nearestEvent) {
     return null; // Or a loading skeleton
