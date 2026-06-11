@@ -73,20 +73,19 @@
   align-self: stretch;
   display: flex;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: stretch; /* Stretch image to content height */
   gap: 40px;
 }
 
 .imageWrapper {
   width: 144px;
-  height: 170px;
   position: relative;
   flex-shrink: 0;
 }
 
 .coverImage {
   width: 144px;
-  height: 170px;
+  height: 100%; /* Stretch to parent wrapper */
   position: absolute;
   left: 0;
   top: 0;
@@ -96,7 +95,7 @@
 .pdfBadge {
   position: absolute;
   left: 0;
-  top: 143px;
+  bottom: 0; /* Anchor to bottom */
   padding: 4px;
   background: white;
   display: flex;
