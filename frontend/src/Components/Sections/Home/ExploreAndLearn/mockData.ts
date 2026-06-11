@@ -1,0 +1,73 @@
+export const MOCK_TEXTBOOKS_EN = [
+  {
+    title: "The Ultimate Guide to Tech Innovations 2024",
+    excerpt: "Discover the emerging technologies reshaping our future, from quantum computing to advanced AI models.",
+    authorLabel: "by",
+    authorName: "Dr. Alice Johnson",
+    authorExpertId: "alice-johnson",
+    imageUrl: "/images/default_textbook_cover.png",
+    pdfUrl: "#",
+  },
+  {
+    title: "Mastering React 18 and Next.js App Router",
+    excerpt: "A comprehensive deep dive into server components, streaming, and modern frontend architecture.",
+    authorLabel: "by",
+    authorName: "David Kim",
+    authorExpertId: "david-kim",
+    imageUrl: "/images/default_textbook_cover.png",
+    pdfUrl: "#",
+  },
+  {
+    title: "UX/UI Design Patterns for Enterprise",
+    excerpt: "Learn how to craft accessible, scalable, and intuitive interfaces for complex B2B applications.",
+    authorLabel: "from",
+    authorName: "Jane Smith",
+    imageUrl: "/images/default_textbook_cover.png",
+    pdfUrl: "#",
+  },
+  {
+    title: "Cybersecurity Basics for Developers",
+    excerpt: "Protect your web applications against common vulnerabilities like XSS, CSRF, and SQL injections.",
+    authorLabel: "by",
+    authorName: "Bob Brown",
+    imageUrl: "/images/default_textbook_cover.png",
+    pdfUrl: "#",
+  },
+];
+
+export const MOCK_TEXTBOOKS_BG = [
+  {
+    title: "Пълно ръководство за технологични иновации 2024",
+    excerpt: "Открийте нововъзникващите технологии, които преоформят бъдещето ни - от квантови изчисления до напреднали AI модели.",
+    authorLabel: "от",
+    authorName: "Д-р Алис Джонсън",
+    authorExpertId: "alice-johnson",
+    imageUrl: "/images/default_textbook_cover.png",
+    pdfUrl: "#",
+  },
+  {
+    title: "Усвояване на React 18 и Next.js App Router",
+    excerpt: "Изчерпателно задълбочаване в сървърните компоненти, стрийминга и модерната фронтенд архитектура.",
+    authorLabel: "от",
+    authorName: "Дейвид Ким",
+    authorExpertId: "david-kim",
+    imageUrl: "/images/default_textbook_cover.png",
+    pdfUrl: "#",
+  },
+  {
+    title: "UX/UI шаблони за дизайн за Enterprise",
+    excerpt: "Научете как да създавате достъпни, мащабируеми и интуитивни интерфейси за сложни B2B приложения.",
+    authorLabel: "от",
+    authorName: "Джейн Смит",
+    imageUrl: "/images/default_textbook_cover.png",
+    pdfUrl: "#",
+  },
+  {
+    title: "Основи на киберсигурността за разработчици",
+    excerpt: "Защитете вашите уеб приложения срещу често срещани уязвимости като XSS, CSRF и SQL инжекции.",
+    authorLabel: "от",
+    authorName: "Боб Браун",
+    imageUrl: "/images/default_textbook_cover.png",
+    pdfUrl: "#",
+  },
+];

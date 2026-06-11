@@ -1,0 +1,355 @@
+@use "../../../../../Styles/mixins" as *;
+
+.popularInsights {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+}
+
+.header {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.headerGroup {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+}
+
+.indexNumber, .titleText {
+  color: black;
+  font-size: 14px;
+  font-family: $font-manrope;
+  font-weight: 500;
+}
+
+.articlesContainer {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 34px;
+}
+
+.featuredArticle {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start; /* Matches HTML */
+  gap: 29px;
+  
+  @include tablet {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.featuredImageWrapper {
+  flex: 1 1 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 200px;
+}
+
+.featuredImageFallback {
+  align-self: stretch;
+  flex: 1 1 0;
+  background: #D9D9D9;
+}
+
+.featuredContent {
+  width: 286px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 22px;
+  
+  @include tablet {
+    width: 100%;
+  }
+}
+
+.featuredTitleGroup {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 28px;
+}
+
+.featuredTitle {
+  align-self: stretch;
+  color: black;
+  font-size: 24px;
+  font-family: $font-manrope;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.featuredExcerpt {
+  align-self: stretch;
+  color: #535362;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.featuredFooter {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 49px;
+}
+
+.featuredAuthorGroup {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.featuredAuthorLabel {
+  color: #5C5C70;
+  font-size: 12px;
+  font-family: $font-manrope;
+  font-weight: 500;
+}
+
+.featuredAuthorName {
+  color: #0F0FFF;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.listContainer {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.bottomRow {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+  
+  @include tablet {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Browse Topics */
+.browseTopics {
+  width: 368px;
+  padding: 8px 16px;
+  outline: 1px solid #C0C0D2;
+  outline-offset: -1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.topicsHeader {
+  padding: 10px 8px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.topicsTitle {
+  color: black;
+  font-size: 18px;
+  font-family: $font-manrope;
+  font-weight: 700;
+}
+
+.topicsList {
+  align-self: stretch;
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.topicItem {
+  align-self: stretch;
+  padding: 4px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topicTextGroup {
+  flex: 1 1 0;
+}
+
+.topicName {
+  color: black;
+  font-size: 14px;
+  font-family: $font-manrope;
+  font-weight: 500;
+}
+
+.topicCount {
+  color: #8C8C92;
+  font-size: 14px;
+  font-family: $font-manrope;
+  font-weight: 600;
+}
+
+.topicCheckboxActive {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.checkboxInner {
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  background: #8C8C92;
+}
+
+/* Newsletter */
+.newsletterBox {
+  flex: 1 1 0;
+  height: 209px;
+  padding: 12px 16px;
+  background: white;
+  outline: 1px solid black;
+  outline-offset: -1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+}
+
+.newsletterHeaderRow {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.newsletterHashtag {
+  color: #AE73F1;
+  font-size: 22px;
+  font-family: "Hiragino Sans", sans-serif;
+  font-weight: 700;
+  line-height: 27px;
+}
+
+.newsletterTitle {
+  color: black;
+  font-size: 18px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 27px;
+}
+
+.newsletterDescRow {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.newsletterDesc {
+  width: 287px;
+  color: #363636;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 20px;
+  
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.newsletterInputBox {
+  align-self: stretch;
+  padding: 4px 4px 4px 12px;
+  background: white;
+  border-radius: 16777200px;
+  outline: 2px solid #C0C0D2;
+  outline-offset: -2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.newsletterInputText {
+  flex: 1 1 0;
+  color: #AAAAB9;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.newsletterSubmitBtn {
+  width: 32px;
+  height: 32px;
+  padding: 8px;
+  background: black;
+  overflow: hidden;
+  border-radius: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.submitIcon {
+  flex: 1 1 0;
+  height: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.submitIconInner {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  background: white;
+}

@@ -1,0 +1,103 @@
+@use "../../../../../../Styles/mixins" as *;
+
+.insightCard {
+  align-self: stretch;
+  height: 120px;
+  overflow: hidden;
+  border-left: 3px solid #C0C0D2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.cardContent {
+  align-self: stretch;
+  padding-left: 16px;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.titleRow {
+  align-self: stretch;
+  padding-right: 16px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.title {
+  flex: 1 1 0;
+  color: black;
+  font-size: 20px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.excerptRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.excerpt {
+  flex: 1 1 0;
+  color: #535362;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.footerRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.authorGroup {
+  width: 127.50px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.authorLabel {
+  color: #5C5C70;
+  font-size: 12px;
+  font-family: $font-manrope;
+  font-weight: 500;
+}
+
+.authorAvatar {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.avatarBg {
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #141414;
+}
+
+
