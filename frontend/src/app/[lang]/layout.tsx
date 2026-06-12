@@ -3,6 +3,7 @@ import { EB_Garamond, Manrope } from "next/font/google";
 import { Language } from "@/Types/Language";
 import "@/Styles/globals.scss";
 import { Header } from "@/Components/Common/Header/Header";
+import { Footer } from "@/Components/Common/Footer/Footer";
 import { LanguageProvider } from "@/Context/LanguageContext";
 import { NavigationProvider } from "@/Context/NavigationContext";
 
@@ -40,9 +41,11 @@ export default async function RootLayout({
             <main className="main-container">
               {children}
             </main>
+            <Footer lang={lang} />
           </NavigationProvider>
         </LanguageProvider>
       </body>
     </html>
   );
 }
+

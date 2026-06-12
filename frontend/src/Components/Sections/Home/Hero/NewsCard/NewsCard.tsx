@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./NewsCard.module.scss";
 import { translations } from "./translations";
 import { ReadButton } from "../../../../Common/Buttons/ReadButton/ReadButton";
-import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink';
 import Link from 'next/link';
 
 interface NewsCardProps {
@@ -29,8 +28,13 @@ export const NewsCard = ({ id, title, excerpt, authorLabel, authorId, authorName
           <div className={styles.authorLink}>
             <div className={styles.newsCardAuthor}>
               <div className={styles.newsCardAuthorLabel}>{authorLabel}</div>
-              <div className={styles.authorAvatar}></div>
-              {authorName && <AuthorLink name={authorName} expertId={authorExpertId} lang={lang} />}
+              {authorExpertId ? (
+                <Link href={`/${lang}/experts/${authorExpertId}`}>
+                  <div className={styles.authorAvatar}></div>
+                </Link>
+              ) : (
+                <div className={styles.authorAvatar}></div>
+              )}
             </div>
           </div>
           <Link href={articleUrl} className={styles.readLink}>

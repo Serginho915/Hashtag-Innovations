@@ -150,7 +150,12 @@ export const PopularInsights: React.FC<PopularInsightsProps> = ({ news, lang }) 
           <div className={styles.newsletterDescRow}>
             <div className={styles.newsletterDesc}>{t.newsletterDesc}</div>
           </div>
-          <div className={styles.newsletterInputBox} style={{ borderColor: subscribeStatus === 'error' ? 'red' : undefined }}>
+          <form 
+            className={`${styles.newsletterInputBox} ${subscribeStatus === 'error' ? styles.shake : ''}`} 
+            style={{ borderColor: subscribeStatus === 'error' ? '#E2425C' : undefined, transition: 'border-color 0.3s ease' }} 
+            onSubmit={(e) => { e.preventDefault(); handleSubscribe(); }}
+            noValidate
+          >
             <input 
               type="email" 
               placeholder={subscribeStatus === 'success' ? t.subscribed : t.enterEmail} 
@@ -160,15 +165,24 @@ export const PopularInsights: React.FC<PopularInsightsProps> = ({ news, lang }) 
                 setEmail(e.target.value);
                 if (subscribeStatus === 'error') setSubscribeStatus('idle');
               }}
-              onKeyDown={handleKeyDown}
               disabled={subscribeStatus === 'loading' || subscribeStatus === 'success'}
             />
-            <div className={styles.newsletterSubmitBtn} onClick={handleSubscribe} style={{ opacity: subscribeStatus === 'loading' ? 0.7 : 1 }}>
+            <button type="submit" className={styles.newsletterSubmitBtn} style={{ opacity: subscribeStatus === 'loading' ? 0.7 : 1, border: 'none' }}>
               <div className={styles.submitIcon} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11" fill="none">
                   <path d="M4.38333 2.26663V9.71663C4.38333 9.90552 4.44733 10.0637 4.57533 10.1913C4.70333 10.3189 4.86156 10.3829 5.05 10.3833C5.23844 10.3837 5.39689 10.3197 5.52533 10.1913C5.65378 10.0629 5.71756 9.90463 5.71667 9.71663V2.26663L8.98333 5.5333C9.11667 5.66663 9.27222 5.73063 9.45 5.7253C9.62778 5.71996 9.78333 5.65041 9.91667 5.51663C10.0389 5.3833 10.1027 5.22774 10.108 5.04996C10.1133 4.87219 10.0496 4.71663 9.91667 4.5833L5.51667 0.183298C5.45 0.116632 5.37778 0.0692978 5.3 0.0412979C5.22222 0.013298 5.13889 -0.000480652 5.05 -3.62396e-05C4.96111 0.000408173 4.87778 0.0141869 4.8 0.0412979C4.72222 0.068409 4.65 0.115743 4.58333 0.183298L0.183333 4.5833C0.0611109 4.70552 0 4.85819 0 5.0413C0 5.22441 0.0611109 5.38285 0.183333 5.51663C0.316666 5.64996 0.475111 5.71663 0.658667 5.71663C0.842222 5.71663 1.00044 5.64996 1.13333 5.51663L4.38333 2.26663Z" fill="white"/>
                 </svg>
               </div>
+            </button>
+          </form>
+          <div className={`${styles.errorContainer} ${subscribeStatus === 'error' ? styles.errorContainerVisible : ''}`}>
+            <div className={styles.errorMessage}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              {email ? (t.emailInvalid || "Please enter a valid email address.") : (t.emailRequired || "Email is required.")}
             </div>
           </div>
         </div>

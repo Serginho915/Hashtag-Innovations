@@ -25,7 +25,7 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
   lang
 }) => {
   return (
-    <div className={styles.card}>
+    <Link href={`/${lang}/experts/${id}`} className={styles.card}>
       <div className={styles.cardContent}>
         {/* Header */}
         <div className={styles.header}>
@@ -46,13 +46,11 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
             <div className={styles.quote}>{quote}</div>
             
             <div className={styles.buttonWrapper}>
-              <Link href={`/${lang}/experts/${id}`} style={{ textDecoration: 'none', flex: 1, display: 'flex' }}>
-                <DiscoverButton text={viewText} variant="blue" />
-              </Link>
+              <DiscoverButton text={viewText} variant="blue" />
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };

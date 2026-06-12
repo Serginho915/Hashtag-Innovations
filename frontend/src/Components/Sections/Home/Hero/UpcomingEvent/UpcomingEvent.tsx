@@ -32,7 +32,7 @@ export const UpcomingEvent = ({ lang, events }: UpcomingEventProps) => {
   }
 
   const dateObj = new Date(nearestEvent.dateIso);
-  const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+  const options: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'long' };
   const locale = lang === 'bg' ? 'bg-BG' : 'en-GB';
   const formattedDate = dateObj.toLocaleDateString(locale, options);
 
@@ -75,7 +75,9 @@ export const UpcomingEvent = ({ lang, events }: UpcomingEventProps) => {
             <DiscoverButton text={t.discoverMore} />
 
             <div className={styles.eventDescription}>
-              {nearestEvent.description}
+              <div className={styles.eventDescriptionInner}>
+                {nearestEvent.description}
+              </div>
             </div>
 
             {/* Date + Location */}

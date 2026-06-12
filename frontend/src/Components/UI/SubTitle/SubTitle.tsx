@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import styles from './SubTitle.module.scss';
+
 interface SubTitleProps {
   title: string;
   className?: string;
@@ -6,8 +8,8 @@ interface SubTitleProps {
 
 export const SubTitle: React.FC<SubTitleProps> = ({ title, className = "" }) => {
   return (
-    <div className={className}>
+    <div className={`${styles.subTitleContainer} ${className}`}>
       <h3>{title}</h3>
     </div>
-  )
-}
+  );
+};

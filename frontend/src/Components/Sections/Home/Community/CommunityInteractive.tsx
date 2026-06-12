@@ -41,18 +41,24 @@ export const CommunityInteractive: React.FC<CommunityInteractiveProps> = ({ lang
   }));
 
   return (
-    <>
-      <CommunityHeader lang={lang} onScrollUp={scrollUp} onScrollDown={scrollDown} />
-      
-      <div className={styles.filtersAndEventsRow}>
-        <CommunityFilters activeTag={activeTag} onTagChange={setActiveTag} lang={lang} />
+    <div className={styles.communityInteractiveWrapper}>
+      <div className={styles.leftMainContent}>
+        <CommunityHeader lang={lang} onScrollUp={scrollUp} onScrollDown={scrollDown} />
         
-        <CommunityEventsList events={filteredEvents} lang={lang} scrollRef={scrollRef} />
-        
-        <div className={styles.sidebarColumn}>
-          <div className={styles.sidebarPlaceholder}></div>
+        <div className={styles.filtersAndEventsRow}>
+          <CommunityFilters activeTag={activeTag} onTagChange={setActiveTag} lang={lang} />
+          
+          <CommunityEventsList events={filteredEvents} lang={lang} scrollRef={scrollRef} />
         </div>
       </div>
-    </>
+      
+      <div className={styles.sidebarColumn}>
+        <div className={styles.sidebarPlaceholder}></div>
+        <div className={styles.bannerContent}>
+          <span>banner</span>
+          <div className={styles.bannerIcon}></div>
+        </div>
+      </div>
+    </div>
   );
 };

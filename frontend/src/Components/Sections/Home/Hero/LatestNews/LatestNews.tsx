@@ -15,7 +15,7 @@ export const LatestNews = ({ lang, news }: LatestNewsProps) => {
 
 
   const today = new Date();
-  const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+  const options: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'long' };
   const locale = lang === 'bg' ? 'bg-BG' : 'en-GB';
   const currentDate = today.toLocaleDateString(locale, options).toLowerCase();
 
