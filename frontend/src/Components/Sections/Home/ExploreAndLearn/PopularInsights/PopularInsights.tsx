@@ -61,50 +61,52 @@ export const PopularInsights: React.FC<PopularInsightsProps> = ({ news, lang }) 
 
   return (
     <div className={styles.popularInsights}>
-      <div className={styles.header}>
-        <div className={styles.headerGroup}>
-          <div className={styles.indexNumber}>04/</div>
-          <div className={styles.titleText}>{t.sectionTitle}</div>
+      <div className={styles.topSection}>
+        <div className={styles.header}>
+          <div className={styles.headerGroup}>
+            <div className={styles.indexNumber}>04/</div>
+            <div className={styles.titleText}>{t.sectionTitle}</div>
+          </div>
         </div>
-      </div>
 
-      <div className={styles.articlesContainer}>
-        {/* Featured Article */}
-        {featuredArticle && (
-          <div className={styles.featuredArticle}>
-            <div className={styles.featuredImageWrapper}>
-              {/* Fallback gray box matching the HTML */}
-              <div className={styles.featuredImageFallback}></div>
-            </div>
-            <div className={styles.featuredContent}>
-              <div className={styles.featuredTitleGroup}>
-                <div className={styles.featuredTitle}>{featuredArticle.title}</div>
-                <div className={styles.featuredExcerpt}>{featuredArticle.excerpt}</div>
+        <div className={styles.articlesContainer}>
+          {/* Featured Article */}
+          {featuredArticle && (
+            <div className={styles.featuredArticle}>
+              <div className={styles.featuredImageWrapper}>
+                {/* Fallback gray box matching the HTML */}
+                <div className={styles.featuredImageFallback}></div>
               </div>
-              <div className={styles.featuredFooter}>
-                <div className={styles.featuredAuthorGroup}>
-                  <div className={styles.featuredAuthorLabel}>{featuredArticle.authorLabel || t.by}</div>
-                  <AuthorLink name={featuredArticle.authorName || 'Andrey Nikolov'} expertId={featuredArticle.authorExpertId} lang={lang} />
+              <div className={styles.featuredContent}>
+                <div className={styles.featuredTitleGroup}>
+                  <div className={styles.featuredTitle}>{featuredArticle.title}</div>
+                  <div className={styles.featuredExcerpt}>{featuredArticle.excerpt}</div>
+                </div>
+                <div className={styles.featuredFooter}>
+                  <div className={styles.featuredAuthorGroup}>
+                    <div className={styles.featuredAuthorLabel}>{featuredArticle.authorLabel || t.by}</div>
+                    <AuthorLink name={featuredArticle.authorName || 'Andrey Nikolov'} expertId={featuredArticle.authorExpertId} lang={lang} />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* List Articles */}
-        <div className={styles.listContainer}>
-          {listArticles.map((article) => (
-            <PopularInsightCard
-              key={article.id}
-              id={article.id}
-              title={article.title}
-              excerpt={article.excerpt || ''}
-              authorName={article.authorName || 'Andrey Nikolov'}
-              authorLabel={article.authorLabel || t.by}
-              authorExpertId={article.authorExpertId}
-              lang={lang}
-            />
-          ))}
+          {/* List Articles */}
+          <div className={styles.listContainer}>
+            {listArticles.map((article) => (
+              <PopularInsightCard
+                key={article.id}
+                id={article.id}
+                title={article.title}
+                excerpt={article.excerpt || ''}
+                authorName={article.authorName || 'Andrey Nikolov'}
+                authorLabel={article.authorLabel || t.by}
+                authorExpertId={article.authorExpertId}
+                lang={lang}
+              />
+            ))}
+          </div>
         </div>
       </div>
 

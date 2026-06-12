@@ -38,13 +38,13 @@
 .boxContainer {
   flex: 1 1 0;
   width: 100%;
-  padding: 24px;
+  padding: 24px 16px 16px 16px;
   position: relative;
   background: #F7F7F7;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 8px;
   min-height: 0; /* Important for flex scrolling */
 }
@@ -56,9 +56,10 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-end;
+  align-items: stretch;
   gap: 32px;
-  padding-right: 16px;
+  padding-left: 2px;
+  padding-right: 2px;
   min-height: 0; /* Important for flex scrolling */
   
   /* Hide scrollbar for cleaner look */
@@ -73,19 +74,20 @@
   align-self: stretch;
   display: flex;
   justify-content: flex-start;
-  align-items: stretch; /* Stretch image to content height */
+  align-items: center;
   gap: 40px;
 }
 
 .imageWrapper {
   width: 144px;
+  height: 170px;
   position: relative;
   flex-shrink: 0;
 }
 
 .coverImage {
   width: 144px;
-  height: 100%; /* Stretch to parent wrapper */
+  height: 170px;
   position: absolute;
   left: 0;
   top: 0;
