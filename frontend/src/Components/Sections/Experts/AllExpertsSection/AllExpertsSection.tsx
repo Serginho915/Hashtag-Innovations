@@ -11,28 +11,21 @@ interface AllExpertsSectionProps {
 }
 
 export const AllExpertsSection: React.FC<AllExpertsSectionProps> = ({ t, lang, experts }) => {
-  // Create an array of 5 experts to match the layout (2 + 3)
-  // If we don't have enough, we'll just repeat the available ones for demonstration
-  const displayExperts = [
-    experts[0],
-    experts[1 % experts.length],
-    experts[2 % experts.length],
-    experts[3 % experts.length],
-    experts[4 % experts.length] || experts[0]
-  ].filter(Boolean);
+  // Create an array of 6 experts to match the layout (2 top left + 4 bottom)
+  const displayExperts = Array.from({ length: 6 }).map((_, i) => experts[i % experts.length]).filter(Boolean);
 
-  const row1Experts = displayExperts.slice(0, 2);
-  const row2Experts = displayExperts.slice(2, 5);
+  const topGridExperts = displayExperts.slice(0, 2);
+  const bottomRowExperts = displayExperts.slice(2, 6);
 
   return (
     <div className={styles.sectionContainer}>
-      <div className={styles.topRow}>
+      <div className={styles.topSection}>
         <div className={styles.expertsColumn}>
           <div className={styles.title}>
             {t.allExpertsTitle ? t.allExpertsTitle.replace('{count}', experts.length.toString()) : ''}
           </div>
-          <div className={styles.cardsRow}>
-            {row1Experts.map((expert, index) => (
+          <div className={styles.topCardsGrid}>
+            {topGridExperts.map((expert, index) => (
               <CatalogExpertCard 
                 key={`top-${expert.id}-${index}`} 
                 expert={expert} 
@@ -48,13 +41,11 @@ export const AllExpertsSection: React.FC<AllExpertsSectionProps> = ({ t, lang, e
           title={t.viewAlso}
           subtitle="(feed/related topics/banner)"
           content={t.becomeExpertBanner}
-          /* href="/some-link" */
-          /* imageUrl="/some-image.jpg" */
         />
       </div>
 
       <div className={styles.bottomRow}>
-        {row2Experts.map((expert, index) => (
+        {bottomRowExperts.map((expert, index) => (
           <CatalogExpertCard 
             key={`bottom-${expert.id}-${index}`} 
             expert={expert} 

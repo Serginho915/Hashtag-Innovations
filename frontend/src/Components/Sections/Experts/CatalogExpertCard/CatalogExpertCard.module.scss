@@ -2,7 +2,6 @@
 @import "../../../../Styles/variables";
 
 .catalogCard {
-  width: 324.50px;
   padding: 16px 24px;
   background: white;
   display: flex;
@@ -10,11 +9,6 @@
   justify-content: flex-start;
   align-items: stretch;
   gap: 16px;
-  flex: 1;
-
-  @include mobile {
-    width: 100%;
-  }
 }
 
 .cardHeader {
@@ -76,14 +70,22 @@
   justify-content: flex-start;
   align-items: flex-start;
   gap: 10.84px;
+  overflow: hidden;
+  border-radius: 3.12px;
 }
 
 .expertImage {
   align-self: stretch;
-  height: 276.50px;
+  height: 276.5px;
   border-radius: 3.12px;
   object-fit: cover;
   width: 100%;
+  transition: transform 0.3s ease;
+}
+
+:global(.catalogCard):hover .expertImage,
+:local(.catalogCard):hover .expertImage {
+  transform: scale(1.05);
 }
 
 .contentWrapper {

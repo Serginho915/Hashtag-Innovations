@@ -78,9 +78,11 @@ export const ExpertsFilters = ({ t }: { t: any }) => {
               <div className={`${styles.selectText} ${(selectedExpertise || activeFilter === 'expertise') ? styles.hasValue : ''}`}>
                 {selectedExpertise || t.expertise}
               </div>
-              <svg className={`${styles.arrow} ${activeFilter === 'expertise' ? styles.open : ''}`} width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1.5L6 6.5L11 1.5" stroke="#7E7E7E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <div className={styles.arrowIconWrapper}>
+                <svg className={`${styles.arrow} ${activeFilter === 'expertise' ? styles.open : ''}`} width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1.5L6 6.5L11 1.5" stroke="#7E7E7E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
             </div>
             
             {/* PRICE RANGE DROPDOWN */}

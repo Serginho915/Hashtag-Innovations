@@ -19,6 +19,8 @@ body {
     line-height: 20px;
     color: $text-color;
     font-family: $font-manrope, sans-serif;
+    background: #FAFAFA;
+    min-height: 100vh;
 
     @include tablet {
       font-size: 14px;
