@@ -1,0 +1,44 @@
+@use "../../../Styles/mixins" as *;
+@import "../../../Styles/variables";
+
+.breadcrumbsWrapper {
+  width: auto;
+  padding: 10px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.breadcrumbsRow {
+  align-self: stretch;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.linkItem {
+  text-align: center;
+  color: #0F0FFF;
+  font-size: 14px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  word-wrap: break-word;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.currentItem {
+  text-align: center;
+  color: black;
+  font-size: 14px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  word-wrap: break-word;
+}

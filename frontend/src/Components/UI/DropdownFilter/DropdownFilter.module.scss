@@ -1,0 +1,96 @@
+@use "../../../Styles/mixins" as *;
+@import "../../../Styles/variables";
+
+.dropdownContainer {
+  flex: 1 1 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.selectBox {
+  padding: 12px 8px;
+  border-bottom: 1px solid #C0C0D2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: border-bottom-color 0.2s ease;
+
+  &:hover {
+    border-bottom-color: black;
+  }
+}
+
+.selectText {
+  color: #7E7E7E;
+  font-size: 18px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+  
+  &.open {
+    transform: rotate(180deg);
+  }
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: max-content;
+  margin-top: 8px;
+  padding: 16px 24px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+  
+  /* User requested layout */
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 32px;
+  z-index: 100;
+  
+  @include laptop {
+    flex-wrap: wrap;
+    max-width: 90vw;
+  }
+  
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    width: 100%;
+  }
+}
+
+.optionItem {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: black;
+  font-size: 18px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  word-wrap: break-word;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #076F7F;
+  }
+
+  &.selected {
+    color: #076F7F;
+  }
+}

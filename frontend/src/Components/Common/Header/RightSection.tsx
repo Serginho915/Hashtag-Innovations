@@ -6,11 +6,15 @@ import styles from "./Header.module.scss";
 import { HeaderNav } from "./HeaderNav";
 import { useLanguage } from "../../../Hooks/useLanguage";
 import { useNavigation } from "../../../Context/NavigationContext";
+import { usePathname } from "next/navigation";
 
 export const RightSection = () => {
   const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
   const { language, setLanguage } = useLanguage();
   const { isHeroTabsVisible } = useNavigation();
+  const pathname = usePathname();
+  
+  const isHomePage = pathname === '/' || pathname === '/en' || pathname === '/bg' || pathname === '/ru';
 
   const toggleBurgerMenu = () => {
     setBurgerMenuOpen(!burgerMenuOpen);
@@ -21,7 +25,7 @@ export const RightSection = () => {
   return (
     <div className={styles.rightSection}>
       <div className={styles.desktopContent}>
-        {isHeroTabsVisible ? (
+        {(isHeroTabsVisible && isHomePage) ? (
           <div className={styles.slogan}>
             Your all-in-one platform to empower your expertise
           </div>

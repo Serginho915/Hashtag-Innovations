@@ -1,0 +1,201 @@
+@use "../../../../Styles/mixins" as *;
+@import "../../../../Styles/variables";
+
+.mainHeaderContent {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.titleRow {
+  width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.controlsRow {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  @include laptop-sm {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+}
+
+.descriptionWrapper {
+  padding: 0 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  @include laptop-sm {
+    padding: 0;
+  }
+}
+
+.descriptionText {
+  width: 437px;
+  color: #4A5565;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  word-wrap: break-word;
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.filtersColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+
+  @include laptop-sm {
+    width: 100%;
+  }
+}
+
+.searchBox {
+  align-self: stretch;
+  padding: 16px 0;
+  border-bottom: 2px solid #C0C0D2;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.searchInner {
+  width: 467px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.searchIconWrapper {
+  padding: 3px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.searchInput {
+  flex: 1 1 0;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: #7E7E7E;
+  font-size: 18px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  word-wrap: break-word;
+  
+  &::placeholder {
+    color: #7E7E7E;
+  }
+}
+
+.selectsRow {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+}
+
+.selectBox {
+  flex: 1 1 0;
+  padding: 12px 8px;
+  border-bottom: 1px solid #C0C0D2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: border-bottom-color 0.2s ease;
+
+  &:hover {
+    border-bottom-color: black;
+  }
+}
+
+.selectText {
+  color: #7E7E7E;
+  font-size: 18px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+  
+  &.open {
+    transform: rotate(180deg);
+  }
+}
+
+.optionsContainer {
+  width: 100%;
+  margin-top: 24px;
+}
+
+.optionsRow {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.optionItem {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: black;
+  font-size: 18px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  word-wrap: break-word;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #076F7F;
+  }
+
+  &.selected {
+    color: #076F7F;
+  }
+}

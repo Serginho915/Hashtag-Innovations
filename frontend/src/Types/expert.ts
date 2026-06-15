@@ -5,4 +5,5 @@ export interface Expert {
   company: string;
   imageUrl: string;
   quote: string;
+  availableFor?: string[];
 }

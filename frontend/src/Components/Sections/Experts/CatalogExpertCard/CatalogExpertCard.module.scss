@@ -1,0 +1,153 @@
+@use "../../../../Styles/mixins" as *;
+@import "../../../../Styles/variables";
+
+.catalogCard {
+  width: 324.50px;
+  padding: 16px 24px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 16px;
+  flex: 1;
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.cardHeader {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 85px;
+}
+
+.expertName {
+  align-self: stretch;
+  color: #101828;
+  font-size: 20px;
+  font-family: $font-manrope;
+  font-weight: 700;
+  line-height: 22px;
+  word-wrap: break-word;
+}
+
+.roleGroup {
+  align-self: stretch;
+  display: block;
+}
+
+.roleText {
+  color: #4A5565;
+  font-size: 18px;
+  font-family: $font-manrope;
+  font-weight: 400;
+  display: inline;
+}
+
+.companyText {
+  color: #6A7282;
+  font-size: 18px;
+  font-family: $font-manrope;
+  font-weight: 400;
+  display: inline;
+  margin-left: 4px;
+}
+
+.cardBody {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+
+.imageWrapper {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10.84px;
+}
+
+.expertImage {
+  align-self: stretch;
+  height: 276.50px;
+  border-radius: 3.12px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.contentWrapper {
+  align-self: stretch;
+  padding-left: 8px;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 1;
+}
+
+.quoteText {
+  align-self: stretch;
+  color: black;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 400;
+  word-wrap: break-word;
+}
+
+.availableForBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.availableForLabel {
+  text-align: center;
+  color: black;
+  font-size: 12px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+.tagsContainer {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+.tagItem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+}
+
+.tagText {
+  text-align: left;
+  color: black;
+  font-size: 13px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  line-height: 18px;
+  white-space: nowrap;
+}
