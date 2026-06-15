@@ -1,4 +1,4 @@
-export const translations: Record<string, Record<string, string>> = {
+export const translations: Record<string, Record<string, any>> = {
   en: {
     expertsTitle: 'Experts Catalog',
     expertsDesc: 'Book individual consultations, mentorship sessions or expert advice tailored to your goals.',
