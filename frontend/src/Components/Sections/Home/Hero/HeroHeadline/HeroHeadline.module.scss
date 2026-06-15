@@ -90,18 +90,23 @@
 }
 
 .tab {
-  text-align: center;
-  color: #363636;
-  font-size: 22px;
-  font-family: $font-manrope;
-  font-weight: 700;
-  word-wrap: break-word;
   cursor: pointer;
   transition: opacity 0.2s;
 
   &:hover {
     opacity: 0.7;
   }
+}
+
+.tabLink {
+  text-align: center;
+  color: #363636;
+  font-size: 22px;
+  font-family: $font-manrope;
+  font-weight: 700;
+  word-wrap: break-word;
+  text-decoration: none;
+  display: block;
 
   @include laptop-sm {
     font-size: 18px;
@@ -115,3 +120,5 @@
     font-size: 16px;
   }
 }
+
+

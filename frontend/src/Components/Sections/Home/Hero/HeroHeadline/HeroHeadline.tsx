@@ -11,7 +11,7 @@ export const HeroHeadline = ({ lang }: { lang: string }) => {
       <div className={styles.headline}>
         {t.headline}
       </div>
-      <HeroHeadlineTabs tabs={t.tabs} />
+      <HeroHeadlineTabs tabs={t.tabs} lang={lang} />
     </div>
   );
 };

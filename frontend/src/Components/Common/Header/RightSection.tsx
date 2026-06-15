@@ -7,6 +7,8 @@ import { HeaderNav } from "./HeaderNav";
 import { useLanguage } from "../../../Hooks/useLanguage";
 import { useNavigation } from "../../../Context/NavigationContext";
 import { usePathname } from "next/navigation";
+import { translations } from "./HeaderNavTranslations";
+import Link from "next/link";
 
 export const RightSection = () => {
   const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
@@ -20,7 +22,15 @@ export const RightSection = () => {
     setBurgerMenuOpen(!burgerMenuOpen);
   };
 
-  const navLinks = ["Find Experts", "Events", "Learn", "Insights"];
+  const t = translations[language] || translations.en;
+  
+  const navLinks = [
+    { label: t.findExperts, href: `/${language}/experts` },
+    { label: t.events, href: `/${language}/events` },
+    { label: t.learn, href: `/${language}/learn` },
+    { label: t.projects, href: `/${language}/projects` },
+    { label: t.insights, href: `/${language}/insights` }
+  ];
 
   return (
     <div className={styles.rightSection}>
@@ -58,9 +68,11 @@ export const RightSection = () => {
 
           <div className={styles.mobileNavWrapper}>
             {navLinks.map((link) => (
-              <div key={link} className={styles.mobileNavItem}>
-                <div className={styles.mobileNavText}>{link}</div>
-              </div>
+              <Link href={link.href} key={link.label} className={styles.navLink} onClick={() => setBurgerMenuOpen(false)}>
+                <div className={styles.mobileNavItem}>
+                  <div className={styles.mobileNavText}>{link.label}</div>
+                </div>
+              </Link>
             ))}
           </div>
         </div>

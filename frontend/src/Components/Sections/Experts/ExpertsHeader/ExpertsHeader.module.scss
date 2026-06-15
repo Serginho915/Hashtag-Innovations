@@ -184,23 +184,32 @@
 .optionItem {
   padding-top: 8px;
   padding-bottom: 8px;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  color: black;
+  color: #4A5565;
   font-size: 18px;
   font-family: $font-manrope;
-  font-weight: 600;
+  font-weight: 500;
   word-wrap: break-word;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, font-weight 0.2s ease;
 
   &:hover {
-    color: #076F7F;
+    color: black;
   }
 
   &.selected {
-    color: #076F7F;
+    color: black;
+    font-weight: 600;
   }
+}
+
+.activeDot {
+  width: 10px;
+  height: 10px;
+  background: #0F0FFF;
+  border-radius: 9999px;
+  flex-shrink: 0;
 }

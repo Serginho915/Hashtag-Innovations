@@ -8,9 +8,17 @@ interface ExpertsHeaderProps {
   t: any;
   selectedExpertise: string | null;
   onSelectExpertise: (val: string | null) => void;
+  searchQuery: string;
+  onSearchQueryChange: (val: string) => void;
 }
 
-export const ExpertsHeader: React.FC<ExpertsHeaderProps> = ({ t, selectedExpertise, onSelectExpertise }) => {
+export const ExpertsHeader: React.FC<ExpertsHeaderProps> = ({ 
+  t, 
+  selectedExpertise, 
+  onSelectExpertise,
+  searchQuery,
+  onSearchQueryChange
+}) => {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
   const toggleFilter = (filter: string) => {
@@ -47,7 +55,13 @@ export const ExpertsHeader: React.FC<ExpertsHeaderProps> = ({ t, selectedExperti
                   <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
               </div>
-              <input type="text" className={styles.searchInput} placeholder={t.searchPlaceholder} />
+              <input 
+                type="text" 
+                className={styles.searchInput} 
+                placeholder={t.searchPlaceholder} 
+                value={searchQuery}
+                onChange={(e) => onSearchQueryChange(e.target.value)}
+              />
             </div>
           </div>
           
@@ -86,17 +100,22 @@ export const ExpertsHeader: React.FC<ExpertsHeaderProps> = ({ t, selectedExperti
               className={`${styles.optionItem} ${selectedExpertise === null ? styles.selected : ''}`}
               onClick={() => handleSelectExpertise(null)}
             >
+              {selectedExpertise === null && <div className={styles.activeDot}></div>}
               {t.allOption || 'All'}
             </div>
-            {t.expertiseOptions.map((opt: string) => (
-              <div 
-                key={opt} 
-                className={`${styles.optionItem} ${selectedExpertise === opt ? styles.selected : ''}`}
-                onClick={() => handleSelectExpertise(opt)}
-              >
-                {opt}
-              </div>
-            ))}
+            {t.expertiseOptions.map((opt: string) => {
+              const isSelected = selectedExpertise === opt;
+              return (
+                <div 
+                  key={opt} 
+                  className={`${styles.optionItem} ${isSelected ? styles.selected : ''}`}
+                  onClick={() => handleSelectExpertise(opt)}
+                >
+                  {isSelected && <div className={styles.activeDot}></div>}
+                  {opt}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

@@ -37,7 +37,7 @@ export default async function RootLayout({
       <body>
         <LanguageProvider initialLang={currentLang}>
           <NavigationProvider>
-            <Header />
+            <Header lang={lang} />
             <main className="main-container">
               {children}
             </main>

@@ -12,27 +12,27 @@ export const HeaderNav = () => {
 
   return (
     <nav className={styles.navContainer}>
-      <Link href="/experts" className={styles.navLink}>
+      <Link href={`/${language}/experts`} className={styles.navLink}>
         <div className={styles.navItemWrapper}>
           <span className={styles.navText}>{t.findExperts}</span>
         </div>
       </Link>
-      <Link href="/events" className={styles.navLink}>
+      <Link href={`/${language}/events`} className={styles.navLink}>
         <div className={styles.navItemWrapper}>
           <span className={styles.navText}>{t.events}</span>
         </div>
       </Link>
-      <Link href="/learn" className={styles.navLink}>
+      <Link href={`/${language}/learn`} className={styles.navLink}>
         <div className={styles.navItemWrapper}>
           <span className={styles.navText}>{t.learn}</span>
         </div>
       </Link>
-      <Link href="/projects" className={styles.navLink}>
+      <Link href={`/${language}/projects`} className={styles.navLink}>
         <div className={styles.navItemWrapper}>
           <span className={styles.navText}>{t.projects}</span>
         </div>
       </Link>
-      <Link href="/insights" className={styles.navLink}>
+      <Link href={`/${language}/insights`} className={styles.navLink}>
         <div className={styles.navItemWrapper}>
           <span className={styles.navText}>{t.insights}</span>
         </div>

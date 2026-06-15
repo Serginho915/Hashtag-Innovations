@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './AllExpertsSection.module.scss';
 import { CatalogExpertCard } from '../CatalogExpertCard/CatalogExpertCard';
 import { Expert } from '../../../../Types/expert';
+import { PromoBanner } from '../../../UI/PromoBanner/PromoBanner';
 
 interface AllExpertsSectionProps {
   t: any;
@@ -42,17 +43,14 @@ export const AllExpertsSection: React.FC<AllExpertsSectionProps> = ({ t, lang, e
           </div>
         </div>
         
-        <div className={styles.bannerColumn}>
-          <div className={styles.bannerHeader}>
-            <div className={styles.bannerTitle}>{t.viewAlso}</div>
-            <div className={styles.bannerSubtitle}>(feed/related topics/banner)</div>
-          </div>
-          <div className={styles.bannerContainer}>
-            <div className={styles.bannerContent}>
-              {t.becomeExpertBanner}
-            </div>
-          </div>
-        </div>
+        <PromoBanner 
+          className={styles.bannerColumn}
+          title={t.viewAlso}
+          subtitle="(feed/related topics/banner)"
+          content={t.becomeExpertBanner}
+          /* href="/some-link" */
+          /* imageUrl="/some-image.jpg" */
+        />
       </div>
 
       <div className={styles.bottomRow}>

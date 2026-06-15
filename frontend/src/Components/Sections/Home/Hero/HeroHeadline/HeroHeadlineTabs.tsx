@@ -1,14 +1,18 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import Link from "next/link";
 import styles from "./HeroHeadline.module.scss";
 import { useNavigation } from "../../../../../Context/NavigationContext";
 
 interface HeroHeadlineTabsProps {
   tabs: string[];
+  lang: string;
 }
 
-export const HeroHeadlineTabs: React.FC<HeroHeadlineTabsProps> = ({ tabs }) => {
+const tabPaths = ["events", "mentors", "experts", "resources", "insights"];
+
+export const HeroHeadlineTabs: React.FC<HeroHeadlineTabsProps> = ({ tabs, lang }) => {
   const navRef = useRef<HTMLElement>(null);
   const { setIsHeroTabsVisible } = useNavigation();
 
@@ -34,11 +38,16 @@ export const HeroHeadlineTabs: React.FC<HeroHeadlineTabsProps> = ({ tabs }) => {
   return (
     <nav ref={navRef} className={styles.navContainer}>
       <ul className={styles.tabs}>
-        {tabs.map((tab: string) => (
-          <li key={tab} className={styles.tab}>
-            {tab}
-          </li>
-        ))}
+        {tabs.map((tab: string, index: number) => {
+          const path = tabPaths[index] || "experts"; // fallback to experts if out of bounds
+          return (
+            <li key={tab} className={styles.tab}>
+              <Link href={`/${lang}/${path}`} className={styles.tabLink}>
+                {tab}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );

@@ -16,18 +16,33 @@ interface ExpertsCatalogClientProps {
 
 export const ExpertsCatalogClient: React.FC<ExpertsCatalogClientProps> = ({ t, lang, initialExperts, breadcrumbs }) => {
   const [selectedExpertise, setSelectedExpertise] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Filter experts based on selected expertise
+  // Filter experts based on selected expertise and search query
   const filteredExperts = useMemo(() => {
-    if (!selectedExpertise) {
-      return initialExperts;
+    let filtered = initialExperts;
+
+    if (selectedExpertise) {
+      filtered = filtered.filter(expert => {
+        if (!expert.expertise || expert.expertise.length === 0) return false;
+        return expert.expertise.includes(selectedExpertise);
+      });
     }
-    return initialExperts.filter(expert => {
-      if (!expert.expertise || expert.expertise.length === 0) return false;
-      return expert.expertise.includes(selectedExpertise);
-    });
-  }, [initialExperts, selectedExpertise]);
+
+    if (searchQuery.trim() !== '') {
+      const q = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(expert => {
+        const matchesName = expert.name?.toLowerCase().includes(q);
+        const matchesCompany = expert.company?.toLowerCase().includes(q);
+        const matchesExpertise = expert.expertise?.some(exp => exp.toLowerCase().includes(q));
+        
+        return matchesName || matchesCompany || matchesExpertise;
+      });
+    }
+
+    return filtered;
+  }, [initialExperts, selectedExpertise, searchQuery]);
 
   // Use the filtered experts for the Top Rated section (allowing more than 4 for scroll)
   const topExperts = filteredExperts.slice(0, 10);
@@ -49,6 +64,8 @@ export const ExpertsCatalogClient: React.FC<ExpertsCatalogClientProps> = ({ t, l
           t={t} 
           selectedExpertise={selectedExpertise} 
           onSelectExpertise={setSelectedExpertise} 
+          searchQuery={searchQuery}
+          onSearchQueryChange={setSearchQuery}
         />
       </div>
       
