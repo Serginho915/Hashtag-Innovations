@@ -6,4 +6,5 @@ export interface Expert {
   imageUrl: string;
   quote: string;
   availableFor?: string[];
+  expertise?: string[];
 }

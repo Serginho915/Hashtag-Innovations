@@ -6,7 +6,11 @@ export const translations: Record<string, Record<string, string>> = {
     expertise: 'Expertise',
     priceRange: 'Price range',
     languages: 'Languages',
-    expertiseOptions: ['Artificial Intelligence', 'Business', 'Accounting', 'Design', 'Management', 'Marketing', 'Finance', 'Development']
+    expertiseOptions: ['Artificial Intelligence', 'Business', 'Accounting', 'Design', 'Management', 'Marketing', 'Finance', 'Development'],
+    allExpertsTitle: '{count} experts in bulgaria',
+    viewAlso: 'view also',
+    becomeExpertBanner: 'Want to become an expert?',
+    allOption: 'All'
   },
   bg: {
     expertsTitle: 'Каталог Експерти',
@@ -15,7 +19,11 @@ export const translations: Record<string, Record<string, string>> = {
     expertise: 'Експертиза',
     priceRange: 'Ценови диапазон',
     languages: 'Езици',
-    expertiseOptions: ['Изкуствен интелект', 'Бизнес', 'Счетоводство', 'Дизайн', 'Мениджмънт', 'Маркетинг', 'Финанси', 'Разработка']
+    expertiseOptions: ['Изкуствен интелект', 'Бизнес', 'Счетоводство', 'Дизайн', 'Мениджмънт', 'Маркетинг', 'Финанси', 'Разработка'],
+    allExpertsTitle: '{count} експерти в българия',
+    viewAlso: 'вижте също',
+    becomeExpertBanner: 'Искаш да станеш експерт?',
+    allOption: 'Всички'
   },
   ru: {
     expertsTitle: 'Каталог Экспертов',
@@ -24,6 +32,10 @@ export const translations: Record<string, Record<string, string>> = {
     expertise: 'Експертиза',
     priceRange: 'Price range',
     languages: 'Languages',
-    expertiseOptions: ['Исскуственный Интелект', 'Бизнес', 'Бухгалтерия', 'Дизайн', 'Менеджмент', 'Маркетинг', 'Финансы', 'Разработка']
+    expertiseOptions: ['Исскуственный Интелект', 'Бизнес', 'Бухгалтерия', 'Дизайн', 'Менеджмент', 'Маркетинг', 'Финансы', 'Разработка'],
+    allExpertsTitle: '{count} экспертов в болгарии',
+    viewAlso: 'смотрите также',
+    becomeExpertBanner: 'Хочешь стать экспертом?',
+    allOption: 'Все'
   }
 };

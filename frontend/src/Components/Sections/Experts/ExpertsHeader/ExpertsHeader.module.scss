@@ -7,6 +7,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  gap: 24px;
 }
 
 .titleRow {
@@ -139,7 +140,7 @@
   cursor: pointer;
   transition: border-bottom-color 0.2s ease;
 
-  &:hover {
+  &:hover, &.active {
     border-bottom-color: black;
   }
 }
@@ -152,6 +153,11 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  &.hasValue {
+    color: #000;
+    /* font-weight 500 is already inherited */
+  }
 }
 
 .arrow {
@@ -164,7 +170,6 @@
 
 .optionsContainer {
   width: 100%;
-  margin-top: 24px;
 }
 
 .optionsRow {

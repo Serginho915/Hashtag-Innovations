@@ -6,18 +6,23 @@ import { SectionTitle } from '../../../UI/SectionTitle/SectionTitle';
 
 interface ExpertsHeaderProps {
   t: any;
+  selectedExpertise: string | null;
+  onSelectExpertise: (val: string | null) => void;
 }
 
-export const ExpertsHeader: React.FC<ExpertsHeaderProps> = ({ t }) => {
+export const ExpertsHeader: React.FC<ExpertsHeaderProps> = ({ t, selectedExpertise, onSelectExpertise }) => {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
-  const [selectedExpertise, setSelectedExpertise] = useState<string | null>(null);
 
   const toggleFilter = (filter: string) => {
     setActiveFilter(activeFilter === filter ? null : filter);
   };
 
-  const handleSelectExpertise = (option: string) => {
-    setSelectedExpertise(selectedExpertise === option ? null : option);
+  const handleSelectExpertise = (option: string | null) => {
+    if (option === null) {
+      onSelectExpertise(null);
+    } else {
+      onSelectExpertise(selectedExpertise === option ? null : option);
+    }
     // Do not close the filter automatically if it's a multi-select or if the user wants to keep it open
     // setActiveFilter(null);
   };
@@ -47,8 +52,10 @@ export const ExpertsHeader: React.FC<ExpertsHeaderProps> = ({ t }) => {
           </div>
           
           <div className={styles.selectsRow}>
-            <div className={styles.selectBox} onClick={() => toggleFilter('expertise')}>
-              <div className={styles.selectText}>{selectedExpertise || t.expertise}</div>
+            <div className={`${styles.selectBox} ${activeFilter === 'expertise' ? styles.active : ''}`} onClick={() => toggleFilter('expertise')}>
+              <div className={`${styles.selectText} ${(selectedExpertise || activeFilter === 'expertise') ? styles.hasValue : ''}`}>
+                {selectedExpertise || t.expertise}
+              </div>
               <svg className={`${styles.arrow} ${activeFilter === 'expertise' ? styles.open : ''}`} width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1 1.5L6 6.5L11 1.5" stroke="#7E7E7E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -75,6 +82,12 @@ export const ExpertsHeader: React.FC<ExpertsHeaderProps> = ({ t }) => {
       {activeFilter === 'expertise' && t.expertiseOptions && (
         <div className={styles.optionsContainer}>
           <div className={styles.optionsRow}>
+            <div 
+              className={`${styles.optionItem} ${selectedExpertise === null ? styles.selected : ''}`}
+              onClick={() => handleSelectExpertise(null)}
+            >
+              {t.allOption || 'All'}
+            </div>
             {t.expertiseOptions.map((opt: string) => (
               <div 
                 key={opt} 
