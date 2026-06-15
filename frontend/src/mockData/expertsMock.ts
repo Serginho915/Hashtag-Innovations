@@ -7,7 +7,9 @@ export const MOCK_EXPERTS_EN = [
     imageUrl: '/images/avatars/avatar_1.png',
     quote: '“Helping startups build scalable digital products through data-driven strategy.”',
     availableFor: ['Consultation', 'Mentorship'],
-    expertise: ['Management', 'Business']
+    expertise: ['Management', 'Business'],
+    price: 150,
+    languages: ['English', 'Русский']
   },
   {
     id: 'expert-2',
@@ -17,7 +19,9 @@ export const MOCK_EXPERTS_EN = [
     imageUrl: '/images/avatars/avatar_2.png',
     quote: '“Passionate about building resilient systems and inclusive engineering cultures.”',
     availableFor: ['Consultation', 'Code Review'],
-    expertise: ['Development']
+    expertise: ['Development'],
+    price: 200,
+    languages: ['English', 'Български']
   },
   {
     id: 'expert-3',
@@ -27,7 +31,9 @@ export const MOCK_EXPERTS_EN = [
     imageUrl: '/images/avatars/avatar_3.png',
     quote: '“Creating intuitive experiences bridging the gap between users and business goals.”',
     availableFor: ['Consultation', 'Portfolio Review'],
-    expertise: ['Design']
+    expertise: ['Design'],
+    price: 100,
+    languages: ['English']
   },
   {
     id: 'expert-4',
@@ -37,7 +43,9 @@ export const MOCK_EXPERTS_EN = [
     imageUrl: '/images/avatars/avatar_1.png',
     quote: '“Building the future of tech communities and fostering continuous innovation.”',
     availableFor: ['Mentorship', 'Strategy'],
-    expertise: ['Business', 'Management']
+    expertise: ['Business', 'Management'],
+    price: 250,
+    languages: ['English', 'Български', 'Русский']
   },
   {
     id: 'expert-5',
@@ -47,7 +55,9 @@ export const MOCK_EXPERTS_EN = [
     imageUrl: '/images/avatars/avatar_2.png',
     quote: '“Turning complex data into actionable insights for personalized user journeys.”',
     availableFor: ['Consultation', 'Data Strategy'],
-    expertise: ['Artificial Intelligence', 'Development']
+    expertise: ['Artificial Intelligence', 'Development'],
+    price: 300,
+    languages: ['English', 'Українська']
   }
 ];
 
@@ -60,7 +70,9 @@ export const MOCK_EXPERTS_BG = [
     imageUrl: '/images/avatars/avatar_1.png',
     quote: '„Помагам на стартъпи да изграждат мащабируеми дигитални продукти чрез стратегии, базирани на данни.“',
     availableFor: ['Консултация', 'Менторство'],
-    expertise: ['Мениджмънт', 'Бизнес']
+    expertise: ['Мениджмънт', 'Бизнес'],
+    price: 150,
+    languages: ['English', 'Русский']
   },
   {
     id: 'expert-2',
@@ -70,7 +82,9 @@ export const MOCK_EXPERTS_BG = [
     imageUrl: '/images/avatars/avatar_2.png',
     quote: '„Страстно отдадена на изграждането на устойчиви системи и приобщаваща инженерна култура.“',
     availableFor: ['Консултация', 'Ревю на код'],
-    expertise: ['Разработка']
+    expertise: ['Разработка'],
+    price: 200,
+    languages: ['English', 'Български']
   },
   {
     id: 'expert-3',
@@ -80,7 +94,9 @@ export const MOCK_EXPERTS_BG = [
     imageUrl: '/images/avatars/avatar_3.png',
     quote: '„Създавам интуитивни преживявания, които свързват нуждите на потребителите с бизнес целите.“',
     availableFor: ['Консултация', 'Ревю на портфолио'],
-    expertise: ['Дизайн']
+    expertise: ['Дизайн'],
+    price: 100,
+    languages: ['English']
   },
   {
     id: 'expert-4',
@@ -90,7 +106,9 @@ export const MOCK_EXPERTS_BG = [
     imageUrl: '/images/avatars/avatar_1.png',
     quote: '„Изграждам бъдещето на технологичните общности и насърчавам непрекъснатите иновации.“',
     availableFor: ['Менторство', 'Стратегия'],
-    expertise: ['Бизнес', 'Мениджмънт']
+    expertise: ['Бизнес', 'Мениджмънт'],
+    price: 250,
+    languages: ['English', 'Български', 'Русский']
   },
   {
     id: 'expert-5',
@@ -100,6 +118,8 @@ export const MOCK_EXPERTS_BG = [
     imageUrl: '/images/avatars/avatar_2.png',
     quote: '„Превръщам сложните данни в приложими стратегии за персонализирани потребителски преживявания.“',
     availableFor: ['Консултация', 'Стратегия за данни'],
-    expertise: ['Изкуствен интелект', 'Разработка']
+    expertise: ['Изкуствен интелект', 'Разработка'],
+    price: 300,
+    languages: ['English', 'Українська']
   }
 ];

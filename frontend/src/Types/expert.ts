@@ -7,4 +7,6 @@ export interface Expert {
   quote: string;
   availableFor?: string[];
   expertise?: string[];
+  price?: number;
+  languages?: string[];
 }
