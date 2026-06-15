@@ -5,11 +5,53 @@ export const MOCK_EXPERTS_EN = [
     role: 'Senior Product Manager at',
     company: 'Meta',
     imageUrl: '/images/avatars/avatar_1.png',
-    quote: '“Helping startups build scalable digital products through data-driven strategy.”',
+    quote: '“Helping startups build scalable digital products through data-driven product strategy and cross-functional leadership.”',
     availableFor: ['Consultation', 'Mentorship'],
-    expertise: ['Management', 'Business'],
+    expertise: ['AI', 'Business Strategy', 'Product Ownership', 'Growth Strategy', 'Startups'],
+    industries: ['FinTech', 'Healthcare'],
     price: 150,
-    languages: ['English', 'Русский']
+    languages: ['Bulgarian', 'English', 'Mandarin'],
+    bio: [
+      'Креативный директор, дизайнер и бывший преподаватель дизайна с опытом работы более 14 лет в стартапах и компаниях из списка Fortune 100 по всему миру. В настоящее время в основном работаю над социальными и экологическими проектами, так как считаю, что дизайн должен служить во благо.',
+      'Готов помочь каждому практически с любым вопросом, независимо от вашего опыта и бэкграунда. Время бронирования — час, но вы можете использовать его полностью или частично по необходимости. Если встреча была полезной, пожалуйста, оставьте отзыв — это поможет охватить больше людей 😄',
+      '⚠️ В связи с большим количеством неявок в последнее время: проявляйте элементарное уважение ко времени. Если не можете прийти, просто сообщите за несколько часов. Если не появитесь или отмените в последний момент без уважительной причины, я не буду принимать новые бронирования.'
+    ],
+    sessions: [
+      {
+        id: 'session-1',
+        title: 'Консультация',
+        subtitle: '60-минутная онлайн-сессия',
+        description: 'Формат консультации вопрос-ответ. Разбираем вашу проблему.',
+        price: 80
+      },
+      {
+        id: 'session-2',
+        title: 'Анализ проекта',
+        subtitle: '90-минутный разбор вашей идеи',
+        description: 'Подробный аудит с советами по улучшению и оптимизации.',
+        price: 150
+      },
+      {
+        id: 'session-3',
+        title: 'Менторство',
+        subtitle: '4 встречи на месяц',
+        description: 'Практические занятия с разбором кейсов и ответами на вопросы.',
+        price: 200
+      }
+    ],
+    experienceList: [
+      {
+        id: 'exp-1',
+        role: 'Senior Design Lead',
+        company: 'Apple inc.',
+        period: 'JAN 2023-PRESENT'
+      }
+    ],
+    analytics: {
+      consultations: '200+',
+      attendance: '100%',
+      experienceYears: '10+'
+    }
   },
   {
     id: 'expert-2',

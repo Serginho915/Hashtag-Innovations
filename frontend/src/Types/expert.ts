@@ -1,3 +1,24 @@
+export interface Session {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  price: number;
+}
+
+export interface Experience {
+  id: string;
+  role: string;
+  company: string;
+  period: string;
+}
+
+export interface Analytics {
+  consultations: string;
+  attendance: string;
+  experienceYears: string;
+}
+
 export interface Expert {
   id: string;
   name: string;
@@ -9,4 +30,11 @@ export interface Expert {
   expertise?: string[];
   price?: number;
   languages?: string[];
+  
+  // New profile fields
+  industries?: string[];
+  bio?: string[];
+  sessions?: Session[];
+  experienceList?: Experience[];
+  analytics?: Analytics;
 }

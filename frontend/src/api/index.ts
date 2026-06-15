@@ -34,3 +34,13 @@ export const getHomePageData = async (lang: string): Promise<HomePageData> => {
     popularInsights: isBg ? MOCK_NEWS_BG as any as NewsItem[] : MOCK_NEWS_EN as any as NewsItem[]
   };
 };
+
+export const getExpertById = async (id: string, lang: string): Promise<Expert | undefined> => {
+  // Simulate network delay to mimic real API
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  
+  const isBg = lang === 'bg';
+  const experts = isBg ? MOCK_EXPERTS_BG : MOCK_EXPERTS_EN;
+  
+  return experts.find(expert => expert.id === id) as Expert | undefined;
+};
