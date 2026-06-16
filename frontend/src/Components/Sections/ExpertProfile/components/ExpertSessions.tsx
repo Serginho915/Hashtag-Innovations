@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import { Expert } from '../../../../Types/expert';
 import styles from '../ExpertProfile.module.scss';
 
@@ -12,13 +13,31 @@ interface Props {
 }
 
 export const ExpertSessions: React.FC<Props> = ({ expert, sessions, t, lang }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   if (!sessions || sessions.length === 0) return null;
 
   return (
-    <div className={styles.sessionsBlock}>
+    <div className={`${styles.sessionsBlock} ${isExpanded ? styles.expanded : ''}`}>
       <div className={styles.sessionsHeader}>
-        <div className={styles.headerDot}></div>
-        <h2 className={styles.sectionTitle}>{t.availableSessions}</h2>
+        <div className={styles.sessionsHeaderLeft}>
+          <div className={styles.headerDot}></div>
+          <h2 className={styles.sectionTitle}>{t.availableSessions}</h2>
+        </div>
+        <button 
+          className={styles.mobileViewButton}
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          {isExpanded ? (
+            <div className={styles.arrowIcon}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ transform: 'rotate(90deg)' }}>
+                <path d="M4.5 10.5L8 7L11.5 10.5L12.5 9.5L8 5L3.5 9.5L4.5 10.5Z" fill="black"/>
+              </svg>
+            </div>
+          ) : (
+            <span className={styles.viewText}>{t.view || (lang === 'ru' ? 'Посмотреть' : 'View')}</span>
+          )}
+        </button>
       </div>
       <div className={styles.sessionsList}>
         {sessions.map(session => (

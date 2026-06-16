@@ -17,8 +17,10 @@
   gap: 48px;
 
   @include laptop-sm {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 158px 1fr;
     gap: 24px;
+    align-items: stretch;
   }
 }
 
@@ -34,6 +36,13 @@
     object-fit: cover;
   }
 
+  @include laptop-sm {
+    width: 158px;
+    height: 185px;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
+
   @include mobile {
     width: 100%;
     height: 350px;
@@ -45,6 +54,10 @@
   flex-direction: column;
   gap: 65px;
   flex: 1;
+
+  @include laptop-sm {
+    display: contents;
+  }
 }
 
 .headerTopRow {
@@ -54,13 +67,18 @@
   width: 100%;
 
   @include laptop {
-    gap: 120px;
+    gap: 24px;
+    justify-content: space-between;
   }
 
   @include laptop-sm {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
     flex-direction: column;
     align-items: flex-start;
-    gap: 32px;
+    justify-content: space-between;
+    gap: 16px;
+    height: 100%;
   }
 }
 
@@ -136,6 +154,12 @@
   flex-direction: column;
   gap: 12px;
   width: 100%;
+
+  @include laptop-sm {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+    gap: 8px;
+  }
 }
 
 /* Main Content Layout */
@@ -146,12 +170,12 @@
   /* Based on Figma positioning */
 
   @include laptop {
-    gap: 64px;
+    gap: 92px;
   }
 
   @include laptop-sm {
-    flex-direction: column;
-    gap: 48px;
+    flex-direction: column-reverse;
+    gap: 32px;
   }
 }
 
@@ -173,6 +197,11 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
+
+  @include laptop {
+    flex: 0 0 518px;
+    width: 518px;
+  }
 
   @include laptop-sm {
     flex: 1 1 auto;
@@ -402,6 +431,12 @@
   list-style: none;
   padding: 0;
   margin: 0;
+
+  @include laptop-sm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
 }
 
 .analyticsCard,
@@ -412,6 +447,16 @@
   align-items: center;
   padding: 24px 16px;
   gap: 16px;
+
+  @include laptop-sm {
+    padding: 16px;
+  }
+}
+
+.analyticsCardRow {
+  @include laptop-sm {
+    grid-column: 1 / 3;
+  }
 }
 
 .analyticsCard {
@@ -447,6 +492,63 @@
   align-items: center;
   padding: 8px 16px;
   gap: 10px;
+
+  @include laptop-sm {
+    background: white;
+    box-shadow: 0px 2px 4px rgba(74, 85, 101, 0.25);
+    border-radius: 4px;
+    justify-content: space-between;
+    padding: 16px;
+  }
+}
+
+.sessionsHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobileViewButton {
+  display: none;
+
+  @include laptop-sm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 24px;
+    height: 40px;
+    background: linear-gradient(90deg, #AE73F1 0%, #7650F6 29%, #5C3FF8 58%, #0F0FFF 100%);
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+
+    .viewText {
+      color: white;
+      font-size: 16px;
+      font-family: $font-manrope;
+      font-weight: 600;
+    }
+
+    .arrowIcon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.sessionsBlock.expanded {
+  @include laptop-sm {
+    .mobileViewButton {
+      background: transparent;
+      padding: 10px;
+      width: auto;
+      height: auto;
+    }
+    .sessionsList {
+      display: flex;
+    }
+  }
 }
 
 .headerDot {
@@ -464,6 +566,11 @@
   background: white;
   border-radius: 4px;
   overflow: hidden;
+
+  @include laptop-sm {
+    display: none;
+    gap: 8px; /* Based on expanded mockup */
+  }
 }
 
 .sessionCard {
@@ -475,6 +582,12 @@
   border-bottom: 1px solid #C0C0D2;
 
   &:last-child {
+    border-bottom: none;
+  }
+
+  @include laptop-sm {
+    padding: 16px;
+    border-radius: 4px;
     border-bottom: none;
   }
 }
@@ -753,15 +866,27 @@
   /* IE and Edge */
   scrollbar-width: none;
   /* Firefox */
+
+  @include laptop-sm {
+    gap: 8px;
+    padding: 8px 0;
+  }
 }
 
 .similarCardWrapper {
+  display: flex;
   flex: 0 0 calc((100% - 48px) / 3);
   min-width: 280px;
   scroll-snap-align: start;
 
+  /* Force ExpertCard to take full width of the wrapper */
+  & > * {
+    flex: 1 1 100% !important;
+    width: 100%;
+  }
+
   @include laptop-sm {
-    flex: 0 0 calc((100% - 24px) / 2);
+    flex: 0 0 calc((100% - 8px) / 2);
   }
 
   @include mobile {
