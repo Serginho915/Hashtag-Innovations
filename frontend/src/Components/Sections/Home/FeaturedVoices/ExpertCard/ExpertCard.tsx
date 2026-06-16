@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './ExpertCard.module.scss';
-import { DiscoverButton } from '../../../../Common/Buttons/DiscoverButton/DiscoverButton';
+import { ButtonView } from '../../../../Common/Buttons/ButtonView/ButtonView';
 import Link from 'next/link';
 
 interface ExpertCardProps {
@@ -46,7 +46,7 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
             <div className={styles.quote}>{quote}</div>
             
             <div className={styles.buttonWrapper}>
-              <DiscoverButton text={viewText} variant="blue" />
+              <ButtonView />
             </div>
           </div>
         </div>

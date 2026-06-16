@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { Expert } from '../Types/expert';
 import { NewsItem } from '../Types/news';
 import { UpcomingEventData } from '../Types/event';
@@ -19,7 +20,7 @@ export interface HomePageData {
   popularInsights: NewsItem[];
 }
 
-export const getHomePageData = async (lang: string): Promise<HomePageData> => {
+export const getHomePageData = cache(async (lang: string): Promise<HomePageData> => {
   // Simulate network delay to mimic real API
   await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -33,9 +34,9 @@ export const getHomePageData = async (lang: string): Promise<HomePageData> => {
     textbooks: isBg ? MOCK_TEXTBOOKS_BG as TextbookItem[] : MOCK_TEXTBOOKS_EN as TextbookItem[],
     popularInsights: isBg ? MOCK_NEWS_BG as any as NewsItem[] : MOCK_NEWS_EN as any as NewsItem[]
   };
-};
+});
 
-export const getExpertById = async (id: string, lang: string): Promise<Expert | undefined> => {
+export const getExpertById = cache(async (id: string, lang: string): Promise<Expert | undefined> => {
   // Simulate network delay to mimic real API
   await new Promise((resolve) => setTimeout(resolve, 50));
   
@@ -43,4 +44,4 @@ export const getExpertById = async (id: string, lang: string): Promise<Expert | 
   const experts = isBg ? MOCK_EXPERTS_BG : MOCK_EXPERTS_EN;
   
   return experts.find(expert => expert.id === id) as Expert | undefined;
-};
+});

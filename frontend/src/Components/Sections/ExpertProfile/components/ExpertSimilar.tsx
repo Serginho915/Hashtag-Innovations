@@ -3,7 +3,7 @@
 import React, { useRef } from 'react';
 import Link from 'next/link';
 import { Expert } from '../../../../Types/expert';
-import { CatalogExpertCard } from '../../Experts/CatalogExpertCard/CatalogExpertCard';
+import { ExpertCard } from '../../Home/FeaturedVoices/ExpertCard/ExpertCard';
 import styles from '../ExpertProfile.module.scss';
 
 interface Props {
@@ -50,10 +50,15 @@ export const ExpertSimilar: React.FC<Props> = ({ similarExperts, t, lang }) => {
       <div className={styles.similarCardsContainer} ref={carouselRef}>
         {similarExperts.map(simExpert => (
           <div key={simExpert.id} className={styles.similarCardWrapper}>
-            <CatalogExpertCard 
-              expert={simExpert} 
-              lang={lang} 
-              availableForLabel={lang === 'bg' ? 'Свободен за:' : lang === 'ru' ? 'Доступно для:' : 'Available for:'} 
+            <ExpertCard 
+              id={simExpert.id}
+              name={simExpert.name}
+              role={simExpert.role}
+              company={simExpert.company}
+              imageUrl={simExpert.imageUrl}
+              quote={simExpert.quote}
+              viewText={t.view || "View"}
+              lang={lang}
             />
           </div>
         ))}
