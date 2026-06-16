@@ -33,7 +33,19 @@ export const translations: Record<string, Record<string, any>> = {
     selectedTimeLabel: 'selected time',
     confirm: 'Confirm',
     selectDateTimePrompt: 'Select date and time',
-    hideText: 'hide'
+    hideText: 'hide',
+    contactDetails: 'Contact Details',
+    contactDetailsDesc: 'Fill in the form below to complete the session booking.',
+    nameLabel: 'Name*',
+    emailLabel: 'Email*',
+    additionalLabel: 'Additional',
+    additionalPlaceholder: 'Describe your request or problem...',
+    termsAgree: 'I agree to the ',
+    termsLink: 'terms of use',
+    and: ' and ',
+    privacyLink: 'privacy policy',
+    nextBtn: 'Next',
+    confirmBtn: 'Confirm'
   },
   bg: {
     expertsTitle: 'Каталог Експерти',
@@ -69,7 +81,19 @@ export const translations: Record<string, Record<string, any>> = {
     selectedTimeLabel: 'избрано време',
     confirm: 'Потвърди',
     selectDateTimePrompt: 'Изберете дата и време',
-    hideText: 'скрий'
+    hideText: 'скрий',
+    contactDetails: 'Данни за контакт',
+    contactDetailsDesc: 'Попълнете формуляра по-долу, за да завършите резервацията.',
+    nameLabel: 'Име*',
+    emailLabel: 'Имейл*',
+    additionalLabel: 'Допълнително',
+    additionalPlaceholder: 'Опишете вашето запитване или проблем...',
+    termsAgree: 'Съгласен съм с ',
+    termsLink: 'условията за ползване',
+    and: ' и ',
+    privacyLink: 'политиката за поверителност',
+    nextBtn: 'Напред',
+    confirmBtn: 'Потвърди'
   },
   ru: {
     expertsTitle: 'Каталог Экспертов',
@@ -105,6 +129,18 @@ export const translations: Record<string, Record<string, any>> = {
     selectedTimeLabel: 'выбранное время',
     confirm: 'Подтвердить',
     selectDateTimePrompt: 'Выберите дату и время',
-    hideText: 'скрыть'
+    hideText: 'скрыть',
+    contactDetails: 'Контактные Данные',
+    contactDetailsDesc: 'Заполните форму ниже, чтобы завершить бронирование сессии.',
+    nameLabel: 'Имя*',
+    emailLabel: 'Электронная Почта*',
+    additionalLabel: 'Дополнительно',
+    additionalPlaceholder: 'Опишите ваш запрос или проблему...',
+    termsAgree: 'Я согласен с ',
+    termsLink: 'условиями использования',
+    and: ' и ',
+    privacyLink: 'политикой конфиденциальности',
+    nextBtn: 'Далее',
+    confirmBtn: 'Подтвердить'
   }
 };
