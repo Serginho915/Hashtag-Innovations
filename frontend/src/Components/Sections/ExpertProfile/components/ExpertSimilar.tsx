@@ -2,8 +2,8 @@
 
 import React, { useRef } from 'react';
 import Link from 'next/link';
-import { Expert } from '../../../../Types/expert';
-import { ExpertCard } from '../../Home/FeaturedVoices/ExpertCard/ExpertCard';
+import { Expert } from '../../../../Types/expert.ts';
+import { ExpertCard } from '../../Home/FeaturedVoices/ExpertCard/ExpertCard.tsx';
 import styles from '../ExpertProfile.module.scss';
 
 interface Props {

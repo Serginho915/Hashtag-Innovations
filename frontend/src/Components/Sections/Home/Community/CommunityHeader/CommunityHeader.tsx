@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './CommunityHeader.module.scss';
 import Link from 'next/link';
-import { translations } from '../translations';
-import { SubTitle } from '../../../../UI/SubTitle/SubTitle';
+import { translations } from '../translations.ts';
+import { SubTitle } from '../../../../UI/SubTitle/SubTitle.tsx';
 
 interface CommunityHeaderProps {
   lang: string;

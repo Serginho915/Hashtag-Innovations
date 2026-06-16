@@ -1,8 +1,8 @@
-import { Hero } from "../../Components/Sections/Home/Hero/Hero";
-import { Community } from "../../Components/Sections/Home/Community/Community";
-import { FeaturedVoices } from "../../Components/Sections/Home/FeaturedVoices/FeaturedVoices";
-import { ExploreAndLearn } from "../../Components/Sections/Home/ExploreAndLearn/ExploreAndLearn";
-import { getHomePageData } from "../../api";
+import { Hero } from "../../Components/Sections/Home/Hero/Hero.tsx";
+import { Community } from "../../Components/Sections/Home/Community/Community.tsx";
+import { FeaturedVoices } from "../../Components/Sections/Home/FeaturedVoices/FeaturedVoices.tsx";
+import { ExploreAndLearn } from "../../Components/Sections/Home/ExploreAndLearn/ExploreAndLearn.tsx";
+import { getHomePageData } from "../../api/index.ts";
 
 export default async function Home({ params }: {
   params: Promise<{ lang: string }>

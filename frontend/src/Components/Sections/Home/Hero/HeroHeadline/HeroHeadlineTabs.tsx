@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import styles from "./HeroHeadline.module.scss";
-import { useNavigation } from "../../../../../Context/NavigationContext";
+import { useNavigation } from "../../../../../Context/NavigationContext.tsx";
 
 interface HeroHeadlineTabsProps {
   tabs: string[];

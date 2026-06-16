@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './AllExpertsSection.module.scss';
-import { CatalogExpertCard } from '../CatalogExpertCard/CatalogExpertCard';
-import { Expert } from '../../../../Types/expert';
-import { PromoBanner } from '../../../UI/PromoBanner/PromoBanner';
+import { CatalogExpertCard } from '../CatalogExpertCard/CatalogExpertCard.tsx';
+import { Expert } from '../../../../Types/expert.ts';
+import { PromoBanner } from '../../../UI/PromoBanner/PromoBanner.tsx';
 
 interface AllExpertsSectionProps {
   t: any;

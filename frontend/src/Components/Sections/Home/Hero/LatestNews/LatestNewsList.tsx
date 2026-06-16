@@ -2,10 +2,10 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import styles from "./LatestNews.module.scss";
-import { NewsCard } from "../NewsCard/NewsCard";
-import { ScrollArrows } from "../../../../UI/ScrollArrows/ScrollArrows";
+import { NewsCard } from "../NewsCard/NewsCard.tsx";
+import { ScrollArrows } from "../../../../UI/ScrollArrows/ScrollArrows.tsx";
 
-import { NewsItem } from "../../../../../Types/news";
+import { NewsItem } from "../../../../../Types/news.ts";
 
 interface LatestNewsListProps {
   news: NewsItem[];

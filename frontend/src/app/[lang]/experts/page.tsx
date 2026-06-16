@@ -1,11 +1,11 @@
 import React from 'react';
-import { Breadcrumbs } from '../../../Components/UI/Breadcrumbs/Breadcrumbs';
+import { Breadcrumbs } from '../../../Components/UI/Breadcrumbs/Breadcrumbs.tsx';
 import styles from './ExpertsPage.module.scss';
-import { translations } from './translations';
-import { MOCK_EXPERTS_EN, MOCK_EXPERTS_BG } from '../../../mockData/expertsMock';
-import { ExpertsHeader } from '../../../Components/Sections/Experts/ExpertsHeader/ExpertsHeader';
-import { AllExpertsSection } from '../../../Components/Sections/Experts/AllExpertsSection/AllExpertsSection';
-import { TopRatedSlider } from '../../../Components/Sections/Experts/TopRatedSlider/TopRatedSlider';
+import { translations } from './translations.ts';
+import { MOCK_EXPERTS_EN, MOCK_EXPERTS_BG } from '../../../mockData/expertsMock.ts';
+import { ExpertsHeader } from '../../../Components/Sections/Experts/ExpertsHeader/ExpertsHeader.tsx';
+import { AllExpertsSection } from '../../../Components/Sections/Experts/AllExpertsSection/AllExpertsSection.tsx';
+import { TopRatedSlider } from '../../../Components/Sections/Experts/TopRatedSlider/TopRatedSlider.tsx';
 
 interface ExpertsPageProps {
   params: Promise<{

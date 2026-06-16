@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { LanguageSelector } from "./LanguageSelector";
+import { LanguageSelector } from "./LanguageSelector.tsx";
 import styles from "./Header.module.scss";
-import { HeaderNav } from "./HeaderNav";
-import { useLanguage } from "../../../Hooks/useLanguage";
-import { useNavigation } from "../../../Context/NavigationContext";
+import { HeaderNav } from "./HeaderNav.tsx";
+import { useLanguage } from "../../../Hooks/useLanguage.ts";
+import { useNavigation } from "../../../Context/NavigationContext.tsx";
 import { usePathname } from "next/navigation";
-import { translations } from "./HeaderNavTranslations";
+import { translations } from "./HeaderNavTranslations.ts";
 import Link from "next/link";
 
 export const RightSection = () => {

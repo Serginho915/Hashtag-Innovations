@@ -1,5 +1,5 @@
-@use "../../../../../Styles/mixins" as *;
-@import "../../../../../Styles/variables";
+@use "../../../../../Styles/mixins.scss" as *;
+@import "../../../../../Styles/variables.scss";
 
 .noEvents {
   flex: 1 1 0;

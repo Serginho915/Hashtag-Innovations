@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './Community.module.scss';
-import { SectionTitle } from '../../../UI/SectionTitle/SectionTitle';
-import { translations } from './translations';
-import { CommunityInteractive } from './CommunityInteractive';
+import { SectionTitle } from '../../../UI/SectionTitle/SectionTitle.tsx';
+import { translations } from './translations.ts';
+import { CommunityInteractive } from './CommunityInteractive.tsx';
 
-import { CommunityEvent } from '../../../../Types/community';
+import { CommunityEvent } from '../../../../Types/community.ts';
 
 interface CommunityProps {
   lang: string;

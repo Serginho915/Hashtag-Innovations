@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import styles from "./InsidePlatform.module.scss";
 import Image from "next/image";
-import { ScrollArrows } from "../../../../UI/ScrollArrows/ScrollArrows";
+import { ScrollArrows } from "../../../../UI/ScrollArrows/ScrollArrows.tsx";
 
 interface SlideData {
   title: string;

@@ -4,9 +4,9 @@ import React, { useRef, useState, useEffect } from "react";
 import styles from "./LearningMaterials.module.scss";
 import Image from "next/image";
 
-import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink';
+import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink.tsx';
 
-import { TextbookItem } from "../../../../../Types/textbook";
+import { TextbookItem } from "../../../../../Types/textbook.ts";
 
 interface LearningMaterialsProps {
   materials: TextbookItem[];

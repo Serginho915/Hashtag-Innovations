@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Header.module.scss";
-import { RightSection } from "./RightSection";
+import { RightSection } from "./RightSection.tsx";
 import logoImage from "../../../../public/images/Logo.svg";
 import Image from "next/image";
 import Link from "next/link";

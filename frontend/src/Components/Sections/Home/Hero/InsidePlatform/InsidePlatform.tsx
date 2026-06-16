@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./InsidePlatform.module.scss";
 import Image from "next/image";
-import { translations } from "./translations";
-import { InsidePlatformCarousel } from "./InsidePlatformCarousel";
+import { translations } from "./translations.ts";
+import { InsidePlatformCarousel } from "./InsidePlatformCarousel.tsx";
 
 export const InsidePlatform = ({ lang }: { lang: string }) => {
   const t = translations[lang] || translations.en;

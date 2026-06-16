@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from './CommunityEventCard.module.scss';
-import { DiscoverButton } from '../../../../Common/Buttons/DiscoverButton/DiscoverButton';
-import { CommunitySpeaker } from '../../../../../Types/community';
+import { DiscoverButton } from '../../../../Common/Buttons/DiscoverButton/DiscoverButton.tsx';
+import { CommunitySpeaker } from '../../../../../Types/community.ts';
 import Link from 'next/link';
-import { translations } from '../translations';
+import { translations } from '../translations.ts';
 
 interface CommunityEventCardProps {
   eventId: string;

@@ -1,15 +1,15 @@
 import { cache } from 'react';
-import { Expert } from '../Types/expert';
-import { NewsItem } from '../Types/news';
-import { UpcomingEventData } from '../Types/event';
-import { TextbookItem } from '../Types/textbook';
-import { CommunityEvent } from '../Types/community';
+import { Expert } from '../Types/expert.ts';
+import { NewsItem } from '../Types/news.ts';
+import { UpcomingEventData } from '../Types/event.ts';
+import { TextbookItem } from '../Types/textbook.ts';
+import { CommunityEvent } from '../Types/community.ts';
 
-import { MOCK_EXPERTS_EN, MOCK_EXPERTS_BG } from '../mockData/expertsMock';
-import { MOCK_NEWS_EN, MOCK_NEWS_BG } from '../mockData/newsMock';
-import { MOCK_UPCOMING_EVENTS_EN, MOCK_UPCOMING_EVENTS_BG } from '../mockData/upcomingEventMock';
-import { MOCK_EVENTS } from '../mockData/communityMock';
-import { MOCK_TEXTBOOKS_EN, MOCK_TEXTBOOKS_BG } from '../mockData/exploreAndLearnMock';
+import { MOCK_EXPERTS_EN, MOCK_EXPERTS_BG } from '../mockData/expertsMock.ts';
+import { MOCK_NEWS_EN, MOCK_NEWS_BG } from '../mockData/newsMock.ts';
+import { MOCK_UPCOMING_EVENTS_EN, MOCK_UPCOMING_EVENTS_BG } from '../mockData/upcomingEventMock.ts';
+import { MOCK_EVENTS } from '../mockData/communityMock.ts';
+import { MOCK_TEXTBOOKS_EN, MOCK_TEXTBOOKS_BG } from '../mockData/exploreAndLearnMock.ts';
 
 export interface HomePageData {
   experts: Expert[];

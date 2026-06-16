@@ -1,7 +1,7 @@
-import { getExpertById, getHomePageData } from '../../../../api';
-import ExpertProfile from '../../../../Components/Sections/ExpertProfile/ExpertProfile';
+import { getExpertById, getHomePageData } from '../../../../api/index.ts';
+import ExpertProfile from '../../../../Components/Sections/ExpertProfile/ExpertProfile.tsx';
 import { notFound } from 'next/navigation';
-import { translations } from '../translations';
+import { translations } from '../translations.ts';
 
 export default async function ExpertPage({
   params

@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import styles from './Community.module.scss';
-import { CommunityHeader } from './CommunityHeader/CommunityHeader';
-import { CommunityFilters } from './CommunityFilters/CommunityFilters';
-import { CommunityEventsList } from './CommunityEventsList/CommunityEventsList';
-import { CommunityEvent } from '../../../../Types/community';
+import { CommunityHeader } from './CommunityHeader/CommunityHeader.tsx';
+import { CommunityFilters } from './CommunityFilters/CommunityFilters.tsx';
+import { CommunityEventsList } from './CommunityEventsList/CommunityEventsList.tsx';
+import { CommunityEvent } from '../../../../Types/community.ts';
 
 interface CommunityInteractiveProps {
   lang: string;

@@ -2,12 +2,12 @@
 
 import React from "react";
 import styles from "./PopularInsights.module.scss";
-import { PopularInsightCard } from "./PopularInsightCard/PopularInsightCard";
+import { PopularInsightCard } from "./PopularInsightCard/PopularInsightCard.tsx";
 import Image from "next/image";
-import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink';
-import { translations } from "./translations";
+import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink.tsx';
+import { translations } from "./translations.ts";
 
-import { NewsItem } from "../../../../../Types/news";
+import { NewsItem } from "../../../../../Types/news.ts";
 
 interface PopularInsightsProps {
   news: NewsItem[];

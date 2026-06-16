@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Expert } from '../../../../../Types/expert';
-import { BookingModal } from '../BookingModal/BookingModal';
+import { Expert } from '../../../../../Types/expert.ts';
+import { BookingModal } from '../BookingModal/BookingModal.tsx';
 import styles from '../../ExpertProfile.module.scss';
 
 interface Props {

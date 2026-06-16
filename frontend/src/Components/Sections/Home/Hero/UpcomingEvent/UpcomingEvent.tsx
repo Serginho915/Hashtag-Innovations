@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "./UpcomingEvent.module.scss";
-import { translations } from "./translations";
-import { DiscoverButton } from "../../../../Common/Buttons/DiscoverButton/DiscoverButton";
-import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink';
-import { CustomVideoPlayer } from "../../../../UI/CustomVideoPlayer/CustomVideoPlayer";
+import { translations } from "./translations.ts";
+import { DiscoverButton } from "../../../../Common/Buttons/DiscoverButton/DiscoverButton.tsx";
+import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink.tsx';
+import { CustomVideoPlayer } from "../../../../UI/CustomVideoPlayer/CustomVideoPlayer.tsx";
 
-import { UpcomingEventData } from "../../../../../Types/event";
+import { UpcomingEventData } from "../../../../../Types/event.ts";
 
 interface UpcomingEventProps {
   lang: string;

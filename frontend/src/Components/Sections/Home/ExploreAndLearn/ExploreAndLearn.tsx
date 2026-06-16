@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "./ExploreAndLearn.module.scss";
-import { translations } from "./translations";
-import { LearningMaterials } from "./LearningMaterials/LearningMaterials";
-import { PopularInsights } from "./PopularInsights/PopularInsights";
-import { SectionTitle } from '../../../UI/SectionTitle/SectionTitle';
-import { TextbookItem } from "../../../../Types/textbook";
-import { NewsItem } from "../../../../Types/news";
+import { translations } from "./translations.ts";
+import { LearningMaterials } from "./LearningMaterials/LearningMaterials.tsx";
+import { PopularInsights } from "./PopularInsights/PopularInsights.tsx";
+import { SectionTitle } from '../../../UI/SectionTitle/SectionTitle.tsx';
+import { TextbookItem } from "../../../../Types/textbook.ts";
+import { NewsItem } from "../../../../Types/news.ts";
 
 interface ExploreAndLearnProps {
   lang: string;

@@ -1,16 +1,16 @@
 import React from 'react';
-import { Expert } from '../../../Types/expert';
+import { Expert } from '../../../Types/expert.ts';
 import styles from './ExpertProfile.module.scss';
-import { Breadcrumbs } from '../../UI/Breadcrumbs/Breadcrumbs';
+import { Breadcrumbs } from '../../UI/Breadcrumbs/Breadcrumbs.tsx';
 
 // Import sub-components
-import { ExpertProfileHeader } from './components/ExpertProfileHeader';
-import { ExpertBio } from './components/ExpertBio';
-import { ExpertExperience } from './components/ExpertExperience';
-import { ExpertLanguages } from './components/ExpertLanguages';
-import { ExpertSessions } from './components/ExpertSessions';
-import { ExpertAnalytics } from './components/ExpertAnalytics';
-import { ExpertSimilar } from './components/ExpertSimilar';
+import { ExpertProfileHeader } from './components/ExpertProfileHeader.tsx';
+import { ExpertBio } from './components/ExpertBio.tsx';
+import { ExpertExperience } from './components/ExpertExperience.tsx';
+import { ExpertLanguages } from './components/ExpertLanguages.tsx';
+import { ExpertSessions } from './components/ExpertSessions.tsx';
+import { ExpertAnalytics } from './components/ExpertAnalytics.tsx';
+import { ExpertSimilar } from './components/ExpertSimilar.tsx';
 
 interface ExpertProfileProps {
   expert: Expert;

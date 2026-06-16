@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./HeroHeadline.module.scss";
-import { translations } from "./translations";
-import { HeroHeadlineTabs } from "./HeroHeadlineTabs";
+import { translations } from "./translations.ts";
+import { HeroHeadlineTabs } from "./HeroHeadlineTabs.tsx";
 
 export const HeroHeadline = ({ lang }: { lang: string }) => {
   const t = translations[lang] || translations.bg;

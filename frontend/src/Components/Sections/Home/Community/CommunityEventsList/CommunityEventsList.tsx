@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './CommunityEventsList.module.scss';
-import { CommunityEventCard } from '../CommunityEventCard/CommunityEventCard';
-import { CommunityEvent } from '../../../../../Types/community';
+import { CommunityEventCard } from '../CommunityEventCard/CommunityEventCard.tsx';
+import { CommunityEvent } from '../../../../../Types/community.ts';
 
 interface CommunityEventsListProps {
   events: CommunityEvent[];

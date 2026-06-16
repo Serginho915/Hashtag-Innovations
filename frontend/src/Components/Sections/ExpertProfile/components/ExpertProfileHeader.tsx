@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Expert } from '../../../../Types/expert';
+import { Expert } from '../../../../Types/expert.ts';
 import styles from '../ExpertProfile.module.scss';
 
 interface Props {

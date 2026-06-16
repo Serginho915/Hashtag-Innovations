@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { EB_Garamond, Manrope } from "next/font/google";
-import { Language } from "@/Types/Language";
+import { Language } from "@/Types/Language.ts";
 import "@/Styles/globals.scss";
-import { Header } from "@/Components/Common/Header/Header";
-import { Footer } from "@/Components/Common/Footer/Footer";
-import { LanguageProvider } from "@/Context/LanguageContext";
-import { NavigationProvider } from "@/Context/NavigationContext";
+import { Header } from "@/Components/Common/Header/Header.tsx";
+import { Footer } from "@/Components/Common/Footer/Footer.tsx";
+import { LanguageProvider } from "@/Context/LanguageContext.tsx";
+import { NavigationProvider } from "@/Context/NavigationContext.tsx";
 
 const ebgaramond = EB_Garamond({
   variable: "--font-eb-garamond",

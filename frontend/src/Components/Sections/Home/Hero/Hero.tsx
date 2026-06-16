@@ -1,12 +1,12 @@
 import React from "react";
 import styles from "./Hero.module.scss";
-import { HeroHeadline } from "./HeroHeadline/HeroHeadline";
-import { InsidePlatform } from "./InsidePlatform/InsidePlatform";
-import { UpcomingEvent } from "./UpcomingEvent/UpcomingEvent";
-import { LatestNews } from "./LatestNews/LatestNews";
+import { HeroHeadline } from "./HeroHeadline/HeroHeadline.tsx";
+import { InsidePlatform } from "./InsidePlatform/InsidePlatform.tsx";
+import { UpcomingEvent } from "./UpcomingEvent/UpcomingEvent.tsx";
+import { LatestNews } from "./LatestNews/LatestNews.tsx";
 
-import { NewsItem } from "../../../../Types/news";
-import { UpcomingEventData } from "../../../../Types/event";
+import { NewsItem } from "../../../../Types/news.ts";
+import { UpcomingEventData } from "../../../../Types/event.ts";
 
 interface HeroProps {
   lang: string;

@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './ExpertCard.module.scss';
-import { ButtonView } from '../../../../Common/Buttons/ButtonView/ButtonView';
+import { ButtonView } from '../../../../Common/Buttons/ButtonView/ButtonView.tsx';
 import Link from 'next/link';
 
 interface ExpertCardProps {

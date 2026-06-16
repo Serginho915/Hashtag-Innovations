@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './CommunityFilters.module.scss';
-import { CommunityTag } from '../../../../../Types/community';
+import { CommunityTag } from '../../../../../Types/community.ts';
 
 export const filters: CommunityTag[] = [
   { id: 'on_site', label: 'On site' },
@@ -13,7 +13,7 @@ export const filters: CommunityTag[] = [
   { id: 'entertainment', label: 'Entertainment' }
 ];
 
-import { translations } from '../translations';
+import { translations } from '../translations.ts';
 
 interface CommunityFiltersProps {
   activeTag: string;

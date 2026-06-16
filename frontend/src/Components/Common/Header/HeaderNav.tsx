@@ -3,8 +3,8 @@
 import React from 'react'
 import Link from 'next/link'
 import styles from './Header.module.scss'
-import { useLanguage } from '../../../Context/LanguageContext'
-import { translations } from './HeaderNavTranslations'
+import { useLanguage } from '../../../Context/LanguageContext.tsx'
+import { translations } from './HeaderNavTranslations.ts'
 
 export const HeaderNav = () => {
   const { language } = useLanguage();

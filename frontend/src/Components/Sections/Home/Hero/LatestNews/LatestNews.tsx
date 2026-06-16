@@ -1,9 +1,9 @@
 import React from "react";
 import styles from "./LatestNews.module.scss";
-import { translations } from "./translations";
-import { LatestNewsList } from "./LatestNewsList";
+import { translations } from "./translations.ts";
+import { LatestNewsList } from "./LatestNewsList.tsx";
 
-import { NewsItem } from "../../../../../Types/news";
+import { NewsItem } from "../../../../../Types/news.ts";
 
 interface LatestNewsProps {
   lang: string;

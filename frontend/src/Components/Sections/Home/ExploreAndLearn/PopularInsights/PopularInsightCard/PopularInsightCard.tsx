@@ -1,9 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
-import { AuthorLink } from '../../../../../UI/AuthorLink/AuthorLink';
+import { AuthorLink } from '../../../../../UI/AuthorLink/AuthorLink.tsx';
 import styles from './PopularInsightCard.module.scss';
-import { ReadButton } from '../../../../../Common/Buttons/ReadButton/ReadButton';
-import { translations } from '../translations';
+import { ReadButton } from '../../../../../Common/Buttons/ReadButton/ReadButton.tsx';
+import { translations } from '../translations.ts';
 
 interface PopularInsightCardProps {
   id: string;

@@ -1,12 +1,12 @@
 import React from 'react';
 import styles from './FeaturedVoices.module.scss';
-import { DiscoverButton } from '../../../Common/Buttons/DiscoverButton/DiscoverButton';
-import { SubTitle } from '../../../UI/SubTitle/SubTitle';
+import { DiscoverButton } from '../../../Common/Buttons/DiscoverButton/DiscoverButton.tsx';
+import { SubTitle } from '../../../UI/SubTitle/SubTitle.tsx';
 import Link from 'next/link';
-import { translations } from './translations';
+import { translations } from './translations.ts';
 
-import { ExpertCard } from './ExpertCard/ExpertCard';
-import { Expert } from '../../../../Types/expert';
+import { ExpertCard } from './ExpertCard/ExpertCard.tsx';
+import { Expert } from '../../../../Types/expert.ts';
 
 interface FeaturedVoicesProps {
   lang: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import styles from './Breadcrumbs.module.scss';
-import { translations } from './translations';
+import { translations } from './translations.ts';
 
 export interface BreadcrumbItem {
   labelKey: string; // Used to look up translation, or fallback to the string itself

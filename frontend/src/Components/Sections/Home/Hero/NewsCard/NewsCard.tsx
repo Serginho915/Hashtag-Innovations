@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./NewsCard.module.scss";
-import { translations } from "./translations";
-import { ReadButton } from "../../../../Common/Buttons/ReadButton/ReadButton";
+import { translations } from "./translations.ts";
+import { ReadButton } from "../../../../Common/Buttons/ReadButton/ReadButton.tsx";
 import Link from 'next/link';
 
 interface NewsCardProps {

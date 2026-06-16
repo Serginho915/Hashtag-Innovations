@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Language } from '../Types/Language';
+import { Language } from '../Types/Language.ts';
 
 interface LanguageContextType {
   language: Language;

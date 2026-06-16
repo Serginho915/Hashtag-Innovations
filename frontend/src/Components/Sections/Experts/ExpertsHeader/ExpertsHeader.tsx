@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './ExpertsHeader.module.scss';
-import { SectionTitle } from '../../../UI/SectionTitle/SectionTitle';
-import { ExpertsFilters } from '../ExpertsFilters/ExpertsFilters';
+import { SectionTitle } from '../../../UI/SectionTitle/SectionTitle.tsx';
+import { ExpertsFilters } from '../ExpertsFilters/ExpertsFilters.tsx';
 
 interface ExpertsHeaderProps {
   t: any;

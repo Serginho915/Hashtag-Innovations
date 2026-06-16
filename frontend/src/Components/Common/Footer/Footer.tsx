@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Footer.module.scss';
-import { translations } from './translations';
+import { translations } from './translations.ts';
 import logoImage from '../../../../public/images/Logo.svg';
 
 interface FooterProps {

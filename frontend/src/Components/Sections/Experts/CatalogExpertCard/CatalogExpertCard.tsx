@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './CatalogExpertCard.module.scss';
 import Link from 'next/link';
-import { Expert } from '../../../../Types/expert';
+import { Expert } from '../../../../Types/expert.ts';
 
 interface CatalogExpertCardProps {
   expert: Expert;

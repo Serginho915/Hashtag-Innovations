@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { Expert } from '../../../../../Types/expert';
-import { Modal } from '../../../../UI/Modal/Modal';
+import { Expert } from '../../../../../Types/expert.ts';
+import { Modal } from '../../../../UI/Modal/Modal.tsx';
 import styles from './BookingModal.module.scss';
 
 interface BookingModalProps {

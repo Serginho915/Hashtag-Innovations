@@ -2,7 +2,7 @@
 
 import React from "react";
 import styles from "./Header.module.scss";
-import { useLanguage } from "../../../Hooks/useLanguage";
+import { useLanguage } from "../../../Hooks/useLanguage.ts";
 
 export const LanguageSelector = ({ isMobile }: { isMobile?: boolean }) => {
   const { language, setLanguage } = useLanguage();

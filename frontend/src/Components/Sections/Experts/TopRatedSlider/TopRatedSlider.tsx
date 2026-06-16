@@ -2,8 +2,8 @@
 
 import React, { useRef } from 'react';
 import styles from '../../../../app/[lang]/experts/ExpertsPage.module.scss';
-import { CatalogExpertCard } from '../CatalogExpertCard/CatalogExpertCard';
-import { Expert } from '../../../../Types/expert';
+import { CatalogExpertCard } from '../CatalogExpertCard/CatalogExpertCard.tsx';
+import { Expert } from '../../../../Types/expert.ts';
 
 interface TopRatedSliderProps {
   experts: Expert[];
