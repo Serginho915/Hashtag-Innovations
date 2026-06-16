@@ -1,5 +1,5 @@
-@use "../../../../Styles/mixins" as *;
-@import "../../../../Styles/variables";
+@use "../../../Styles/mixins" as *;
+@import "../../../Styles/variables";
 
 .profileWrapper {
   width: 100%;
@@ -8,33 +8,6 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
-}
-
-/* Breadcrumbs */
-.breadcrumbs {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: $font-manrope;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.breadcrumbLink {
-  color: #0F0FFF;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-.separator {
-  color: #0F0FFF;
-}
-
-.currentBreadcrumb {
-  color: black;
 }
 
 /* Header */
@@ -70,14 +43,36 @@
 .headerInfo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 65px;
   flex: 1;
+}
+
+.headerTopRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 288px;
+  width: 100%;
+
+  @include laptop {
+    gap: 120px;
+  }
+
+  @include laptop-sm {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+  }
 }
 
 .titleGroup {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 366px;
+
+  @include mobile {
+    width: 100%;
+  }
 }
 
 .expertName {
@@ -86,6 +81,7 @@
   font-size: 44px;
   font-family: 'EB Garamond', serif;
   font-weight: 700;
+  word-wrap: break-word;
 
   @include mobile {
     font-size: 32px;
@@ -111,15 +107,17 @@
   display: flex;
   align-items: flex-start;
   gap: 19px;
-  max-width: 600px;
-  margin-top: 16px;
+  width: 381px;
+
+  @include mobile {
+    width: 100%;
+  }
 }
 
 .quoteIcon {
   width: 22px;
   height: 20px;
-  background: rgba(0, 0, 0, 0.30);
-  /* Replace with actual SVG quote icon if available */
+  flex-shrink: 0;
 }
 
 .quoteText {
@@ -129,6 +127,15 @@
   font-family: $font-manrope;
   font-weight: 500;
   letter-spacing: 1px;
+  flex: 1 1 0;
+  word-wrap: break-word;
+}
+
+.headerBottomRow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
 }
 
 /* Main Content Layout */
@@ -152,7 +159,7 @@
   flex: 0 1 558px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 32px;
 
   @include laptop-sm {
     flex: 1 1 auto;
@@ -161,12 +168,14 @@
 }
 
 .rightColumn {
-  flex: 1;
+  flex: 0 0 634px;
+  width: 634px;
   display: flex;
   flex-direction: column;
   gap: 40px;
 
   @include laptop-sm {
+    flex: 1 1 auto;
     width: 100%;
   }
 }
@@ -238,6 +247,11 @@
     height: 7px;
     background: #076F7F;
     clip-path: polygon(100% 0, 0 0, 50% 100%);
+    transition: transform 0.2s ease;
+  }
+
+  .caretUp {
+    transform: rotate(180deg);
   }
 }
 
@@ -261,7 +275,7 @@
 .experienceItem {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 
 .expRole {
@@ -279,10 +293,11 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
+  width: 100%;
 }
 
 .expCompany {
+  flex: 1 1 0;
   color: black;
   font-size: 16px;
   font-family: $font-manrope;
@@ -304,6 +319,9 @@
   align-items: center;
   gap: 47px;
   flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 
   @include mobile {
     gap: 24px;
@@ -324,6 +342,20 @@
   /* Ideally background image with actual flag based on lang */
 }
 
+.ruFlagFallback {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #000;
+  font-family: $font-manrope;
+}
+
 .langName {
   color: black;
   font-size: 22px;
@@ -336,6 +368,10 @@
 }
 
 /* Analytics */
+.analyticsSection {
+  margin-top: 40px;
+}
+
 .analyticsHeader {
   display: flex;
   align-items: center;
@@ -358,10 +394,13 @@
   font-weight: 700;
 }
 
-.analyticsGrid {
+.analyticsList {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .analyticsCard,
@@ -399,7 +438,14 @@
 .sessionsBlock {
   display: flex;
   flex-direction: column;
-  gap: 11px;
+  gap: 16px;
+}
+
+.sessionsHeader {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  gap: 10px;
 }
 
 .headerDot {
@@ -407,20 +453,29 @@
   height: 8px;
   background: #0F0FFF;
   border-radius: 50%;
-  margin-right: 10px;
 }
 
 .sessionsList {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  padding: 16px 0;
+  gap: 0;
+  padding: 0;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .sessionCard {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding: 24px 24px;
+  background: white;
+  border-bottom: 1px solid #C0C0D2;
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .sessionInfo {
@@ -429,15 +484,21 @@
   gap: 8px;
 }
 
+.sessionBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .sessionTitle {
   margin: 0;
   color: black;
-  font-size: 28px;
+  font-size: 24px;
   font-family: $font-manrope;
   font-weight: 700;
 
   @include mobile {
-    font-size: 24px;
+    font-size: 20px;
   }
 }
 
@@ -470,7 +531,7 @@
 
 .sessionPrice {
   color: black;
-  font-size: 24px;
+  font-size: 22px;
   font-family: $font-manrope;
   font-weight: 700;
 }
@@ -501,11 +562,10 @@
 .tagsBlock {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .tagsLabel {
-  margin: 0;
   color: black;
   font-size: 16px;
   font-family: $font-manrope;
@@ -519,7 +579,12 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  padding: 0 8px;
+  padding: 12px 8px;
+  border-top: 1px solid #373840;
+  border-bottom: 1px solid #373840;
+  width: 100%;
+  list-style: none;
+  margin: 0;
 }
 
 .tagItem {
@@ -528,6 +593,19 @@
   font-family: $font-manrope;
   font-weight: 700;
   padding: 4px 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    background: #076F7F;
+    border-radius: 50%;
+  }
 }
 
 .tagDot {
@@ -535,6 +613,21 @@
   height: 8px;
   background: #076F7F;
   border-radius: 50%;
+}
+
+.industriesRow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.industriesList {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .industryItem {
@@ -610,42 +703,36 @@
   }
 }
 
-.browseAllBtn {
+.browseAll {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 16px;
-  border-radius: 200px;
-  color: #F40A0A;
-  font-size: 16px;
-  font-family: $font-manrope;
-  font-weight: 600;
-  text-transform: uppercase;
   text-decoration: none;
-  transition: opacity 0.2s ease;
+  
+  span {
+    color: #F40A0A;
+    font-size: 16px;
+    font-family: $font-manrope;
+    font-weight: 500;
+    word-wrap: break-word;
+    text-transform: uppercase;
+  }
+
+  .icon {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+  }
 
   &:hover {
-    opacity: 0.8;
-  }
-}
-
-.browseIcon {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #FF0C0C;
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    width: 13px;
-    height: 13px;
-    top: 5.5px;
-    left: 5.5px;
-    background: white;
-    /* Replace with actual icon */
-    clip-path: polygon(100% 50%, 0 0, 0 100%);
+    .icon {
+      transform: translate(2px, -2px);
+    }
   }
 }
 

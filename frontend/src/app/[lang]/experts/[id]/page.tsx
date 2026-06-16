@@ -1,5 +1,5 @@
 import { getExpertById, getHomePageData } from '../../../../api';
-import ExpertProfile from '../../../../Components/Sections/Experts/ExpertProfile/ExpertProfile';
+import ExpertProfile from '../../../../Components/Sections/ExpertProfile/ExpertProfile';
 import { notFound } from 'next/navigation';
 import { translations } from '../translations';
 
