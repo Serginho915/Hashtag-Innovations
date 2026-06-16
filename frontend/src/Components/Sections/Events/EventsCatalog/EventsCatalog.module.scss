@@ -1,0 +1,232 @@
+@use "../../../../Styles/mixins.scss" as *;
+@import "../../../../Styles/variables.scss";
+
+.catalogContainer {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  margin-bottom: 80px;
+
+  @include laptop-sm {
+    gap: 40px;
+  }
+}
+
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.titleWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  @include tablet {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.titleBlock {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-bottom: 2px black solid;
+  padding-bottom: 12px;
+
+  @include tablet {
+    width: 100%;
+    flex: none;
+  }
+}
+
+.title {
+  color: black;
+  font-size: 56px;
+  font-family: $font-eb-garamond;
+  font-weight: 700;
+  margin: 0;
+
+  @include tablet {
+    font-size: 40px;
+  }
+}
+
+.subtitleBlock {
+  padding: 16px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include tablet {
+    padding: 0;
+    justify-content: flex-start;
+  }
+}
+
+.subtitle {
+  width: 467px;
+  text-align: right;
+  color: #4A5565;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 500;
+
+  @include tablet {
+    width: 100%;
+    text-align: left;
+  }
+}
+
+.filtersRow {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+  width: 885px;
+  max-width: 100%;
+
+  @include tablet {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.filterItem {
+  flex: 1 1 0;
+  padding: 12px 8px;
+  border-bottom: 1px #C0C0D2 solid;
+
+  @include tablet {
+    width: 100%;
+    flex: none;
+  }
+}
+
+.contentSection {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+
+  @include tablet {
+    flex-direction: column;
+  }
+}
+
+.tagsColumn {
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 200px;
+  flex-shrink: 0;
+
+  @include tablet {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 0;
+  }
+}
+
+.tagItem {
+  width: 100%;
+  padding: 8px 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+
+  @include tablet {
+    width: auto;
+  }
+}
+
+.tagDot {
+  width: 10px;
+  height: 10px;
+  background: #0F0FFF;
+  border-radius: 9999px;
+}
+
+.tagText {
+  color: black;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  word-wrap: break-word;
+
+  &.inactive {
+    color: #5C5C70;
+  }
+}
+
+.mainColumn {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.topSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 24px;
+
+  @include laptop-sm {
+    flex-direction: column;
+  }
+}
+
+.horizontalList {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.bottomSection {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+
+  @include laptop-sm {
+    flex-direction: column;
+  }
+}
+
+.verticalList {
+  flex: 1 1 0;
+  display: flex;
+  gap: 24px;
+
+  @include tablet {
+    flex-direction: column;
+  }
+}
+
+.verticalCardWrapper {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+
+  @include tablet {
+    flex: none;
+    width: 100%;
+  }
+}
