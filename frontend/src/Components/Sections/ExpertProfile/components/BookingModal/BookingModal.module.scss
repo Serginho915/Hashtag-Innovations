@@ -1,0 +1,441 @@
+@use "../../../../../Styles/mixins" as *;
+@import "../../../../../Styles/variables";
+
+.container {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  width: 100%;
+  max-width: 1200px; /* from combined widths: 460 + 686 + gaps */
+  box-sizing: border-box;
+
+  @include laptop-sm {
+    padding: 24px;
+    gap: 32px;
+  }
+}
+
+.topSection {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+
+  @include laptop-sm {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.expertInfoColumn {
+  width: 460px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  @include laptop-sm {
+    width: 100%;
+  }
+}
+
+.expertDetails {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.breadcrumbs {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  
+  .crumbText {
+    color: black;
+    font-size: 14px;
+    font-family: $font-manrope;
+    font-weight: 500;
+  }
+}
+
+.expertHeader {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.expertNameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  .nameText {
+    color: #101828;
+    font-size: 20px;
+    font-family: $font-manrope;
+    font-weight: 700;
+    line-height: 22px;
+  }
+}
+
+.expertRoleRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+
+  .roleText {
+    color: #4A5565;
+    font-size: 18px;
+    font-family: $font-manrope;
+    font-weight: 400;
+    line-height: 18px;
+  }
+
+  .companyText {
+    color: #6A7282;
+    font-size: 18px;
+    font-family: $font-manrope;
+    font-weight: 400;
+    line-height: 18px;
+  }
+}
+
+.divider {
+  align-self: stretch;
+  height: 1px;
+  background: #F0F0F5;
+  margin: 16px 0; /* Add some margin instead of structural gaps */
+}
+
+.sessionInfoRow {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  @include mobile {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.sessionTextColumn {
+  width: 100%;
+  max-width: 394px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sessionTitle {
+  color: black;
+  font-size: 28px;
+  font-family: $font-manrope;
+  font-weight: 700;
+}
+
+.sessionDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .subtitle {
+    color: black;
+    font-size: 18px;
+    font-family: $font-manrope;
+    font-weight: 500;
+  }
+
+  .description {
+    color: black;
+    font-size: 16px;
+    font-family: $font-manrope;
+    font-weight: 400;
+  }
+}
+
+.sessionPrice {
+  color: black;
+  font-size: 24px;
+  font-family: $font-manrope;
+  font-weight: 700;
+}
+
+/* Calendar Section */
+.calendarColumn {
+  flex: 1;
+  padding: 24px;
+  background: white;
+  border-left: 1px solid #F1F3F7;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+
+  @include laptop-sm {
+    border-left: none;
+    border-top: 1px solid #F1F3F7;
+    width: 100%;
+    padding: 24px 0 0 0;
+  }
+}
+
+.calendarHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .title {
+    color: #4A5565;
+    font-size: 24px;
+    font-family: $font-manrope;
+    font-weight: 500;
+    line-height: 32px;
+  }
+
+  .subtitle {
+    color: #4A5565;
+    font-size: 14px;
+    font-family: $font-manrope;
+    font-weight: 500;
+  }
+}
+
+.calendarBody {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.monthRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+
+  .monthName {
+    color: #101828;
+    font-size: 22px;
+    font-family: $font-manrope;
+    font-weight: 700;
+  }
+}
+
+.arrowBtn {
+  width: 40px;
+  height: 40px;
+  background: #F3F3F3;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #E5E7EB;
+  }
+}
+
+.daysGrid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 8px;
+
+  /* Hide scrollbar */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.dayCard {
+  flex: 1 0 auto;
+  min-width: 60px;
+  padding: 12px;
+  background: white;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: 1px solid transparent;
+
+  &:hover:not(.disabled) {
+    background: #F8F9FA;
+    border-color: #E5E7EB;
+  }
+
+  &.selected {
+    background: #0F0FFF;
+    .dayName, .dayNumber {
+      color: white;
+    }
+  }
+
+  &.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .dayName {
+    color: black;
+    font-size: 16px;
+    font-family: $font-manrope;
+    font-weight: 400;
+  }
+
+  .dayNumber {
+    color: black;
+    font-size: 24px;
+    font-family: $font-manrope;
+    font-weight: 600;
+  }
+}
+
+.timeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.timeHeader {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+
+  .timeLabel {
+    color: #101828;
+    font-size: 22px;
+    font-family: $font-manrope;
+    font-weight: 600;
+  }
+
+  .timeZone {
+    color: #101828;
+    font-size: 14px;
+    font-family: $font-manrope;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+}
+
+.timeSlotsRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.timeSlot {
+  padding: 12px 24px;
+  border-radius: 9999px;
+  border: 1.5px solid #0F0FFF;
+  background: white;
+  color: #0F0FFF;
+  font-size: 24px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover:not(.selected) {
+    background: rgba(15, 15, 255, 0.05);
+  }
+
+  &.selected {
+    background: #0F0FFF;
+    color: white;
+  }
+}
+
+/* Bottom Confirmation Section */
+.bottomSection {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.selectionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .selectionLabel {
+    color: black;
+    font-size: 16px;
+    font-family: $font-manrope;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .selectionValueRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .iconSquare {
+      width: 20px;
+      height: 20px;
+      background: #1E1E20;
+    }
+
+    .selectionText {
+      color: #1F1F2C;
+      font-size: 18px;
+      font-family: $font-manrope;
+      font-weight: 700;
+    }
+  }
+}
+
+.confirmBtn {
+  flex: 1;
+  max-width: 681px;
+  padding: 16px;
+  background: linear-gradient(90deg, #AE73F1 0%, #7650F6 29%, #5C3FF8 58%, #0F0FFF 100%);
+  border-radius: 9999px;
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

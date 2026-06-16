@@ -27,7 +27,7 @@ export const ExpertBio: React.FC<Props> = ({ bio, t }) => {
         ))}
         {bio.length > 1 && (
           <button className={styles.showAllBtn} onClick={() => setIsBioExpanded(!isBioExpanded)}>
-            {isBioExpanded ? 'скрыть' : t.showAll || 'показать все'}
+            {isBioExpanded ? (t.hideText || 'скрыть') : t.showAll || 'показать все'}
             <div className={`${styles.caret} ${isBioExpanded ? styles.caretUp : ''}`}></div>
           </button>
         )}

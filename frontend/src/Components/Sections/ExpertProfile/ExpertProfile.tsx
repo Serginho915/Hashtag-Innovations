@@ -46,7 +46,7 @@ const ExpertProfile: React.FC<ExpertProfileProps> = ({ expert, similarExperts, t
 
         {/* Right Column */}
         <div className={styles.rightColumn}>
-          <ExpertSessions sessions={expert.sessions || []} t={t} />
+          <ExpertSessions expert={expert} sessions={expert.sessions || []} t={t} lang={lang} />
         </div>
       </div>
 

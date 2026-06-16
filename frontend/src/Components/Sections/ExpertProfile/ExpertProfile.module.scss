@@ -380,10 +380,11 @@
 }
 
 .analyticsIcon {
-  width: 16px;
-  height: 16px;
-  background: #C7C5C5;
-  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
 }
 
 .analyticsTitle {

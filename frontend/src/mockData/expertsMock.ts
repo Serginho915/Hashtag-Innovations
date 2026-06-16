@@ -1,6 +1,22 @@
+const getDynamicDates = () => {
+  const dates = [];
+  const today = new Date();
+  for (let i = 1; i <= 6; i++) {
+    if (i === 4) continue; // Skip one day to simulate unavailability
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    dates.push(d.toISOString().split('T')[0]);
+  }
+  return dates;
+};
+
+const mockDates = getDynamicDates();
+
 export const MOCK_EXPERTS_EN = [
   {
     id: 'expert-1',
+    availableDates: mockDates,
+    availableTimes: ['13:00', '14:00'],
     name: 'David Kim',
     role: 'Senior Product Manager at',
     company: 'Meta',
@@ -55,6 +71,8 @@ export const MOCK_EXPERTS_EN = [
   },
   {
     id: 'expert-2',
+    availableDates: mockDates,
+    availableTimes: ['13:00', '14:00'],
     name: 'Elena Rostova',
     role: 'Head of Engineering at',
     company: 'Spotify',
@@ -63,10 +81,54 @@ export const MOCK_EXPERTS_EN = [
     availableFor: ['Consultation', 'Code Review'],
     expertise: ['Development'],
     price: 200,
-    languages: ['English', 'Български']
+    languages: ['English', 'Български'],
+    industries: ['Tech', 'Design'],
+    bio: [
+      'Креативный директор, дизайнер и бывший преподаватель дизайна с опытом работы более 14 лет в стартапах и компаниях из списка Fortune 100 по всему миру. В настоящее время в основном работаю над социальными и экологическими проектами, так как считаю, что дизайн должен служить во благо.',
+      'Готов помочь каждому практически с любым вопросом, независимо от вашего опыта и бэкграунда. Время бронирования — час, но вы можете использовать его полностью или частично по необходимости. Если встреча была полезной, пожалуйста, оставьте отзыв — это поможет охватить больше людей 😄',
+      '⚠️ В связи с большим количеством неявок в последнее время: проявляйте элементарное уважение ко времени. Если не можете прийти, просто сообщите за несколько часов. Если не появитесь или отмените в последний момент без уважительной причины, я не буду принимать новые бронирования.'
+    ],
+    sessions: [
+      {
+        id: 'session-1',
+        title: 'Консультация',
+        subtitle: '60-минутная онлайн-сессия',
+        description: 'Формат консультации вопрос-ответ. Разбираем вашу проблему.',
+        price: 80
+      },
+      {
+        id: 'session-2',
+        title: 'Анализ проекта',
+        subtitle: '90-минутный разбор вашей идеи',
+        description: 'Подробный аудит с советами по улучшению и оптимизации.',
+        price: 150
+      },
+      {
+        id: 'session-3',
+        title: 'Менторство',
+        subtitle: '4 встречи на месяц',
+        description: 'Практические занятия с разбором кейсов и ответами на вопросы.',
+        price: 200
+      }
+    ],
+    experienceList: [
+      {
+        id: 'exp-1',
+        role: 'Senior Design Lead',
+        company: 'Apple inc.',
+        period: 'JAN 2023-PRESENT'
+      }
+    ],
+    analytics: {
+      consultations: '150+',
+      attendance: '98%',
+      experienceYears: '8+'
+    }
   },
   {
     id: 'expert-3',
+    availableDates: mockDates,
+    availableTimes: ['13:00', '14:00'],
     name: 'Michael Chen',
     role: 'UX Design Lead at',
     company: 'Airbnb',
@@ -75,10 +137,54 @@ export const MOCK_EXPERTS_EN = [
     availableFor: ['Consultation', 'Portfolio Review'],
     expertise: ['Design'],
     price: 100,
-    languages: ['English']
+    languages: ['English'],
+    industries: ['Tech', 'Design'],
+    bio: [
+      'Креативный директор, дизайнер и бывший преподаватель дизайна с опытом работы более 14 лет в стартапах и компаниях из списка Fortune 100 по всему миру. В настоящее время в основном работаю над социальными и экологическими проектами, так как считаю, что дизайн должен служить во благо.',
+      'Готов помочь каждому практически с любым вопросом, независимо от вашего опыта и бэкграунда. Время бронирования — час, но вы можете использовать его полностью или частично по необходимости. Если встреча была полезной, пожалуйста, оставьте отзыв — это поможет охватить больше людей 😄',
+      '⚠️ В связи с большим количеством неявок в последнее время: проявляйте элементарное уважение ко времени. Если не можете прийти, просто сообщите за несколько часов. Если не появитесь или отмените в последний момент без уважительной причины, я не буду принимать новые бронирования.'
+    ],
+    sessions: [
+      {
+        id: 'session-1',
+        title: 'Консультация',
+        subtitle: '60-минутная онлайн-сессия',
+        description: 'Формат консультации вопрос-ответ. Разбираем вашу проблему.',
+        price: 80
+      },
+      {
+        id: 'session-2',
+        title: 'Анализ проекта',
+        subtitle: '90-минутный разбор вашей идеи',
+        description: 'Подробный аудит с советами по улучшению и оптимизации.',
+        price: 150
+      },
+      {
+        id: 'session-3',
+        title: 'Менторство',
+        subtitle: '4 встречи на месяц',
+        description: 'Практические занятия с разбором кейсов и ответами на вопросы.',
+        price: 200
+      }
+    ],
+    experienceList: [
+      {
+        id: 'exp-1',
+        role: 'Senior Design Lead',
+        company: 'Apple inc.',
+        period: 'JAN 2023-PRESENT'
+      }
+    ],
+    analytics: {
+      consultations: '300+',
+      attendance: '99%',
+      experienceYears: '15+'
+    }
   },
   {
     id: 'expert-4',
+    availableDates: mockDates,
+    availableTimes: ['13:00', '14:00'],
     name: 'Andrey Nikolov',
     role: 'Founder & CEO at',
     company: 'Hashtag Innovations',
@@ -138,13 +244,15 @@ export const MOCK_EXPERTS_EN = [
       }
     ],
     analytics: {
-      consultations: '200+',
+      consultations: '50+',
       attendance: '100%',
-      experienceYears: '10+'
+      experienceYears: '5+'
     }
   },
   {
     id: 'expert-5',
+    availableDates: mockDates,
+    availableTimes: ['13:00', '14:00'],
     name: 'Sarah Jenkins',
     role: 'Principal Data Scientist at',
     company: 'Netflix',
@@ -160,6 +268,8 @@ export const MOCK_EXPERTS_EN = [
 export const MOCK_EXPERTS_BG = [
   {
     id: 'expert-1',
+    availableDates: mockDates,
+    availableTimes: ['13:00', '14:00'],
     name: 'Дейвид Ким',
     role: 'Старши продуктов мениджър в',
     company: 'Meta',
@@ -214,6 +324,8 @@ export const MOCK_EXPERTS_BG = [
   },
   {
     id: 'expert-2',
+    availableDates: mockDates,
+    availableTimes: ['13:00', '14:00'],
     name: 'Елена Ростова',
     role: 'Ръководител инженеринг в',
     company: 'Spotify',
@@ -222,10 +334,54 @@ export const MOCK_EXPERTS_BG = [
     availableFor: ['Консултация', 'Ревю на код'],
     expertise: ['Разработка'],
     price: 200,
-    languages: ['English', 'Български']
+    languages: ['English', 'Български'],
+    industries: ['Tech', 'Design'],
+    bio: [
+      'Креативный директор, дизайнер и бывший преподаватель дизайна с опытом работы более 14 лет в стартапах и компаниях из списка Fortune 100 по всему миру. В настоящее время в основном работаю над социальными и экологическими проектами, так как считаю, что дизайн должен служить во благо.',
+      'Готов помочь каждому практически с любым вопросом, независимо от вашего опыта и бэкграунда. Время бронирования — час, но вы можете использовать его полностью или частично по необходимости. Если встреча была полезной, пожалуйста, оставьте отзыв — это поможет охватить больше людей 😄',
+      '⚠️ В связи с большим количеством неявок в последнее время: проявляйте элементарное уважение ко времени. Если не можете прийти, просто сообщите за несколько часов. Если не появитесь или отмените в последний момент без уважительной причины, я не буду принимать новые бронирования.'
+    ],
+    sessions: [
+      {
+        id: 'session-1',
+        title: 'Консультация',
+        subtitle: '60-минутная онлайн-сессия',
+        description: 'Формат консультации вопрос-ответ. Разбираем вашу проблему.',
+        price: 80
+      },
+      {
+        id: 'session-2',
+        title: 'Анализ проекта',
+        subtitle: '90-минутный разбор вашей идеи',
+        description: 'Подробный аудит с советами по улучшению и оптимизации.',
+        price: 150
+      },
+      {
+        id: 'session-3',
+        title: 'Менторство',
+        subtitle: '4 встречи на месяц',
+        description: 'Практические занятия с разбором кейсов и ответами на вопросы.',
+        price: 200
+      }
+    ],
+    experienceList: [
+      {
+        id: 'exp-1',
+        role: 'Senior Design Lead',
+        company: 'Apple inc.',
+        period: 'JAN 2023-PRESENT'
+      }
+    ],
+    analytics: {
+      consultations: '150+',
+      attendance: '98%',
+      experienceYears: '8+'
+    }
   },
   {
     id: 'expert-3',
+    availableDates: mockDates,
+    availableTimes: ['13:00', '14:00'],
     name: 'Майкъл Чен',
     role: 'Водещ UX дизайнер в',
     company: 'Airbnb',
@@ -234,10 +390,54 @@ export const MOCK_EXPERTS_BG = [
     availableFor: ['Консултация', 'Ревю на портфолио'],
     expertise: ['Дизайн'],
     price: 100,
-    languages: ['English']
+    languages: ['English'],
+    industries: ['Tech', 'Design'],
+    bio: [
+      'Креативный директор, дизайнер и бывший преподаватель дизайна с опытом работы более 14 лет в стартапах и компаниях из списка Fortune 100 по всему миру. В настоящее время в основном работаю над социальными и экологическими проектами, так как считаю, что дизайн должен служить во благо.',
+      'Готов помочь каждому практически с любым вопросом, независимо от вашего опыта и бэкграунда. Время бронирования — час, но вы можете использовать его полностью или частично по необходимости. Если встреча была полезной, пожалуйста, оставьте отзыв — это поможет охватить больше людей 😄',
+      '⚠️ В связи с большим количеством неявок в последнее время: проявляйте элементарное уважение ко времени. Если не можете прийти, просто сообщите за несколько часов. Если не появитесь или отмените в последний момент без уважительной причины, я не буду принимать новые бронирования.'
+    ],
+    sessions: [
+      {
+        id: 'session-1',
+        title: 'Консультация',
+        subtitle: '60-минутная онлайн-сессия',
+        description: 'Формат консультации вопрос-ответ. Разбираем вашу проблему.',
+        price: 80
+      },
+      {
+        id: 'session-2',
+        title: 'Анализ проекта',
+        subtitle: '90-минутный разбор вашей идеи',
+        description: 'Подробный аудит с советами по улучшению и оптимизации.',
+        price: 150
+      },
+      {
+        id: 'session-3',
+        title: 'Менторство',
+        subtitle: '4 встречи на месяц',
+        description: 'Практические занятия с разбором кейсов и ответами на вопросы.',
+        price: 200
+      }
+    ],
+    experienceList: [
+      {
+        id: 'exp-1',
+        role: 'Senior Design Lead',
+        company: 'Apple inc.',
+        period: 'JAN 2023-PRESENT'
+      }
+    ],
+    analytics: {
+      consultations: '300+',
+      attendance: '99%',
+      experienceYears: '15+'
+    }
   },
   {
     id: 'expert-4',
+    availableDates: mockDates,
+    availableTimes: ['13:00', '14:00'],
     name: 'Андрей Николов',
     role: 'Основател и изпълнителен директор в',
     company: 'Hashtag Innovations',
@@ -297,13 +497,15 @@ export const MOCK_EXPERTS_BG = [
       }
     ],
     analytics: {
-      consultations: '200+',
+      consultations: '50+',
       attendance: '100%',
-      experienceYears: '10+'
+      experienceYears: '5+'
     }
   },
   {
     id: 'expert-5',
+    availableDates: mockDates,
+    availableTimes: ['13:00', '14:00'],
     name: 'Сара Дженкинс',
     role: 'Главен Data Scientist в',
     company: 'Netflix',

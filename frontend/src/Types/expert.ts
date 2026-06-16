@@ -37,4 +37,6 @@ export interface Expert {
   sessions?: Session[];
   experienceList?: Experience[];
   analytics?: Analytics;
+  availableDates?: string[]; // ISO format YYYY-MM-DD
+  availableTimes?: string[]; // HH:mm format
 }

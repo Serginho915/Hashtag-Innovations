@@ -23,7 +23,7 @@ export const ExpertExperience: React.FC<Props> = ({ experienceList, t }) => {
             className={styles.viewAllText} 
             onClick={() => setIsExperienceExpanded(!isExperienceExpanded)}
           >
-            {isExperienceExpanded ? 'скрыть' : t.allText || 'все'}
+            {isExperienceExpanded ? (t.hideText || 'скрыть') : t.allText || 'все'}
           </span>
         )}
       </div>

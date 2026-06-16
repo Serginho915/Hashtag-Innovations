@@ -2,12 +2,16 @@ import React from 'react';
 import { Expert } from '../../../../Types/expert';
 import styles from '../ExpertProfile.module.scss';
 
+import { BookSessionButton } from './BookSessionButton/BookSessionButton';
+
 interface Props {
+  expert: Expert;
   sessions: Expert['sessions'];
   t: Record<string, string>;
+  lang: string;
 }
 
-export const ExpertSessions: React.FC<Props> = ({ sessions, t }) => {
+export const ExpertSessions: React.FC<Props> = ({ expert, sessions, t, lang }) => {
   if (!sessions || sessions.length === 0) return null;
 
   return (
@@ -28,7 +32,7 @@ export const ExpertSessions: React.FC<Props> = ({ sessions, t }) => {
             </div>
             <div className={styles.sessionFooter}>
               <div className={styles.sessionPrice}>€{session.price}</div>
-              <button className={styles.bookBtn}>{t.bookNow}</button>
+              <BookSessionButton expert={expert} session={session} t={t} lang={lang} />
             </div>
           </div>
         ))}

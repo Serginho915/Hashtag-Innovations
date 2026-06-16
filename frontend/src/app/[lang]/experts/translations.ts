@@ -25,7 +25,15 @@ export const translations: Record<string, Record<string, any>> = {
     browseAll: 'Browse All',
     consultationsCompleted: 'Consultations completed',
     sessionAttendance: 'Session attendance',
-    yearsOfExperience: 'Years of experience'
+    yearsOfExperience: 'Years of experience',
+    dateTime: 'Date and Time /',
+    selectDateTime: 'Select an available time and date',
+    bookingInfo: 'Booking & cancellation available up to 48 hours before.',
+    timeLabel: 'Time',
+    selectedTimeLabel: 'selected time',
+    confirm: 'Confirm',
+    selectDateTimePrompt: 'Select date and time',
+    hideText: 'hide'
   },
   bg: {
     expertsTitle: 'Каталог Експерти',
@@ -53,7 +61,15 @@ export const translations: Record<string, Record<string, any>> = {
     browseAll: 'Разгледай всички',
     consultationsCompleted: 'Завършени консултации',
     sessionAttendance: 'Присъствие',
-    yearsOfExperience: 'Години опит'
+    yearsOfExperience: 'Години опит',
+    dateTime: 'Дата и Време /',
+    selectDateTime: 'Изберете актуално време и дата',
+    bookingInfo: 'Резервация & отмяна са достъпни до 48 часа преди събитието.',
+    timeLabel: 'Време',
+    selectedTimeLabel: 'избрано време',
+    confirm: 'Потвърди',
+    selectDateTimePrompt: 'Изберете дата и време',
+    hideText: 'скрий'
   },
   ru: {
     expertsTitle: 'Каталог Экспертов',
@@ -81,6 +97,14 @@ export const translations: Record<string, Record<string, any>> = {
     browseAll: 'browse all',
     consultationsCompleted: 'Consultations completed',
     sessionAttendance: 'Session attendence',
-    yearsOfExperience: 'Years of experience'
+    yearsOfExperience: 'Years of experience',
+    dateTime: 'Дата и Время /',
+    selectDateTime: 'Выберите актуальное время и дату',
+    bookingInfo: 'Бронирование & отмена доступны за 48 часов до начала.',
+    timeLabel: 'Время',
+    selectedTimeLabel: 'выбранное время',
+    confirm: 'Подтвердить',
+    selectDateTimePrompt: 'Выберите дату и время',
+    hideText: 'скрыть'
   }
 };
