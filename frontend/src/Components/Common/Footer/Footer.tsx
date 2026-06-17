@@ -15,7 +15,7 @@ export const Footer = ({ lang }: FooterProps) => {
   const browseLinks = [
     { label: t.experts, href: `/${lang}/experts` },
     { label: t.events, href: `/${lang}/events` },
-    { label: t.materials, href: `/${lang}/materials` },
+    { label: t.materials, href: `/${lang}/learn` },
     { label: t.insights, href: `/${lang}/insights` },
   ];
 

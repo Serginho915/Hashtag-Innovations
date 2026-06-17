@@ -7,5 +7,12 @@ export interface TextbookItem {
   authorExpertId?: string;
   imageUrl: string;
   pdfUrl: string;
+  salesUrl?: string;
+  category?: string;
+  format?: string;
+  price?: string;
+  badge?: string;
+  hasPreview?: boolean;
+  isTrending?: boolean;
   createdAt?: string;
 }

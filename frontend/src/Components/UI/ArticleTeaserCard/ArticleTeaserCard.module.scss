@@ -11,6 +11,10 @@
   align-items: flex-start;
   gap: 10px;
   flex-shrink: 0;
+
+  @include mobile {
+    overflow: visible;
+  }
 }
 
 .content {
@@ -23,6 +27,11 @@
   justify-content: flex-start;
   align-items: flex-start;
   gap: 12px;
+
+  @include mobile {
+    height: auto;
+    padding-right: 0;
+  }
 }
 
 .title {
@@ -35,6 +44,10 @@
   font-weight: 600;
   line-height: 24px;
   word-wrap: break-word;
+
+  @include mobile {
+    padding-right: 0;
+  }
 }
 
 .excerpt {
@@ -59,6 +72,12 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+
+  @include mobile {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
 }
 
 .authorGroup {

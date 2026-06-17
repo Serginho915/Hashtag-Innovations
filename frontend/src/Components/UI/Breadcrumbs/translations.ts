@@ -3,6 +3,7 @@ export const translations: Record<string, Record<string, string>> = {
     home: 'Home',
     experts: 'Experts',
     events: 'Events',
+    learn: 'Learn',
     materials: 'Materials',
     insights: 'Insights'
   },
@@ -10,6 +11,7 @@ export const translations: Record<string, Record<string, string>> = {
     home: 'Начало',
     experts: 'Експерти',
     events: 'Събития',
+    learn: 'Научи',
     materials: 'Материали',
     insights: 'Статии'
   }

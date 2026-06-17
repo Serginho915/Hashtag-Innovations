@@ -14,6 +14,7 @@ export interface NewsItem {
     paragraphs: string[];
   }>;
   promotedLabel?: string;
+  hashtags?: string[];
   authorName?: string;
   authorLabel?: string;
   authorId?: string;

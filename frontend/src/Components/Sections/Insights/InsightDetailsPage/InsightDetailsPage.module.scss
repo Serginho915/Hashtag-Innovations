@@ -91,8 +91,11 @@
   }
 
   @include tablet {
+    width: 100%;
+    flex: none;
     height: 360px;
     min-height: 360px;
+    align-self: stretch;
   }
 
   @include mobile {
@@ -194,18 +197,22 @@
 
 .primaryMeta,
 .tagsList,
+.primaryMeta li,
 .tagsList li {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
+.primaryMeta,
 .tagsList {
   padding: 0;
   margin: 0;
   list-style: none;
   flex-wrap: wrap;
+}
 
+.tagsList {
   span {
     color: #868686;
     text-transform: uppercase;
@@ -316,23 +323,26 @@
   gap: 23px;
 
   a {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     color: #0F0F0F;
     text-decoration: none;
-  }
-}
+    transition: opacity 0.2s ease;
 
-.socialIcon {
-  width: 28px;
-  height: 28px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #0F0F0F;
-  font-family: $font-manrope;
-  font-size: 14px;
-  font-weight: 800;
-  line-height: 1;
-  text-transform: uppercase;
+    &:hover {
+      opacity: 0.7;
+    }
+
+    svg {
+      max-width: 28px;
+      max-height: 28px;
+      display: block;
+      flex: 0 0 auto;
+    }
+  }
 }
 
 .relatedArticles {
@@ -361,7 +371,12 @@
 }
 
 .relatedCard {
-  height: 120px;
+  min-height: 120px;
+
+  @include mobile {
+    height: auto;
+    min-height: 0;
+  }
 }
 
 .newsletter {

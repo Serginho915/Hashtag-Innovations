@@ -23,6 +23,8 @@
   }
 
   @include laptop-sm {
+    width: 100%;
+    align-self: stretch;
   }
 
   @include tablet {
@@ -112,6 +114,9 @@
 
   @include laptop-sm {
     width: 100%;
+    flex: none;
+    height: auto;
+    max-height: 60vh;
   }
 
   @include tablet {

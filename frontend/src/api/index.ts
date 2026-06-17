@@ -25,6 +25,12 @@ export interface InsightsPageData {
   relatedEvents: CommunityEvent[];
 }
 
+export interface LearnPageData {
+  textbooks: TextbookItem[];
+  popularInsights: NewsItem[];
+  experts: Expert[];
+}
+
 const insightImages = [
   '/images/community/ai_event.png',
   '/images/community/summit_event.png',
@@ -34,10 +40,23 @@ const insightImages = [
   '/images/platform/slide_skills.png',
 ];
 
+const toHashtag = (value: string) => {
+  const normalized = value.trim();
+
+  if (!normalized) {
+    return '';
+  }
+
+  return normalized.startsWith('#') ? normalized : `#${normalized.replace(/\s+/g, '')}`;
+};
+
 const normalizeInsights = (items: unknown[], lang: string): NewsItem[] => items.map((item, index) => {
   const source = item as Record<string, unknown>;
   const rawTags = Array.isArray(source.tags) ? source.tags : [];
+  const rawHashtags = Array.isArray(source.hashtags) ? source.hashtags : [];
   const rawBodySections = Array.isArray(source.bodySections) ? source.bodySections : [];
+  const tags = rawTags.map(String);
+  const category = String(source.category ?? tags[0] ?? 'Business');
   const bodySections = rawBodySections
     .map((section) => {
       const sectionSource = section as Record<string, unknown>;
@@ -50,10 +69,18 @@ const normalizeInsights = (items: unknown[], lang: string): NewsItem[] => items.
     })
     .filter((section) => section.paragraphs.length > 0);
   const fallbackExcerpt = String(source.excerpt ?? '');
+  const hashtagSource = rawHashtags.length
+    ? rawHashtags.map(String)
+    : source.promotedLabel
+      ? [String(source.promotedLabel), ...tags]
+      : tags.length
+        ? tags
+        : [category];
+  const hashtags = Array.from(new Set(hashtagSource.map(toHashtag).filter(Boolean)));
 
   return {
     id: String(source.id ?? `insight-${index + 1}`),
-    category: String(source.category ?? rawTags[0] ?? 'Business'),
+    category,
     title: String(source.title ?? ''),
     date: String(source.date ?? source.createdAt ?? '2026-06-17T10:00:00Z'),
     displayDate: source.displayDate ? String(source.displayDate) : undefined,
@@ -66,12 +93,13 @@ const normalizeInsights = (items: unknown[], lang: string): NewsItem[] => items.
       ? bodySections
       : [{ paragraphs: [fallbackExcerpt] }],
     promotedLabel: source.promotedLabel ? String(source.promotedLabel) : undefined,
+    hashtags,
     authorName: String(source.authorName ?? 'Andrew Nikolov'),
     authorLabel: String(source.authorLabel ?? (lang === 'bg' ? 'от' : 'by')),
     authorId: source.authorId ? String(source.authorId) : undefined,
     authorExpertId: source.authorExpertId ? String(source.authorExpertId) : undefined,
     authorAvatarUrl: source.authorAvatarUrl ? String(source.authorAvatarUrl) : undefined,
-    tags: rawTags.map(String),
+    tags,
   };
 });
 
@@ -118,6 +146,19 @@ export const getInsightsPageData = cache(async (lang: string): Promise<InsightsP
   return {
     insights,
     relatedEvents: MOCK_EVENTS,
+  };
+});
+
+export const getLearnPageData = cache(async (lang: string): Promise<LearnPageData> => {
+  // Simulate network delay to mimic real API
+  await new Promise((resolve) => setTimeout(resolve, 50));
+
+  const isBg = lang === 'bg';
+
+  return {
+    textbooks: isBg ? MOCK_TEXTBOOKS_BG as TextbookItem[] : MOCK_TEXTBOOKS_EN as TextbookItem[],
+    popularInsights: normalizeInsights(isBg ? MOCK_NEWS_BG : MOCK_NEWS_EN, lang),
+    experts: isBg ? MOCK_EXPERTS_BG as Expert[] : MOCK_EXPERTS_EN as Expert[],
   };
 });
 
