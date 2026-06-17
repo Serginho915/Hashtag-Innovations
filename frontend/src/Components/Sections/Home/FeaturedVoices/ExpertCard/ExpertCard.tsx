@@ -46,7 +46,7 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
             <div className={styles.quote}>{quote}</div>
             
             <div className={styles.buttonWrapper}>
-              <ButtonView />
+              <ButtonView text={viewText} />
             </div>
           </div>
         </div>

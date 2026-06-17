@@ -1,9 +1,77 @@
 .buttonView {
+  box-sizing: border-box;
+  width: 44px;
+  height: 32px;
+  padding-left: 12px;
+  position: relative;
   display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  overflow: hidden;
+  background: #0F0FFF;
+  border-radius: 9999px;
+  border: 2px solid #0F0FFF;
+  color: white;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition:
+    width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease;
 
   &:hover {
-    opacity: 0.8;
+    width: 92px;
+    background: #0F0FFF;
+    border-color: #0F0FFF;
+    color: white;
+
+    .buttonText {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .arrowCircle {
+      border-color: white;
+    }
+  }
+}
+
+.buttonText {
+  min-width: max-content;
+  padding-right: 40px;
+  text-align: center;
+  color: white;
+  font-size: 16px;
+  font-family: Manrope, sans-serif;
+  font-weight: 500;
+  line-height: 24px;
+  word-wrap: break-word;
+  opacity: 0;
+  transform: translateX(12px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.arrowCircle {
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  padding: 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  overflow: hidden;
+  border-radius: 44px;
+  border: 2px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: currentColor;
+  transition: border-color 0.35s ease;
+
+  svg {
+    display: block;
   }
 }

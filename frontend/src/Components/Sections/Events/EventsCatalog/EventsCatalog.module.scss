@@ -9,10 +9,10 @@
   display: flex;
   flex-direction: column;
   gap: 56px;
-  margin-bottom: 80px;
+  
 
   @include laptop-sm {
-    gap: 40px;
+    gap: 32px;
   }
 }
 
@@ -27,8 +27,12 @@
   justify-content: space-between;
   align-items: flex-start;
 
-  @include tablet {
+  @include laptop-sm {
     flex-direction: column;
+    gap: 0;
+  }
+
+  @include tablet {
     gap: 16px;
   }
 }
@@ -54,8 +58,14 @@
   font-weight: 700;
   margin: 0;
 
+  @include laptop-sm {
+    font-size: 46px;
+    line-height: 64px;
+  }
+
   @include tablet {
-    font-size: 40px;
+    font-size: 36px;
+    line-height: 44px;
   }
 }
 
@@ -65,9 +75,12 @@
   justify-content: center;
   align-items: center;
 
-  @include tablet {
-    padding: 0;
+  @include laptop-sm {
     justify-content: flex-start;
+  }
+
+  @include tablet {
+    padding: 8px 0;
   }
 }
 
@@ -93,23 +106,59 @@
   justify-content: flex-start;
   align-items: flex-start;
   gap: 24px;
-  width: 885px;
+  width: 685px;
   max-width: 100%;
 
+  @include laptop-sm {
+    width: 685px;
+  }
+
   @include tablet {
-    flex-direction: column;
-    gap: 16px;
+    width: 100%;
+    gap: 8px;
   }
 }
 
 .filterItem {
-  flex: 1 1 0;
-  padding: 12px 8px;
-  border-bottom: 1px #C0C0D2 solid;
+  flex: 0 0 auto;
 
   @include tablet {
-    width: 100%;
-    flex: none;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+.dropdownInputItem {
+  padding: 10px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.priceInput {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: black;
+  font-size: 16px;
+  font-family: $font-manrope;
+  font-weight: 600;
+  text-align: left;
+
+  &::placeholder {
+    color: rgba(54, 54, 54, 0.50);
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &[type=number] {
+    -moz-appearance: textfield;
   }
 }
 
@@ -191,7 +240,7 @@
   align-items: stretch;
   gap: 24px;
 
-  @include laptop-sm {
+  @include tablet {
     flex-direction: column;
   }
 }
@@ -220,7 +269,13 @@
   display: flex;
   gap: 24px;
 
+  @include laptop-sm {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   @include tablet {
+    display: flex;
     flex-direction: column;
   }
 }

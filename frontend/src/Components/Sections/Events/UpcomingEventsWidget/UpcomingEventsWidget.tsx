@@ -1,4 +1,6 @@
-import React from 'react';
+"use client";
+
+import React, { useState } from 'react';
 import styles from './UpcomingEventsWidget.module.scss';
 import { CommunityEvent } from '../../../../Types/community.ts';
 import Link from 'next/link';
@@ -11,6 +13,7 @@ interface UpcomingEventsWidgetProps {
 
 export const UpcomingEventsWidget: React.FC<UpcomingEventsWidgetProps> = ({ events, lang }) => {
   const t = translations[lang] || translations.bg;
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const getLocationLabel = (location: string) => {
     const parts = location.split(',').map((part) => part.trim()).filter(Boolean);
@@ -20,10 +23,23 @@ export const UpcomingEventsWidget: React.FC<UpcomingEventsWidgetProps> = ({ even
   return (
     <div className={styles.widgetContainer}>
       <div className={styles.widgetHeader}>
-        <div className={styles.headerDot}></div>
-        <div className={styles.headerText}>{t.upcomingThisMonth}</div>
+        <div className={styles.headerLabel}>
+          <div className={styles.headerDot}></div>
+          <div className={styles.headerText}>{t.upcomingThisMonth}</div>
+        </div>
+        <button
+          type="button"
+          className={`${styles.mobileToggle} ${isExpanded ? styles.expanded : ''}`}
+          aria-label={isExpanded ? 'Collapse upcoming events' : 'Expand upcoming events'}
+          aria-expanded={isExpanded}
+          onClick={() => setIsExpanded((current) => !current)}
+        >
+          <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
       </div>
-      <ul className={styles.eventsList}>
+      <ul className={`${styles.eventsList} ${isExpanded ? styles.expandedList : ''}`}>
         {events.map((event) => {
           const eventUrl = `/${lang}/events/${event.id}`;
           // e.g. "FRI, 20 May" -> split into "FRI," and "20 May"

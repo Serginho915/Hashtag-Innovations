@@ -27,6 +27,10 @@
   justify-content: flex-start;
   align-items: flex-start;
   gap: 24px;
+
+  @include tablet {
+    align-items: center;
+  }
 }
 
 /* Top row: brand + nav columns */
@@ -108,18 +112,25 @@
 
 .brandTagline {
   color: #5E5C5C;
-  font-size: 16px;
   font-family: $font-manrope;
+  font-size: 20px;
+  font-style: normal;
   font-weight: 400;
-  word-wrap: break-word;
+  line-height: 24px;
+    margin-top:56px;
 
   @include laptop {
-    color: #363636;
     font-size: 20px;
+  }
+
+  @include tablet {
+    margin-top: 36px;
   }
 
   @include mobile {
     width: 194px;
+    margin-top: 32px;
+
   }
 }
 

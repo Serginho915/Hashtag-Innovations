@@ -16,14 +16,15 @@ interface EventsCatalogProps {
 export const EventsCatalog: React.FC<EventsCatalogProps> = ({ events, lang }) => {
   const [activeTag, setActiveTag] = useState('all');
   const [activeLocation, setActiveLocation] = useState<string | null>(null);
-  const [activePriceRange, setActivePriceRange] = useState<string | null>(null);
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
   const [activeFormat, setActiveFormat] = useState<string | null>(null);
   const t = translations[lang] || translations.bg;
   const allLabel = t.all;
 
   const locationOptions = [allLabel, 'Sofia', 'Plovdiv', 'Varna', 'Online'];
-  const priceOptions = [allLabel, 'Free', 'Under €50', 'Over €50'];
   const formatOptions = [allLabel, 'Live', 'Online', 'Hybrid'];
+  const priceLabel = (minPrice || maxPrice) ? `€${minPrice || '0'} - €${maxPrice || '∞'}` : null;
 
   const TAGS = [
     { key: 'all', label: t.all },
@@ -38,10 +39,10 @@ export const EventsCatalog: React.FC<EventsCatalogProps> = ({ events, lang }) =>
 
     const matchesTag = activeTag === 'all' || event.tags.includes(activeTag);
     const matchesLocation = !activeLocation || activeLocation === allLabel || locationValue.includes(activeLocation.toLowerCase());
-    const matchesPrice = !activePriceRange || activePriceRange === allLabel
-      || (activePriceRange === 'Free' && !event.price)
-      || (activePriceRange === 'Under €50' && Boolean(event.price) && priceValue < 50)
-      || (activePriceRange === 'Over €50' && Boolean(event.price) && priceValue >= 50);
+    const minPriceValue = minPrice ? Number(minPrice) : null;
+    const maxPriceValue = maxPrice ? Number(maxPrice) : null;
+    const matchesPrice = (minPriceValue === null || priceValue >= minPriceValue)
+      && (maxPriceValue === null || priceValue <= maxPriceValue);
     const matchesFormat = !activeFormat || activeFormat === allLabel
       || (activeFormat === 'Live' && (event.tags.includes('on_site') || locationValue.includes('live') || locationValue.includes('на живо')))
       || (activeFormat === 'Online' && (event.tags.includes('online') || locationValue.includes('online') || locationValue.includes('онлайн')))
@@ -52,7 +53,7 @@ export const EventsCatalog: React.FC<EventsCatalogProps> = ({ events, lang }) =>
 
   const horizontalEvents = filteredEvents.slice(0, 2);
   const verticalEvents = filteredEvents.slice(2, 5);
-  const widgetEvents = filteredEvents.slice(0, 6);
+  const widgetEvents = filteredEvents;
 
   return (
     <div className={styles.catalogContainer}>
@@ -74,22 +75,42 @@ export const EventsCatalog: React.FC<EventsCatalogProps> = ({ events, lang }) =>
               label={t.location}
               options={locationOptions}
               value={activeLocation}
+              variant="events"
               onSelect={(option) => setActiveLocation(option === allLabel ? null : option)}
             />
           </li>
           <li className={styles.filterItem}>
             <DropdownFilter
               label={t.priceRange}
-              options={priceOptions}
-              value={activePriceRange}
-              onSelect={(option) => setActivePriceRange(option === allLabel ? null : option)}
-            />
+              value={priceLabel}
+              variant="events"
+            >
+              <div className={styles.dropdownInputItem}>
+                <input
+                  type="number"
+                  placeholder="min"
+                  value={minPrice}
+                  onChange={(event) => setMinPrice(event.target.value)}
+                  className={styles.priceInput}
+                />
+              </div>
+              <div className={styles.dropdownInputItem}>
+                <input
+                  type="number"
+                  placeholder="max"
+                  value={maxPrice}
+                  onChange={(event) => setMaxPrice(event.target.value)}
+                  className={styles.priceInput}
+                />
+              </div>
+            </DropdownFilter>
           </li>
           <li className={styles.filterItem}>
             <DropdownFilter
               label={t.format}
               options={formatOptions}
               value={activeFormat}
+              variant="events"
               onSelect={(option) => setActiveFormat(option === allLabel ? null : option)}
             />
           </li>
