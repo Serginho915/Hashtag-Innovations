@@ -6,6 +6,7 @@ import { EventOrganizationsBlock } from '../EventOrganizationsBlock/EventOrganiz
 import { EventSpeakersBlock } from '../EventSpeakersBlock/EventSpeakersBlock.tsx';
 import { RelatedEventsBlock } from '../RelatedEventsBlock/RelatedEventsBlock.tsx';
 import { RelevantArticlesBlock } from '../RelevantArticlesBlock/RelevantArticlesBlock.tsx';
+import { EventRegisterButton } from '../EventRegisterButton/EventRegisterButton.tsx';
 import styles from './EventDetails.module.scss';
 
 interface EventDetailsProps {
@@ -142,7 +143,15 @@ export const EventDetails: React.FC<EventDetailsProps> = ({ event, relatedEvents
               <dd>{event.price || 'Free'}</dd>
             </div>
           </dl>
-          <a className={styles.registerButton} href="#register">{t.register}</a>
+          <EventRegisterButton 
+            event={event} 
+            lang={lang} 
+            title={title} 
+            description={description} 
+            displayDate={getEventDate(event, lang) || ''} 
+            displayLocation={location}
+            registerText={t.register} 
+          />
         </aside>
       </div>
 

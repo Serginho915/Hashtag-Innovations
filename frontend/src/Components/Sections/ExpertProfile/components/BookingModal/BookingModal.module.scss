@@ -545,6 +545,14 @@
     &::placeholder {
       color: #9FA5B2;
     }
+
+    &.error {
+      border-color: #F04438;
+      &:focus {
+        border-color: #F04438;
+        box-shadow: 0 0 0 4px rgba(240, 68, 56, 0.1);
+      }
+    }
   }
 
   .textarea {
@@ -594,6 +602,10 @@
       background: #0F0FFF;
       border-color: #0F0FFF;
     }
+
+    &.error {
+      border-color: #F04438;
+    }
   }
 
   .termsText {
@@ -606,5 +618,25 @@
       color: #4A5565;
       text-decoration: underline;
     }
+  }
+}
+
+.errorText {
+  color: #F04438;
+  font-size: 13px;
+  font-family: $font-manrope;
+  font-weight: 500;
+  margin-top: 2px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

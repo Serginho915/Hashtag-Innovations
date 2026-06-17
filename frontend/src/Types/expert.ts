@@ -38,5 +38,5 @@ export interface Expert {
   experienceList?: Experience[];
   analytics?: Analytics;
   availableDates?: string[]; // ISO format YYYY-MM-DD
-  availableTimes?: string[]; // HH:mm format
+  availableTimes?: string[] | Record<string, string[]>; // HH:mm format array or mapping from date to times
 }

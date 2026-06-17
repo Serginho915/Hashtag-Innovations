@@ -41,6 +41,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [email, setEmail] = useState('');
   const [additional, setAdditional] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [errors, setErrors] = useState<{ date?: string; time?: string; name?: string; email?: string; terms?: string }>({});
 
   const locale = getLocale(lang);
   const daysGridRef = useRef<HTMLDivElement>(null);
@@ -102,12 +103,38 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     return new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(new Date());
   }, [locale]);
 
-  const times = expert.availableTimes || ['13:00', '14:00', '15:00'];
+  const times = useMemo(() => {
+    if (!selectedDate) return [];
+    if (expert.availableTimes && !Array.isArray(expert.availableTimes)) {
+      return (expert.availableTimes as Record<string, string[]>)[selectedDate] || ['13:00', '14:00', '15:00'];
+    }
+    return (expert.availableTimes as string[]) || ['13:00', '14:00', '15:00'];
+  }, [expert.availableTimes, selectedDate]);
 
   const handleNextOrConfirm = () => {
     if (step === 1) {
+      let newErrors: { date?: string; time?: string } = {};
+      if (!selectedDate) newErrors.date = t.errorRequired || 'Required';
+      if (!selectedTime) newErrors.time = t.errorRequired || 'Required';
+      
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
+      }
+      setErrors({});
       setStep(2);
     } else {
+      let newErrors: { name?: string; email?: string; terms?: string } = {};
+      if (!name.trim()) newErrors.name = t.errorRequired || 'Обязательное поле';
+      if (!email.trim() || !/^\S+@\S+\.\S+$/.test(email)) newErrors.email = t.errorEmail || 'Некорректный email';
+      if (!termsAccepted) newErrors.terms = t.errorTerms || 'Необходимо согласие';
+
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
+      }
+
+      setErrors({});
       console.log('Confirmed booking:', {
         expertId: expert.id,
         sessionId: session.id,
@@ -142,14 +169,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     ? (t.dateTime || 'Date and Time /') 
     : `${t.dateTime || 'Date and Time /'} ${t.contactDetails || 'Contact Details'}`;
 
-  const isNextDisabled = step === 1 
-    ? (!selectedDate || !selectedTime)
-    : (!name.trim() || !email.trim() || !termsAccepted);
-
   return (
     <Modal isOpen={isOpen} onClose={() => {
       // If modal is closed, optionally reset to step 1
       setStep(1);
+      setErrors({});
       onClose();
     }}>
       <div className={styles.container}>
@@ -249,7 +273,12 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     <div 
                       key={day.dateStr}
                       className={`${styles.dayCard} ${day.disabled ? styles.disabled : ''} ${selectedDate === day.dateStr ? styles.selected : ''}`}
-                      onClick={() => !day.disabled && setSelectedDate(day.dateStr)}
+                      onClick={() => {
+                        if (!day.disabled) {
+                          setSelectedDate(day.dateStr);
+                          setSelectedTime(null);
+                        }
+                      }}
                     >
                       <span className={styles.dayName} style={{textTransform: 'capitalize'}}>{day.name}</span>
                       <span className={styles.dayNumber}>{day.number}</span>
@@ -289,19 +318,27 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     <div className={styles.label}>{t.nameLabel || 'Name*'}</div>
                     <input 
                       type="text" 
-                      className={styles.input} 
+                      className={`${styles.input} ${errors.name ? styles.error : ''}`} 
                       value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        if (errors.name) setErrors({ ...errors, name: undefined });
+                      }}
                     />
+                    {errors.name && <div className={styles.errorText}>{errors.name}</div>}
                   </div>
                   <div className={styles.formGroup}>
                     <div className={styles.label}>{t.emailLabel || 'Email*'}</div>
                     <input 
                       type="email" 
-                      className={styles.input} 
+                      className={`${styles.input} ${errors.email ? styles.error : ''}`} 
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (errors.email) setErrors({ ...errors, email: undefined });
+                      }}
                     />
+                    {errors.email && <div className={styles.errorText}>{errors.email}</div>}
                   </div>
                 </div>
                 
@@ -316,8 +353,17 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 </div>
               </div>
               
-              <div className={styles.termsRow} onClick={() => setTermsAccepted(!termsAccepted)}>
-                <div className={`${styles.checkbox} ${termsAccepted ? styles.checked : ''}`}>
+              <div className={styles.termsRow}>
+                <div className={`${styles.checkbox} ${termsAccepted ? styles.checked : ''} ${errors.terms ? styles.error : ''}`}>
+                  <input 
+                    type="checkbox" 
+                    checked={termsAccepted}
+                    onChange={(e) => {
+                      setTermsAccepted(e.target.checked);
+                      if (errors.terms) setErrors({ ...errors, terms: undefined });
+                    }}
+                    style={{ position: 'absolute', opacity: 0, width: '22px', height: '22px', cursor: 'pointer', margin: 0 }}
+                  />
                   {termsAccepted && (
                     <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M1 5L4.5 8.5L13 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -331,6 +377,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   <a href="#" onClick={(e) => e.stopPropagation()}>{t.privacyLink || 'privacy policy'}</a>
                 </div>
               </div>
+              {errors.terms && <div className={styles.errorText} style={{ marginTop: '-12px' }}>{errors.terms}</div>}
             </div>
           )}
         </div>
@@ -348,14 +395,20 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               </div>
             </div>
           </div>
-          <button 
-            className={styles.confirmBtn}
-            disabled={isNextDisabled}
-            onClick={handleNextOrConfirm}
-            style={step === 2 ? { flex: 1, maxWidth: '681px' } : {}}
-          >
-            {step === 1 ? (t.nextBtn || 'Next') : (t.confirmBtn || 'Confirm')}
-          </button>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px', flex: step === 2 ? 1 : 'none', maxWidth: step === 2 ? '681px' : 'none' }}>
+            <button 
+              className={styles.confirmBtn}
+              onClick={handleNextOrConfirm}
+              style={{ width: '100%' }}
+            >
+              {step === 1 ? (t.nextBtn || 'Next') : (t.confirmBtn || 'Confirm')}
+            </button>
+            {step === 1 && (errors.date || errors.time) && (
+              <div className={styles.errorText} style={{ marginTop: '8px' }}>
+                {t.selectDateTimePrompt || 'Select an available time and date'}
+              </div>
+            )}
+          </div>
         </div>
 
       </div>

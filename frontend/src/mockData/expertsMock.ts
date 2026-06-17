@@ -12,11 +12,28 @@ const getDynamicDates = () => {
 
 const mockDates = getDynamicDates();
 
+const getDynamicTimes = (dates: string[]) => {
+  const timeOptions = [
+    ['10:00', '11:00', '13:00'],
+    ['14:00', '15:00', '16:00'],
+    ['09:00', '10:00'],
+    ['12:00', '14:00', '17:00'],
+    ['16:00', '18:00', '19:00'],
+  ];
+  const timesRecord: Record<string, string[]> = {};
+  dates.forEach((date, index) => {
+    timesRecord[date] = timeOptions[index % timeOptions.length];
+  });
+  return timesRecord;
+};
+
+const mockTimes = getDynamicTimes(mockDates);
+
 export const MOCK_EXPERTS_EN = [
   {
     id: 'expert-1',
     availableDates: mockDates,
-    availableTimes: ['13:00', '14:00'],
+    availableTimes: mockTimes,
     name: 'David Kim',
     role: 'Senior Product Manager at',
     company: 'Meta',
@@ -72,7 +89,7 @@ export const MOCK_EXPERTS_EN = [
   {
     id: 'expert-2',
     availableDates: mockDates,
-    availableTimes: ['13:00', '14:00'],
+    availableTimes: mockTimes,
     name: 'Elena Rostova',
     role: 'Head of Engineering at',
     company: 'Spotify',
@@ -128,7 +145,7 @@ export const MOCK_EXPERTS_EN = [
   {
     id: 'expert-3',
     availableDates: mockDates,
-    availableTimes: ['13:00', '14:00'],
+    availableTimes: mockTimes,
     name: 'Michael Chen',
     role: 'UX Design Lead at',
     company: 'Airbnb',
@@ -184,7 +201,7 @@ export const MOCK_EXPERTS_EN = [
   {
     id: 'expert-4',
     availableDates: mockDates,
-    availableTimes: ['13:00', '14:00'],
+    availableTimes: mockTimes,
     name: 'Andrey Nikolov',
     role: 'Founder & CEO at',
     company: 'Hashtag Innovations',
@@ -252,7 +269,7 @@ export const MOCK_EXPERTS_EN = [
   {
     id: 'expert-5',
     availableDates: mockDates,
-    availableTimes: ['13:00', '14:00'],
+    availableTimes: mockTimes,
     name: 'Sarah Jenkins',
     role: 'Principal Data Scientist at',
     company: 'Netflix',
@@ -269,7 +286,7 @@ export const MOCK_EXPERTS_BG = [
   {
     id: 'expert-1',
     availableDates: mockDates,
-    availableTimes: ['13:00', '14:00'],
+    availableTimes: mockTimes,
     name: 'Дейвид Ким',
     role: 'Старши продуктов мениджър в',
     company: 'Meta',
@@ -325,7 +342,7 @@ export const MOCK_EXPERTS_BG = [
   {
     id: 'expert-2',
     availableDates: mockDates,
-    availableTimes: ['13:00', '14:00'],
+    availableTimes: mockTimes,
     name: 'Елена Ростова',
     role: 'Ръководител инженеринг в',
     company: 'Spotify',
@@ -381,7 +398,7 @@ export const MOCK_EXPERTS_BG = [
   {
     id: 'expert-3',
     availableDates: mockDates,
-    availableTimes: ['13:00', '14:00'],
+    availableTimes: mockTimes,
     name: 'Майкъл Чен',
     role: 'Водещ UX дизайнер в',
     company: 'Airbnb',
@@ -437,7 +454,7 @@ export const MOCK_EXPERTS_BG = [
   {
     id: 'expert-4',
     availableDates: mockDates,
-    availableTimes: ['13:00', '14:00'],
+    availableTimes: mockTimes,
     name: 'Андрей Николов',
     role: 'Основател и изпълнителен директор в',
     company: 'Hashtag Innovations',
@@ -505,7 +522,7 @@ export const MOCK_EXPERTS_BG = [
   {
     id: 'expert-5',
     availableDates: mockDates,
-    availableTimes: ['13:00', '14:00'],
+    availableTimes: mockTimes,
     name: 'Сара Дженкинс',
     role: 'Главен Data Scientist в',
     company: 'Netflix',
