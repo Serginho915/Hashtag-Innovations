@@ -5,7 +5,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
 }
 
 .relatedHeader {
@@ -29,9 +29,50 @@
 .relatedEventsList {
   padding: 0;
   margin: 0;
+  list-style: none;
+}
+
+.column {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  overflow: hidden;
-  list-style: none;
+}
+
+.grid {
+  max-height: 798px;
+  padding-right: 6px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: #C0C0D2 transparent;
+
+  > li {
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+
+    > * {
+      flex: 1 1 auto;
+      height: 100%;
+    }
+  }
+
+  .featuredGridItem {
+    grid-column: 1 / -1;
+  }
+
+  @include tablet {
+    grid-template-columns: 1fr;
+    max-height: 900px;
+    gap: 13px;
+  }
+
+  @include mobile {
+    max-height: 760px;
+    padding-right: 0;
+  }
 }

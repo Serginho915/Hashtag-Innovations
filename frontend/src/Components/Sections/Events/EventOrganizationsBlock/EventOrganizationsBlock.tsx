@@ -27,9 +27,11 @@ export const EventOrganizationsBlock: React.FC<EventOrganizationsBlockProps> = (
             {group.items.map((item) => (
               <li key={item.id} className={styles.organizationItem}>
                 {item.logoSrc ? (
-                  <img className={styles.organizationLogo} src={item.logoSrc} alt="" />
+                  <span className={styles.organizationLogoFrame}>
+                    <img className={styles.organizationLogo} src={item.logoSrc} alt="" />
+                  </span>
                 ) : (
-                  <span className={styles.organizationLogo} aria-hidden="true" />
+                  <span className={styles.organizationLogoPlaceholder} aria-hidden="true" />
                 )}
                 <span>{item.name}</span>
               </li>

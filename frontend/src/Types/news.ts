@@ -3,10 +3,17 @@ export interface NewsItem {
   category: string;
   title: string;
   date: string;
+  displayDate?: string;
   timeToRead?: string;
   readTime?: string;
   imageUrl: string;
   excerpt?: string;
+  lead?: string;
+  bodySections?: Array<{
+    title?: string;
+    paragraphs: string[];
+  }>;
+  promotedLabel?: string;
   authorName?: string;
   authorLabel?: string;
   authorId?: string;

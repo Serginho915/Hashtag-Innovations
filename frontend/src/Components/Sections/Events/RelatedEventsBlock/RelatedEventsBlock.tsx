@@ -10,6 +10,7 @@ interface RelatedEventsBlockProps {
   events: CommunityEvent[];
   lang: string;
   viewAllHref?: string;
+  layout?: 'column' | 'grid';
 }
 
 export const RelatedEventsBlock: React.FC<RelatedEventsBlockProps> = ({
@@ -18,6 +19,7 @@ export const RelatedEventsBlock: React.FC<RelatedEventsBlockProps> = ({
   events,
   lang,
   viewAllHref = `/${lang}/events`,
+  layout = 'column',
 }) => {
   if (!events.length) {
     return null;
@@ -29,17 +31,24 @@ export const RelatedEventsBlock: React.FC<RelatedEventsBlockProps> = ({
         <h2>{title}</h2>
         <ViewAllLink href={viewAllHref} variant="arrow">{viewAllText}</ViewAllLink>
       </div>
-      <ul className={styles.relatedEventsList}>
-        {events.map((event) => (
-          <li key={event.id}>
-            <CommunityEventCard
-              {...event}
-              eventId={event.id}
-              lang={lang}
-              variant="horizontal"
-            />
-          </li>
-        ))}
+      <ul className={`${styles.relatedEventsList} ${styles[layout]}`}>
+        {events.map((event, index) => {
+          const isFeaturedGridEvent = layout === 'grid' && index === 0;
+
+          return (
+            <li key={event.id} className={isFeaturedGridEvent ? styles.featuredGridItem : undefined}>
+              <CommunityEventCard
+                {...event}
+                eventId={event.id}
+                lang={lang}
+                variant={isFeaturedGridEvent || layout !== 'grid' ? 'horizontal' : 'vertical'}
+                compact={layout === 'grid'}
+                useLocalizedContent={layout !== 'grid'}
+                showPrice={layout !== 'grid'}
+              />
+            </li>
+          );
+        })}
       </ul>
     </section>
   );

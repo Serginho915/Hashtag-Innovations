@@ -14,9 +14,27 @@
 
   &.horizontal {
     flex-direction: row;
+
+    .imageWrapper {
+      flex: 0 0 calc((100% - 16px) / 2);
+      width: calc((100% - 16px) / 2);
+      height: 244px;
+      min-height: 244px;
+      align-self: flex-start;
+    }
+
+    .textContainer {
+      min-width: 0;
+    }
+
     @include laptop-sm {
       padding: 12px;
       gap: 12px;
+
+      .imageWrapper {
+        flex-basis: calc((100% - 12px) / 2);
+        width: calc((100% - 12px) / 2);
+      }
     }
 
     @include tablet {
@@ -46,6 +64,7 @@
     flex-direction: column;
     gap: 16px;
     flex: 1;
+    height: 100%;
     @include laptop-sm {
       padding: 12px;
     }
@@ -63,16 +82,114 @@
       flex: 1 1 auto;
       justify-content: flex-start;
     }
-    .titleRow {
-      min-height: 64px;
-      align-items: flex-start;
-    }
+    .titleRow,
     .descriptionRow {
-      min-height: 60px;
       align-items: flex-start;
     }
     .metaRow {
       margin-top: auto;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+.compact {
+  gap: 16px;
+
+  .imageWrapper {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 244px;
+    min-height: 244px;
+  }
+
+  .textContainer {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 4px 12px;
+    justify-content: flex-start;
+    align-self: stretch;
+  }
+
+  .contentStack {
+    height: 100%;
+    gap: 16px;
+  }
+
+  .title {
+    font-size: 24px;
+    line-height: 32px;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .description {
+    -webkit-line-clamp: 3;
+  }
+
+  .metaRow {
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0;
+  }
+
+  .metaLeft {
+    gap: 60px;
+    flex-wrap: nowrap;
+  }
+
+  @include laptop {
+    gap: 13px;
+
+    .textContainer {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .metaLeft {
+      gap: 50px;
+    }
+  }
+
+  @include tablet {
+    &:nth-child(n) {
+      gap: 13px;
+    }
+  }
+
+  @include mobile {
+    padding-bottom: 24px;
+    gap: 16px;
+
+    .imageWrapper {
+      width: 100%;
+      height: 240px;
+      min-height: 240px;
+    }
+
+    .textContainer {
+      width: 100%;
+      padding: 0;
+    }
+
+    .title {
+      font-size: 22px;
+      line-height: 28px;
+    }
+
+    .descriptionRow {
+      display: none;
+    }
+
+    .metaRow {
+      justify-content: flex-start;
+      gap: 24px;
+    }
+
+    .metaLeft {
+      gap: 24px;
+      flex-wrap: wrap;
     }
   }
 }
@@ -194,7 +311,9 @@
   font-family: $font-manrope;
   font-weight: 700;
   line-height: 20px;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
 
   @include laptop-sm {
     font-weight: 600;

@@ -21,6 +21,9 @@ interface CommunityEventCardProps {
   lang: string;
   price?: string;
   variant?: 'horizontal' | 'vertical';
+  compact?: boolean;
+  useLocalizedContent?: boolean;
+  showPrice?: boolean;
 }
 
 export const CommunityEventCard: React.FC<CommunityEventCardProps> = ({
@@ -39,18 +42,22 @@ export const CommunityEventCard: React.FC<CommunityEventCardProps> = ({
   lang,
   price,
   variant = 'horizontal',
+  compact = false,
+  useLocalizedContent = true,
+  showPrice = true,
 }) => {
   const eventUrl = `/${lang}/events/${eventId}`;
   const t = translations[lang] || translations.bg;
   const isBg = lang === 'bg';
 
-  const displayTitle = isBg && titleBg ? titleBg : title;
-  const displayDesc = isBg && descriptionBg ? descriptionBg : description;
-  const finalDate = isBg && displayDateBg ? displayDateBg : (displayDate || date);
-  const displayLoc = isBg && locationBg ? locationBg : location;
+  const shouldLocalize = useLocalizedContent && isBg;
+  const displayTitle = shouldLocalize && titleBg ? titleBg : title;
+  const displayDesc = shouldLocalize && descriptionBg ? descriptionBg : description;
+  const finalDate = shouldLocalize && displayDateBg ? displayDateBg : (displayDate || date);
+  const displayLoc = shouldLocalize && locationBg ? locationBg : location;
 
   return (
-    <div className={`${styles.cardContainer} ${styles[variant]}`}>
+    <div className={`${styles.cardContainer} ${styles[variant]} ${compact ? styles.compact : ''}`}>
       {imageSrc && (
         <div className={styles.imageWrapper}>
           <img src={imageSrc} alt={title} className={styles.image} />
@@ -98,17 +105,18 @@ export const CommunityEventCard: React.FC<CommunityEventCardProps> = ({
               </div>
             </div>
             
-            {/* Price section */}
-            <div className={styles.priceContainer}>
-              <div className={styles.priceItem}>
-                <div className={styles.priceIcon}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="11" viewBox="0 0 14 11" fill="none">
-                    <path d="M13.3333 1.33333V9.33333C13.3333 9.7 13.2029 10.014 12.942 10.2753C12.6811 10.5367 12.3671 10.6671 12 10.6667H1.33333C0.966667 10.6667 0.652889 10.5362 0.392 10.2753C0.131111 10.0144 0.000444444 9.70045 0 9.33333V1.33333C0 0.966667 0.130667 0.652889 0.392 0.392C0.653333 0.131111 0.967111 0.000444444 1.33333 0H12C12.3667 0 12.6807 0.130667 12.942 0.392C13.2033 0.653333 13.3338 0.967111 13.3333 1.33333ZM1.33333 2.66667H12V1.33333H1.33333V2.66667ZM1.33333 5.33333V9.33333H12V5.33333H1.33333Z" fill="#363636"/>
-                  </svg>
+            {showPrice && (
+              <div className={styles.priceContainer}>
+                <div className={styles.priceItem}>
+                  <div className={styles.priceIcon}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="11" viewBox="0 0 14 11" fill="none">
+                      <path d="M13.3333 1.33333V9.33333C13.3333 9.7 13.2029 10.014 12.942 10.2753C12.6811 10.5367 12.3671 10.6671 12 10.6667H1.33333C0.966667 10.6667 0.652889 10.5362 0.392 10.2753C0.131111 10.0144 0.000444444 9.70045 0 9.33333V1.33333C0 0.966667 0.130667 0.652889 0.392 0.392C0.653333 0.131111 0.967111 0.000444444 1.33333 0H12C12.3667 0 12.6807 0.130667 12.942 0.392C13.2033 0.653333 13.3338 0.967111 13.3333 1.33333ZM1.33333 2.66667H12V1.33333H1.33333V2.66667ZM1.33333 5.33333V9.33333H12V5.33333H1.33333Z" fill="#363636"/>
+                    </svg>
+                  </div>
+                  <span className={styles.priceText}>{price || 'Free'}</span>
                 </div>
-                <span className={styles.priceText}>{price || 'Free'}</span>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

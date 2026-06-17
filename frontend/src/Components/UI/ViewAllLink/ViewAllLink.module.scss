@@ -28,6 +28,7 @@
   gap: 10px;
   font-size: 16px;
   text-transform: uppercase;
+  opacity: 1;
 
   &::after {
     content: "";
@@ -35,5 +36,15 @@
     height: 13px;
     background: currentColor;
     clip-path: polygon(100% 0, 100% 82%, 82% 82%, 82% 31%, 13% 100%, 0 87%, 69% 18%, 18% 18%, 18% 0);
+    transition: transform 0.35s ease;
+    will-change: transform;
+  }
+
+  &:hover {
+    opacity: 1;
+
+    &::after {
+      transform: translate(4px, -4px);
+    }
   }
 }

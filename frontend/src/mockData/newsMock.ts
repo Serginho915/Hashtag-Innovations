@@ -1,11 +1,35 @@
 export const MOCK_NEWS_EN = [
   {
     id: "news-en-1",
-    title: "Hashtag Innovations hosting a massive tech summit in Sofia",
-    excerpt: "Networking is getting more popular in Bulgaria. We decided to take part and help young professionals become more flexible and adaptive to social communication",
+    title: "Unlocking the Future: How AI Is Changing Our World",
+    category: "Artificial Intelligence",
+    date: "2025-02-24T10:00:00Z",
+    displayDate: "24/02/2025",
+    promotedLabel: "#Trending",
+    timeToRead: "5 min read",
+    readTime: "5 min read",
+    imageUrl: "/images/community/ai_event.png",
+    excerpt: "Discover the wide-ranging impact of AI as it transforms industries, everyday life, and the way professionals work.",
+    lead: "Artificial intelligence is no longer a technology of the future. It has become part of the present. We meet it daily when we search for information, use navigation, read recommendations, or communicate with digital assistants. But this is only the surface. Beneath it, a larger transformation is changing how work, creativity, education, and decision-making are organized.",
+    bodySections: [
+      {
+        title: "A new level of interaction with technology",
+        paragraphs: [
+          "Technology used to demand adaptation from people. Now the opposite is happening: AI adapts to people. It learns to understand context, habits, goals, and even styles of thinking. This changes the principle of interaction itself. Interfaces are becoming partners, not just tools.",
+          "We already see this in product design, where algorithms offer not just options, but personalized solutions. In business, real-time analytics helps teams make decisions faster than ever before.",
+        ],
+      },
+      {
+        paragraphs: [
+          "Automation is gradually taking over routine work. More importantly, AI is beginning to influence creative professions. Designers, copywriters, and developers now work together with models that accelerate idea generation, prototyping, and data analysis.",
+        ],
+      },
+    ],
     authorLabel: "by",
-    authorName: "Dr. Alice Johnson",
-    tags: ["Business", "Strategy"],
+    authorName: "Andrew Nikolov",
+    authorExpertId: "expert-4",
+    authorAvatarUrl: "/images/avatars/avatar_1.png",
+    tags: ["Artificial Intelligence", "Innovations", "Technology"],
     createdAt: "2023-10-15T10:00:00Z"
   },
   {
@@ -61,11 +85,35 @@ export const MOCK_NEWS_EN = [
 export const MOCK_NEWS_BG = [
   {
     id: "news-bg-1",
-    title: "Hashtag Innovations организира мащабна технологична среща в София",
-    excerpt: "Нетуъркингът става все по-популярен в България. Решихме да вземем участие и да помогнем на младите професионалисти да станат по-гъвкави и адаптивни в социалната комуникация",
+    title: "Отключване на бъдещето: Как ИИ променя нашия свят",
+    category: "Изкуствен интелект",
+    date: "2025-02-24T10:00:00Z",
+    displayDate: "24/02/2025",
+    promotedLabel: "#Набира популярност",
+    timeToRead: "5 мин четене",
+    readTime: "5 мин четене",
+    imageUrl: "/images/community/ai_event.png",
+    excerpt: "Открийте широкото влияние на ИИ, който променя индустрии, ежедневието и начина, по който работят професионалистите.",
+    lead: "Изкуственият интелект вече не е технология на бъдещето, а част от настоящето. Срещаме го всеки ден, когато търсим информация, използваме навигация, четем препоръки в социалните мрежи или общуваме с дигитални асистенти. Но това е само повърхността. В дълбочина се случва мащабна трансформация на начина, по който са устроени работата, креативността, образованието и дори вземането на решения.",
+    bodySections: [
+      {
+        title: "Ново ниво на взаимодействие с технологиите",
+        paragraphs: [
+          "Преди технологиите изискваха адаптация от човека. Сега се случва обратното: ИИ се адаптира към човека. Той се учи да разбира контекст, навици, цели и дори стил на мислене. Това променя самия принцип на взаимодействие: интерфейсите вече не са просто инструменти, а партньори.",
+          "Виждаме това в продуктовия дизайн, където алгоритмите предлагат не просто варианти, а персонализирани решения. В бизнеса анализите в реално време помагат на екипите да вземат решения по-бързо от всякога.",
+        ],
+      },
+      {
+        paragraphs: [
+          "Автоматизацията постепенно поема рутинните задачи. По-важното е, че ИИ започва да влияе и върху творческите професии. Дизайнери, копирайтъри и разработчици вече работят заедно с модели, които ускоряват генерирането на идеи, прототипирането и анализа на данни.",
+        ],
+      },
+    ],
     authorLabel: "от",
-    authorName: "Д-р Алис Джонсън",
-    tags: ["Business", "Strategy"],
+    authorName: "Андрей Николов",
+    authorExpertId: "expert-4",
+    authorAvatarUrl: "/images/avatars/avatar_1.png",
+    tags: ["Изкуствен интелект", "Иновации", "Технологии"],
     createdAt: "2023-10-15T10:00:00Z"
   },
   {
