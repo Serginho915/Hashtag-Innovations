@@ -14,9 +14,10 @@ export const RightSection = () => {
   const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
   const { language, setLanguage } = useLanguage();
   const { isHeroTabsVisible } = useNavigation();
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
   
-  const isHomePage = pathname === '/' || pathname === '/en' || pathname === '/bg' || pathname === '/ru';
+  // Match /, /en, /bg, /ru with or without trailing slash
+  const isHomePage = pathname === '/' || /^\/(en|bg|ru)\/?$/.test(pathname);
 
   const toggleBurgerMenu = () => {
     setBurgerMenuOpen(!burgerMenuOpen);

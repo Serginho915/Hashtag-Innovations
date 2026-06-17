@@ -4,7 +4,6 @@
 .widgetContainer {
   width: 345px;
   align-self: stretch;
-  max-height: calc(100vh - 32px);
   background: white;
   outline: 1px #C0C0D2 solid;
   outline-offset: -1px;
@@ -24,13 +23,11 @@
   }
 
   @include laptop-sm {
-    max-height: calc(100vh - 112px);
   }
 
   @include tablet {
     width: 100%;
     flex: none;
-    max-height: none;
   }
 }
 
@@ -90,12 +87,18 @@
 
 .eventsList {
   width: 297px;
-  flex: 1 1 auto;
+  flex: 1 1 0;
+  height: 0;
   min-height: 0;
   margin: 0;
   padding: 0 4px 0 0;
   list-style: none;
   overflow-y: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
   overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
@@ -113,6 +116,7 @@
 
   @include tablet {
     flex: none;
+    height: auto;
     max-height: 56px;
     overflow: hidden;
     padding-right: 0;

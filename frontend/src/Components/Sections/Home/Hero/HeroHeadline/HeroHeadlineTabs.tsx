@@ -10,7 +10,7 @@ interface HeroHeadlineTabsProps {
   lang: string;
 }
 
-const tabPaths = ["events", "mentors", "experts", "resources", "insights"];
+const tabPaths = ["experts", "events", "learn", "projects", "insights"];
 
 export const HeroHeadlineTabs: React.FC<HeroHeadlineTabsProps> = ({ tabs, lang }) => {
   const navRef = useRef<HTMLElement>(null);
