@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import styles from '../ExpertProfile.module.scss';
+import { ExpertSection } from './ExpertSection.tsx';
 
 interface Props {
   bio: string[];
@@ -14,10 +15,7 @@ export const ExpertBio: React.FC<Props> = ({ bio, t }) => {
   if (!bio || bio.length === 0) return null;
 
   return (
-    <div className={styles.section}>
-      <div className={styles.sectionHeader}>
-        <h2 className={styles.sectionTitle}>{t.background}</h2>
-      </div>
+    <ExpertSection title={t.background}>
       <div className={styles.bioContent}>
         {bio.slice(0, isBioExpanded ? undefined : 1).map((paragraph, idx) => (
           <p key={idx} className={styles.bioParagraph}>
@@ -32,6 +30,6 @@ export const ExpertBio: React.FC<Props> = ({ bio, t }) => {
           </button>
         )}
       </div>
-    </div>
+    </ExpertSection>
   );
 };

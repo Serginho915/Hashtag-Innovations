@@ -60,26 +60,6 @@
   gap: 24px;
 }
 
-.viewAll {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-radius: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #F40A0A;
-  font-size: 14px;
-  font-family: $font-manrope;
-  font-weight: 600;
-  text-decoration: none;
-  word-wrap: break-word;
-  transition: opacity 0.2s;
-
-  &:hover {
-    opacity: 0.7;
-  }
-}
-
 .arrowsGroup {
   align-self: stretch;
   display: flex;

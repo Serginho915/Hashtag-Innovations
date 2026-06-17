@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from '../ExpertProfile.module.scss';
+import { ExpertSection } from './ExpertSection.tsx';
 
 interface Props {
   languages: string[];
@@ -76,10 +77,7 @@ export const ExpertLanguages: React.FC<Props> = ({ languages, t }) => {
   if (!languages || languages.length === 0) return null;
 
   return (
-    <div className={styles.section}>
-      <div className={styles.sectionHeader}>
-        <h2 className={styles.sectionTitle}>{t.fluentIn}</h2>
-      </div>
+    <ExpertSection title={t.fluentIn}>
       <ul className={styles.languagesList}>
         {languages.map(langStr => (
           <li key={langStr} className={styles.languageItem}>
@@ -88,6 +86,6 @@ export const ExpertLanguages: React.FC<Props> = ({ languages, t }) => {
           </li>
         ))}
       </ul>
-    </div>
+    </ExpertSection>
   );
 };

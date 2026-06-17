@@ -45,3 +45,10 @@ export const getExpertById = cache(async (id: string, lang: string): Promise<Exp
   
   return experts.find(expert => expert.id === id) as Expert | undefined;
 });
+
+export const getEventById = cache(async (id: string): Promise<CommunityEvent | undefined> => {
+  // Simulate network delay to mimic real API
+  await new Promise((resolve) => setTimeout(resolve, 50));
+
+  return MOCK_EVENTS.find(event => event.id === id) as CommunityEvent | undefined;
+});

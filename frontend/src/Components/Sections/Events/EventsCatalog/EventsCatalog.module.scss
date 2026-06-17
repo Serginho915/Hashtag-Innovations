@@ -114,8 +114,9 @@
   }
 
   @include tablet {
-    width: 100%;
-    gap: 8px;
+    width: auto;
+    gap: 24px;
+    flex-wrap: wrap;
   }
 }
 
@@ -123,7 +124,7 @@
   flex: 0 0 auto;
 
   @include tablet {
-    flex: 1 1 0;
+    flex: 0 0 auto;
     min-width: 0;
   }
 }

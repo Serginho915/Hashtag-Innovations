@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Expert } from '../../../../Types/expert.ts';
 import styles from '../ExpertProfile.module.scss';
+import { ExpertSection } from './ExpertSection.tsx';
 
 interface Props {
   experienceList: Expert['experienceList'];
@@ -15,18 +16,17 @@ export const ExpertExperience: React.FC<Props> = ({ experienceList, t }) => {
   if (!experienceList || experienceList.length === 0) return null;
 
   return (
-    <div className={styles.section}>
-      <div className={styles.sectionHeader}>
-        <h2 className={styles.sectionTitle}>{t.experienceLabel}</h2>
-        {experienceList.length > 1 && (
-          <span 
-            className={styles.viewAllText} 
-            onClick={() => setIsExperienceExpanded(!isExperienceExpanded)}
-          >
-            {isExperienceExpanded ? (t.hideText || 'скрыть') : t.allText || 'все'}
-          </span>
-        )}
-      </div>
+    <ExpertSection
+      title={t.experienceLabel}
+      action={experienceList.length > 1 && (
+        <span
+          className={styles.viewAllText}
+          onClick={() => setIsExperienceExpanded(!isExperienceExpanded)}
+        >
+          {isExperienceExpanded ? (t.hideText || 'скрыть') : t.allText || 'все'}
+        </span>
+      )}
+    >
       <div className={styles.experienceList}>
         {experienceList.slice(0, isExperienceExpanded ? undefined : 1).map(exp => (
           <div key={exp.id} className={styles.experienceItem}>
@@ -38,6 +38,6 @@ export const ExpertExperience: React.FC<Props> = ({ experienceList, t }) => {
           </div>
         ))}
       </div>
-    </div>
+    </ExpertSection>
   );
 };

@@ -51,7 +51,7 @@ export const MOCK_UPCOMING_EVENTS_BG = [
   {
     id: 3,
     title: "Бъдещето на Web3 и Блокчейн",
-    speakerName: "Michael Smith",
+    speakerName: "Майкъл Смит",
     description: "Разгледайте децентрализацията на мрежата и новите финансови модели.",
     dateIso: "2026-10-10T10:00:00Z",
     location: "Онлайн",

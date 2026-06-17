@@ -11,5 +11,6 @@ export interface NewsItem {
   authorLabel?: string;
   authorId?: string;
   authorExpertId?: string;
+  authorAvatarUrl?: string;
   tags?: string[];
 }

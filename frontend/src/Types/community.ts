@@ -1,7 +1,11 @@
 export interface CommunitySpeaker {
   id: string;
   name: string;
+  nameBg?: string;
   expertId?: string; // If present, the speaker is an expert and their name should be a link.
+  role?: string;
+  roleBg?: string;
+  avatarSrc?: string;
 }
 
 export interface CommunityEvent {
@@ -17,8 +21,23 @@ export interface CommunityEvent {
   location: string;
   locationBg?: string;
   imageSrc?: string;
+  heroImageSrc?: string;
   tags: string[]; // Array of tag IDs, e.g., ['recommended', 'business']
   price?: string;
+  startTime?: string;
+  timezone?: string;
+  detailDescription?: string;
+  detailDescriptionBg?: string;
+  speakers?: CommunitySpeaker[];
+  organizers?: EventOrganization[];
+  partners?: EventOrganization[];
+  relatedArticleIds?: string[];
+}
+
+export interface EventOrganization {
+  id: string;
+  name: string;
+  logoSrc?: string;
 }
 
 export interface CommunityTag {

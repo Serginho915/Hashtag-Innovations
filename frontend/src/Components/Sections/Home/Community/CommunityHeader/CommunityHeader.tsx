@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './CommunityHeader.module.scss';
-import Link from 'next/link';
 import { translations } from '../translations.ts';
 import { SubTitle } from '../../../../UI/SubTitle/SubTitle.tsx';
+import { ViewAllLink } from '../../../../UI/ViewAllLink/ViewAllLink.tsx';
 
 interface CommunityHeaderProps {
   lang: string;
@@ -18,9 +18,7 @@ export const CommunityHeader: React.FC<CommunityHeaderProps> = ({ lang, onScroll
       <div className={styles.headerRow}>
         <SubTitle title={`01/ ${t.subtitle}`} className={styles.titleGroup} />
         <div className={styles.actionsGroup}>
-          <Link href={`/${lang}/events`} className={styles.viewAll}>
-            {t.viewAll}
-          </Link>
+          <ViewAllLink href={`/${lang}/events`}>{t.viewAll}</ViewAllLink>
           <div className={styles.arrowsGroup}>
             <div 
               className={styles.arrowIcon} 
