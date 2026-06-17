@@ -13,6 +13,28 @@
   cursor: pointer;
   border: none;
   text-decoration: none;
+  overflow: hidden;
+  transition:
+    background-color 0.35s ease,
+    outline-color 0.35s ease;
+
+  &:hover {
+    background: #0F0FFF;
+    outline-color: #0F0FFF;
+
+    .readText {
+      color: white;
+    }
+
+    .readArrow {
+      outline-color: white;
+
+      svg {
+        transform: translate(18px, -18px);
+        opacity: 0;
+      }
+    }
+  }
 }
 
 .readText {
@@ -21,6 +43,7 @@
   font-size: 16px;
   font-family: $font-manrope;
   font-weight: 500;
+  transition: color 0.35s ease;
 }
 
 .readArrow {
@@ -34,4 +57,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: outline-color 0.35s ease;
+
+  svg {
+    flex-shrink: 0;
+    transition:
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.35s ease;
+  }
 }

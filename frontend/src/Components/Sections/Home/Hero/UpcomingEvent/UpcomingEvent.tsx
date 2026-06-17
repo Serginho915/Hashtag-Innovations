@@ -25,12 +25,14 @@ export const UpcomingEvent = ({ lang, events }: UpcomingEventProps) => {
   futureEvents.sort((a: UpcomingEventData, b: UpcomingEventData) => new Date(a.dateIso).getTime() - new Date(b.dateIso).getTime());
 
   // Fallback to the last event in array if no future events
-  const nearestEvent = futureEvents.length > 0 ? futureEvents[0] : eventsData[eventsData.length - 1];
+  const featuredEvent = eventsData.find((event) => event.isFeaturedHero);
+  const nearestEvent = featuredEvent || (futureEvents.length > 0 ? futureEvents[0] : eventsData[eventsData.length - 1]);
 
   if (!nearestEvent) {
     return null;
   }
 
+  const eventHref = nearestEvent.eventHref || `/${lang}/events/${nearestEvent.eventId || nearestEvent.id}`;
   const dateObj = new Date(nearestEvent.dateIso);
   const options: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'long' };
   const locale = lang === 'bg' ? 'bg-BG' : 'en-GB';
@@ -72,7 +74,7 @@ export const UpcomingEvent = ({ lang, events }: UpcomingEventProps) => {
             </div>
 
             {/* Discover More Button */}
-            <DiscoverButton text={t.discoverMore} />
+            <DiscoverButton text={t.discoverMore} href={eventHref} />
 
             <div className={styles.eventDescription}>
               <div className={styles.eventDescriptionInner}>

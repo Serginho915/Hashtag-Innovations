@@ -6,13 +6,15 @@ import styles from './DropdownFilter.module.scss';
 interface DropdownFilterProps {
   label: string;
   options: string[];
+  value?: string | null;
   onSelect?: (option: string) => void;
 }
 
-export const DropdownFilter: React.FC<DropdownFilterProps> = ({ label, options, onSelect }) => {
+export const DropdownFilter: React.FC<DropdownFilterProps> = ({ label, options, value, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const currentValue = value !== undefined ? value : selected;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -38,7 +40,7 @@ export const DropdownFilter: React.FC<DropdownFilterProps> = ({ label, options, 
   return (
     <div className={styles.dropdownContainer} ref={dropdownRef}>
       <div className={styles.selectBox} onClick={() => setIsOpen(!isOpen)}>
-        <div className={styles.selectText}>{selected || label}</div>
+        <div className={styles.selectText}>{currentValue || label}</div>
         <svg 
           className={`${styles.arrow} ${isOpen ? styles.open : ''}`} 
           width="12" 
@@ -52,17 +54,17 @@ export const DropdownFilter: React.FC<DropdownFilterProps> = ({ label, options, 
       </div>
 
       {isOpen && (
-        <div className={styles.dropdownMenu}>
+        <ul className={styles.dropdownMenu}>
           {options.map((option, index) => (
-            <div 
+            <li
               key={index} 
-              className={`${styles.optionItem} ${selected === option ? styles.selected : ''}`}
+              className={`${styles.optionItem} ${currentValue === option ? styles.selected : ''}`}
               onClick={() => handleSelect(option)}
             >
               {option}
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );

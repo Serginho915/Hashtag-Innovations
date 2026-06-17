@@ -68,9 +68,7 @@ export const CommunityEventCard: React.FC<CommunityEventCardProps> = ({
 
           {/* Button */}
           <div className={styles.buttonRow}>
-            <Link href={eventUrl} className={styles.buttonLink}>
-              <DiscoverButton text={t.viewDetails} />
-            </Link>
+            <DiscoverButton text={t.viewDetails} href={eventUrl} />
           </div>
           
           {/* Description */}

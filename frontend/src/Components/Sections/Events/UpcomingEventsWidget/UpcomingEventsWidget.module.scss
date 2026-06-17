@@ -3,6 +3,7 @@
 
 .widgetContainer {
   width: 345px;
+  align-self: stretch;
   background: white;
   outline: 1px #C0C0D2 solid;
   outline-offset: -1px;
@@ -42,13 +43,44 @@
 }
 
 .eventsList {
-  width: 100%;
-  flex: 1 1 0;
+  width: 297px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
   gap: 24px;
+
+  @include laptop-sm {
+    width: 100%;
+  }
+}
+
+.eventListItem,
+.eventLink {
+  width: 100%;
+}
+
+.eventLink {
+  display: block;
+  text-decoration: none;
+
+  &:hover {
+    .dateBlock {
+      background: #F8F8FA;
+      border-left-color: transparent;
+
+      &::before {
+        transform: scaleX(1);
+      }
+    }
+
+    .dateText {
+      color: white;
+    }
+  }
 }
 
 .eventItem {
@@ -61,16 +93,34 @@
 
 .dateBlock {
   padding: 8px;
+  position: relative;
   background: rgba(191.66, 191.66, 210.44, 0.10);
   border-left: 2px #C0C0D2 solid;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  min-width: 60px;
+  overflow: hidden;
+  transition: background-color 0.35s ease, border-left-color 0.35s ease;
+
+  &::before {
+    content: "";
+    width: 69px;
+    height: 56px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #101828;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
 }
 
 .dateText {
+  position: relative;
+  z-index: 1;
+  width: 53px;
   text-align: center;
   color: #535362;
   font-size: 14px;
@@ -79,18 +129,23 @@
   text-transform: uppercase;
   line-height: 20px;
   word-wrap: break-word;
+  transition: color 0.35s ease;
 }
 
 .infoBlock {
   flex: 1 1 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: flex-end;
   gap: 4px;
 }
 
 .eventTitle {
+  align-self: stretch;
+  height: 17.5px;
+  overflow: hidden;
   color: #0A0A0A;
   font-size: 16px;
   font-family: $font-manrope;
