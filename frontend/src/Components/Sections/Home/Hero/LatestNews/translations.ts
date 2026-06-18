@@ -1,4 +1,10 @@
-export const translations: Record<string, any> = {
+interface LatestNewsTranslations {
+  latestNews: string;
+  date: string;
+  location: string;
+}
+
+export const translations: Record<string, LatestNewsTranslations> = {
   en: {
     latestNews: "Latest News",
     date: "thursday, 14 May",

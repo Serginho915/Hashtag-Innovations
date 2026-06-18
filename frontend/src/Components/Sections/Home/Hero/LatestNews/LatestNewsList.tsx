@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React from "react";
 import styles from "./LatestNews.module.scss";
 import { NewsCard } from "../NewsCard/NewsCard.tsx";
 import { ScrollArrows } from "../../../../UI/ScrollArrows/ScrollArrows.tsx";
+import { useScrollProgress } from "../../../../../Hooks/useScrollProgress.ts";
 
 import { NewsItem } from "../../../../../Types/news.ts";
 
@@ -13,42 +14,14 @@ interface LatestNewsListProps {
 }
 
 export const LatestNewsList: React.FC<LatestNewsListProps> = ({ news, lang }) => {
-  const listRef = useRef<HTMLUListElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  const handleScroll = () => {
-    if (listRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = listRef.current;
-      const maxScroll = scrollHeight - clientHeight;
-      if (maxScroll <= 0) {
-        setScrollProgress(0);
-      } else {
-        setScrollProgress(scrollTop / maxScroll);
-      }
-    }
-  };
-
-  useEffect(() => {
-    handleScroll();
-    window.addEventListener('resize', handleScroll);
-    return () => window.removeEventListener('resize', handleScroll);
-  }, []);
-
-  const scrollUp = () => {
-    if (listRef.current) {
-      listRef.current.scrollBy({ top: -300, behavior: "smooth" });
-    }
-  };
-
-  const scrollDown = () => {
-    if (listRef.current) {
-      listRef.current.scrollBy({ top: 300, behavior: "smooth" });
-    }
-  };
+  const { scrollRef, scrollProgress, handleScroll, scrollPrev, scrollNext } = useScrollProgress<HTMLUListElement>({
+    axis: 'vertical',
+    scrollAmount: 300,
+  });
 
   return (
     <>
-      <ul className={styles.newsList} ref={listRef} onScroll={handleScroll}>
+      <ul className={styles.newsList} ref={scrollRef} onScroll={handleScroll}>
         {news.map((item) => (
           <NewsCard
             key={item.id}
@@ -65,8 +38,8 @@ export const LatestNewsList: React.FC<LatestNewsListProps> = ({ news, lang }) =>
 
       <ScrollArrows 
         progress={scrollProgress} 
-        onPrev={scrollUp} 
-        onNext={scrollDown} 
+        onPrev={scrollPrev}
+        onNext={scrollNext}
         direction="vertical" 
       />
     </>

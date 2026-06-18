@@ -1,4 +1,14 @@
-export const translations: Record<string, any> = {
+interface InsidePlatformTranslations {
+  sectionLabel: string;
+  desc1: string;
+  descBold: string;
+  desc2: string;
+  trusted: string;
+  slideAlt: string;
+  slides: Array<{ title: string }>;
+}
+
+export const translations: Record<string, InsidePlatformTranslations> = {
   en: {
     sectionLabel: "Inside the platform",
     desc1: "Hashtag Innovations is a modern platform designed for ",

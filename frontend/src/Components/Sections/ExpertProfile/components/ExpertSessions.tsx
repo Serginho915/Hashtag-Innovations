@@ -2,13 +2,14 @@
 import React, { useState } from 'react';
 import { Expert } from '../../../../Types/expert.ts';
 import styles from '../ExpertProfile.module.scss';
+import type { ExpertsTranslations } from '../../../../app/[lang]/experts/translations.ts';
 
 import { BookSessionButton } from './BookSessionButton/BookSessionButton.tsx';
 
 interface Props {
   expert: Expert;
   sessions: Expert['sessions'];
-  t: Record<string, string>;
+  t: ExpertsTranslations;
   lang: string;
 }
 

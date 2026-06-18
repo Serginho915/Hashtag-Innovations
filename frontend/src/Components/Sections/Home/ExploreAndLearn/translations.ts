@@ -1,4 +1,12 @@
-export const translations: Record<string, any> = {
+interface ExploreAndLearnTranslations {
+  sectionTitle: string;
+  textbooks: string;
+  blogs: string;
+  read: string;
+  downloadPdf: string;
+}
+
+export const translations: Record<string, ExploreAndLearnTranslations> = {
   en: {
     sectionTitle: "Explore & Learn",
     textbooks: "Textbooks",

@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import { Expert } from '../../../../Types/expert.ts';
 import styles from '../ExpertProfile.module.scss';
 import { ExpertSection } from './ExpertSection.tsx';
+import type { ExpertsTranslations } from '../../../../app/[lang]/experts/translations.ts';
 
 interface Props {
   experienceList: Expert['experienceList'];
-  t: Record<string, string>;
+  t: ExpertsTranslations;
 }
 
 export const ExpertExperience: React.FC<Props> = ({ experienceList, t }) => {

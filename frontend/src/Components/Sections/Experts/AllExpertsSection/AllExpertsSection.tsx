@@ -3,9 +3,10 @@ import styles from './AllExpertsSection.module.scss';
 import { CatalogExpertCard } from '../CatalogExpertCard/CatalogExpertCard.tsx';
 import { Expert } from '../../../../Types/expert.ts';
 import { PromoBanner } from '../../../UI/PromoBanner/PromoBanner.tsx';
+import type { ExpertsTranslations } from '../../../../app/[lang]/experts/translations.ts';
 
 interface AllExpertsSectionProps {
-  t: any;
+  t: ExpertsTranslations;
   lang: string;
   experts: Expert[];
 }

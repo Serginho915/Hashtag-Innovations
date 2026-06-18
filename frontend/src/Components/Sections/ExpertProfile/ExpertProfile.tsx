@@ -2,6 +2,7 @@ import React from 'react';
 import { Expert } from '../../../Types/expert.ts';
 import styles from './ExpertProfile.module.scss';
 import { Breadcrumbs } from '../../UI/Breadcrumbs/Breadcrumbs.tsx';
+import type { ExpertsTranslations } from '../../../app/[lang]/experts/translations.ts';
 
 // Import sub-components
 import { ExpertProfileHeader } from './components/ExpertProfileHeader.tsx';
@@ -15,7 +16,7 @@ import { ExpertSimilar } from './components/ExpertSimilar.tsx';
 interface ExpertProfileProps {
   expert: Expert;
   similarExperts: Expert[];
-  t: Record<string, string>;
+  t: ExpertsTranslations;
   lang: string;
 }
 

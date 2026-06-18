@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from '../ExpertProfile.module.scss';
 import { ExpertSection } from './ExpertSection.tsx';
+import type { ExpertsTranslations } from '../../../../app/[lang]/experts/translations.ts';
 
 interface Props {
   languages: string[];
-  t: Record<string, string>;
+  t: ExpertsTranslations;
 }
 
 const getFlagIcon = (language: string) => {

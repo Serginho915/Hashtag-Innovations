@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Expert } from '../../../../../Types/expert.ts';
 import { BookingModal } from '../BookingModal/BookingModal.tsx';
 import styles from '../../ExpertProfile.module.scss';
+import type { ExpertsTranslations } from '../../../../../app/[lang]/experts/translations.ts';
 
 interface Props {
   expert: Expert;
@@ -14,7 +15,7 @@ interface Props {
     description: string;
     price: number;
   };
-  t: Record<string, string>;
+  t: ExpertsTranslations;
   lang: string;
 }
 

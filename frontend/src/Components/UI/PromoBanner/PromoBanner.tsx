@@ -20,14 +20,8 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({
   href,
   className = '',
 }) => {
-  const Wrapper = href ? Link : 'div';
-  const wrapperProps = href 
-    ? { href, className: `${styles.bannerWrapper} ${className}` } 
-    : { className: `${styles.bannerWrapper} ${className}` };
-
-  return (
-    // @ts-ignore
-    <Wrapper {...wrapperProps}>
+  const bannerContent = (
+    <>
       {(title || subtitle) && (
         <div className={styles.bannerHeader}>
           {title && <div className={styles.bannerTitle}>{title}</div>}
@@ -49,6 +43,20 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({
           </div>
         )}
       </div>
-    </Wrapper>
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={`${styles.bannerWrapper} ${className}`}>
+        {bannerContent}
+      </Link>
+    );
+  }
+
+  return (
+    <div className={`${styles.bannerWrapper} ${className}`}>
+      {bannerContent}
+    </div>
   );
 };

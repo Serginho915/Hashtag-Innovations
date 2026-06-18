@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React from 'react';
 import styles from '../../../../app/[lang]/experts/ExpertsPage.module.scss';
 import { CatalogExpertCard } from '../CatalogExpertCard/CatalogExpertCard.tsx';
 import { Expert } from '../../../../Types/expert.ts';
+import { useScrollProgress } from '../../../../Hooks/useScrollProgress.ts';
 
 interface TopRatedSliderProps {
   experts: Expert[];
@@ -11,16 +12,10 @@ interface TopRatedSliderProps {
 }
 
 export const TopRatedSlider: React.FC<TopRatedSliderProps> = ({ experts, lang }) => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollContainerRef.current) {
-      const { current } = scrollContainerRef;
-      // Scroll by the width of one card + gap (324.5 + 12 = 336.5)
-      const scrollAmount = 336.5; 
-      current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
-    }
-  };
+  const { scrollRef, scrollPrev, scrollNext } = useScrollProgress<HTMLDivElement>({
+    axis: 'horizontal',
+    scrollAmount: 336.5,
+  });
 
   if (experts.length === 0) {
     return (
@@ -35,7 +30,7 @@ export const TopRatedSlider: React.FC<TopRatedSliderProps> = ({ experts, lang })
       {experts.length > 4 && (
         <button 
           className={`${styles.arrowBtn} ${styles.leftArrow}`} 
-          onClick={() => scroll('left')}
+          onClick={scrollPrev}
           aria-label="Scroll left"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,7 +39,7 @@ export const TopRatedSlider: React.FC<TopRatedSliderProps> = ({ experts, lang })
         </button>
       )}
 
-      <div className={styles.cardsContainer} ref={scrollContainerRef}>
+      <div className={styles.cardsContainer} ref={scrollRef}>
         {experts.map((expert) => (
           <CatalogExpertCard 
             key={expert.id} 
@@ -58,7 +53,7 @@ export const TopRatedSlider: React.FC<TopRatedSliderProps> = ({ experts, lang })
       {experts.length > 4 && (
         <button 
           className={`${styles.arrowBtn} ${styles.rightArrow}`} 
-          onClick={() => scroll('right')}
+          onClick={scrollNext}
           aria-label="Scroll right"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

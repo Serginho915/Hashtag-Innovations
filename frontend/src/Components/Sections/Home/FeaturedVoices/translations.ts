@@ -1,4 +1,10 @@
-export const translations: Record<string, any> = {
+interface FeaturedVoicesTranslations {
+  sectionTitle: string;
+  browseAll: string;
+  view: string;
+}
+
+export const translations: Record<string, FeaturedVoicesTranslations> = {
   en: {
     sectionTitle: "02/ TOP BULGARIA’S VOICES",
     browseAll: "BROWSE ALL",

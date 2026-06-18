@@ -1,4 +1,8 @@
-export const translations: Record<string, any> = {
+interface NewsCardTranslations {
+  read: string;
+}
+
+export const translations: Record<string, NewsCardTranslations> = {
   en: {
     read: "Read",
   },

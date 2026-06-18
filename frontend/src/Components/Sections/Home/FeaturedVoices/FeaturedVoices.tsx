@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './FeaturedVoices.module.scss';
-import { DiscoverButton } from '../../../Common/Buttons/DiscoverButton/DiscoverButton.tsx';
 import { SubTitle } from '../../../UI/SubTitle/SubTitle.tsx';
 import Link from 'next/link';
 import { translations } from './translations.ts';

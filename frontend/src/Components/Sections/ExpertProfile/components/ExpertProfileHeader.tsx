@@ -2,10 +2,11 @@ import React from 'react';
 import Image from 'next/image';
 import { Expert } from '../../../../Types/expert.ts';
 import styles from '../ExpertProfile.module.scss';
+import type { ExpertsTranslations } from '../../../../app/[lang]/experts/translations.ts';
 
 interface Props {
   expert: Expert;
-  t: Record<string, string>;
+  t: ExpertsTranslations;
 }
 
 export const ExpertProfileHeader: React.FC<Props> = ({ expert, t }) => {

@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import styles from "./LearningMaterials.module.scss";
 import Image from "next/image";
 import Link from "next/link";
 
 import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink.tsx';
 import { getMaterialAnchorHref } from '../../../Learn/materialAnchors.ts';
+import { useScrollProgress } from '../../../../../Hooks/useScrollProgress.ts';
 
 import { TextbookItem } from "../../../../../Types/textbook.ts";
 
@@ -16,19 +17,10 @@ interface LearningMaterialsProps {
 }
 
 export const LearningMaterials: React.FC<LearningMaterialsProps> = ({ materials, lang }) => {
-  const listRef = useRef<HTMLDivElement>(null);
-
-  const scrollUp = () => {
-    if (listRef.current) {
-      listRef.current.scrollBy({ top: -200, behavior: "smooth" });
-    }
-  };
-
-  const scrollDown = () => {
-    if (listRef.current) {
-      listRef.current.scrollBy({ top: 200, behavior: "smooth" });
-    }
-  };
+  const { scrollRef, scrollPrev, scrollNext } = useScrollProgress<HTMLDivElement>({
+    axis: 'vertical',
+    scrollAmount: 200,
+  });
 
   return (
     <div className={styles.learningMaterials}>
@@ -40,7 +32,7 @@ export const LearningMaterials: React.FC<LearningMaterialsProps> = ({ materials,
       </div>
       
       <div className={styles.boxContainer}>
-        <div className={styles.materialsList} ref={listRef}>
+        <div className={styles.materialsList} ref={scrollRef}>
           {materials.map((item) => {
             const materialHref = getMaterialAnchorHref(item, lang);
 
@@ -67,8 +59,8 @@ export const LearningMaterials: React.FC<LearningMaterialsProps> = ({ materials,
         
         <div className={styles.boxFooter}>
           <div className={styles.arrowsGroup}>
-            <div className={styles.arrowUp} onClick={scrollUp}></div>
-            <div className={styles.arrowDown} onClick={scrollDown}></div>
+            <div className={styles.arrowUp} onClick={scrollPrev}></div>
+            <div className={styles.arrowDown} onClick={scrollNext}></div>
           </div>
           <Link href={`/${lang}/learn`} className={styles.discoverButton}>
             DISCOVER ALL

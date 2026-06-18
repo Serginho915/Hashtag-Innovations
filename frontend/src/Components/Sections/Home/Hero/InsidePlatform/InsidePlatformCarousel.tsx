@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React from "react";
 import styles from "./InsidePlatform.module.scss";
 import Image from "next/image";
 import { ScrollArrows } from "../../../../UI/ScrollArrows/ScrollArrows.tsx";
+import { useScrollProgress } from "../../../../../Hooks/useScrollProgress.ts";
 
 interface SlideData {
   title: string;
@@ -15,44 +16,14 @@ interface InsidePlatformCarouselProps {
 }
 
 export const InsidePlatformCarousel: React.FC<InsidePlatformCarouselProps> = ({ slides, slideAlt }) => {
-  const listRef = useRef<HTMLDivElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  const handleScroll = () => {
-    if (listRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = listRef.current;
-      const maxScroll = scrollWidth - clientWidth;
-      if (maxScroll <= 0) {
-        setScrollProgress(0);
-      } else {
-        setScrollProgress(scrollLeft / maxScroll);
-      }
-    }
-  };
-
-  useEffect(() => {
-    handleScroll();
-    window.addEventListener('resize', handleScroll);
-    return () => window.removeEventListener('resize', handleScroll);
-  }, []);
-
-  const scrollLeft = () => {
-    if (listRef.current) {
-      const width = listRef.current.clientWidth;
-      listRef.current.scrollBy({ left: -width, behavior: "smooth" });
-    }
-  };
-
-  const scrollRight = () => {
-    if (listRef.current) {
-      const width = listRef.current.clientWidth;
-      listRef.current.scrollBy({ left: width, behavior: "smooth" });
-    }
-  };
+  const { scrollRef, scrollProgress, handleScroll, scrollPrev, scrollNext } = useScrollProgress<HTMLDivElement>({
+    axis: 'horizontal',
+    scrollAmount: 'container',
+  });
 
   return (
     <div className={styles.carouselWrapper}>
-      <div className={styles.carouselTrack} ref={listRef} onScroll={handleScroll}>
+      <div className={styles.carouselTrack} ref={scrollRef} onScroll={handleScroll}>
         {slides.map((slide, index) => {
           const slideImages = [
             "/images/platform/slide_events.png",
@@ -89,8 +60,8 @@ export const InsidePlatformCarousel: React.FC<InsidePlatformCarouselProps> = ({ 
       <ScrollArrows
         progress={scrollProgress}
         direction="horizontal"
-        onPrev={scrollLeft}
-        onNext={scrollRight}
+        onPrev={scrollPrev}
+        onNext={scrollNext}
       />
     </div>
   );

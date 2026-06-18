@@ -30,7 +30,6 @@ export const CommunityEventCard: React.FC<CommunityEventCardProps> = ({
   eventId,
   title,
   titleBg,
-  speaker,
   description,
   descriptionBg,
   date,

@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import styles from '../ExpertsHeader/ExpertsHeader.module.scss';
 import { DropdownFilter } from '../../../UI/DropdownFilter/DropdownFilter.tsx';
+import type { ExpertsTranslations } from '../../../../app/[lang]/experts/translations.ts';
 
-export const ExpertsFilters = ({ t }: { t: any }) => {
+export const ExpertsFilters = ({ t }: { t: ExpertsTranslations }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -14,7 +15,7 @@ export const ExpertsFilters = ({ t }: { t: any }) => {
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   
   // Update URL helper
-  const updateUrlParams = (key: string, value: string | null) => {
+  const updateUrlParams = useCallback((key: string, value: string | null) => {
     const params = new URLSearchParams(searchParams.toString());
     if (value) {
       params.set(key, value);
@@ -22,7 +23,7 @@ export const ExpertsFilters = ({ t }: { t: any }) => {
       params.delete(key);
     }
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-  };
+  }, [pathname, router, searchParams]);
 
   // Debounce search query
   useEffect(() => {
@@ -33,7 +34,7 @@ export const ExpertsFilters = ({ t }: { t: any }) => {
       }
     }, 300);
     return () => clearTimeout(handler);
-  }, [searchQuery, searchParams]);
+  }, [searchQuery, searchParams, updateUrlParams]);
 
   // Current values from URL
   const selectedExpertise = searchParams.get('expertise');

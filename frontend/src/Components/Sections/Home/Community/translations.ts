@@ -1,4 +1,22 @@
-export const translations: Record<string, any> = {
+interface CommunityTranslations {
+  title: string;
+  subtitle: string;
+  viewAll: string;
+  tags: Record<string, string>;
+  speaker: string;
+  viewDetails: string;
+  home: string;
+  events: string;
+  eventsCalendar: string;
+  eventsSubtitle: string;
+  location: string;
+  priceRange: string;
+  format: string;
+  upcomingThisMonth: string;
+  all: string;
+}
+
+export const translations: Record<string, CommunityTranslations> = {
   en: {
     title: "Business Community & Gatherings",
     subtitle: "EVENTS",

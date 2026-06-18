@@ -1,4 +1,12 @@
-export const translations: Record<string, any> = {
+interface HeaderNavTranslation {
+  findExperts: string;
+  events: string;
+  learn: string;
+  projects: string;
+  insights: string;
+}
+
+export const translations: Record<string, HeaderNavTranslation> = {
   en: {
     findExperts: "Find Experts",
     events: "Events",

@@ -3,6 +3,7 @@ import { Expert } from '../../../../../Types/expert.ts';
 import { Modal } from '../../../../UI/Modal/Modal.tsx';
 import { isValidEmail } from '../../../../../Lib/validation.ts';
 import styles from './BookingModal.module.scss';
+import type { ExpertsTranslations } from '../../../../../app/[lang]/experts/translations.ts';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -15,7 +16,7 @@ interface BookingModalProps {
     description: string;
     price: number;
   };
-  t: Record<string, string>;
+  t: ExpertsTranslations;
   lang: string;
 }
 

@@ -1,4 +1,57 @@
-export const translations: Record<string, Record<string, any>> = {
+export interface ExpertsTranslations {
+  expertsTitle: string;
+  expertsDesc: string;
+  searchPlaceholder: string;
+  expertise: string;
+  priceRange: string;
+  languages: string;
+  expertiseOptions: string[];
+  allExpertsTitle: string;
+  viewAlso: string;
+  becomeExpertBanner: string;
+  allOption: string;
+  availableSessions: string;
+  background: string;
+  experienceLabel: string;
+  fluentIn: string;
+  expertiseLabel: string;
+  industriesLabel: string;
+  profileAnalytics: string;
+  showAll: string;
+  allText: string;
+  bookNow: string;
+  similarExperts: string;
+  browseAll: string;
+  consultationsCompleted: string;
+  sessionAttendance: string;
+  yearsOfExperience: string;
+  dateTime: string;
+  selectDateTime: string;
+  bookingInfo: string;
+  timeLabel: string;
+  selectedTimeLabel: string;
+  confirm: string;
+  selectDateTimePrompt: string;
+  hideText: string;
+  contactDetails: string;
+  contactDetailsDesc: string;
+  nameLabel: string;
+  emailLabel: string;
+  additionalLabel: string;
+  additionalPlaceholder: string;
+  termsAgree: string;
+  termsLink: string;
+  and: string;
+  privacyLink: string;
+  nextBtn: string;
+  confirmBtn: string;
+  view?: string;
+  errorRequired?: string;
+  errorEmail?: string;
+  errorTerms?: string;
+}
+
+export const translations: Record<string, ExpertsTranslations> = {
   en: {
     expertsTitle: 'Experts Catalog',
     expertsDesc: 'Book individual consultations, mentorship sessions or expert advice tailored to your goals.',

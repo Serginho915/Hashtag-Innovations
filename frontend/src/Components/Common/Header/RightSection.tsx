@@ -12,7 +12,7 @@ import Link from "next/link";
 
 export const RightSection = () => {
   const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
-  const { language, setLanguage } = useLanguage();
+  const { language } = useLanguage();
   const { isHeroTabsVisible } = useNavigation();
   const pathname = usePathname() || '';
   

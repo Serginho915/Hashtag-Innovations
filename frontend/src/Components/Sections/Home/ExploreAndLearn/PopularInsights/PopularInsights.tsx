@@ -6,6 +6,7 @@ import { PopularInsightCard } from "./PopularInsightCard/PopularInsightCard.tsx"
 import Link from "next/link";
 import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink.tsx';
 import { translations } from "./translations.ts";
+import { isValidEmail } from "../../../../../Lib/validation.ts";
 
 import { NewsItem } from "../../../../../Types/news.ts";
 
@@ -38,7 +39,7 @@ export const PopularInsights: React.FC<PopularInsightsProps> = ({ news, lang }) 
   const listArticles = displayNews.slice(1); // Take all remaining articles
 
   const handleSubscribe = () => {
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!email || !isValidEmail(email)) {
       setSubscribeStatus("error");
       return;
     }

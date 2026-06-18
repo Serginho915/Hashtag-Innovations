@@ -5,10 +5,11 @@ import Link from 'next/link';
 import { Expert } from '../../../../Types/expert.ts';
 import { ExpertCard } from '../../Home/FeaturedVoices/ExpertCard/ExpertCard.tsx';
 import styles from '../ExpertProfile.module.scss';
+import type { ExpertsTranslations } from '../../../../app/[lang]/experts/translations.ts';
 
 interface Props {
   similarExperts: Expert[];
-  t: Record<string, string>;
+  t: ExpertsTranslations;
   lang: string;
 }
 

@@ -3,10 +3,11 @@
 import React, { useState } from 'react';
 import styles from '../ExpertProfile.module.scss';
 import { ExpertSection } from './ExpertSection.tsx';
+import type { ExpertsTranslations } from '../../../../app/[lang]/experts/translations.ts';
 
 interface Props {
   bio: string[];
-  t: Record<string, string>;
+  t: ExpertsTranslations;
 }
 
 export const ExpertBio: React.FC<Props> = ({ bio, t }) => {

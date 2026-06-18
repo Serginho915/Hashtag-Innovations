@@ -1,4 +1,18 @@
-export const translations: Record<string, any> = {
+interface PopularInsightsTranslations {
+  sectionTitle: string;
+  browseTopics: string;
+  categories: Record<string, string>;
+  newsletterTitle: string;
+  newsletterDesc: string;
+  enterEmail: string;
+  subscribed: string;
+  emailRequired: string;
+  emailInvalid: string;
+  read: string;
+  by: string;
+}
+
+export const translations: Record<string, PopularInsightsTranslations> = {
   en: {
     sectionTitle: "POPULAR INSIGHTS",
     browseTopics: "Browse Topics",
@@ -13,6 +27,8 @@ export const translations: Record<string, any> = {
     newsletterDesc: "Get curated business content, event updates, and expert insights delivered every Monday.",
     enterEmail: "Enter your email",
     subscribed: "Subscribed successfully!",
+    emailRequired: "Email is required.",
+    emailInvalid: "Please enter a valid email address.",
     read: "Read",
     by: "by"
   },
@@ -30,6 +46,8 @@ export const translations: Record<string, any> = {
     newsletterDesc: "Получавайте подбрано бизнес съдържание, актуализации за събития и експертни анализи всеки понеделник.",
     enterEmail: "Въведете вашия имейл",
     subscribed: "Успешно абониране!",
+    emailRequired: "Имейлът е задължителен.",
+    emailInvalid: "Моля, въведете валиден имейл адрес.",
     read: "Прочети",
     by: "от"
   }
