@@ -2,7 +2,9 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 import Image from 'next/image';
 import { Modal } from '../../../UI/Modal/Modal.tsx';
 import type { TextbookItem } from '../../../../Types/textbook.ts';
+import { isValidEmail } from '../../../../Lib/validation.ts';
 import styles from './MaterialPurchaseModal.module.scss';
+import { translations } from './translations.ts';
 
 interface MaterialPurchaseModalProps {
   material: TextbookItem;
@@ -24,73 +26,6 @@ type FormState = {
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
 
-const translations = {
-  en: {
-    overview: 'Overview',
-    contactDetails: 'Contact Details',
-    fileContents: 'File Contents',
-    author: 'Author:',
-    price: 'Price',
-    contactTitle: 'Contact Details',
-    contactText: 'Fill out the form below to complete your purchase',
-    name: 'Name*',
-    email: 'Email*',
-    namePlaceholder: 'George Nikolov',
-    emailPlaceholder: 'georgenikolov@mail.com',
-    termsStart: 'I agree to the',
-    terms: 'terms of use',
-    and: 'and',
-    privacy: 'privacy policy',
-    total: 'To pay',
-    preview: 'Preview',
-    get: 'Get',
-    payment: 'Proceed to payment',
-    nameError: 'Enter your name',
-    emailError: 'Enter a valid email',
-    termsError: 'Accept the terms to continue',
-    contents: [
-      'Technology market analysis for 2026',
-      'Artificial intelligence development forecasts for 2026',
-      'Sustainable IT sector trends',
-      'The impact of quantum computing on business',
-      '5G development and communication shifts',
-      'Cybersecurity innovation overview',
-    ],
-  },
-  bg: {
-    overview: 'Overview',
-    contactDetails: 'Contact Details',
-    fileContents: 'Съдържание на файла',
-    author: 'Автор:',
-    price: 'Цена',
-    contactTitle: 'Контактни данни',
-    contactText: 'Попълнете формата по-долу, за да завършите покупката',
-    name: 'Име*',
-    email: 'Електронна поща*',
-    namePlaceholder: 'Георги Николов',
-    emailPlaceholder: 'georgenikolov@mail.com',
-    termsStart: 'Съгласен съм с',
-    terms: 'условията за ползване',
-    and: 'и',
-    privacy: 'политиката за поверителност',
-    total: 'Към плащане',
-    preview: 'Преглед',
-    get: 'Вземи',
-    payment: 'Премини към плащане',
-    nameError: 'Въведете име',
-    emailError: 'Въведете валиден имейл',
-    termsError: 'Приемете условията, за да продължите',
-    contents: [
-      'Анализ на технологичния пазар за 2026 година',
-      'Прогнози за развитието на изкуствения интелект през 2026',
-      'Тенденции за устойчиво развитие в IT сектора',
-      'Влияние на квантовите изчисления върху бизнеса',
-      'Развитие на 5G и влиянието му върху комуникациите',
-      'Иновации в областта на киберсигурността',
-    ],
-  },
-};
-
 const PdfIcon = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
     <path d="M3.33 1.33h6.2L12.67 4.47v10.2H3.33V1.33Zm5.54 1.34v2.46h2.46L8.87 2.67ZM4.67 2.67v10.66h6.66V6.47H7.53v-3.8H4.67Z" fill="currentColor" />
@@ -102,8 +37,6 @@ const CheckIcon = () => (
     <path d="M7.95 10.35L6.3375 8.7375C6.2 8.6 6.025 8.53125 5.8125 8.53125C5.6 8.53125 5.425 8.6 5.2875 8.7375C5.15 8.875 5.08125 9.05 5.08125 9.2625C5.08125 9.475 5.15 9.65 5.2875 9.7875L7.425 11.925C7.575 12.075 7.75 12.15 7.95 12.15C8.15 12.15 8.325 12.075 8.475 11.925L12.7125 7.6875C12.85 7.55 12.9188 7.375 12.9188 7.1625C12.9188 6.95 12.85 6.775 12.7125 6.6375C12.575 6.5 12.4 6.43125 12.1875 6.43125C11.975 6.43125 11.8 6.5 11.6625 6.6375L7.95 10.35ZM9 16.5C7.9625 16.5 6.9875 16.303 6.075 15.909C5.1625 15.515 4.36875 14.9808 3.69375 14.3063C3.01875 13.6318 2.4845 12.838 2.091 11.925C1.6975 11.012 1.5005 10.037 1.5 9C1.4995 7.963 1.6965 6.988 2.091 6.075C2.4855 5.162 3.01975 4.36825 3.69375 3.69375C4.36775 3.01925 5.1615 2.485 6.075 2.091C6.9885 1.697 7.9635 1.5 9 1.5C10.0365 1.5 11.0115 1.697 11.925 2.091C12.8385 2.485 13.6323 3.01925 14.3063 3.69375C14.9803 4.36825 15.5148 5.162 15.9098 6.075C16.3048 6.988 16.5015 7.963 16.5 9C16.4985 10.037 16.3015 11.012 15.909 11.925C15.5165 12.838 14.9823 13.6318 14.3063 14.3063C13.6303 14.9808 12.8365 15.5152 11.925 15.9097C11.0135 16.3042 10.0385 16.501 9 16.5Z" fill="#076F7F" />
   </svg>
 );
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const MaterialPurchaseModal: React.FC<MaterialPurchaseModalProps> = ({
   material,
@@ -130,7 +63,7 @@ export const MaterialPurchaseModal: React.FC<MaterialPurchaseModalProps> = ({
       nextErrors.name = t.nameError;
     }
 
-    if (!emailRegex.test(values.email.trim())) {
+    if (!isValidEmail(values.email)) {
       nextErrors.email = t.emailError;
     }
 

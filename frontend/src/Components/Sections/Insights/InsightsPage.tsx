@@ -8,6 +8,7 @@ import { CommunityEvent } from '../../../Types/community.ts';
 import { NewsItem } from '../../../Types/news.ts';
 import { InsightCard } from './InsightCard/InsightCard.tsx';
 import styles from './InsightsPage.module.scss';
+import { translations } from './translations.ts';
 
 interface InsightsPageProps {
   insights: NewsItem[];
@@ -19,57 +20,6 @@ const categoryIds = ['all', 'business', 'ai', 'innovations', 'technology', 'even
 
 type CategoryId = typeof categoryIds[number];
 type FilterableCategoryId = Exclude<CategoryId, 'all'>;
-
-const translations = {
-  en: {
-    title: 'Insights',
-    categories: {
-      all: 'All',
-      business: 'Business',
-      ai: 'Artificial Intelligence',
-      innovations: 'Innovations',
-      technology: 'Technology',
-      events: 'Events',
-      ecology: 'Ecology',
-      education: 'Education',
-    },
-    showMore: 'show more',
-    relatedEvents: 'Relevant Events',
-    viewAll: 'VIEW ALL',
-    popular: 'Popular Now',
-    newsletterTitle: 'Stay Ahead',
-    newsletterText: 'Get curated business content, event updates, and expert insights delivered every Monday.',
-    emailPlaceholder: 'Enter your email',
-    subscribe: 'Subscribe',
-    read: 'Read',
-    emptyTitle: 'No materials at the moment',
-    emptyText: 'There are no insights in this category yet. Please check another topic or come back later.',
-  },
-  bg: {
-    title: 'Инсайти',
-    categories: {
-      all: 'Всички',
-      business: 'Бизнес',
-      ai: 'Изкуствен интелект',
-      innovations: 'Иновации',
-      technology: 'Технологии',
-      events: 'Събития',
-      ecology: 'Екология',
-      education: 'Образование',
-    },
-    showMore: 'покажи повече',
-    relatedEvents: 'Релевантни събития',
-    viewAll: 'Виж всички',
-    popular: 'Популярно сега',
-    newsletterTitle: 'Бъдете напред',
-    newsletterText: 'Получавайте подбрано бизнес съдържание, актуализации за събития и експертни мнения всяка седмица.',
-    emailPlaceholder: 'Въведете вашия email',
-    subscribe: 'Абонирай се',
-    read: 'Прочети',
-    emptyTitle: 'В момента няма материали',
-    emptyText: 'Все още няма инсайти в тази категория. Изберете друга тема или проверете по-късно.',
-  },
-};
 
 const categoryMatchers: Record<FilterableCategoryId, string[]> = {
   business: ['business', 'strategy'],

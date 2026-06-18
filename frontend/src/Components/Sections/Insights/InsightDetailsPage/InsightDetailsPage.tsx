@@ -4,35 +4,13 @@ import { AuthorLink } from '../../../UI/AuthorLink/AuthorLink.tsx';
 import { ArticleTeaserCard } from '../../../UI/ArticleTeaserCard/ArticleTeaserCard.tsx';
 import { NewsItem } from '../../../../Types/news.ts';
 import styles from './InsightDetailsPage.module.scss';
+import { translations } from './translations.ts';
 
 interface InsightDetailsPageProps {
   insight: NewsItem;
   relatedInsights: NewsItem[];
   lang: string;
 }
-
-const translations = {
-  en: {
-    insights: 'Insights',
-    share: 'Share',
-    relatedArticles: 'Related Articles',
-    newsletterTitle: 'Stay Ahead',
-    newsletterText: 'Get curated business content, event updates, and expert insights delivered every Monday.',
-    emailPlaceholder: 'Enter your email',
-    subscribe: 'Subscribe',
-    read: 'Read',
-  },
-  bg: {
-    insights: 'Инсайти',
-    share: 'Сподели',
-    relatedArticles: 'Свързани статии',
-    newsletterTitle: 'Бъдете напред',
-    newsletterText: 'Получавайте подбрано бизнес съдържание, актуализации за събития и експертни мнения всеки понеделник.',
-    emailPlaceholder: 'Въведете вашия email',
-    subscribe: 'Абонирай се',
-    read: 'Прочети',
-  },
-};
 
 const formatDate = (date: string, lang: string) => {
   const parsedDate = new Date(date);

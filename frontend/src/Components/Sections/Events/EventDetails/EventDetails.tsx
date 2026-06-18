@@ -8,6 +8,7 @@ import { RelatedEventsBlock } from '../RelatedEventsBlock/RelatedEventsBlock.tsx
 import { RelevantArticlesBlock } from '../RelevantArticlesBlock/RelevantArticlesBlock.tsx';
 import { EventRegisterButton } from '../EventRegisterButton/EventRegisterButton.tsx';
 import styles from './EventDetails.module.scss';
+import { translations } from './translations.ts';
 
 interface EventDetailsProps {
   event: CommunityEvent;
@@ -15,41 +16,6 @@ interface EventDetailsProps {
   relatedArticles: NewsItem[];
   lang: string;
 }
-
-const translations = {
-  en: {
-    details: 'Event Details',
-    speakers: 'Speakers',
-    organizers: 'Organizer(s):',
-    partners: 'Partners:',
-    relatedEvents: 'Related Events',
-    relatedArticles: 'Relevant Articles',
-    viewAll: 'view all',
-    viewDetails: 'View Details',
-    register: 'Register',
-    date: 'Date',
-    time: 'Time',
-    location: 'Location',
-    price: 'Price',
-    read: 'Read',
-  },
-  bg: {
-    details: 'Детайли на събитие',
-    speakers: 'Спикери',
-    organizers: 'Организатор(и):',
-    partners: 'Партньори:',
-    relatedEvents: 'Похожи събития',
-    relatedArticles: 'Релевантни статии',
-    viewAll: 'view all',
-    viewDetails: 'Вижте детайли',
-    register: 'Зарегистрирайте се',
-    date: 'Дата',
-    time: 'Време',
-    location: 'Локация',
-    price: 'Цена',
-    read: 'Read',
-  },
-};
 
 const tagLabels: Record<string, Record<string, string>> = {
   business: { en: 'Business', bg: 'Бизнес' },

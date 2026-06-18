@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Expert } from '../../../../../Types/expert.ts';
 import { Modal } from '../../../../UI/Modal/Modal.tsx';
+import { isValidEmail } from '../../../../../Lib/validation.ts';
 import styles from './BookingModal.module.scss';
 
 interface BookingModalProps {
@@ -113,7 +114,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   const handleNextOrConfirm = () => {
     if (step === 1) {
-      let newErrors: { date?: string; time?: string } = {};
+      const newErrors: { date?: string; time?: string } = {};
       if (!selectedDate) newErrors.date = t.errorRequired || 'Required';
       if (!selectedTime) newErrors.time = t.errorRequired || 'Required';
       
@@ -124,9 +125,9 @@ export const BookingModal: React.FC<BookingModalProps> = ({
       setErrors({});
       setStep(2);
     } else {
-      let newErrors: { name?: string; email?: string; terms?: string } = {};
+      const newErrors: { name?: string; email?: string; terms?: string } = {};
       if (!name.trim()) newErrors.name = t.errorRequired || 'Обязательное поле';
-      if (!email.trim() || !/^\S+@\S+\.\S+$/.test(email)) newErrors.email = t.errorEmail || 'Некорректный email';
+      if (!email.trim() || !isValidEmail(email)) newErrors.email = t.errorEmail || 'Некорректный email';
       if (!termsAccepted) newErrors.terms = t.errorTerms || 'Необходимо согласие';
 
       if (Object.keys(newErrors).length > 0) {
@@ -163,11 +164,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     const dateStr = new Intl.DateTimeFormat(locale, { weekday: 'long', month: 'long', day: 'numeric' }).format(d);
     return `${dateStr} · ${selectedTime}`;
   };
-
-  // The title in the breadcrumbs depends on the step
-  const breadcrumbTitle = step === 1 
-    ? (t.dateTime || 'Date and Time /') 
-    : `${t.dateTime || 'Date and Time /'} ${t.contactDetails || 'Contact Details'}`;
 
   return (
     <Modal isOpen={isOpen} onClose={() => {

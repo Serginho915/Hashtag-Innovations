@@ -2,8 +2,10 @@
 
 import React, { useState } from 'react';
 import { Modal } from '../../../UI/Modal/Modal.tsx';
+import { isValidEmail } from '../../../../Lib/validation.ts';
 import styles from './EventRegistrationModal.module.scss';
 import { CommunityEvent } from '../../../../Types/community.ts';
+import { translations } from './translations.ts';
 
 interface EventRegistrationModalProps {
   isOpen: boolean;
@@ -28,45 +30,6 @@ const LocationIcon = () => (
   </svg>
 );
 
-const translations = {
-  en: {
-    dateTime: 'Date and Time /',
-    price: 'Price',
-    contactDetails: 'Contact Details',
-    contactDetailsDesc: 'Fill in the form below to complete the registration.',
-    nameLabel: 'Name*',
-    namePlaceholder: 'John Doe',
-    emailLabel: 'Email*',
-    emailPlaceholder: 'johndoe@mail.com',
-    termsAgree: 'I agree to the ',
-    termsLink: 'terms of use',
-    and: ' and ',
-    privacyLink: 'privacy policy',
-    registerBtn: 'Register',
-    errorRequired: 'Required field',
-    errorEmail: 'Invalid email',
-    errorTerms: 'Consent is required',
-  },
-  bg: {
-    dateTime: 'Дата и Време /',
-    price: 'Цена',
-    contactDetails: 'Контактни Данни',
-    contactDetailsDesc: 'Попълнете формата по-долу, за да завършите регистрацията.',
-    nameLabel: 'Име*',
-    namePlaceholder: 'Георги Николов',
-    emailLabel: 'Електронна Поща*',
-    emailPlaceholder: 'georgenikolov@mail.com',
-    termsAgree: 'Съгласен съм с ',
-    termsLink: 'условията за ползване',
-    and: ' и ',
-    privacyLink: 'политиката за поверителност',
-    registerBtn: 'Регистрация',
-    errorRequired: 'Обязательное поле',
-    errorEmail: 'Некорректный email',
-    errorTerms: 'Необходимо согласие',
-  },
-};
-
 export const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({
   isOpen,
   onClose,
@@ -87,9 +50,9 @@ export const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({
   const handleRegister = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
-    let newErrors: { name?: string; email?: string; terms?: string } = {};
+    const newErrors: { name?: string; email?: string; terms?: string } = {};
     if (!name.trim()) newErrors.name = t.errorRequired;
-    if (!email.trim() || !/^\S+@\S+\.\S+$/.test(email)) newErrors.email = t.errorEmail;
+    if (!email.trim() || !isValidEmail(email)) newErrors.email = t.errorEmail;
     if (!termsAccepted) newErrors.terms = t.errorTerms;
 
     if (Object.keys(newErrors).length > 0) {
