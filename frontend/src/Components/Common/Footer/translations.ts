@@ -15,6 +15,14 @@ export const translations: Record<string, {
   privacy: string;
   terms: string;
   cookies: string;
+  close: string;
+  euProjectTitle: string;
+  privacyTitle: string;
+  privacyIntro: string;
+  privacySections: Array<{
+    title: string;
+    text: string;
+  }>;
 }> = {
   en: {
     tagline: 'Your all-in-one platform to empower your expertise.',
@@ -33,6 +41,28 @@ export const translations: Record<string, {
     privacy: 'Privacy Policy',
     terms: 'Terms of Service',
     cookies: 'Cookie Settings',
+    close: 'Close',
+    euProjectTitle: 'EU Project Information',
+    privacyTitle: 'Privacy Policy',
+    privacyIntro: 'This is temporary privacy policy copy for the Hashtag Innovations platform. It describes how user information is handled across the website, forms, learning materials, events, and expert services.',
+    privacySections: [
+      {
+        title: 'Information we collect',
+        text: 'We may collect contact details, profile information, event registrations, learning material requests, and technical information needed to keep the service reliable and secure.',
+      },
+      {
+        title: 'How we use information',
+        text: 'We use this data to provide requested services, respond to inquiries, improve platform content, process registrations, and send relevant updates when the user has agreed to receive them.',
+      },
+      {
+        title: 'Data protection',
+        text: 'We apply reasonable organizational and technical measures to protect information from unauthorized access, loss, misuse, or disclosure.',
+      },
+      {
+        title: 'User choices',
+        text: 'Users may request access, correction, or deletion of their personal information, and may unsubscribe from non-essential communications at any time.',
+      },
+    ],
   },
   bg: {
     tagline: 'Вашата платформа за експертиза и иновации.',
@@ -51,5 +81,27 @@ export const translations: Record<string, {
     privacy: 'Политика за поверителност',
     terms: 'Условия за ползване',
     cookies: 'Настройки за бисквитки',
+    close: 'Затвори',
+    euProjectTitle: 'ЕС информация за проекта',
+    privacyTitle: 'Политика за поверителност',
+    privacyIntro: 'Това е временен текст за политиката за поверителност на платформата Hashtag Innovations. Той описва как се обработва информацията на потребителите в сайта, формите, учебните материали, събитията и експертните услуги.',
+    privacySections: [
+      {
+        title: 'Каква информация събираме',
+        text: 'Може да събираме данни за контакт, профилна информация, регистрации за събития, заявки за учебни материали и техническа информация, необходима за надеждната и сигурна работа на услугата.',
+      },
+      {
+        title: 'Как използваме информацията',
+        text: 'Използваме тези данни, за да предоставяме заявени услуги, да отговаряме на запитвания, да подобряваме съдържанието на платформата, да обработваме регистрации и да изпращаме релевантни актуализации при съгласие от потребителя.',
+      },
+      {
+        title: 'Защита на данните',
+        text: 'Прилагаме разумни организационни и технически мерки за защита на информацията от неоторизиран достъп, загуба, злоупотреба или разкриване.',
+      },
+      {
+        title: 'Права и избор на потребителите',
+        text: 'Потребителите могат да поискат достъп, корекция или изтриване на личната си информация и могат по всяко време да се отпишат от несъществени комуникации.',
+      },
+    ],
   },
 };

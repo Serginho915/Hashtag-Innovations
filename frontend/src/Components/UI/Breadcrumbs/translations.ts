@@ -5,7 +5,8 @@ export const translations: Record<string, Record<string, string>> = {
     events: 'Events',
     learn: 'Learn',
     materials: 'Materials',
-    insights: 'Insights'
+    insights: 'Insights',
+    projects: 'Projects'
   },
   bg: {
     home: 'Начало',
@@ -13,6 +14,7 @@ export const translations: Record<string, Record<string, string>> = {
     events: 'Събития',
     learn: 'Научи',
     materials: 'Материали',
-    insights: 'Статии'
+    insights: 'Статии',
+    projects: 'Проекти'
   }
 };

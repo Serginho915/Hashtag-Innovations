@@ -1,16 +1,22 @@
-import React from 'react';
+"use client";
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Footer.module.scss';
 import { translations } from './translations.ts';
+import { Modal } from '../../UI/Modal/Modal.tsx';
 import logoImage from '../../../../public/images/Logo.svg';
 
 interface FooterProps {
   lang: string;
 }
 
+type FooterModal = 'euProject' | 'privacy' | null;
+
 export const Footer = ({ lang }: FooterProps) => {
   const t = translations[lang] || translations.bg;
+  const [activeModal, setActiveModal] = useState<FooterModal>(null);
 
   const browseLinks = [
     { label: t.experts, href: `/${lang}/experts` },
@@ -27,11 +33,13 @@ export const Footer = ({ lang }: FooterProps) => {
   ];
 
   const legalLinks = [
-    { label: t.euProject, href: `/${lang}/eu-project` },
-    { label: t.privacy, href: `/${lang}/privacy` },
+    { label: t.euProject, href: `/${lang}/eu-project`, modal: 'euProject' as const },
+    { label: t.privacy, href: `/${lang}/privacy`, modal: 'privacy' as const },
     { label: t.terms, href: `/${lang}/terms` },
     { label: t.cookies, href: `/${lang}/cookies` },
   ];
+
+  const closeModal = () => setActiveModal(null);
 
   return (
     <footer className={styles.footer}>
@@ -134,11 +142,59 @@ export const Footer = ({ lang }: FooterProps) => {
           <div className={styles.copyright}>{t.copyright}</div>
           <div className={styles.legalLinks}>
             {legalLinks.map((link) => (
-              <Link key={link.href} href={link.href} className={styles.legalLink}>{link.label}</Link>
+              link.modal ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={styles.legalLink}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setActiveModal(link.modal);
+                  }}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link key={link.href} href={link.href} className={styles.legalLink}>{link.label}</Link>
+              )
             ))}
           </div>
         </div>
       </div>
+
+      <Modal isOpen={activeModal === 'euProject'} onClose={closeModal} className={styles.euModal} closeButtonClassName={styles.modalClose}>
+        <div className={styles.euModalContent}>
+          <h2>{t.euProjectTitle}</h2>
+          <div className={styles.posterFrame}>
+            <Image
+              src="/Plakat-Hash-Digi.jpg"
+              alt={t.euProjectTitle}
+              width={3364}
+              height={4735}
+              className={styles.posterImage}
+              sizes="(max-width: 768px) 92vw, 760px"
+            />
+          </div>
+        </div>
+      </Modal>
+
+      <Modal isOpen={activeModal === 'privacy'} onClose={closeModal} className={styles.privacyModal} closeButtonClassName={styles.modalClose}>
+        <div className={styles.privacyContent}>
+          <h2>{t.privacyTitle}</h2>
+          <p className={styles.privacyIntro}>{t.privacyIntro}</p>
+          <div className={styles.privacySections}>
+            {t.privacySections.map((section) => (
+              <section key={section.title}>
+                <h3>{section.title}</h3>
+                <p>{section.text}</p>
+              </section>
+            ))}
+          </div>
+          <button type="button" className={styles.modalAction} onClick={closeModal}>
+            {t.close}
+          </button>
+        </div>
+      </Modal>
     </footer>
   );
 };

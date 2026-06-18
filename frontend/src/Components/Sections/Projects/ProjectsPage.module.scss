@@ -1,0 +1,137 @@
+@use "../../../Styles/mixins.scss" as *;
+@import "../../../Styles/variables.scss";
+
+.projectsPage {
+  width: 100%;
+  padding-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 56px;
+  background: #fff;
+  font-family: $font-manrope;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  p {
+    width: min(534px, 100%);
+    min-height: 73px;
+    margin: 0;
+    color: #A7A7A7;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+}
+
+.titleLine {
+  position: relative;
+  width: 100%;
+  min-height: 68px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 2px solid #000;
+
+  h1 {
+    margin: 0;
+    color: #000;
+    font-family: $font-eb-garamond;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+  }
+}
+
+.titleMark {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 76px;
+  height: 68px;
+  object-fit: contain;
+}
+
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 44px 32px;
+}
+
+@include laptop {
+  .projectsPage {
+    gap: 56px;
+  }
+
+  .titleMark {
+    width: 76px;
+    height: 68px;
+  }
+}
+
+@include laptop-sm {
+  .projectsPage {
+    gap: 36px;
+  }
+
+  .titleLine {
+    min-height: 64px;
+
+    h1 {
+      font-size: 46px;
+      line-height: 64px;
+    }
+  }
+
+  .titleMark {
+    width: 71px;
+    height: 64px;
+  }
+
+  .projectsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@include mobile {
+  .projectsPage {
+    gap: 24px;
+  }
+
+  .hero {
+    p {
+      min-height: 0;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+  }
+
+  .titleLine {
+    min-height: 44px;
+
+    h1 {
+      font-size: 36px;
+      line-height: 44px;
+    }
+  }
+
+  .titleMark {
+    width: 49px;
+    height: 44px;
+  }
+}

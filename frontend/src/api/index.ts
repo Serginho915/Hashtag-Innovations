@@ -4,12 +4,14 @@ import { NewsItem } from '../Types/news.ts';
 import { UpcomingEventData } from '../Types/event.ts';
 import { TextbookItem } from '../Types/textbook.ts';
 import { CommunityEvent } from '../Types/community.ts';
+import { ProjectItem } from '../Types/project.ts';
 
 import { MOCK_EXPERTS_EN, MOCK_EXPERTS_BG } from '../mockData/expertsMock.ts';
 import { MOCK_NEWS_EN, MOCK_NEWS_BG } from '../mockData/newsMock.ts';
 import { MOCK_UPCOMING_EVENTS_EN, MOCK_UPCOMING_EVENTS_BG } from '../mockData/upcomingEventMock.ts';
 import { MOCK_EVENTS } from '../mockData/communityMock.ts';
 import { MOCK_TEXTBOOKS_EN, MOCK_TEXTBOOKS_BG } from '../mockData/exploreAndLearnMock.ts';
+import { MOCK_PROJECTS_EN, MOCK_PROJECTS_BG } from '../mockData/projectsMock.ts';
 
 export interface HomePageData {
   experts: Expert[];
@@ -29,6 +31,10 @@ export interface LearnPageData {
   textbooks: TextbookItem[];
   popularInsights: NewsItem[];
   experts: Expert[];
+}
+
+export interface ProjectsPageData {
+  projects: ProjectItem[];
 }
 
 const insightImages = [
@@ -175,6 +181,17 @@ export const getLearnPageData = cache(async (lang: string): Promise<LearnPageDat
     textbooks: isBg ? MOCK_TEXTBOOKS_BG as TextbookItem[] : MOCK_TEXTBOOKS_EN as TextbookItem[],
     popularInsights: normalizeInsights(isBg ? MOCK_NEWS_BG : MOCK_NEWS_EN, lang),
     experts: isBg ? MOCK_EXPERTS_BG as Expert[] : MOCK_EXPERTS_EN as Expert[],
+  };
+});
+
+export const getProjectsPageData = cache(async (lang: string): Promise<ProjectsPageData> => {
+  // Simulate network delay to mimic real API
+  await new Promise((resolve) => setTimeout(resolve, 50));
+
+  const isBg = lang === 'bg';
+
+  return {
+    projects: isBg ? MOCK_PROJECTS_BG : MOCK_PROJECTS_EN,
   };
 });
 
