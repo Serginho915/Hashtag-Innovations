@@ -28,7 +28,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ projects, lang }) =>
           <div className={styles.titleLine}>
             <h1>{t.title}</h1>
             <Image
-              src="/images/Logo.svg"
+              src="/ProjectImg.png"
               alt=""
               width={76}
               height={68}
