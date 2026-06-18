@@ -188,6 +188,7 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ insights, relatedEve
                 excerpt={article.excerpt || ''}
                 authorLabel={article.authorLabel || 'by'}
                 authorHref={article.authorExpertId ? `/${lang}/experts/${article.authorExpertId}` : undefined}
+                authorAvatarUrl={article.authorAvatarUrl}
                 readText={t.read}
                 readHref={`/${lang}/insights/${article.id}`}
               />

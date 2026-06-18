@@ -27,7 +27,7 @@ export const MOCK_NEWS_EN = [
       },
     ],
     authorLabel: "by",
-    authorName: "Andrew Nikolov",
+    authorName: "Andrey Nikolov",
     authorExpertId: "expert-4",
     authorAvatarUrl: "/images/avatars/avatar_1.png",
     tags: ["Artificial Intelligence", "Innovations", "Technology"],
@@ -64,6 +64,7 @@ export const MOCK_NEWS_EN = [
     authorLabel: "by",
     authorName: "Andrey Nikolov",
     authorExpertId: "expert-4",
+    authorAvatarUrl: "/images/avatars/avatar_1.png",
     tags: ["Business"],
     createdAt: "2023-10-10T10:00:00Z"
   },
@@ -97,6 +98,7 @@ export const MOCK_NEWS_EN = [
     ],
     authorLabel: "from",
     authorName: "Jane Smith",
+    authorAvatarUrl: "/images/avatars/avatar_3.png",
     tags: ["Business", "Entertainment"],
     createdAt: "2023-09-20T10:00:00Z"
   },
@@ -131,6 +133,7 @@ export const MOCK_NEWS_EN = [
     authorLabel: "by",
     authorName: "David Kim",
     authorExpertId: "expert-1",
+    authorAvatarUrl: "/images/avatars/avatar_1.png",
     tags: ["AI", "Business"],
     createdAt: "2023-11-01T10:00:00Z"
   },
@@ -165,6 +168,7 @@ export const MOCK_NEWS_EN = [
     authorLabel: "from",
     authorName: "Andrey Nikolov",
     authorExpertId: "expert-4",
+    authorAvatarUrl: "/images/avatars/avatar_1.png",
     tags: ["Strategy", "Business"],
     createdAt: "2023-11-15T10:00:00Z"
   },
@@ -198,6 +202,7 @@ export const MOCK_NEWS_EN = [
     ],
     authorLabel: "by",
     authorName: "Dr. Alice Johnson",
+    authorAvatarUrl: "/images/avatars/avatar_2.png",
     tags: ["Entertainment"],
     createdAt: "2023-08-05T10:00:00Z"
   },
@@ -269,6 +274,7 @@ export const MOCK_NEWS_BG = [
     authorLabel: "от",
     authorName: "Андрей Николов",
     authorExpertId: "expert-4",
+    authorAvatarUrl: "/images/avatars/avatar_1.png",
     tags: ["Бизнес"],
     createdAt: "2023-10-10T10:00:00Z"
   },
@@ -302,6 +308,7 @@ export const MOCK_NEWS_BG = [
     ],
     authorLabel: "от",
     authorName: "Джейн Смит",
+    authorAvatarUrl: "/images/avatars/avatar_3.png",
     tags: ["Бизнес", "Развлечение"],
     createdAt: "2023-09-20T10:00:00Z"
   },
@@ -336,6 +343,7 @@ export const MOCK_NEWS_BG = [
     authorLabel: "от",
     authorName: "Дейвид Ким",
     authorExpertId: "expert-1",
+    authorAvatarUrl: "/images/avatars/avatar_1.png",
     tags: ["Изкуствен интелект", "Бизнес"],
     createdAt: "2023-11-01T10:00:00Z"
   },
@@ -370,6 +378,7 @@ export const MOCK_NEWS_BG = [
     authorLabel: "от",
     authorName: "Андрей Николов",
     authorExpertId: "expert-4",
+    authorAvatarUrl: "/images/avatars/avatar_1.png",
     tags: ["Стратегия", "Бизнес"],
     createdAt: "2023-11-15T10:00:00Z"
   },
@@ -403,6 +412,7 @@ export const MOCK_NEWS_BG = [
     ],
     authorLabel: "от",
     authorName: "Д-р Алис Джонсън",
+    authorAvatarUrl: "/images/avatars/avatar_2.png",
     tags: ["Технологии"],
     createdAt: "2023-08-05T10:00:00Z"
   },

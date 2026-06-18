@@ -1,42 +1,57 @@
+@use "../../../../Styles/mixins.scss" as *;
 @import "../../../../Styles/variables.scss";
 
 .authors {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
   font-family: $font-manrope;
 
   h2 {
     margin: 0;
-    color: black;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: #101828;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
+    line-height: 28px;
     text-transform: uppercase;
+
+    &::before {
+      content: "";
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      background: #101828;
+      clip-path: polygon(50% 6%, 61% 38%, 95% 38%, 67% 57%, 78% 90%, 50% 70%, 22% 90%, 33% 57%, 5% 38%, 39% 38%);
+    }
   }
 }
 
 .list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 .author {
+  padding: 8px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 21px;
   color: black;
   text-decoration: none;
 }
 
 .avatar {
   position: relative;
-  width: 56px;
-  height: 56px;
+  width: 104px;
+  height: 104px;
   overflow: hidden;
-  border-radius: 50%;
-  background: #e5e5e5;
+  background: #d9d9d9;
   flex: 0 0 auto;
 }
 
@@ -47,19 +62,66 @@
 .info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 24px;
   min-width: 0;
+  flex: 1 1 auto;
+}
+
+.top {
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .name {
-  font-size: 18px;
+  color: #101828;
+  font-size: 20px;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 22px;
+  text-decoration: none;
 }
 
 .role {
-  color: #5c5c70;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.35;
+  color: #4a5565;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  span {
+    color: #6a7282;
+  }
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.resources {
+  color: #4a5565;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+@include laptop {
+  .author {
+    gap: 14px;
+  }
+
+  .avatar {
+    width: 88px;
+    height: 88px;
+  }
+
+  .role,
+  .resources {
+    font-size: 16px;
+  }
 }

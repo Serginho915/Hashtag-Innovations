@@ -12,6 +12,7 @@ interface PopularInsightCardProps {
   authorName: string;
   authorLabel: string;
   authorExpertId?: string;
+  authorAvatarUrl?: string;
   lang?: string;
 }
 
@@ -22,6 +23,7 @@ export const PopularInsightCard = ({
   authorName,
   authorLabel,
   authorExpertId,
+  authorAvatarUrl,
   lang = 'en'
 }: PopularInsightCardProps) => {
   const t = translations[lang] || translations.en;
@@ -39,7 +41,11 @@ export const PopularInsightCard = ({
           <div className={styles.authorGroup}>
             <div className={styles.authorLabel}>{authorLabel}</div>
             <div className={styles.authorAvatar}>
-              <Image src="/images/avatar-1.png" alt={authorName} fill style={{ objectFit: 'cover' }} />
+              {authorAvatarUrl ? (
+                <Image src={authorAvatarUrl} alt={authorName} fill style={{ objectFit: 'cover' }} />
+              ) : (
+                <span className={styles.avatarBg} aria-hidden="true" />
+              )}
             </div>
             <AuthorLink name={authorName} expertId={authorExpertId} lang={lang} />
           </div>

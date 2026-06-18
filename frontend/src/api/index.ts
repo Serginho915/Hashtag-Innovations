@@ -50,8 +50,24 @@ const toHashtag = (value: string) => {
   return normalized.startsWith('#') ? normalized : `#${normalized.replace(/\s+/g, '')}`;
 };
 
+const normalizeAuthorName = (value?: string) => value?.trim().toLowerCase().replace(/\s+/g, ' ');
+
 const normalizeInsights = (items: unknown[], lang: string): NewsItem[] => items.map((item, index) => {
   const source = item as Record<string, unknown>;
+  const expertsForLang = lang === 'bg' ? MOCK_EXPERTS_BG : MOCK_EXPERTS_EN;
+  const allExperts = [...MOCK_EXPERTS_EN, ...MOCK_EXPERTS_BG];
+  const rawAuthorName = source.authorName ? String(source.authorName) : undefined;
+  const rawAuthorExpertId = source.authorExpertId ? String(source.authorExpertId) : undefined;
+  const rawAuthorAvatarUrl = source.authorAvatarUrl ? String(source.authorAvatarUrl) : undefined;
+  const authorById = rawAuthorExpertId
+    ? expertsForLang.find((expert) => expert.id === rawAuthorExpertId) ?? allExperts.find((expert) => expert.id === rawAuthorExpertId)
+    : undefined;
+  const normalizedRawAuthorName = normalizeAuthorName(rawAuthorName);
+  const authorByName = normalizedRawAuthorName
+    ? expertsForLang.find((expert) => normalizeAuthorName(expert.name) === normalizedRawAuthorName)
+      ?? allExperts.find((expert) => normalizeAuthorName(expert.name) === normalizedRawAuthorName)
+    : undefined;
+  const author = authorById ?? authorByName;
   const rawTags = Array.isArray(source.tags) ? source.tags : [];
   const rawHashtags = Array.isArray(source.hashtags) ? source.hashtags : [];
   const rawBodySections = Array.isArray(source.bodySections) ? source.bodySections : [];
@@ -94,11 +110,11 @@ const normalizeInsights = (items: unknown[], lang: string): NewsItem[] => items.
       : [{ paragraphs: [fallbackExcerpt] }],
     promotedLabel: source.promotedLabel ? String(source.promotedLabel) : undefined,
     hashtags,
-    authorName: String(source.authorName ?? 'Andrew Nikolov'),
+    authorName: rawAuthorName ?? author?.name,
     authorLabel: String(source.authorLabel ?? (lang === 'bg' ? 'от' : 'by')),
     authorId: source.authorId ? String(source.authorId) : undefined,
-    authorExpertId: source.authorExpertId ? String(source.authorExpertId) : undefined,
-    authorAvatarUrl: source.authorAvatarUrl ? String(source.authorAvatarUrl) : undefined,
+    authorExpertId: rawAuthorExpertId ?? author?.id,
+    authorAvatarUrl: rawAuthorAvatarUrl ?? author?.imageUrl,
     tags,
   };
 });

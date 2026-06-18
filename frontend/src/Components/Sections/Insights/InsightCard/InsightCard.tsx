@@ -20,6 +20,7 @@ const ReadTimeBadge = ({ text }: { text?: string }) => (
 
 export const InsightCard: React.FC<InsightCardProps> = ({ article, lang, variant = 'grid' }) => {
   const href = `/${lang}/insights/${article.id}`;
+  const authorName = article.authorName || (lang === 'bg' ? 'Автор' : 'Author');
 
   return (
     <article className={`${styles.card} ${styles[variant]}`}>
@@ -37,7 +38,7 @@ export const InsightCard: React.FC<InsightCardProps> = ({ article, lang, variant
         <div className={styles.authorRow}>
           <span>{article.authorLabel || 'by'}</span>
           <Link href={article.authorExpertId ? `/${lang}/experts/${article.authorExpertId}` : href} className={styles.authorName}>
-            {article.authorName || 'Andrew Nikolov'}
+            {authorName}
           </Link>
         </div>
       </div>

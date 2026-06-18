@@ -7,6 +7,7 @@ export interface TextbookItem {
   authorExpertId?: string;
   imageUrl: string;
   pdfUrl: string;
+  previewPdfUrl?: string;
   salesUrl?: string;
   category?: string;
   format?: string;

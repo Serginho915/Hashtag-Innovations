@@ -79,7 +79,7 @@ export const PopularInsights: React.FC<PopularInsightsProps> = ({ news, lang }) 
                 <div className={styles.featuredFooter}>
                   <div className={styles.featuredAuthorGroup}>
                     <div className={styles.featuredAuthorLabel}>{featuredArticle.authorLabel || t.by}</div>
-                    <AuthorLink name={featuredArticle.authorName || 'Andrey Nikolov'} expertId={featuredArticle.authorExpertId} lang={lang} />
+                    <AuthorLink name={featuredArticle.authorName || ''} expertId={featuredArticle.authorExpertId} lang={lang} />
                   </div>
                 </div>
               </div>
@@ -94,9 +94,10 @@ export const PopularInsights: React.FC<PopularInsightsProps> = ({ news, lang }) 
                 id={article.id}
                 title={article.title}
                 excerpt={article.excerpt || ''}
-                authorName={article.authorName || 'Andrey Nikolov'}
+                authorName={article.authorName || ''}
                 authorLabel={article.authorLabel || t.by}
                 authorExpertId={article.authorExpertId}
+                authorAvatarUrl={article.authorAvatarUrl}
                 lang={lang}
               />
             ))}

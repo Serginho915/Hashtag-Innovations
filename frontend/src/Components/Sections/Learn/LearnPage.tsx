@@ -1,7 +1,9 @@
 import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { Breadcrumbs } from '../../UI/Breadcrumbs/Breadcrumbs.tsx';
 import { ViewAllLink } from '../../UI/ViewAllLink/ViewAllLink.tsx';
-import { ArticleTeaserCard } from '../../UI/ArticleTeaserCard/ArticleTeaserCard.tsx';
+import { ReadButton } from '../../Common/Buttons/ReadButton/ReadButton.tsx';
 import type { TextbookItem } from '../../../Types/textbook.ts';
 import type { NewsItem } from '../../../Types/news.ts';
 import type { Expert } from '../../../Types/expert.ts';
@@ -20,6 +22,8 @@ interface LearnPageProps {
 export const LearnPage: React.FC<LearnPageProps> = ({ textbooks, popularInsights, experts, lang }) => {
   const t = getLearnTranslations(lang);
   const relatedArticles = popularInsights.slice(0, 3);
+  const featuredArticle = relatedArticles[0];
+  const compactArticles = relatedArticles.slice(1, 3);
 
   return (
     <section className={styles.learnPage}>
@@ -50,18 +54,57 @@ export const LearnPage: React.FC<LearnPageProps> = ({ textbooks, popularInsights
             </ViewAllLink>
           </div>
           <div className={styles.articleList}>
-            {relatedArticles.map((article) => (
-              <ArticleTeaserCard
-                key={article.id}
-                title={article.title}
-                excerpt={article.excerpt || article.lead || ''}
-                authorLabel={article.authorLabel || (lang === 'bg' ? 'от' : 'by')}
-                readText={t.read}
-                readHref={`/${lang}/insights/${article.id}`}
-                authorHref={article.authorExpertId ? `/${lang}/experts/${article.authorExpertId}` : undefined}
-                authorAvatarUrl={article.authorAvatarUrl}
-                className={styles.articleCard}
-              />
+            {featuredArticle && (
+              <article className={styles.featuredArticle}>
+                <Link href={`/${lang}/insights/${featuredArticle.id}`} className={styles.featuredArticleImage}>
+                  <Image
+                    src={featuredArticle.imageUrl}
+                    alt={featuredArticle.title}
+                    fill
+                    className={styles.articleImage}
+                    sizes="(max-width: 1023px) 100vw, 366px"
+                  />
+                </Link>
+                <div className={styles.featuredArticleBody}>
+                  <Link href={`/${lang}/insights/${featuredArticle.id}`} className={styles.articleTitleLink}>
+                    <h3>{featuredArticle.title}</h3>
+                  </Link>
+                  <p>{featuredArticle.excerpt || featuredArticle.lead || ''}</p>
+                  <div className={styles.featuredArticleAuthor}>
+                    <span>{featuredArticle.authorLabel || (lang === 'bg' ? 'от' : 'by')}</span>
+                    {featuredArticle.authorExpertId ? (
+                      <Link href={`/${lang}/experts/${featuredArticle.authorExpertId}`}>
+                        {featuredArticle.authorName}
+                      </Link>
+                    ) : (
+                      <strong>{featuredArticle.authorName}</strong>
+                    )}
+                  </div>
+                </div>
+              </article>
+            )}
+            {compactArticles.map((article) => (
+              <article className={styles.compactArticle} key={article.id}>
+                <div className={styles.compactArticleInner}>
+                  <Link href={`/${lang}/insights/${article.id}`} className={styles.articleTitleLink}>
+                    <h3>{article.title}</h3>
+                  </Link>
+                  <p>{article.excerpt || article.lead || ''}</p>
+                  <div className={styles.compactArticleFooter}>
+                    <div className={styles.articleAvatarGroup}>
+                      <span>{article.authorLabel || (lang === 'bg' ? 'от' : 'by')}</span>
+                      {article.authorAvatarUrl ? (
+                        <Link href={article.authorExpertId ? `/${lang}/experts/${article.authorExpertId}` : `/${lang}/insights/${article.id}`} className={styles.articleAvatar}>
+                          <Image src={article.authorAvatarUrl} alt={article.authorName || article.authorLabel || article.title} fill className={styles.articleImage} sizes="32px" />
+                        </Link>
+                      ) : (
+                        <span className={styles.articleAvatar} aria-hidden="true" />
+                      )}
+                    </div>
+                    <ReadButton text={t.read} href={`/${lang}/insights/${article.id}`} />
+                  </div>
+                </div>
+              </article>
             ))}
           </div>
         </div>

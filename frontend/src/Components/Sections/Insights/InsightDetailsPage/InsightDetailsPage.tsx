@@ -159,7 +159,7 @@ export const InsightDetailsPage: React.FC<InsightDetailsPageProps> = ({ insight,
                 <img className={styles.authorAvatar} src={insight.authorAvatarUrl} alt="" />
               )}
               <AuthorLink
-                name={insight.authorName || 'Andrew Nikolov'}
+                name={insight.authorName || (lang === 'bg' ? 'Автор' : 'Author')}
                 expertId={insight.authorExpertId}
                 lang={lang}
                 className={styles.authorName}

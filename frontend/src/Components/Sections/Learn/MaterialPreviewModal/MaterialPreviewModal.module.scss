@@ -42,6 +42,61 @@
   pointer-events: none;
 }
 
+.mockPage {
+  min-height: 560px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: white;
+}
+
+.mockHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  color: #69698b;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 487 / 238;
+  overflow: hidden;
+  background: #e0e0e0;
+}
+
+.coverImage {
+  object-fit: cover;
+}
+
+.mockContent {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  h3 {
+    margin: 0;
+    color: black;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.16;
+  }
+
+  p {
+    margin: 0;
+    max-width: 640px;
+    color: #535362;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.45;
+  }
+}
+
 .info {
   display: flex;
   flex-direction: column;
@@ -105,7 +160,8 @@
 
   .document,
   .pdfPage,
-  .frame {
+  .frame,
+  .mockPage {
     height: auto;
     min-height: 480px;
   }
@@ -126,9 +182,20 @@
 
   .document,
   .pdfPage,
-  .frame {
+  .frame,
+  .mockPage {
     height: auto;
     min-height: 420px;
+  }
+
+  .mockContent {
+    h3 {
+      font-size: 24px;
+    }
+
+    p {
+      font-size: 16px;
+    }
   }
 
   .info {
