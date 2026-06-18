@@ -1,8 +1,11 @@
-import React from 'react';
+'use client';
+
+import React, { KeyboardEvent, MouseEvent, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ButtonView } from '../../../Common/Buttons/ButtonView/ButtonView.tsx';
 import { TextbookItem } from '../../../../Types/textbook.ts';
+import { MaterialPreviewModal } from '../MaterialPreviewModal/MaterialPreviewModal.tsx';
 import styles from './MaterialCard.module.scss';
 
 interface MaterialCardProps {
@@ -40,48 +43,77 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({
   previewText,
   anchorId,
 }) => {
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const href = material.salesUrl || material.pdfUrl || `/${lang}/learn?material=${material.id || material.title}`;
   const classNames = [styles.card, styles[variant]].join(' ');
   const authorHref = material.authorExpertId ? `/${lang}/experts/${material.authorExpertId}` : undefined;
+  const openPreview = () => setIsPreviewOpen(true);
+  const closePreview = () => setIsPreviewOpen(false);
+  const stopCardClick = (event: MouseEvent<HTMLElement>) => event.stopPropagation();
+  const stopCardKeyDown = (event: KeyboardEvent<HTMLElement>) => event.stopPropagation();
+  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openPreview();
+    }
+  };
 
   return (
-    <article id={anchorId} className={classNames}>
-      <div className={styles.media}>
-        <Image src={material.imageUrl} alt={material.title} fill className={styles.image} sizes="(max-width: 767px) 50vw, 33vw" />
-        <div className={styles.badges}>
-          <span className={styles.badge}>
-            <FileIcon />
-            {material.badge || material.format || 'PDF'}
-          </span>
-          {material.hasPreview && (
+    <>
+      <article
+        id={anchorId}
+        className={classNames}
+        role="button"
+        tabIndex={0}
+        onClick={openPreview}
+        onKeyDown={handleKeyDown}
+        aria-label={`${previewText}: ${material.title}`}
+      >
+        <div className={styles.media}>
+          <Image src={material.imageUrl} alt={material.title} fill className={styles.image} sizes="(max-width: 767px) 50vw, 33vw" />
+          <div className={styles.badges}>
             <span className={styles.badge}>
-              <EyeIcon />
-              {previewText}
+              <FileIcon />
+              {material.badge || material.format || 'PDF'}
             </span>
-          )}
-        </div>
-      </div>
-
-      <div className={styles.body}>
-        <h2 className={styles.title}>{material.title}</h2>
-        <p className={styles.excerpt}>{material.excerpt}</p>
-        <div className={styles.meta}>
-          <div className={styles.authorRow}>
-            <span>{material.authorLabel}</span>
-            {authorHref ? (
-              <Link href={authorHref} className={styles.authorName}>
-                {material.authorName}
-              </Link>
-            ) : (
-              <span className={styles.authorName}>{material.authorName}</span>
+            {material.hasPreview && (
+              <span className={styles.badge}>
+                <EyeIcon />
+                {previewText}
+              </span>
             )}
           </div>
-          {material.price && <div className={styles.price}>{material.price}</div>}
         </div>
-        <div className={styles.buttonSlot}>
-          <ButtonView href={href} text={getText} variant="pill" />
+
+        <div className={styles.body}>
+          <h2 className={styles.title}>{material.title}</h2>
+          <p className={styles.excerpt}>{material.excerpt}</p>
+          <div className={styles.meta}>
+            <div className={styles.authorRow}>
+              <span>{material.authorLabel}</span>
+              {authorHref ? (
+                <Link href={authorHref} className={styles.authorName} onClick={stopCardClick} onKeyDown={stopCardKeyDown}>
+                  {material.authorName}
+                </Link>
+              ) : (
+                <span className={styles.authorName}>{material.authorName}</span>
+              )}
+            </div>
+            {material.price && <div className={styles.price}>{material.price}</div>}
+          </div>
+          <div className={styles.buttonSlot} onClick={stopCardClick} onKeyDown={stopCardKeyDown}>
+            <ButtonView href={href} text={getText} variant="pill" />
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
+      <MaterialPreviewModal
+        material={material}
+        isOpen={isPreviewOpen}
+        onClose={closePreview}
+        actionHref={href}
+        actionText={getText}
+        previewText={previewText}
+      />
+    </>
   );
 };

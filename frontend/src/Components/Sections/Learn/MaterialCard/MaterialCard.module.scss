@@ -10,6 +10,12 @@
   min-width: 0;
   font-family: $font-manrope;
   scroll-margin-top: clamp(72px, 8vw, 112px);
+  cursor: pointer;
+  outline: none;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba(15, 15, 255, 0.2);
+  }
 }
 
 .media {
