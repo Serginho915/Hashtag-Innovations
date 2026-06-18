@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef } from "react";
 import styles from "./LearningMaterials.module.scss";
 import Image from "next/image";
+import Link from "next/link";
 
 import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink.tsx';
 
@@ -40,14 +41,16 @@ export const LearningMaterials: React.FC<LearningMaterialsProps> = ({ materials,
       <div className={styles.boxContainer}>
         <div className={styles.materialsList} ref={listRef}>
           {materials.map((item) => (
-            <div key={item.id} className={styles.materialCard}>
-              <div className={styles.imageWrapper}>
+            <div key={item.id || item.title} className={styles.materialCard}>
+              <Link href={item.salesUrl || item.pdfUrl || `/${lang}/learn`} className={styles.imageWrapper}>
                 <Image src={item.imageUrl} alt={item.title} width={144} height={170} className={styles.coverImage} />
                 <div className={styles.pdfBadge}>PDF</div>
-              </div>
+              </Link>
               <div className={styles.cardContent}>
-                <div className={styles.cardTitle}>{item.title}</div>
-                <div className={styles.cardExcerpt}>{item.excerpt}</div>
+                <Link href={item.salesUrl || item.pdfUrl || `/${lang}/learn`} className={styles.materialTextLink}>
+                  <div className={styles.cardTitle}>{item.title}</div>
+                  <div className={styles.cardExcerpt}>{item.excerpt}</div>
+                </Link>
                 <div className={styles.authorRow}>
                   <div className={styles.authorLabel}>{item.authorLabel || 'Author:'}</div>
                   <AuthorLink name={item.authorName} expertId={item.authorExpertId} lang={lang} />
@@ -62,9 +65,9 @@ export const LearningMaterials: React.FC<LearningMaterialsProps> = ({ materials,
             <div className={styles.arrowUp} onClick={scrollUp}></div>
             <div className={styles.arrowDown} onClick={scrollDown}></div>
           </div>
-          <div className={styles.discoverButton}>
+          <Link href={`/${lang}/learn`} className={styles.discoverButton}>
             DISCOVER ALL
-          </div>
+          </Link>
         </div>
       </div>
     </div>

@@ -56,7 +56,6 @@ export const LatestNewsList: React.FC<LatestNewsListProps> = ({ news, lang }) =>
             title={item.title}
             excerpt={item.excerpt || ''}
             authorLabel={item.authorLabel || ''}
-            authorId={item.authorId || ''}
             authorAvatarUrl={item.authorAvatarUrl}
             authorExpertId={item.authorExpertId}
             lang={lang}

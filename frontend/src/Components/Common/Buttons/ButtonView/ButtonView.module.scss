@@ -13,6 +13,7 @@
   border: 2px solid #0F0FFF;
   color: white;
   cursor: pointer;
+  text-decoration: none;
   transition:
     width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
     background-color 0.35s ease,
@@ -36,6 +37,62 @@
   }
 }
 
+.compact {
+  .buttonText {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+
+  &:hover {
+    width: 92px;
+
+    .buttonText {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+.pill {
+  width: 100%;
+  height: 44px;
+  min-height: 44px;
+  padding-left: 12px;
+  justify-content: center;
+  background: #101828;
+  border-color: #101828;
+
+  .buttonText {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-right: 40px;
+    opacity: 1;
+    transform: none;
+  }
+
+  .arrowCircle {
+    width: 40px;
+    height: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &:hover {
+    width: 100%;
+    background: #0F0FFF;
+    border-color: #0F0FFF;
+
+    .buttonText {
+      opacity: 1;
+      transform: none;
+    }
+
+    .arrowCircle svg {
+      transform: translate(3px, -3px);
+    }
+  }
+}
+
 .buttonText {
   min-width: max-content;
   padding-right: 40px;
@@ -46,8 +103,6 @@
   font-weight: 500;
   line-height: 24px;
   word-wrap: break-word;
-  opacity: 0;
-  transform: translateX(12px);
   transition:
     opacity 0.25s ease,
     transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
@@ -72,5 +127,6 @@
 
   svg {
     display: block;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
 }

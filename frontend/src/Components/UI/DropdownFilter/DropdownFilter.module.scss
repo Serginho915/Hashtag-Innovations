@@ -71,8 +71,12 @@
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100%;
+  box-sizing: border-box;
+  width: max-content;
+  min-width: 100%;
+  max-width: min(320px, calc(100vw - 32px));
   margin: 0;
+  padding: 0;
   list-style: none;
   background: white;
   border-left: 1px solid #C0C0D2;
@@ -86,16 +90,19 @@
 }
 
 .optionItem {
+  box-sizing: border-box;
+  width: 100%;
   padding: 10px;
   display: inline-flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   gap: 10px;
   color: rgba(54, 54, 54, 0.50);
   font-size: 16px;
   font-family: $font-manrope;
   font-weight: 600;
-  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  white-space: normal;
   cursor: pointer;
   transition: color 0.2s ease;
 

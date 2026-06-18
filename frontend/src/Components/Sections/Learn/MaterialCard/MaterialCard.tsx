@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ButtonView } from '../../../Common/Buttons/ButtonView/ButtonView.tsx';
 import { TextbookItem } from '../../../../Types/textbook.ts';
 import styles from './MaterialCard.module.scss';
 
@@ -26,18 +27,6 @@ const EyeIcon = () => (
     <path
       d="M8 3.33c3.34 0 5.53 3.08 5.62 3.21l.31.46-.31.46C13.53 7.59 11.34 10.67 8 10.67S2.47 7.59 2.38 7.46L2.07 7l.31-.46C2.47 6.41 4.66 3.33 8 3.33Zm0 1.34C5.95 4.67 4.37 6.15 3.78 7 4.37 7.85 5.95 9.33 8 9.33S11.63 7.85 12.22 7C11.63 6.15 10.05 4.67 8 4.67Zm0 .66A1.67 1.67 0 1 1 8 8.67 1.67 1.67 0 0 1 8 5.33Z"
       fill="currentColor"
-    />
-  </svg>
-);
-
-const ArrowIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-    <path
-      d="M4.01 1.56h8.43v8.43M12.1 1.9 1.56 12.44"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
     />
   </svg>
 );
@@ -87,12 +76,9 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({
           </div>
           {material.price && <div className={styles.price}>{material.price}</div>}
         </div>
-        <Link href={href} className={styles.getButton}>
-          <span>{getText}</span>
-          <span className={styles.arrowCircle}>
-            <ArrowIcon />
-          </span>
-        </Link>
+        <div className={styles.buttonSlot}>
+          <ButtonView href={href} text={getText} variant="pill" />
+        </div>
       </div>
     </article>
   );

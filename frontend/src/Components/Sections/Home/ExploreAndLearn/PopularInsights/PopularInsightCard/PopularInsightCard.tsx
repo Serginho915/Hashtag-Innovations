@@ -43,7 +43,7 @@ export const PopularInsightCard = ({
             </div>
             <AuthorLink name={authorName} expertId={authorExpertId} lang={lang} />
           </div>
-          <ReadButton text={t.read} />
+          <ReadButton text={t.read} href={`/${lang}/insights/${id}`} />
         </div>
       </div>
     </div>

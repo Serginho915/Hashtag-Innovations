@@ -16,17 +16,13 @@ interface ExploreAndLearnProps {
 export const ExploreAndLearn = ({ lang, textbooks, popularInsights }: ExploreAndLearnProps) => {
   const t = translations[lang] || translations.en;
   
-  const formattedTextbooks = textbooks.map((item, idx) => ({
-    ...item,
-    id: `textbook-${idx + 1}`
-  })).sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  const formattedTextbooks = [...textbooks].sort((a, b) => (
+    new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime()
+  ));
 
-  const formattedBlogs = popularInsights.map((item: any, idx: number) => ({
-    ...item,
-    id: `blog-${idx + 1}`,
-    authorId: `author-${idx + 1}`,
-    authorName: item.authorName || "Andrey Nikolov"
-  })).sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  const formattedBlogs = [...popularInsights].sort((a, b) => (
+    new Date(b.date || '').getTime() - new Date(a.date || '').getTime()
+  ));
 
   return (
     <section className={styles.exploreSection}>

@@ -7,15 +7,14 @@ interface NewsCardProps {
   title: string;
   excerpt: string;
   authorLabel: string;
-  authorId?: string;
   authorAvatarUrl?: string;
   authorExpertId?: string;
   lang: string;
 }
 
-export const NewsCard = ({ id, title, excerpt, authorLabel, authorId, authorAvatarUrl, authorExpertId, lang }: NewsCardProps) => {
+export const NewsCard = ({ id, title, excerpt, authorLabel, authorAvatarUrl, authorExpertId, lang }: NewsCardProps) => {
   const t = translations[lang] || translations.en;
-  const articleUrl = `/${lang}/news/${id}`;
+  const articleUrl = `/${lang}/insights/${id}`;
 
   return (
     <ArticleTeaserCard

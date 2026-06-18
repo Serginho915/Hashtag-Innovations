@@ -3,7 +3,7 @@
 import React from "react";
 import styles from "./PopularInsights.module.scss";
 import { PopularInsightCard } from "./PopularInsightCard/PopularInsightCard.tsx";
-import Image from "next/image";
+import Link from "next/link";
 import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink.tsx';
 import { translations } from "./translations.ts";
 
@@ -53,12 +53,6 @@ export const PopularInsights: React.FC<PopularInsightsProps> = ({ news, lang }) 
     }, 1000);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSubscribe();
-    }
-  };
-
   return (
     <div className={styles.popularInsights}>
       <div className={styles.topSection}>
@@ -73,15 +67,15 @@ export const PopularInsights: React.FC<PopularInsightsProps> = ({ news, lang }) 
           {/* Featured Article */}
           {featuredArticle && (
             <div className={styles.featuredArticle}>
-              <div className={styles.featuredImageWrapper}>
+              <Link href={`/${lang}/insights/${featuredArticle.id}`} className={styles.featuredImageWrapper}>
                 {/* Fallback gray box matching the HTML */}
                 <div className={styles.featuredImageFallback}></div>
-              </div>
+              </Link>
               <div className={styles.featuredContent}>
-                <div className={styles.featuredTitleGroup}>
+                <Link href={`/${lang}/insights/${featuredArticle.id}`} className={styles.featuredTitleGroup}>
                   <div className={styles.featuredTitle}>{featuredArticle.title}</div>
                   <div className={styles.featuredExcerpt}>{featuredArticle.excerpt}</div>
-                </div>
+                </Link>
                 <div className={styles.featuredFooter}>
                   <div className={styles.featuredAuthorGroup}>
                     <div className={styles.featuredAuthorLabel}>{featuredArticle.authorLabel || t.by}</div>
