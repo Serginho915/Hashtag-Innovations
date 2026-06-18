@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { TextbookItem } from '../../../../Types/textbook.ts';
+import { getMaterialAnchorHref } from '../materialAnchors.ts';
 import styles from './TrendingMaterials.module.scss';
 
 interface TrendingMaterialsProps {
@@ -27,7 +28,7 @@ export const TrendingMaterials: React.FC<TrendingMaterialsProps> = ({ materials,
       <ol className={styles.list}>
         {visibleItems.map((material, index) => (
           <li className={styles.item} key={material.id || material.title}>
-            <Link href={material.salesUrl || material.pdfUrl || `/${lang}/learn`} className={styles.link}>
+            <Link href={getMaterialAnchorHref(material, lang)} className={styles.link}>
               <span className={styles.index}>{String(index + 1).padStart(2, '0')}/</span>
               <span className={styles.thumb}>
                 <Image src={material.imageUrl} alt="" fill className={styles.image} sizes="48px" />

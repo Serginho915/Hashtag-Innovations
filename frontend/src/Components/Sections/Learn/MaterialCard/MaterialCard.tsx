@@ -11,6 +11,7 @@ interface MaterialCardProps {
   variant?: 'featured' | 'compact';
   getText: string;
   previewText: string;
+  anchorId?: string;
 }
 
 const FileIcon = () => (
@@ -37,13 +38,14 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({
   variant = 'compact',
   getText,
   previewText,
+  anchorId,
 }) => {
   const href = material.salesUrl || material.pdfUrl || `/${lang}/learn?material=${material.id || material.title}`;
   const classNames = [styles.card, styles[variant]].join(' ');
   const authorHref = material.authorExpertId ? `/${lang}/experts/${material.authorExpertId}` : undefined;
 
   return (
-    <article className={classNames}>
+    <article id={anchorId} className={classNames}>
       <div className={styles.media}>
         <Image src={material.imageUrl} alt={material.title} fill className={styles.image} sizes="(max-width: 767px) 50vw, 33vw" />
         <div className={styles.badges}>

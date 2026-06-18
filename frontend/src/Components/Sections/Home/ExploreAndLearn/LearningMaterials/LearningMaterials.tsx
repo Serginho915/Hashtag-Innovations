@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { AuthorLink } from '../../../../UI/AuthorLink/AuthorLink.tsx';
+import { getMaterialAnchorHref } from '../../../Learn/materialAnchors.ts';
 
 import { TextbookItem } from "../../../../../Types/textbook.ts";
 
@@ -40,24 +41,28 @@ export const LearningMaterials: React.FC<LearningMaterialsProps> = ({ materials,
       
       <div className={styles.boxContainer}>
         <div className={styles.materialsList} ref={listRef}>
-          {materials.map((item) => (
-            <div key={item.id || item.title} className={styles.materialCard}>
-              <Link href={item.salesUrl || item.pdfUrl || `/${lang}/learn`} className={styles.imageWrapper}>
-                <Image src={item.imageUrl} alt={item.title} width={144} height={170} className={styles.coverImage} />
-                <div className={styles.pdfBadge}>PDF</div>
-              </Link>
-              <div className={styles.cardContent}>
-                <Link href={item.salesUrl || item.pdfUrl || `/${lang}/learn`} className={styles.materialTextLink}>
-                  <div className={styles.cardTitle}>{item.title}</div>
-                  <div className={styles.cardExcerpt}>{item.excerpt}</div>
+          {materials.map((item) => {
+            const materialHref = getMaterialAnchorHref(item, lang);
+
+            return (
+              <div key={item.id || item.title} className={styles.materialCard}>
+                <Link href={materialHref} className={styles.imageWrapper}>
+                  <Image src={item.imageUrl} alt={item.title} width={144} height={170} className={styles.coverImage} />
+                  <div className={styles.pdfBadge}>PDF</div>
                 </Link>
-                <div className={styles.authorRow}>
-                  <div className={styles.authorLabel}>{item.authorLabel || 'Author:'}</div>
-                  <AuthorLink name={item.authorName} expertId={item.authorExpertId} lang={lang} />
+                <div className={styles.cardContent}>
+                  <Link href={materialHref} className={styles.materialTextLink}>
+                    <div className={styles.cardTitle}>{item.title}</div>
+                    <div className={styles.cardExcerpt}>{item.excerpt}</div>
+                  </Link>
+                  <div className={styles.authorRow}>
+                    <div className={styles.authorLabel}>{item.authorLabel || 'Author:'}</div>
+                    <AuthorLink name={item.authorName} expertId={item.authorExpertId} lang={lang} />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         
         <div className={styles.boxFooter}>

@@ -9,6 +9,7 @@
   gap: 16px;
   min-width: 0;
   font-family: $font-manrope;
+  scroll-margin-top: clamp(72px, 8vw, 112px);
 }
 
 .media {

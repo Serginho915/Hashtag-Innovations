@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { DropdownFilter } from '../../../UI/DropdownFilter/DropdownFilter.tsx';
 import type { DropdownOption } from '../../../UI/DropdownFilter/DropdownFilter.tsx';
 import type { TextbookItem } from '../../../../Types/textbook.ts';
 import { MaterialCard } from '../MaterialCard/MaterialCard.tsx';
 import { TrendingMaterials } from '../TrendingMaterials/TrendingMaterials.tsx';
 import type { LearnTranslations } from '../translations.ts';
+import { getMaterialAnchorId } from '../materialAnchors.ts';
 import styles from '../LearnPage.module.scss';
 
 interface LearnCatalogProps {
@@ -76,6 +77,31 @@ export const LearnCatalog: React.FC<LearnCatalogProps> = ({ materials, lang, t }
 
   const resetVisibleCount = () => setVisibleCount(8);
 
+  useEffect(() => {
+    const hash = decodeURIComponent(window.location.hash.replace('#', ''));
+
+    if (!hash) {
+      return;
+    }
+
+    const targetIndex = filteredMaterials.findIndex((material) => getMaterialAnchorId(material) === hash);
+
+    if (targetIndex < 0) {
+      return;
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      if (targetIndex >= visibleCount) {
+        setVisibleCount(targetIndex + 1);
+        return;
+      }
+
+      document.getElementById(hash)?.scrollIntoView({ block: 'start' });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [filteredMaterials, visibleCount]);
+
   return (
     <>
       <div className={styles.filtersRow}>
@@ -126,6 +152,7 @@ export const LearnCatalog: React.FC<LearnCatalogProps> = ({ materials, lang, t }
                 variant="featured"
                 getText={t.get}
                 previewText={t.preview}
+                anchorId={getMaterialAnchorId(material)}
               />
             ))}
           </div>
@@ -141,6 +168,7 @@ export const LearnCatalog: React.FC<LearnCatalogProps> = ({ materials, lang, t }
                 lang={lang}
                 getText={t.get}
                 previewText={t.preview}
+                anchorId={getMaterialAnchorId(material)}
               />
             ))}
           </section>
