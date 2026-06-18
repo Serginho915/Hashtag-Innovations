@@ -5,11 +5,12 @@ import styles from './ButtonView.module.scss';
 interface ButtonViewProps {
   className?: string;
   href?: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   text?: string;
   variant?: 'compact' | 'pill';
 }
 
-export const ButtonView: React.FC<ButtonViewProps> = ({ className, href, text = 'View', variant = 'compact' }) => {
+export const ButtonView: React.FC<ButtonViewProps> = ({ className, href, onClick, text = 'View', variant = 'compact' }) => {
   const classNames = [styles.buttonView, styles[variant], className].filter(Boolean).join(' ');
   const content = (
     <>
@@ -27,6 +28,14 @@ export const ButtonView: React.FC<ButtonViewProps> = ({ className, href, text = 
       <Link href={href} className={classNames}>
         {content}
       </Link>
+    );
+  }
+
+  if (onClick) {
+    return (
+      <button type="button" className={classNames} onClick={onClick}>
+        {content}
+      </button>
     );
   }
 

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ButtonView } from '../../../Common/Buttons/ButtonView/ButtonView.tsx';
 import { TextbookItem } from '../../../../Types/textbook.ts';
 import { MaterialPreviewModal } from '../MaterialPreviewModal/MaterialPreviewModal.tsx';
+import { MaterialPurchaseModal } from '../MaterialPurchaseModal/MaterialPurchaseModal.tsx';
 import styles from './MaterialCard.module.scss';
 
 interface MaterialCardProps {
@@ -44,13 +45,32 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({
   anchorId,
 }) => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
+  const [purchaseInitialStep, setPurchaseInitialStep] = useState<'overview' | 'checkout'>('overview');
   const href = material.salesUrl || material.pdfUrl || `/${lang}/learn?material=${material.id || material.title}`;
   const classNames = [styles.card, styles[variant]].join(' ');
   const authorHref = material.authorExpertId ? `/${lang}/experts/${material.authorExpertId}` : undefined;
   const openPreview = () => setIsPreviewOpen(true);
   const closePreview = () => setIsPreviewOpen(false);
+  const closePurchase = () => setIsPurchaseOpen(false);
+  const openPurchaseModal = (initialStep: 'overview' | 'checkout' = 'overview') => {
+    setPurchaseInitialStep(initialStep);
+    setIsPurchaseOpen(true);
+  };
+  const openPurchaseFromPreview = () => {
+    setIsPreviewOpen(false);
+    openPurchaseModal('overview');
+  };
+  const openPreviewFromPurchase = () => {
+    setIsPurchaseOpen(false);
+    setIsPreviewOpen(true);
+  };
   const stopCardClick = (event: MouseEvent<HTMLElement>) => event.stopPropagation();
   const stopCardKeyDown = (event: KeyboardEvent<HTMLElement>) => event.stopPropagation();
+  const openPurchase = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    openPurchaseModal('overview');
+  };
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -102,7 +122,7 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({
             {material.price && <div className={styles.price}>{material.price}</div>}
           </div>
           <div className={styles.buttonSlot} onClick={stopCardClick} onKeyDown={stopCardKeyDown}>
-            <ButtonView href={href} text={getText} variant="pill" />
+            <ButtonView onClick={openPurchase} text={getText} variant="pill" />
           </div>
         </div>
       </article>
@@ -110,9 +130,19 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({
         material={material}
         isOpen={isPreviewOpen}
         onClose={closePreview}
-        actionHref={href}
+        onAction={openPurchaseFromPreview}
         actionText={getText}
         previewText={previewText}
+      />
+      <MaterialPurchaseModal
+        key={`${material.id || material.title}-${purchaseInitialStep}-${isPurchaseOpen ? 'open' : 'closed'}`}
+        material={material}
+        isOpen={isPurchaseOpen}
+        onClose={closePurchase}
+        onPreview={openPreviewFromPurchase}
+        paymentHref={href}
+        lang={lang}
+        initialStep={purchaseInitialStep}
       />
     </>
   );

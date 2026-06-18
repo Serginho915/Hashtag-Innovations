@@ -9,7 +9,7 @@ interface MaterialPreviewModalProps {
   material: TextbookItem;
   isOpen: boolean;
   onClose: () => void;
-  actionHref: string;
+  onAction: () => void;
   actionText: string;
   previewText: string;
 }
@@ -20,7 +20,7 @@ export const MaterialPreviewModal: React.FC<MaterialPreviewModalProps> = ({
   material,
   isOpen,
   onClose,
-  actionHref,
+  onAction,
   actionText,
   previewText,
 }) => {
@@ -73,7 +73,7 @@ export const MaterialPreviewModal: React.FC<MaterialPreviewModalProps> = ({
             <strong>{material.authorName}</strong>
           </div>
           {material.price && <div className={styles.price}>{material.price}</div>}
-          <ButtonView href={actionHref} text={actionText} variant="pill" />
+          <ButtonView onClick={onAction} text={actionText} variant="pill" />
         </aside>
       </div>
     </Modal>

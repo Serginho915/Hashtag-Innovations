@@ -927,7 +927,7 @@
     padding: 8px 0;
   }
 
-  @include mobile {
+  @media (max-width: 600px) {
     flex-direction: column;
     overflow-x: visible;
     scroll-snap-type: none;

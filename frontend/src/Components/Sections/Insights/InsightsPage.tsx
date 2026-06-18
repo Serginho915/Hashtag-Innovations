@@ -15,14 +15,16 @@ interface InsightsPageProps {
   lang: string;
 }
 
-const categoryIds = ['business', 'ai', 'innovations', 'technology', 'events', 'ecology', 'education'] as const;
+const categoryIds = ['all', 'business', 'ai', 'innovations', 'technology', 'events', 'ecology', 'education'] as const;
 
 type CategoryId = typeof categoryIds[number];
+type FilterableCategoryId = Exclude<CategoryId, 'all'>;
 
 const translations = {
   en: {
     title: 'Insights',
     categories: {
+      all: 'All',
       business: 'Business',
       ai: 'Artificial Intelligence',
       innovations: 'Innovations',
@@ -40,10 +42,13 @@ const translations = {
     emailPlaceholder: 'Enter your email',
     subscribe: 'Subscribe',
     read: 'Read',
+    emptyTitle: 'No materials at the moment',
+    emptyText: 'There are no insights in this category yet. Please check another topic or come back later.',
   },
   bg: {
     title: 'Инсайти',
     categories: {
+      all: 'Всички',
       business: 'Бизнес',
       ai: 'Изкуствен интелект',
       innovations: 'Иновации',
@@ -61,10 +66,12 @@ const translations = {
     emailPlaceholder: 'Въведете вашия email',
     subscribe: 'Абонирай се',
     read: 'Прочети',
+    emptyTitle: 'В момента няма материали',
+    emptyText: 'Все още няма инсайти в тази категория. Изберете друга тема или проверете по-късно.',
   },
 };
 
-const categoryMatchers: Record<CategoryId, string[]> = {
+const categoryMatchers: Record<FilterableCategoryId, string[]> = {
   business: ['business', 'strategy'],
   ai: ['ai', 'artificial intelligence', 'изкуствен интелект', 'искуствен интелект'],
   innovations: ['innovation', 'innovations', 'инновации', 'strategy'],
@@ -77,6 +84,10 @@ const categoryMatchers: Record<CategoryId, string[]> = {
 const normalizeFilterValue = (value: string) => value.toLowerCase().trim();
 
 const articleMatchesCategory = (article: NewsItem, category: CategoryId) => {
+  if (category === 'all') {
+    return true;
+  }
+
   const matchers = categoryMatchers[category];
   const searchableValues = [
     article.category,
@@ -89,11 +100,12 @@ const articleMatchesCategory = (article: NewsItem, category: CategoryId) => {
 
 export const InsightsPage: React.FC<InsightsPageProps> = ({ insights, relatedEvents, lang }) => {
   const t = translations[lang as keyof typeof translations] || translations.en;
-  const [activeCategory, setActiveCategory] = useState<CategoryId>('business');
+  const [activeCategory, setActiveCategory] = useState<CategoryId>('all');
   const filteredInsights = useMemo(
     () => insights.filter((article) => articleMatchesCategory(article, activeCategory)),
     [activeCategory, insights]
   );
+  const hasFilteredInsights = filteredInsights.length > 0;
   const [featured, side, ...rest] = filteredInsights;
   const gridArticles = rest.slice(0, 3);
   const hasMoreArticles = rest.length > gridArticles.length;
@@ -137,32 +149,47 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ insights, relatedEve
       </header>
 
       <div className={styles.contentStack}>
-        <section className={styles.featuredRow}>
-          {featured && <InsightCard article={featured} lang={lang} variant="featured" />}
-          {side && <InsightCard article={side} lang={lang} variant="side" />}
-        </section>
+        {hasFilteredInsights ? (
+          <>
+            <section className={styles.featuredRow}>
+              {featured && <InsightCard article={featured} lang={lang} variant="featured" />}
+              {side && <InsightCard article={side} lang={lang} variant="side" />}
+            </section>
 
-        <section className={styles.middleRow}>
-          <div className={styles.articlesColumn}>
-            <ul className={styles.gridArticles}>
-              {gridArticles.map((article) => (
-                <li key={article.id}>
-                  <InsightCard article={article} lang={lang} />
-                </li>
-              ))}
-            </ul>
-            {hasMoreArticles && (
-              <button className={styles.showMoreButton} type="button">
-                <span>{t.showMore}</span>
-                <span className={styles.chevron} aria-hidden="true" />
-              </button>
-            )}
-          </div>
-          <aside className={styles.banner} aria-label="banner">
-            <span>banner</span>
-            <span className={styles.bannerIcon} aria-hidden="true" />
-          </aside>
-        </section>
+            <section className={styles.middleRow}>
+              <div className={styles.articlesColumn}>
+                <ul className={styles.gridArticles}>
+                  {gridArticles.map((article) => (
+                    <li key={article.id}>
+                      <InsightCard article={article} lang={lang} />
+                    </li>
+                  ))}
+                </ul>
+                {hasMoreArticles && (
+                  <button className={styles.showMoreButton} type="button">
+                    <span>{t.showMore}</span>
+                    <span className={styles.chevron} aria-hidden="true" />
+                  </button>
+                )}
+              </div>
+              <aside className={styles.banner} aria-label="banner">
+                <span>banner</span>
+                <span className={styles.bannerIcon} aria-hidden="true" />
+              </aside>
+            </section>
+          </>
+        ) : (
+          <section className={styles.emptyRow}>
+            <div className={styles.emptyState} role="status">
+              <h2>{t.emptyTitle}</h2>
+              <p>{t.emptyText}</p>
+            </div>
+            <aside className={styles.banner} aria-label="banner">
+              <span>banner</span>
+              <span className={styles.bannerIcon} aria-hidden="true" />
+            </aside>
+          </section>
+        )}
       </div>
 
       <section className={styles.bottomGrid}>

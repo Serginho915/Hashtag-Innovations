@@ -181,8 +181,13 @@
 }
 
 .grid {
-  width: 278px;
+  width: 100%;
+  align-self: stretch;
   position: relative;
+
+  .imageLink {
+    width: 100%;
+  }
 
   .imageWrap {
     height: 178px;

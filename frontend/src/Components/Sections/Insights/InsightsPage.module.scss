@@ -191,6 +191,61 @@
   }
 }
 
+.emptyRow {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+
+  @include laptop {
+    gap: 20px;
+  }
+
+  @include laptop-sm {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  @include tablet {
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+.emptyState {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: clamp(220px, 30vw, 425px);
+  padding: 32px 0;
+  border-bottom: 1px solid #C0C0D2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+
+  h2,
+  p {
+    margin: 0;
+    font-family: $font-manrope;
+  }
+
+  h2 {
+    color: #000;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 30px;
+  }
+
+  p {
+    max-width: 520px;
+    color: #5C5C70;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 22px;
+  }
+}
+
 .articlesColumn {
   flex: 1 1 0;
   display: flex;
@@ -290,7 +345,7 @@
 .bottomGrid {
   display: grid;
   grid-template-columns: minmax(0, 720px) minmax(328px, 1fr);
-  align-items: start;
+  align-items: stretch;
   gap: 44px;
 
   @include laptop {
@@ -311,6 +366,7 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+  justify-content: space-between;
   overflow: hidden;
 }
 
@@ -338,6 +394,7 @@
 }
 
 .popularList {
+  max-height: clamp(420px, 70vh, 860px);
   margin: 0;
   padding: 24px 12px;
   display: flex;
@@ -345,7 +402,18 @@
   gap: 24px;
   list-style: none;
   background: #F8F8F8;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #C0C0D2 transparent;
+
+  @include tablet {
+    max-height: clamp(360px, 68vh, 720px);
+  }
+
+  @include mobile {
+    max-height: clamp(320px, 66vh, 640px);
+  }
 }
 
 .newsletter {

@@ -9,9 +9,10 @@ export interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
   className?: string;
+  closeButtonClassName?: string;
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, className = '' }) => {
+export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, className = '', closeButtonClassName = '' }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, classNa
   return createPortal(
     <div className={styles.backdrop} onClick={handleBackdropClick}>
       <div className={`${styles.modalContent} ${className}`} ref={modalRef}>
-        <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
+        <button className={`${styles.closeBtn} ${closeButtonClassName}`} onClick={onClose} aria-label="Close">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
