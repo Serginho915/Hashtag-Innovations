@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LanguageSelector } from "./LanguageSelector.tsx";
 import styles from "./Header.module.scss";
 import { HeaderNav } from "./HeaderNav.tsx";
@@ -12,6 +12,7 @@ import Link from "next/link";
 
 export const RightSection = () => {
   const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
+  const rightSectionRef = useRef<HTMLDivElement>(null);
   const { language } = useLanguage();
   const { isHeroTabsVisible } = useNavigation();
   const pathname = usePathname() || '';
@@ -22,6 +23,32 @@ export const RightSection = () => {
   const toggleBurgerMenu = () => {
     setBurgerMenuOpen(!burgerMenuOpen);
   };
+
+  useEffect(() => {
+    if (!burgerMenuOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!rightSectionRef.current?.contains(event.target as Node)) {
+        setBurgerMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setBurgerMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [burgerMenuOpen]);
 
   const t = translations[language] || translations.en;
   
@@ -34,7 +61,7 @@ export const RightSection = () => {
   ];
 
   return (
-    <div className={styles.rightSection}>
+    <div className={styles.rightSection} ref={rightSectionRef}>
       <div className={styles.desktopContent}>
         {(isHeroTabsVisible && isHomePage) ? (
           <div className={styles.slogan}>
@@ -46,7 +73,12 @@ export const RightSection = () => {
         <LanguageSelector />
       </div>
 
-      <button className={styles.burgerButton} onClick={toggleBurgerMenu}>
+      <button
+        className={styles.burgerButton}
+        onClick={toggleBurgerMenu}
+        aria-expanded={burgerMenuOpen}
+        aria-label="Toggle navigation menu"
+      >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           {burgerMenuOpen ? (
             <>

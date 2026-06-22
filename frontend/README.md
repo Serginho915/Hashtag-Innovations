@@ -1,36 +1,136 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hashtag Innovations Frontend
+
+Frontend application for the Hashtag Innovations platform. The project is built with Next.js App Router, React, TypeScript, SCSS modules, and a lightweight custom localization layer for Bulgarian and English routes.
+
+## Tech Stack
+
+- **Next.js 16** with App Router
+- **React 19**
+- **TypeScript**
+- **SCSS modules** for component-level styling
+- **Motion** for UI animation primitives
+- **ESLint 9** with Next.js config
+
+## Features
+
+- Localized routes under `/bg` and `/en`
+- Shared layout with sticky header and footer
+- Home page sections for hero content, community events, experts, learning materials, and insights
+- Catalog/detail pages for events, experts, learn, projects, and insights
+- Mock data layer for local development
+- Responsive components for desktop and mobile navigation
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open the app:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The localized entry points are:
 
-## Learn More
+```text
+http://localhost:3000/bg
+http://localhost:3000/en
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Starts the local development server.
 
-## Deploy on Vercel
+```bash
+npm run build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Creates a production build.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run start
+```
+
+Runs the production server after a successful build.
+
+```bash
+npm run lint
+```
+
+Runs ESLint checks.
+
+## Project Structure
+
+```text
+src/
+  app/
+    [lang]/                 Localized App Router pages
+  Components/
+    Common/                 Header, footer, buttons, shared layout pieces
+    Sections/               Page-level feature sections
+    UI/                     Reusable UI primitives
+  Context/                  Language and navigation providers
+  Hooks/                    Shared React hooks
+  Lib/                      i18n and validation helpers
+  mockData/                 Local demo data
+  Styles/                   Global styles, variables, mixins
+  Types/                    Shared TypeScript types
+public/
+  images/                   Static images and SVG assets
+```
+
+## Localization
+
+The app supports English and Bulgarian through the `LanguageProvider` and localized routes.
+
+- Language type: `src/Types/Language.ts`
+- Context: `src/Context/LanguageContext.tsx`
+- Hook: `src/Hooks/useLanguage.ts`
+- Route format: `/en/...` or `/bg/...`
+
+Most feature sections keep their copy in colocated `translations.ts` files. When adding new text, prefer the existing local translation file for that section.
+
+## Styling Guidelines
+
+- Use SCSS modules next to the component they style.
+- Keep shared tokens in `src/Styles/variables.scss`.
+- Use existing responsive mixins from `src/Styles/mixins.scss`.
+- Prefer semantic HTML controls for interactive UI.
+- Keep mobile and desktop states visually consistent.
+
+## Development Notes
+
+- Static images live in `public/images`.
+- Mock entities live in `src/mockData` and are typed through `src/Types`.
+- Component imports currently use a mix of aliases and relative paths; follow the surrounding file style when editing.
+- The header language switcher updates the URL locale segment and keeps `document.documentElement.lang` in sync.
+
+## Production
+
+Create and run a production build:
+
+```bash
+npm run build
+npm run start
+```
+
+Before deploying, run:
+
+```bash
+npm run lint
+npm run build
+```
