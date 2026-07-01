@@ -1,13 +1,27 @@
 services:
+  backend:
+    build:
+      context: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+
   frontend:
     build:
       context: .
       dockerfile: Dockerfile
       target: dev
     command: npm run dev -- --hostname 0.0.0.0
+    depends_on:
+      - backend
     environment:
       NEXT_TELEMETRY_DISABLED: "1"
       WATCHPACK_POLLING: "true"
+      NEXT_PUBLIC_API_URL: "http://localhost:8000"
     ports:
       - "3000:3000"
     volumes:
