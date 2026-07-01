@@ -1,0 +1,10 @@
+.git
+backend
+frontend/.next
+frontend/node_modules
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.env*.local
+Dockerfile
+docker-compose*.yml
