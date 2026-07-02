@@ -424,6 +424,54 @@ const formatValue = (value: FieldValue | undefined) => {
   return String(value);
 };
 
+const EditIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 20 20" focusable="false">
+    <path
+      d="M8.6 4H4.8A1.8 1.8 0 0 0 3 5.8v9.4A1.8 1.8 0 0 0 4.8 17h9.4a1.8 1.8 0 0 0 1.8-1.8v-3.8"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.7"
+    />
+    <path
+      d="M14.5 2.8a1.5 1.5 0 0 1 2.1 2.1l-7.1 7.1-2.9.8.8-2.9 7.1-7.1Z"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.7"
+    />
+    <path
+      d="m13.4 3.9 2.7 2.7"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeWidth="1.8"
+    />
+  </svg>
+);
+
+const DeleteIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 20 20" focusable="false">
+    <path
+      d="M7.2 4.2h5.6l.5 1.5h2.4v2H4.3v-2h2.4l.5-1.5Z"
+      fill="currentColor"
+    />
+    <path
+      d="M5.8 8.7h8.4l-.7 7.2a1.5 1.5 0 0 1-1.5 1.3H8a1.5 1.5 0 0 1-1.5-1.3l-.7-7.2Z"
+      fill="currentColor"
+    />
+    <path
+      d="M8.6 10.5v4.4M11.4 10.5v4.4"
+      fill="none"
+      stroke="#fff"
+      strokeLinecap="round"
+      strokeWidth="1.2"
+    />
+  </svg>
+);
+
 export const AdminPanel = () => {
   const [activeKey, setActiveKey] = useState(resources[0].key);
   const [query, setQuery] = useState("");
@@ -452,11 +500,6 @@ export const AdminPanel = () => {
       ),
     );
   }, [activeRecords, query]);
-
-  const totalRecords = Object.values(recordsByResource).reduce(
-    (total, records) => total + records.length,
-    0,
-  );
 
   const openCreate = () => {
     setEditingMode("create");
@@ -508,28 +551,26 @@ export const AdminPanel = () => {
     closeEditor();
   };
 
-  const duplicateRecord = (record: AdminRecord) => {
-    const copy = {
-      ...record,
-      id: `${activeResource.key}-${Date.now()}`,
-      title: record.title ? `${record.title} copy` : record.title,
-      name: record.name ? `${record.name} copy` : record.name,
-      slug: record.slug ? `${record.slug}-copy` : record.slug,
-    };
-
-    setRecordsByResource((current) => ({
-      ...current,
-      [activeResource.key]: [copy, ...(current[activeResource.key] ?? [])],
-    }));
-  };
-
   const deleteRecord = (recordId: string) => {
+    const isConfirmed = window.confirm("Are you sure you want to delete this record?");
+
+    if (!isConfirmed) {
+      return;
+    }
+
     setRecordsByResource((current) => ({
       ...current,
       [activeResource.key]: (current[activeResource.key] ?? []).filter(
         (record) => record.id !== recordId,
       ),
     }));
+  };
+
+  const logout = async () => {
+    await fetch("/api/admin/logout", {
+      method: "POST",
+    });
+    window.location.assign("/admin/login");
   };
 
   return (
@@ -540,18 +581,14 @@ export const AdminPanel = () => {
           <span>innovations</span>
         </Link>
         <div className={styles.topbarMeta}>
-          <span>Content admin</span>
-          <strong>{totalRecords}</strong>
+          <button className={styles.logoutButton} type="button" onClick={logout}>
+            Logout
+          </button>
         </div>
       </header>
 
       <main className={styles.workspace}>
         <aside className={styles.sidebar} aria-label="Admin resources">
-          <div className={styles.sidebarHeader}>
-            <p>Objects</p>
-            <span>{resources.length}</span>
-          </div>
-
           <nav className={styles.resourceNav}>
             {resources.map((resource) => {
               const isActive = resource.key === activeResource.key;
@@ -581,7 +618,6 @@ export const AdminPanel = () => {
         <section className={styles.contentArea}>
           <div className={styles.titleLine}>
             <div>
-              <span className={styles.eyebrow}>{activeResource.singular}</span>
               <h1>{activeResource.label}</h1>
             </div>
             <button className={styles.primaryButton} type="button" onClick={openCreate}>
@@ -648,18 +684,17 @@ export const AdminPanel = () => {
                     ))}
                     <td>
                       <div className={styles.tableActions}>
-                        <button type="button" onClick={() => openEdit(record)}>
-                          Edit
-                        </button>
-                        <button type="button" onClick={() => duplicateRecord(record)}>
-                          Copy
+                        <button type="button" onClick={() => openEdit(record)} aria-label="Edit record" title="Edit">
+                          <EditIcon />
                         </button>
                         <button
-                          className={styles.dangerButton}
+                          className={`${styles.dangerButton} ${styles.deleteActionButton}`}
                           type="button"
                           onClick={() => deleteRecord(record.id)}
+                          aria-label="Delete record"
+                          title="Delete"
                         >
-                          Delete
+                          <DeleteIcon />
                         </button>
                       </div>
                     </td>

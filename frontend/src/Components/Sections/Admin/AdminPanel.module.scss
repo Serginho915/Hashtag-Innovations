@@ -70,6 +70,23 @@
   }
 }
 
+.logoutButton {
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid #c0c0d2;
+  border-radius: 8px;
+  background: #fff;
+  color: #000;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #000;
+  }
+}
+
 .workspace {
   width: 100%;
   max-width: 1440px;
@@ -226,12 +243,26 @@
 }
 
 .titleLine {
+  position: relative;
   min-height: 74px;
-  border-bottom: 2px solid #000;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
+
+  > div:first-child {
+    margin-right: auto;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -5px;
+    left: 0;
+    height: 2px;
+    background: #000;
+  }
 
   h1 {
     margin: 0;
@@ -404,24 +435,39 @@
   gap: 8px;
 
   button {
-    min-height: 32px;
-    padding: 7px 10px;
+    width: 34px;
+    height: 34px;
+    padding: 0;
     border: 1px solid #c0c0d2;
     border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: #fff;
     color: #000;
-    font-size: 12px;
-    font-weight: 800;
     cursor: pointer;
 
     &:hover {
       border-color: #000;
+    }
+
+    svg {
+      width: 17px;
+      height: 17px;
+      display: block;
     }
   }
 }
 
 .dangerButton {
   color: #d62612 !important;
+}
+
+.deleteActionButton {
+  svg {
+    width: 19px !important;
+    height: 19px !important;
+  }
 }
 
 .primaryButton,
