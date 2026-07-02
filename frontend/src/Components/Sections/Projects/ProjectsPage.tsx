@@ -42,7 +42,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ projects, lang }) =>
 
       <div className={styles.projectsGrid}>
         {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} showAllText={t.showAll} />
+          <ProjectCard key={project.id} project={project} showAllText={t.showAll} lang={lang} />
         ))}
       </div>
     </section>

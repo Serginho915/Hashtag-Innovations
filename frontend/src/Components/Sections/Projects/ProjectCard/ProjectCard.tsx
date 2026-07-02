@@ -6,15 +6,16 @@ import styles from './ProjectCard.module.scss';
 interface ProjectCardProps {
   project: ProjectItem;
   showAllText: string;
+  lang: string;
 }
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ project, showAllText }) => {
-  const projectHref = project.href || `#${project.id}`;
+export const ProjectCard: React.FC<ProjectCardProps> = ({ project, showAllText, lang }) => {
+  const projectHref = `/${lang}/projects/${project.id}`;
 
   return (
     <article className={styles.projectCard} id={project.id}>
       <div className={styles.cardMain}>
-        <a href={projectHref} className={styles.imageWrap} aria-label={project.title} target="_blank" rel="noopener noreferrer">
+        <a href={projectHref} className={styles.imageWrap} aria-label={project.title}>
           <Image
             src={project.imageUrl}
             alt={project.title}
@@ -24,11 +25,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, showAllText }
           />
         </a>
         <div className={styles.content}>
-          <a href={projectHref} className={styles.titleLink} target="_blank" rel="noopener noreferrer">
+          <a href={projectHref} className={styles.titleLink}>
             <h2>{project.title}</h2>
           </a>
           <p>{project.description}</p>
-          <a href={projectHref} className={styles.showAll} target="_blank" rel="noopener noreferrer">
+          <a href={projectHref} className={styles.showAll}>
             <span>{showAllText}</span>
           </a>
         </div>

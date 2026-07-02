@@ -37,7 +37,6 @@ class Category(TimeStampedModel):
         blank=True,
         help_text="Leave empty if the category can be reused across content types.",
     )
-    description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
 
     class Meta:
@@ -57,7 +56,6 @@ class Tag(TimeStampedModel):
         blank=True,
         help_text="Leave empty if the tag can be reused across content types.",
     )
-    show_dot = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
     class Meta:
@@ -315,7 +313,6 @@ class Project(TimeStampedModel):
     code = models.CharField(max_length=80, blank=True)
     project_date = models.DateField(blank=True, null=True)
     image = models.ImageField(upload_to="projects/images/", blank=True)
-    external_url = models.URLField(blank=True)
     status = models.CharField(
         max_length=16,
         choices=PublishStatus.choices,

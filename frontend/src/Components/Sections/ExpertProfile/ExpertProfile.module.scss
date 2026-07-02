@@ -71,7 +71,7 @@
 .headerTopRow {
   display: flex;
   align-items: flex-end;
-  gap: 288px;
+  gap: clamp(32px, 10vw, 160px);
   width: 100%;
 
   @include laptop {
@@ -99,7 +99,13 @@
   flex-direction: column;
   gap: 6px;
   width: 100%;
-  max-width: 366px;
+  max-width: 560px;
+  flex: 1 1 560px;
+
+  @include laptop-sm {
+    max-width: 100%;
+    flex: 0 1 auto;
+  }
 
   @include mobile {
     max-width: 100%;
@@ -123,11 +129,11 @@
   display: flex;
   align-items: center;
   gap: 4px;
+  width: 100%;
   font-family: $font-manrope;
   font-size: 24px;
   font-weight: 500;
   color: black;
-  flex-wrap: wrap;
 
   @include mobile {
     font-size: 16px;
@@ -140,9 +146,16 @@
   gap: 19px;
   width: 100%;
   max-width: 381px;
+  flex: 0 0 381px;
+
+  @include laptop-sm {
+    max-width: 100%;
+    flex: 1 1 auto;
+  }
 
   @include mobile {
     max-width: 100%;
+    flex: 1 1 auto;
   }
 }
 

@@ -562,8 +562,8 @@
 }
 
 .editorHeader {
+  position: relative;
   min-height: 58px;
-  border-bottom: 2px solid #000;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -646,6 +646,35 @@
     min-height: 18px;
     padding: 0;
     accent-color: #000;
+  }
+}
+
+.fileField {
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid #c0c0d2;
+  border-radius: 8px;
+  display: flex !important;
+  flex-direction: column;
+  gap: 8px;
+  background: #fff;
+  color: #000 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+
+  input {
+    min-height: auto !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    font: inherit;
+  }
+
+  > span {
+    color: #69698b;
+    font-size: 12px;
+    font-weight: 800;
   }
 }
 

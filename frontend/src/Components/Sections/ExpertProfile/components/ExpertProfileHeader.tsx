@@ -10,6 +10,8 @@ interface Props {
 }
 
 export const ExpertProfileHeader: React.FC<Props> = ({ expert, t }) => {
+  const roleWithCompany = [expert.role, expert.company].filter(Boolean).join("\u00A0");
+
   return (
     <div className={styles.headerBlock}>
       <div className={styles.imageWrapper}>
@@ -20,8 +22,7 @@ export const ExpertProfileHeader: React.FC<Props> = ({ expert, t }) => {
           <div className={styles.titleGroup}>
             <h1 className={styles.expertName}>{expert.name}</h1>
             <div className={styles.expertRole}>
-              <span className={styles.roleText}>{expert.role}</span>
-              <span className={styles.companyText}>{expert.company}</span>
+              {roleWithCompany}
             </div>
           </div>
           <div className={styles.quoteBlock}>

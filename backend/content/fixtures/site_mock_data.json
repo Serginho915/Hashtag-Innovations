@@ -1,0 +1,2158 @@
+{
+  "news": {
+    "en": [
+      {
+        "id": "news-en-1",
+        "title": "Unlocking the Future: How AI Is Changing Our World",
+        "category": "Artificial Intelligence",
+        "date": "2025-02-24T10:00:00Z",
+        "displayDate": "24/02/2025",
+        "promotedLabel": "#Trending",
+        "hashtags": [
+          "#Trending",
+          "#AI",
+          "#FutureOfWork"
+        ],
+        "timeToRead": "5 min read",
+        "readTime": "5 min read",
+        "imageUrl": "/images/community/ai_event.png",
+        "excerpt": "Discover the wide-ranging impact of AI as it transforms industries, everyday life, and the way professionals work.",
+        "lead": "Artificial intelligence is no longer a technology of the future. It has become part of the present. We meet it daily when we search for information, use navigation, read recommendations, or communicate with digital assistants. But this is only the surface. Beneath it, a larger transformation is changing how work, creativity, education, and decision-making are organized.",
+        "bodySections": [
+          {
+            "title": "A new level of interaction with technology",
+            "paragraphs": [
+              "Technology used to demand adaptation from people. Now the opposite is happening: AI adapts to people. It learns to understand context, habits, goals, and even styles of thinking. This changes the principle of interaction itself. Interfaces are becoming partners, not just tools.",
+              "We already see this in product design, where algorithms offer not just options, but personalized solutions. In business, real-time analytics helps teams make decisions faster than ever before."
+            ]
+          },
+          {
+            "paragraphs": [
+              "Automation is gradually taking over routine work. More importantly, AI is beginning to influence creative professions. Designers, copywriters, and developers now work together with models that accelerate idea generation, prototyping, and data analysis."
+            ]
+          }
+        ],
+        "authorLabel": "by",
+        "authorName": "Andrey Nikolov",
+        "authorExpertId": "expert-4",
+        "authorAvatarUrl": "/images/avatars/avatar_1.png",
+        "tags": [
+          "Artificial Intelligence",
+          "Innovations",
+          "Technology"
+        ],
+        "createdAt": "2023-10-15T10:00:00Z"
+      },
+      {
+        "id": "news-en-2",
+        "title": "New local startup incubator announced by Hashtag",
+        "category": "Business",
+        "date": "2025-03-12T10:00:00Z",
+        "displayDate": "12/03/2025",
+        "timeToRead": "6 min read",
+        "readTime": "6 min read",
+        "hashtags": [
+          "#Startups",
+          "#Business",
+          "#Community"
+        ],
+        "imageUrl": "/images/community/summit_event.png",
+        "excerpt": "Networking is getting more popular in Bulgaria. We decided to take part and help young professionals become more flexible and adaptive to social communication",
+        "lead": "Hashtag Innovations is launching a local startup incubator designed for founders who need more than advice. The program combines mentoring, operational support, investor preparation, and a practical community where early-stage teams can test ideas before they scale.",
+        "bodySections": [
+          {
+            "title": "Why the incubator starts with community",
+            "paragraphs": [
+              "Most young companies do not fail because the idea is weak. They fail because the team is isolated, feedback arrives too late, and important decisions are made without enough market context. The incubator is built around weekly working sessions where founders meet operators, product leaders, legal advisors, and growth specialists.",
+              "Instead of a lecture-only format, each team will bring real business questions to the table: how to price the product, which customer segment to serve first, how to communicate value, and what to measure before raising capital."
+            ]
+          },
+          {
+            "title": "What founders will work on",
+            "paragraphs": [
+              "The first phase focuses on customer discovery and positioning. Teams will sharpen their problem statement, interview potential users, and turn early conversations into product decisions. The second phase moves into financial planning, pitch structure, and partnership strategy.",
+              "By the end of the program, participants should have a clearer product roadmap, a concise investor story, and a network of people who can continue opening doors after the formal sessions end."
+            ]
+          }
+        ],
+        "authorLabel": "by",
+        "authorName": "Andrey Nikolov",
+        "authorExpertId": "expert-4",
+        "authorAvatarUrl": "/images/avatars/avatar_1.png",
+        "tags": [
+          "Business"
+        ],
+        "createdAt": "2023-10-10T10:00:00Z"
+      },
+      {
+        "id": "news-en-3",
+        "title": "Annual corporate retreat focuses on digital well-being",
+        "category": "Business",
+        "date": "2025-04-08T10:00:00Z",
+        "displayDate": "08/04/2025",
+        "timeToRead": "7 min read",
+        "readTime": "7 min read",
+        "hashtags": [
+          "#DigitalWellbeing",
+          "#Leadership",
+          "#Teams"
+        ],
+        "imageUrl": "/images/community/tech_event.png",
+        "excerpt": "Networking is getting more popular in Bulgaria. We decided to take part and help young professionals become more flexible and adaptive to social communication",
+        "lead": "Digital well-being has moved from a soft benefit to a real business priority. This year's corporate retreat explores how teams can stay ambitious without turning every calendar, channel, and dashboard into a source of constant pressure.",
+        "bodySections": [
+          {
+            "title": "The hidden cost of always being online",
+            "paragraphs": [
+              "Modern teams rarely suffer from a lack of tools. More often, they struggle with too many signals competing for attention. Notifications fragment deep work, meeting overload slows decisions, and employees begin to measure productivity by responsiveness instead of meaningful progress.",
+              "The retreat brings together managers, HR leaders, and product teams to identify where digital habits support performance and where they quietly drain it."
+            ]
+          },
+          {
+            "title": "Designing healthier operating rhythms",
+            "paragraphs": [
+              "Sessions will cover meeting hygiene, async communication, focus blocks, and how leaders can model sustainable behavior without slowing the business down. The goal is not to disconnect from technology, but to use it with clearer boundaries.",
+              "Teams will leave with practical rituals they can test immediately: decision logs, weekly priority resets, quiet hours, and communication rules that reduce ambiguity."
+            ]
+          }
+        ],
+        "authorLabel": "from",
+        "authorName": "Jane Smith",
+        "authorAvatarUrl": "/images/avatars/avatar_3.png",
+        "tags": [
+          "Business",
+          "Entertainment"
+        ],
+        "createdAt": "2023-09-20T10:00:00Z"
+      },
+      {
+        "id": "news-en-4",
+        "title": "New AI features announced for our core platform",
+        "category": "Artificial Intelligence",
+        "date": "2025-05-02T10:00:00Z",
+        "displayDate": "02/05/2025",
+        "timeToRead": "8 min read",
+        "readTime": "8 min read",
+        "hashtags": [
+          "#AI",
+          "#Productivity",
+          "#Platform"
+        ],
+        "imageUrl": "/images/community/ai_event.png",
+        "excerpt": "We are excited to introduce machine learning capabilities to automate repetitive tasks and boost productivity for our enterprise users.",
+        "lead": "The newest platform release introduces AI features that help teams summarize information, automate repeated workflows, and identify patterns across projects. The update is designed to make expertise easier to access without replacing the human judgment that makes the platform valuable.",
+        "bodySections": [
+          {
+            "title": "From automation to assistance",
+            "paragraphs": [
+              "Enterprise users asked for tools that remove repetitive admin work without hiding the reasoning behind decisions. The new AI layer focuses on transparent assistance: it suggests next steps, drafts summaries, and highlights risks while keeping users in control.",
+              "This matters especially for teams working across experts, events, and learning materials. Instead of searching through multiple sources manually, users can now receive structured recommendations based on context."
+            ]
+          },
+          {
+            "title": "How teams can use the release",
+            "paragraphs": [
+              "Project managers can generate meeting summaries and action lists. Community teams can segment event feedback. Learning managers can identify which topics are gaining traction across the platform.",
+              "The release also includes guardrails for privacy, review workflows, and clear indicators when AI-generated content needs human approval before it is shared externally."
+            ]
+          }
+        ],
+        "authorLabel": "by",
+        "authorName": "David Kim",
+        "authorExpertId": "expert-1",
+        "authorAvatarUrl": "/images/avatars/avatar_1.png",
+        "tags": [
+          "AI",
+          "Business"
+        ],
+        "createdAt": "2023-11-01T10:00:00Z"
+      },
+      {
+        "id": "news-en-5",
+        "title": "Hashtag Innovations expands to the UK market",
+        "category": "Strategy",
+        "date": "2025-05-20T10:00:00Z",
+        "displayDate": "20/05/2025",
+        "timeToRead": "6 min read",
+        "readTime": "6 min read",
+        "hashtags": [
+          "#Expansion",
+          "#Strategy",
+          "#UKMarket"
+        ],
+        "imageUrl": "/images/platform/slide_skills.png",
+        "excerpt": "Opening a new office in London to better serve our growing client base in Western Europe and establish stronger partnerships.",
+        "lead": "Hashtag Innovations is opening a London office as part of a broader plan to connect more European experts, founders, and enterprise teams. The expansion gives the company a closer presence to partners working across finance, technology, education, and professional services.",
+        "bodySections": [
+          {
+            "title": "Why London is the next step",
+            "paragraphs": [
+              "The UK market has a dense network of investors, accelerators, universities, and enterprise buyers. For a platform built around expertise and connections, that ecosystem creates opportunities to deepen both supply and demand.",
+              "The London team will focus on partnerships first: expert onboarding, event collaborations, and corporate programs that help organizations access specialized knowledge faster."
+            ]
+          },
+          {
+            "title": "What changes for the community",
+            "paragraphs": [
+              "Members will see more cross-border events, new expert profiles, and learning tracks shaped around international growth. Bulgarian and regional founders will also gain clearer paths to UK mentors, clients, and potential partners.",
+              "The goal is not to move attention away from the local ecosystem, but to build a bridge that makes local expertise more visible across Europe."
+            ]
+          }
+        ],
+        "authorLabel": "from",
+        "authorName": "Andrey Nikolov",
+        "authorExpertId": "expert-4",
+        "authorAvatarUrl": "/images/avatars/avatar_1.png",
+        "tags": [
+          "Strategy",
+          "Business"
+        ],
+        "createdAt": "2023-11-15T10:00:00Z"
+      },
+      {
+        "id": "news-en-6",
+        "title": "Q3 Tech Meetup: Future of Web Development",
+        "category": "Technology",
+        "date": "2025-06-05T10:00:00Z",
+        "displayDate": "05/06/2025",
+        "timeToRead": "5 min read",
+        "readTime": "5 min read",
+        "hashtags": [
+          "#WebDevelopment",
+          "#Frontend",
+          "#Engineering"
+        ],
+        "imageUrl": "/images/community/finance_event.png",
+        "excerpt": "Join our lead engineers next month as they discuss the upcoming trends in web performance, React ecosystem, and modern frameworks.",
+        "lead": "The next Q3 Tech Meetup will look at how web development is changing as performance, accessibility, AI-assisted coding, and design systems become everyday engineering concerns. The session is aimed at developers who want practical patterns, not abstract predictions.",
+        "bodySections": [
+          {
+            "title": "Performance is becoming product work",
+            "paragraphs": [
+              "Fast interfaces are no longer only an engineering metric. They shape conversion, trust, and retention. Speakers will discuss how teams can treat performance budgets as part of product planning rather than a cleanup task at the end of a release.",
+              "The meetup will include examples from real projects: reducing layout shifts, improving image delivery, and measuring the moments where users actually feel speed."
+            ]
+          },
+          {
+            "title": "The role of modern frameworks",
+            "paragraphs": [
+              "React, server components, and edge rendering continue to shift how teams structure applications. The discussion will focus on choosing architecture based on product needs, team maturity, and maintainability.",
+              "Participants will leave with a clearer view of which trends are ready for production today and which should still be treated as experiments."
+            ]
+          }
+        ],
+        "authorLabel": "by",
+        "authorName": "Dr. Alice Johnson",
+        "authorAvatarUrl": "/images/avatars/avatar_2.png",
+        "tags": [
+          "Entertainment"
+        ],
+        "createdAt": "2023-08-05T10:00:00Z"
+      }
+    ],
+    "bg": [
+      {
+        "id": "news-bg-1",
+        "title": "Отключване на бъдещето: Как ИИ променя нашия свят",
+        "category": "Изкуствен интелект",
+        "date": "2025-02-24T10:00:00Z",
+        "displayDate": "24/02/2025",
+        "promotedLabel": "#Набира популярност",
+        "hashtags": [
+          "#Набира популярност",
+          "#ИИ",
+          "#БъдещеНаРаботата"
+        ],
+        "timeToRead": "5 мин четене",
+        "readTime": "5 мин четене",
+        "imageUrl": "/images/community/ai_event.png",
+        "excerpt": "Открийте широкото влияние на ИИ, който променя индустрии, ежедневието и начина, по който работят професионалистите.",
+        "lead": "Изкуственият интелект вече не е технология на бъдещето, а част от настоящето. Срещаме го всеки ден, когато търсим информация, използваме навигация, четем препоръки в социалните мрежи или общуваме с дигитални асистенти. Но това е само повърхността. В дълбочина се случва мащабна трансформация на начина, по който са устроени работата, креативността, образованието и дори вземането на решения.",
+        "bodySections": [
+          {
+            "title": "Ново ниво на взаимодействие с технологиите",
+            "paragraphs": [
+              "Преди технологиите изискваха адаптация от човека. Сега се случва обратното: ИИ се адаптира към човека. Той се учи да разбира контекст, навици, цели и дори стил на мислене. Това променя самия принцип на взаимодействие: интерфейсите вече не са просто инструменти, а партньори.",
+              "Виждаме това в продуктовия дизайн, където алгоритмите предлагат не просто варианти, а персонализирани решения. В бизнеса анализите в реално време помагат на екипите да вземат решения по-бързо от всякога."
+            ]
+          },
+          {
+            "paragraphs": [
+              "Автоматизацията постепенно поема рутинните задачи. По-важното е, че ИИ започва да влияе и върху творческите професии. Дизайнери, копирайтъри и разработчици вече работят заедно с модели, които ускоряват генерирането на идеи, прототипирането и анализа на данни."
+            ]
+          }
+        ],
+        "authorLabel": "от",
+        "authorName": "Андрей Николов",
+        "authorExpertId": "expert-4",
+        "authorAvatarUrl": "/images/avatars/avatar_1.png",
+        "tags": [
+          "Изкуствен интелект",
+          "Иновации",
+          "Технологии"
+        ],
+        "createdAt": "2023-10-15T10:00:00Z"
+      },
+      {
+        "id": "news-bg-2",
+        "title": "Нов локален стартъп инкубатор обявен от Hashtag",
+        "category": "Бизнес",
+        "date": "2025-03-12T10:00:00Z",
+        "displayDate": "12/03/2025",
+        "timeToRead": "6 мин четене",
+        "readTime": "6 мин четене",
+        "hashtags": [
+          "#Стартъпи",
+          "#Бизнес",
+          "#Общност"
+        ],
+        "imageUrl": "/images/community/summit_event.png",
+        "excerpt": "Нетуъркингът става все по-популярен в България. Решихме да вземем участие и да помогнем на младите професионалисти да станат по-гъвкави и адаптивни в социалната комуникация",
+        "lead": "Hashtag Innovations стартира локален стартъп инкубатор за основатели, които имат нужда от повече от съвети. Програмата комбинира менторство, оперативна подкрепа, подготовка за инвеститори и практична общност, в която ранните екипи могат да тестват идеите си преди да растат.",
+        "bodySections": [
+          {
+            "title": "Защо инкубаторът започва с общност",
+            "paragraphs": [
+              "Много млади компании не се провалят, защото идеята е слаба. Провалят се, защото екипът е изолиран, обратната връзка идва твърде късно, а важните решения се вземат без достатъчно пазарен контекст.",
+              "Инкубаторът е изграден около седмични работни сесии, в които основателите срещат оператори, продуктови лидери, правни съветници и специалисти по растеж."
+            ]
+          },
+          {
+            "title": "По какво ще работят участниците",
+            "paragraphs": [
+              "Първата фаза е посветена на клиентското проучване и позиционирането. Екипите ще изяснят проблема, ще разговарят с потенциални потребители и ще превърнат ранните разговори в продуктови решения.",
+              "До края на програмата участниците трябва да имат по-ясна продуктова пътна карта, кратка инвеститорска история и мрежа от хора, които могат да отварят врати и след финала."
+            ]
+          }
+        ],
+        "authorLabel": "от",
+        "authorName": "Андрей Николов",
+        "authorExpertId": "expert-4",
+        "authorAvatarUrl": "/images/avatars/avatar_1.png",
+        "tags": [
+          "Бизнес"
+        ],
+        "createdAt": "2023-10-10T10:00:00Z"
+      },
+      {
+        "id": "news-bg-3",
+        "title": "Годишният корпоративен ретрийт се фокусира върху дигиталното благополучие",
+        "category": "Бизнес",
+        "date": "2025-04-08T10:00:00Z",
+        "displayDate": "08/04/2025",
+        "timeToRead": "7 мин четене",
+        "readTime": "7 мин четене",
+        "hashtags": [
+          "#ДигиталноБлагополучие",
+          "#Лидерство",
+          "#Екипи"
+        ],
+        "imageUrl": "/images/community/tech_event.png",
+        "excerpt": "Нетуъркингът става все по-популярен в България. Решихме да вземем участие и да помогнем на младите професионалисти да станат по-гъвкави и адаптивни в социалната комуникация",
+        "lead": "Дигиталното благополучие вече не е просто приятна придобивка, а реален бизнес приоритет. Тазгодишният корпоративен ретрийт разглежда как екипите могат да останат амбициозни, без всеки календар, канал и табло да се превръща в източник на постоянен натиск.",
+        "bodySections": [
+          {
+            "title": "Скритата цена на постоянното онлайн присъствие",
+            "paragraphs": [
+              "Съвременните екипи рядко страдат от липса на инструменти. По-често проблемът е в твърде много сигнали, които се борят за внимание. Нотификациите накъсват дълбоката работа, срещите забавят решенията, а продуктивността се бърка с бърз отговор.",
+              "Ретрийтът събира мениджъри, HR лидери и продуктови екипи, за да открият къде дигиталните навици помагат на представянето и къде тихо го изтощават."
+            ]
+          },
+          {
+            "title": "По-здравословен ритъм на работа",
+            "paragraphs": [
+              "Сесиите ще обхванат хигиена на срещите, асинхронна комуникация, блокове за фокус и начина, по който лидерите могат да задават устойчив модел без да забавят бизнеса.",
+              "Екипите ще си тръгнат с практични ритуали: дневници за решения, седмично подреждане на приоритетите, тихи часове и правила за комуникация, които намаляват неяснотата."
+            ]
+          }
+        ],
+        "authorLabel": "от",
+        "authorName": "Джейн Смит",
+        "authorAvatarUrl": "/images/avatars/avatar_3.png",
+        "tags": [
+          "Бизнес",
+          "Развлечение"
+        ],
+        "createdAt": "2023-09-20T10:00:00Z"
+      },
+      {
+        "id": "news-bg-4",
+        "title": "Обявени са нови AI функции за нашата основна платформа",
+        "category": "Изкуствен интелект",
+        "date": "2025-05-02T10:00:00Z",
+        "displayDate": "02/05/2025",
+        "timeToRead": "8 мин четене",
+        "readTime": "8 мин четене",
+        "hashtags": [
+          "#ИИ",
+          "#Продуктивност",
+          "#Платформа"
+        ],
+        "imageUrl": "/images/community/ai_event.png",
+        "excerpt": "С вълнение представяме възможности за машинно обучение, които ще автоматизират повтарящи се задачи и ще увеличат продуктивността за корпоративните ни клиенти.",
+        "lead": "Най-новото обновление на платформата въвежда AI функции, които помагат на екипите да обобщават информация, да автоматизират повтарящи се процеси и да откриват модели в проектите. Целта е експертизата да стане по-достъпна, без да се заменя човешката преценка.",
+        "bodySections": [
+          {
+            "title": "От автоматизация към асистиране",
+            "paragraphs": [
+              "Корпоративните потребители поискаха инструменти, които премахват административната рутина, но не скриват логиката зад решенията. Новият AI слой предлага прозрачна помощ: предлага следващи стъпки, подготвя резюмета и маркира рискове, като оставя контрола у потребителя.",
+              "Това е особено важно за екипи, които работят едновременно с експерти, събития и обучителни материали. Вместо ръчно търсене в различни източници, те получават структурирани препоръки според контекста."
+            ]
+          },
+          {
+            "title": "Как екипите могат да използват обновлението",
+            "paragraphs": [
+              "Проектните мениджъри могат да генерират резюмета на срещи и списъци със задачи. Общностните екипи могат да сегментират обратна връзка от събития. Обучителните мениджъри могат да видят кои теми набират скорост.",
+              "Добавени са и предпазни механизми за поверителност, процеси за преглед и ясни индикатори кога AI съдържанието трябва да бъде одобрено от човек."
+            ]
+          }
+        ],
+        "authorLabel": "от",
+        "authorName": "Дейвид Ким",
+        "authorExpertId": "expert-1",
+        "authorAvatarUrl": "/images/avatars/avatar_1.png",
+        "tags": [
+          "Изкуствен интелект",
+          "Бизнес"
+        ],
+        "createdAt": "2023-11-01T10:00:00Z"
+      },
+      {
+        "id": "news-bg-5",
+        "title": "Hashtag Innovations се разширява на пазара във Великобритания",
+        "category": "Стратегия",
+        "date": "2025-05-20T10:00:00Z",
+        "displayDate": "20/05/2025",
+        "timeToRead": "6 мин четене",
+        "readTime": "6 мин четене",
+        "hashtags": [
+          "#Разширяване",
+          "#Стратегия",
+          "#UKMarket"
+        ],
+        "imageUrl": "/images/platform/slide_skills.png",
+        "excerpt": "Отваряме нов офис в Лондон, за да обслужваме по-добре нашата растяща клиентска база в Западна Европа и да изградим по-силни партньорства.",
+        "lead": "Hashtag Innovations отваря офис в Лондон като част от по-широк план за свързване на повече европейски експерти, основатели и корпоративни екипи. Разширяването дава на компанията по-близко присъствие до партньори във финансите, технологиите, образованието и професионалните услуги.",
+        "bodySections": [
+          {
+            "title": "Защо Лондон е следващата стъпка",
+            "paragraphs": [
+              "Британският пазар има гъста мрежа от инвеститори, акселератори, университети и корпоративни купувачи. За платформа, изградена около експертиза и връзки, тази среда създава възможности и от двете страни.",
+              "Лондонският екип първо ще се фокусира върху партньорства: привличане на експерти, съвместни събития и корпоративни програми, които дават по-бърз достъп до специализирано знание."
+            ]
+          },
+          {
+            "title": "Какво се променя за общността",
+            "paragraphs": [
+              "Потребителите ще виждат повече международни събития, нови експертни профили и обучителни теми, свързани с растеж извън локалния пазар.",
+              "Целта не е вниманието да се премести от местната екосистема, а да се изгради мост, който прави локалната експертиза по-видима в Европа."
+            ]
+          }
+        ],
+        "authorLabel": "от",
+        "authorName": "Андрей Николов",
+        "authorExpertId": "expert-4",
+        "authorAvatarUrl": "/images/avatars/avatar_1.png",
+        "tags": [
+          "Стратегия",
+          "Бизнес"
+        ],
+        "createdAt": "2023-11-15T10:00:00Z"
+      },
+      {
+        "id": "news-bg-6",
+        "title": "Q3 Tech Meetup: Бъдещето на уеб разработката",
+        "category": "Технологии",
+        "date": "2025-06-05T10:00:00Z",
+        "displayDate": "05/06/2025",
+        "timeToRead": "5 мин четене",
+        "readTime": "5 мин четене",
+        "hashtags": [
+          "#УебРазработка",
+          "#Frontend",
+          "#Инженеринг"
+        ],
+        "imageUrl": "/images/community/finance_event.png",
+        "excerpt": "Присъединете се към нашите водещи инженери следващия месец, когато ще обсъждат предстоящите тенденции в уеб производителността и модерните фреймуърци.",
+        "lead": "Следващият Q3 Tech Meetup ще разгледа как уеб разработката се променя, докато производителността, достъпността, AI подпомогнатото писане на код и дизайн системите стават ежедневни инженерни теми. Срещата е за разработчици, които искат практични модели, не абстрактни прогнози.",
+        "bodySections": [
+          {
+            "title": "Производителността вече е продуктова тема",
+            "paragraphs": [
+              "Бързите интерфейси вече не са само инженерна метрика. Те влияят върху конверсията, доверието и задържането на потребителите. Лекторите ще покажат как performance budget може да бъде част от планирането, а не задача за финално почистване.",
+              "Срещата ще включва примери от реални проекти: намаляване на layout shift, по-добра доставка на изображения и измерване на моментите, в които потребителят наистина усеща скоростта."
+            ]
+          },
+          {
+            "title": "Ролята на модерните фреймуърци",
+            "paragraphs": [
+              "React, server components и edge rendering продължават да променят структурата на приложенията. Дискусията ще се фокусира върху избора на архитектура според продукта, зрелостта на екипа и поддръжката.",
+              "Участниците ще си тръгнат с по-ясна представа кои тенденции са готови за production и кои все още е по-добре да останат експеримент."
+            ]
+          }
+        ],
+        "authorLabel": "от",
+        "authorName": "Д-р Алис Джонсън",
+        "authorAvatarUrl": "/images/avatars/avatar_2.png",
+        "tags": [
+          "Технологии"
+        ],
+        "createdAt": "2023-08-05T10:00:00Z"
+      }
+    ]
+  },
+  "experts": {
+    "en": [
+      {
+        "id": "expert-1",
+        "availableDates": [
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-07",
+          "2026-07-08"
+        ],
+        "availableTimes": {
+          "2026-07-03": [
+            "10:00",
+            "11:00",
+            "13:00"
+          ],
+          "2026-07-04": [
+            "14:00",
+            "15:00",
+            "16:00"
+          ],
+          "2026-07-05": [
+            "09:00",
+            "10:00"
+          ],
+          "2026-07-07": [
+            "12:00",
+            "14:00",
+            "17:00"
+          ],
+          "2026-07-08": [
+            "16:00",
+            "18:00",
+            "19:00"
+          ]
+        },
+        "name": "David Kim",
+        "role": "Senior Product Manager at",
+        "company": "Meta",
+        "imageUrl": "/images/avatars/avatar_1.png",
+        "quote": "“Helping startups build scalable digital products through data-driven product strategy and cross-functional leadership.”",
+        "availableFor": [
+          "Consultation",
+          "Mentorship"
+        ],
+        "expertise": [
+          "AI",
+          "Business Strategy",
+          "Product Ownership",
+          "Growth Strategy",
+          "Startups"
+        ],
+        "industries": [
+          "FinTech",
+          "Healthcare"
+        ],
+        "price": 150,
+        "languages": [
+          "Bulgarian",
+          "English",
+          "Mandarin"
+        ],
+        "bio": [
+          "Креативный директор, дизайнер и бывший преподаватель дизайна с опытом работы более 14 лет в стартапах и компаниях из списка Fortune 100 по всему миру. В настоящее время в основном работаю над социальными и экологическими проектами, так как считаю, что дизайн должен служить во благо.",
+          "Готов помочь каждому практически с любым вопросом, независимо от вашего опыта и бэкграунда. Время бронирования — час, но вы можете использовать его полностью или частично по необходимости. Если встреча была полезной, пожалуйста, оставьте отзыв — это поможет охватить больше людей 😄",
+          "⚠️ В связи с большим количеством неявок в последнее время: проявляйте элементарное уважение ко времени. Если не можете прийти, просто сообщите за несколько часов. Если не появитесь или отмените в последний момент без уважительной причины, я не буду принимать новые бронирования."
+        ],
+        "sessions": [
+          {
+            "id": "session-1",
+            "title": "Консультация",
+            "subtitle": "60-минутная онлайн-сессия",
+            "description": "Формат консультации вопрос-ответ. Разбираем вашу проблему.",
+            "price": 80
+          },
+          {
+            "id": "session-2",
+            "title": "Анализ проекта",
+            "subtitle": "90-минутный разбор вашей идеи",
+            "description": "Подробный аудит с советами по улучшению и оптимизации.",
+            "price": 150
+          },
+          {
+            "id": "session-3",
+            "title": "Менторство",
+            "subtitle": "4 встречи на месяц",
+            "description": "Практические занятия с разбором кейсов и ответами на вопросы.",
+            "price": 200
+          }
+        ],
+        "experienceList": [
+          {
+            "id": "exp-1",
+            "role": "Senior Design Lead",
+            "company": "Apple inc.",
+            "period": "JAN 2023-PRESENT"
+          }
+        ],
+        "analytics": {
+          "consultations": "200+",
+          "attendance": "100%",
+          "experienceYears": "10+"
+        }
+      },
+      {
+        "id": "expert-2",
+        "availableDates": [
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-07",
+          "2026-07-08"
+        ],
+        "availableTimes": {
+          "2026-07-03": [
+            "10:00",
+            "11:00",
+            "13:00"
+          ],
+          "2026-07-04": [
+            "14:00",
+            "15:00",
+            "16:00"
+          ],
+          "2026-07-05": [
+            "09:00",
+            "10:00"
+          ],
+          "2026-07-07": [
+            "12:00",
+            "14:00",
+            "17:00"
+          ],
+          "2026-07-08": [
+            "16:00",
+            "18:00",
+            "19:00"
+          ]
+        },
+        "name": "Elena Rostova",
+        "role": "Head of Engineering at",
+        "company": "Spotify",
+        "imageUrl": "/images/avatars/avatar_2.png",
+        "quote": "“Passionate about building resilient systems and inclusive engineering cultures.”",
+        "availableFor": [
+          "Consultation",
+          "Code Review"
+        ],
+        "expertise": [
+          "Development"
+        ],
+        "price": 200,
+        "languages": [
+          "English",
+          "Български"
+        ],
+        "industries": [
+          "Tech",
+          "Design"
+        ],
+        "bio": [
+          "Креативный директор, дизайнер и бывший преподаватель дизайна с опытом работы более 14 лет в стартапах и компаниях из списка Fortune 100 по всему миру. В настоящее время в основном работаю над социальными и экологическими проектами, так как считаю, что дизайн должен служить во благо.",
+          "Готов помочь каждому практически с любым вопросом, независимо от вашего опыта и бэкграунда. Время бронирования — час, но вы можете использовать его полностью или частично по необходимости. Если встреча была полезной, пожалуйста, оставьте отзыв — это поможет охватить больше людей 😄",
+          "⚠️ В связи с большим количеством неявок в последнее время: проявляйте элементарное уважение ко времени. Если не можете прийти, просто сообщите за несколько часов. Если не появитесь или отмените в последний момент без уважительной причины, я не буду принимать новые бронирования."
+        ],
+        "sessions": [
+          {
+            "id": "session-1",
+            "title": "Консультация",
+            "subtitle": "60-минутная онлайн-сессия",
+            "description": "Формат консультации вопрос-ответ. Разбираем вашу проблему.",
+            "price": 80
+          },
+          {
+            "id": "session-2",
+            "title": "Анализ проекта",
+            "subtitle": "90-минутный разбор вашей идеи",
+            "description": "Подробный аудит с советами по улучшению и оптимизации.",
+            "price": 150
+          },
+          {
+            "id": "session-3",
+            "title": "Менторство",
+            "subtitle": "4 встречи на месяц",
+            "description": "Практические занятия с разбором кейсов и ответами на вопросы.",
+            "price": 200
+          }
+        ],
+        "experienceList": [
+          {
+            "id": "exp-1",
+            "role": "Senior Design Lead",
+            "company": "Apple inc.",
+            "period": "JAN 2023-PRESENT"
+          }
+        ],
+        "analytics": {
+          "consultations": "150+",
+          "attendance": "98%",
+          "experienceYears": "8+"
+        }
+      },
+      {
+        "id": "expert-3",
+        "availableDates": [
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-07",
+          "2026-07-08"
+        ],
+        "availableTimes": {
+          "2026-07-03": [
+            "10:00",
+            "11:00",
+            "13:00"
+          ],
+          "2026-07-04": [
+            "14:00",
+            "15:00",
+            "16:00"
+          ],
+          "2026-07-05": [
+            "09:00",
+            "10:00"
+          ],
+          "2026-07-07": [
+            "12:00",
+            "14:00",
+            "17:00"
+          ],
+          "2026-07-08": [
+            "16:00",
+            "18:00",
+            "19:00"
+          ]
+        },
+        "name": "Michael Chen",
+        "role": "UX Design Lead at",
+        "company": "Airbnb",
+        "imageUrl": "/images/avatars/avatar_3.png",
+        "quote": "“Creating intuitive experiences bridging the gap between users and business goals.”",
+        "availableFor": [
+          "Consultation",
+          "Portfolio Review"
+        ],
+        "expertise": [
+          "Design"
+        ],
+        "price": 100,
+        "languages": [
+          "English"
+        ],
+        "industries": [
+          "Tech",
+          "Design"
+        ],
+        "bio": [
+          "Креативный директор, дизайнер и бывший преподаватель дизайна с опытом работы более 14 лет в стартапах и компаниях из списка Fortune 100 по всему миру. В настоящее время в основном работаю над социальными и экологическими проектами, так как считаю, что дизайн должен служить во благо.",
+          "Готов помочь каждому практически с любым вопросом, независимо от вашего опыта и бэкграунда. Время бронирования — час, но вы можете использовать его полностью или частично по необходимости. Если встреча была полезной, пожалуйста, оставьте отзыв — это поможет охватить больше людей 😄",
+          "⚠️ В связи с большим количеством неявок в последнее время: проявляйте элементарное уважение ко времени. Если не можете прийти, просто сообщите за несколько часов. Если не появитесь или отмените в последний момент без уважительной причины, я не буду принимать новые бронирования."
+        ],
+        "sessions": [
+          {
+            "id": "session-1",
+            "title": "Консультация",
+            "subtitle": "60-минутная онлайн-сессия",
+            "description": "Формат консультации вопрос-ответ. Разбираем вашу проблему.",
+            "price": 80
+          },
+          {
+            "id": "session-2",
+            "title": "Анализ проекта",
+            "subtitle": "90-минутный разбор вашей идеи",
+            "description": "Подробный аудит с советами по улучшению и оптимизации.",
+            "price": 150
+          },
+          {
+            "id": "session-3",
+            "title": "Менторство",
+            "subtitle": "4 встречи на месяц",
+            "description": "Практические занятия с разбором кейсов и ответами на вопросы.",
+            "price": 200
+          }
+        ],
+        "experienceList": [
+          {
+            "id": "exp-1",
+            "role": "Senior Design Lead",
+            "company": "Apple inc.",
+            "period": "JAN 2023-PRESENT"
+          }
+        ],
+        "analytics": {
+          "consultations": "300+",
+          "attendance": "99%",
+          "experienceYears": "15+"
+        }
+      },
+      {
+        "id": "expert-4",
+        "availableDates": [
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-07",
+          "2026-07-08"
+        ],
+        "availableTimes": {
+          "2026-07-03": [
+            "10:00",
+            "11:00",
+            "13:00"
+          ],
+          "2026-07-04": [
+            "14:00",
+            "15:00",
+            "16:00"
+          ],
+          "2026-07-05": [
+            "09:00",
+            "10:00"
+          ],
+          "2026-07-07": [
+            "12:00",
+            "14:00",
+            "17:00"
+          ],
+          "2026-07-08": [
+            "16:00",
+            "18:00",
+            "19:00"
+          ]
+        },
+        "name": "Andrey Nikolov",
+        "role": "Founder & CEO at",
+        "company": "Hashtag Innovations",
+        "imageUrl": "/images/avatars/avatar_1.png",
+        "quote": "“Building the future of tech communities and fostering continuous innovation.”",
+        "availableFor": [
+          "Mentorship",
+          "Strategy"
+        ],
+        "expertise": [
+          "Business",
+          "Management"
+        ],
+        "industries": [
+          "Community",
+          "EdTech"
+        ],
+        "price": 250,
+        "languages": [
+          "English",
+          "Български",
+          "Русский"
+        ],
+        "bio": [
+          "Креативный директор, дизайнер и бывший преподаватель дизайна с опытом работы более 14 лет в стартапах и компаниях из списка Fortune 100 по всему миру. В настоящее время в основном работаю над социальными и экологическими проектами, так как считаю, что дизайн должен служить во благо.",
+          "Готов помочь каждому практически с любым вопросом, независимо от вашего опыта и бэкграунда. Время бронирования — час, но вы можете использовать его полностью или частично по необходимости. Если встреча была полезной, пожалуйста, оставьте отзыв — это поможет охватить больше людей 😄",
+          "⚠️ В связи с большим количеством неявок в последнее время: проявляйте элементарное уважение ко времени. Если не можете прийти, просто сообщите за несколько часов. Если не появитесь или отмените в последний момент без уважительной причины, я не буду принимать новые бронирования."
+        ],
+        "sessions": [
+          {
+            "id": "session-1",
+            "title": "Консультация",
+            "subtitle": "60-минутная онлайн-сессия",
+            "description": "Формат консультации вопрос-ответ. Разбираем вашу проблему.",
+            "price": 80
+          },
+          {
+            "id": "session-2",
+            "title": "Анализ проекта",
+            "subtitle": "90-минутный разбор вашей идеи",
+            "description": "Подробный аудит с советами по улучшению и оптимизации.",
+            "price": 150
+          },
+          {
+            "id": "session-3",
+            "title": "Менторство",
+            "subtitle": "4 встречи на месяц",
+            "description": "Практические занятия с разбором кейсов и ответами на вопросы.",
+            "price": 200
+          }
+        ],
+        "experienceList": [
+          {
+            "id": "exp-1",
+            "role": "Senior Design Lead",
+            "company": "Apple inc.",
+            "period": "JAN 2023-PRESENT"
+          },
+          {
+            "id": "exp-2",
+            "role": "Lead UX/UI Designer",
+            "company": "Google",
+            "period": "MAR 2019-DEC 2022"
+          },
+          {
+            "id": "exp-3",
+            "role": "Senior Graphic Designer",
+            "company": "Adobe Systems",
+            "period": "AUG 2015-FEB 2019"
+          }
+        ],
+        "analytics": {
+          "consultations": "50+",
+          "attendance": "100%",
+          "experienceYears": "5+"
+        }
+      },
+      {
+        "id": "expert-5",
+        "availableDates": [
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-07",
+          "2026-07-08"
+        ],
+        "availableTimes": {
+          "2026-07-03": [
+            "10:00",
+            "11:00",
+            "13:00"
+          ],
+          "2026-07-04": [
+            "14:00",
+            "15:00",
+            "16:00"
+          ],
+          "2026-07-05": [
+            "09:00",
+            "10:00"
+          ],
+          "2026-07-07": [
+            "12:00",
+            "14:00",
+            "17:00"
+          ],
+          "2026-07-08": [
+            "16:00",
+            "18:00",
+            "19:00"
+          ]
+        },
+        "name": "Sarah Jenkins",
+        "role": "Principal Data Scientist at",
+        "company": "Netflix",
+        "imageUrl": "/images/avatars/avatar_2.png",
+        "quote": "“Turning complex data into actionable insights for personalized user journeys.”",
+        "availableFor": [
+          "Consultation",
+          "Data Strategy"
+        ],
+        "expertise": [
+          "Artificial Intelligence",
+          "Development"
+        ],
+        "price": 300,
+        "languages": [
+          "English",
+          "Українська"
+        ]
+      }
+    ],
+    "bg": [
+      {
+        "id": "expert-1",
+        "availableDates": [
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-07",
+          "2026-07-08"
+        ],
+        "availableTimes": {
+          "2026-07-03": [
+            "10:00",
+            "11:00",
+            "13:00"
+          ],
+          "2026-07-04": [
+            "14:00",
+            "15:00",
+            "16:00"
+          ],
+          "2026-07-05": [
+            "09:00",
+            "10:00"
+          ],
+          "2026-07-07": [
+            "12:00",
+            "14:00",
+            "17:00"
+          ],
+          "2026-07-08": [
+            "16:00",
+            "18:00",
+            "19:00"
+          ]
+        },
+        "name": "Дейвид Ким",
+        "role": "Старши продуктов мениджър в",
+        "company": "Meta",
+        "imageUrl": "/images/avatars/avatar_1.png",
+        "quote": "„Помагам на стартъпи да изграждат мащабируеми дигитални продукти чрез стратегии, базирани на данни.“",
+        "availableFor": [
+          "Консултация",
+          "Менторство"
+        ],
+        "expertise": [
+          "Изкуствен интелект",
+          "Бизнес Стратегия",
+          "Продуктов Мениджмънт",
+          "Стратегия за Растеж",
+          "Стартъпи"
+        ],
+        "industries": [
+          "FinTech",
+          "Healthcare"
+        ],
+        "price": 150,
+        "languages": [
+          "Bulgarian",
+          "English",
+          "Mandarin"
+        ],
+        "bio": [
+          "Креативный директор, дизайнер и бывший преподаватель дизайна с опытом работы более 14 лет в стартапах и компаниях из списка Fortune 100 по всему миру. В настоящее время в основном работаю над социальными и экологическими проектами, так как считаю, что дизайн должен служить во благо.",
+          "Готов помочь каждому практически с любым вопросом, независимо от вашего опыта и бэкграунда. Время бронирования — час, но вы можете использовать его полностью или частично по необходимости. Если встреча была полезной, пожалуйста, оставьте отзыв — это поможет охватить больше людей 😄",
+          "⚠️ В связи с большим количеством неявок в последнее время: проявляйте элементарное уважение ко времени. Если не можете прийти, просто сообщите за несколько часов. Если не появитесь или отмените в последний момент без уважительной причины, я не буду принимать новые бронирования."
+        ],
+        "sessions": [
+          {
+            "id": "session-1",
+            "title": "Консультация",
+            "subtitle": "60-минутная онлайн-сессия",
+            "description": "Формат консультации вопрос-ответ. Разбираем вашу проблему.",
+            "price": 80
+          },
+          {
+            "id": "session-2",
+            "title": "Анализ проекта",
+            "subtitle": "90-минутный разбор вашей идеи",
+            "description": "Подробный аудит с советами по улучшению и оптимизации.",
+            "price": 150
+          },
+          {
+            "id": "session-3",
+            "title": "Менторство",
+            "subtitle": "4 встречи на месяц",
+            "description": "Практические занятия с разбором кейсов и ответами на вопросы.",
+            "price": 200
+          }
+        ],
+        "experienceList": [
+          {
+            "id": "exp-1",
+            "role": "Senior Design Lead",
+            "company": "Apple inc.",
+            "period": "JAN 2023-PRESENT"
+          }
+        ],
+        "analytics": {
+          "consultations": "200+",
+          "attendance": "100%",
+          "experienceYears": "10+"
+        }
+      },
+      {
+        "id": "expert-2",
+        "availableDates": [
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-07",
+          "2026-07-08"
+        ],
+        "availableTimes": {
+          "2026-07-03": [
+            "10:00",
+            "11:00",
+            "13:00"
+          ],
+          "2026-07-04": [
+            "14:00",
+            "15:00",
+            "16:00"
+          ],
+          "2026-07-05": [
+            "09:00",
+            "10:00"
+          ],
+          "2026-07-07": [
+            "12:00",
+            "14:00",
+            "17:00"
+          ],
+          "2026-07-08": [
+            "16:00",
+            "18:00",
+            "19:00"
+          ]
+        },
+        "name": "Елена Ростова",
+        "role": "Ръководител инженеринг в",
+        "company": "Spotify",
+        "imageUrl": "/images/avatars/avatar_2.png",
+        "quote": "„Страстно отдадена на изграждането на устойчиви системи и приобщаваща инженерна култура.“",
+        "availableFor": [
+          "Консултация",
+          "Ревю на код"
+        ],
+        "expertise": [
+          "Разработка"
+        ],
+        "price": 200,
+        "languages": [
+          "English",
+          "Български"
+        ],
+        "industries": [
+          "Tech",
+          "Design"
+        ],
+        "bio": [
+          "Креативный директор, дизайнер и бывший преподаватель дизайна с опытом работы более 14 лет в стартапах и компаниях из списка Fortune 100 по всему миру. В настоящее время в основном работаю над социальными и экологическими проектами, так как считаю, что дизайн должен служить во благо.",
+          "Готов помочь каждому практически с любым вопросом, независимо от вашего опыта и бэкграунда. Время бронирования — час, но вы можете использовать его полностью или частично по необходимости. Если встреча была полезной, пожалуйста, оставьте отзыв — это поможет охватить больше людей 😄",
+          "⚠️ В связи с большим количеством неявок в последнее время: проявляйте элементарное уважение ко времени. Если не можете прийти, просто сообщите за несколько часов. Если не появитесь или отмените в последний момент без уважительной причины, я не буду принимать новые бронирования."
+        ],
+        "sessions": [
+          {
+            "id": "session-1",
+            "title": "Консультация",
+            "subtitle": "60-минутная онлайн-сессия",
+            "description": "Формат консультации вопрос-ответ. Разбираем вашу проблему.",
+            "price": 80
+          },
+          {
+            "id": "session-2",
+            "title": "Анализ проекта",
+            "subtitle": "90-минутный разбор вашей идеи",
+            "description": "Подробный аудит с советами по улучшению и оптимизации.",
+            "price": 150
+          },
+          {
+            "id": "session-3",
+            "title": "Менторство",
+            "subtitle": "4 встречи на месяц",
+            "description": "Практические занятия с разбором кейсов и ответами на вопросы.",
+            "price": 200
+          }
+        ],
+        "experienceList": [
+          {
+            "id": "exp-1",
+            "role": "Senior Design Lead",
+            "company": "Apple inc.",
+            "period": "JAN 2023-PRESENT"
+          }
+        ],
+        "analytics": {
+          "consultations": "150+",
+          "attendance": "98%",
+          "experienceYears": "8+"
+        }
+      },
+      {
+        "id": "expert-3",
+        "availableDates": [
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-07",
+          "2026-07-08"
+        ],
+        "availableTimes": {
+          "2026-07-03": [
+            "10:00",
+            "11:00",
+            "13:00"
+          ],
+          "2026-07-04": [
+            "14:00",
+            "15:00",
+            "16:00"
+          ],
+          "2026-07-05": [
+            "09:00",
+            "10:00"
+          ],
+          "2026-07-07": [
+            "12:00",
+            "14:00",
+            "17:00"
+          ],
+          "2026-07-08": [
+            "16:00",
+            "18:00",
+            "19:00"
+          ]
+        },
+        "name": "Майкъл Чен",
+        "role": "Водещ UX дизайнер в",
+        "company": "Airbnb",
+        "imageUrl": "/images/avatars/avatar_3.png",
+        "quote": "„Създавам интуитивни преживявания, които свързват нуждите на потребителите с бизнес целите.“",
+        "availableFor": [
+          "Консултация",
+          "Ревю на портфолио"
+        ],
+        "expertise": [
+          "Дизайн"
+        ],
+        "price": 100,
+        "languages": [
+          "English"
+        ],
+        "industries": [
+          "Tech",
+          "Design"
+        ],
+        "bio": [
+          "Креативный директор, дизайнер и бывший преподаватель дизайна с опытом работы более 14 лет в стартапах и компаниях из списка Fortune 100 по всему миру. В настоящее время в основном работаю над социальными и экологическими проектами, так как считаю, что дизайн должен служить во благо.",
+          "Готов помочь каждому практически с любым вопросом, независимо от вашего опыта и бэкграунда. Время бронирования — час, но вы можете использовать его полностью или частично по необходимости. Если встреча была полезной, пожалуйста, оставьте отзыв — это поможет охватить больше людей 😄",
+          "⚠️ В связи с большим количеством неявок в последнее время: проявляйте элементарное уважение ко времени. Если не можете прийти, просто сообщите за несколько часов. Если не появитесь или отмените в последний момент без уважительной причины, я не буду принимать новые бронирования."
+        ],
+        "sessions": [
+          {
+            "id": "session-1",
+            "title": "Консультация",
+            "subtitle": "60-минутная онлайн-сессия",
+            "description": "Формат консультации вопрос-ответ. Разбираем вашу проблему.",
+            "price": 80
+          },
+          {
+            "id": "session-2",
+            "title": "Анализ проекта",
+            "subtitle": "90-минутный разбор вашей идеи",
+            "description": "Подробный аудит с советами по улучшению и оптимизации.",
+            "price": 150
+          },
+          {
+            "id": "session-3",
+            "title": "Менторство",
+            "subtitle": "4 встречи на месяц",
+            "description": "Практические занятия с разбором кейсов и ответами на вопросы.",
+            "price": 200
+          }
+        ],
+        "experienceList": [
+          {
+            "id": "exp-1",
+            "role": "Senior Design Lead",
+            "company": "Apple inc.",
+            "period": "JAN 2023-PRESENT"
+          }
+        ],
+        "analytics": {
+          "consultations": "300+",
+          "attendance": "99%",
+          "experienceYears": "15+"
+        }
+      },
+      {
+        "id": "expert-4",
+        "availableDates": [
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-07",
+          "2026-07-08"
+        ],
+        "availableTimes": {
+          "2026-07-03": [
+            "10:00",
+            "11:00",
+            "13:00"
+          ],
+          "2026-07-04": [
+            "14:00",
+            "15:00",
+            "16:00"
+          ],
+          "2026-07-05": [
+            "09:00",
+            "10:00"
+          ],
+          "2026-07-07": [
+            "12:00",
+            "14:00",
+            "17:00"
+          ],
+          "2026-07-08": [
+            "16:00",
+            "18:00",
+            "19:00"
+          ]
+        },
+        "name": "Андрей Николов",
+        "role": "Основател и изпълнителен директор в",
+        "company": "Hashtag Innovations",
+        "imageUrl": "/images/avatars/avatar_1.png",
+        "quote": "„Изграждам бъдещето на технологичните общности и насърчавам непрекъснатите иновации.“",
+        "availableFor": [
+          "Менторство",
+          "Стратегия"
+        ],
+        "expertise": [
+          "Бизнес",
+          "Мениджмънт"
+        ],
+        "industries": [
+          "Общности",
+          "EdTech"
+        ],
+        "price": 250,
+        "languages": [
+          "English",
+          "Български",
+          "Русский"
+        ],
+        "bio": [
+          "Креативный директор, дизайнер и бывший преподаватель дизайна с опытом работы более 14 лет в стартапах и компаниях из списка Fortune 100 по всему миру. В настоящее время в основном работаю над социальными и экологическими проектами, так как считаю, что дизайн должен служить во благо.",
+          "Готов помочь каждому практически с любым вопросом, независимо от вашего опыта и бэкграунда. Время бронирования — час, но вы можете использовать его полностью или частично по необходимости. Если встреча была полезной, пожалуйста, оставьте отзыв — это поможет охватить больше людей 😄",
+          "⚠️ В связи с большим количеством неявок в последнее время: проявляйте элементарное уважение ко времени. Если не можете прийти, просто сообщите за несколько часов. Если не появитесь или отмените в последний момент без уважительной причины, я не буду принимать новые бронирования."
+        ],
+        "sessions": [
+          {
+            "id": "session-1",
+            "title": "Консультация",
+            "subtitle": "60-минутная онлайн-сессия",
+            "description": "Формат консультации вопрос-ответ. Разбираем вашу проблему.",
+            "price": 80
+          },
+          {
+            "id": "session-2",
+            "title": "Анализ проекта",
+            "subtitle": "90-минутный разбор вашей идеи",
+            "description": "Подробный аудит с советами по улучшению и оптимизации.",
+            "price": 150
+          },
+          {
+            "id": "session-3",
+            "title": "Менторство",
+            "subtitle": "4 встречи на месяц",
+            "description": "Практические занятия с разбором кейсов и ответами на вопросы.",
+            "price": 200
+          }
+        ],
+        "experienceList": [
+          {
+            "id": "exp-1",
+            "role": "Senior Design Lead",
+            "company": "Apple inc.",
+            "period": "JAN 2023-PRESENT"
+          },
+          {
+            "id": "exp-2",
+            "role": "Lead UX/UI Designer",
+            "company": "Google",
+            "period": "MAR 2019-DEC 2022"
+          },
+          {
+            "id": "exp-3",
+            "role": "Senior Graphic Designer",
+            "company": "Adobe Systems",
+            "period": "AUG 2015-FEB 2019"
+          }
+        ],
+        "analytics": {
+          "consultations": "50+",
+          "attendance": "100%",
+          "experienceYears": "5+"
+        }
+      },
+      {
+        "id": "expert-5",
+        "availableDates": [
+          "2026-07-03",
+          "2026-07-04",
+          "2026-07-05",
+          "2026-07-07",
+          "2026-07-08"
+        ],
+        "availableTimes": {
+          "2026-07-03": [
+            "10:00",
+            "11:00",
+            "13:00"
+          ],
+          "2026-07-04": [
+            "14:00",
+            "15:00",
+            "16:00"
+          ],
+          "2026-07-05": [
+            "09:00",
+            "10:00"
+          ],
+          "2026-07-07": [
+            "12:00",
+            "14:00",
+            "17:00"
+          ],
+          "2026-07-08": [
+            "16:00",
+            "18:00",
+            "19:00"
+          ]
+        },
+        "name": "Сара Дженкинс",
+        "role": "Главен Data Scientist в",
+        "company": "Netflix",
+        "imageUrl": "/images/avatars/avatar_2.png",
+        "quote": "„Превръщам сложните данни в приложими стратегии за персонализирани потребителски преживявания.“",
+        "availableFor": [
+          "Консултация",
+          "Стратегия за данни"
+        ],
+        "expertise": [
+          "Изкуствен интелект",
+          "Разработка"
+        ],
+        "price": 300,
+        "languages": [
+          "English",
+          "Українська"
+        ]
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": "evt-1",
+      "title": "Business Innovation Summit 2026",
+      "titleBg": "Среща на върха за бизнес иновации 2026",
+      "speaker": {
+        "id": "spk-1",
+        "name": "Andrey Nikolov",
+        "nameBg": "Андрей Николов",
+        "expertId": "expert-4",
+        "avatarSrc": "/images/avatars/avatar_1.png",
+        "role": "Founder & CEO at Hashtag Innovations",
+        "roleBg": "Основател и изпълнителен директор в Hashtag Innovations"
+      },
+      "description": "Connect with 500+ industry trailblazers at the Business Innovation Summit 2026. Explore AI, navigate digital transformation, and unlock strategic growth opportunities. Elevate your expertise and expand your network.",
+      "descriptionBg": "Свържете се с 500+ лидери в индустрията на Business Innovation Summit 2026. Изследвайте ИИ, навигирайте дигиталната трансформация и отключете възможности за стратегически растеж.",
+      "date": "2026-08-20T10:00:00Z",
+      "displayDate": "Thu, 20 Aug",
+      "displayDateBg": "Четв, 20 Авг",
+      "location": "LIVE, Sofia",
+      "locationBg": "НА ЖИВО, София",
+      "imageSrc": "/images/community/summit_event.png",
+      "heroImageSrc": "/images/community/summit_event.png",
+      "tags": [
+        "recommended",
+        "business",
+        "on_site"
+      ],
+      "price": "€80",
+      "startTime": "11:00",
+      "timezone": "GMT+3",
+      "detailDescription": "We invite you to an upcoming business event where leading experts and entrepreneurs will gather to exchange experience and discuss current trends. The program includes inspiring talks, practical workshops, and networking opportunities. It is a strong opportunity to expand your knowledge, find new partners, and gain valuable insights for developing your business.",
+      "detailDescriptionBg": "Каним ви на предстоящо бизнес събитие, където водещи експерти и предприемачи ще се съберат, за да обменят опит и да обсъдят актуални тенденции. Програмата включва вдъхновяващи лекции, практически работилници и възможности за нетуъркинг. Това е отлична възможност да разширите знанията си, да намерите нови партньори и да получите ценни идеи за развитието на вашия бизнес.",
+      "speakers": [
+        {
+          "id": "spk-1",
+          "name": "Andrey Nikolov",
+          "nameBg": "Андрей Николов",
+          "role": "Founder & CEO at Hashtag Innovations",
+          "roleBg": "Основател и изпълнителен директор в Hashtag Innovations",
+          "avatarSrc": "/images/avatars/avatar_1.png",
+          "expertId": "expert-4"
+        },
+        {
+          "id": "spk-2",
+          "name": "David Kim",
+          "nameBg": "Дейвид Ким",
+          "role": "Senior Product Manager at Meta",
+          "roleBg": "Старши продуктов мениджър в Meta",
+          "avatarSrc": "/images/avatars/avatar_1.png",
+          "expertId": "expert-1"
+        },
+        {
+          "id": "spk-3",
+          "name": "Sarah Jenkins",
+          "nameBg": "Сара Дженкинс",
+          "role": "Principal Data Scientist at Netflix",
+          "roleBg": "Главен Data Scientist в Netflix",
+          "avatarSrc": "/images/avatars/avatar_2.png",
+          "expertId": "expert-5"
+        },
+        {
+          "id": "spk-4",
+          "name": "Michael Chen",
+          "nameBg": "Майкъл Чен",
+          "role": "UX Design Lead at Airbnb",
+          "roleBg": "Водещ UX дизайнер в Airbnb",
+          "avatarSrc": "/images/avatars/avatar_3.png",
+          "expertId": "expert-3"
+        }
+      ],
+      "organizers": [
+        {
+          "id": "org-1",
+          "name": "Hashtag Innovations",
+          "logoSrc": "/images/Logo.svg"
+        }
+      ],
+      "partners": [
+        {
+          "id": "partner-1",
+          "name": "itStep",
+          "logoSrc": "https://placehold.co/120x40/000000/FFFFFF?text=itStep"
+        },
+        {
+          "id": "partner-2",
+          "name": "Miray group",
+          "logoSrc": "https://placehold.co/120x40/000000/FFFFFF?text=Miray"
+        }
+      ],
+      "relatedArticleIds": [
+        "article-1",
+        "article-2",
+        "article-3",
+        "article-4",
+        "article-5",
+        "article-6"
+      ]
+    },
+    {
+      "id": "evt-2",
+      "title": "Future of Finance Forum",
+      "titleBg": "Форум Бъдещето на Финансите",
+      "speaker": {
+        "id": "spk-2",
+        "name": "Sarah Jenkins",
+        "nameBg": "Сара Дженкинс",
+        "expertId": "expert-5",
+        "avatarSrc": "/images/avatars/avatar_2.png",
+        "role": "Principal Data Scientist at Netflix",
+        "roleBg": "Главен Data Scientist в Netflix"
+      },
+      "description": "Discover the latest trends in fintech, decentralized finance, and banking innovations. Join top executives and visionaries to discuss what the next decade holds for the financial sector.",
+      "descriptionBg": "Открийте най-новите тенденции във финтех, децентрализираните финанси и банковите иновации. Присъединете се към топ ръководители.",
+      "date": "2026-08-23T09:00:00Z",
+      "displayDate": "Sun, 23 Aug",
+      "displayDateBg": "Нед, 23 Авг",
+      "location": "ONLINE",
+      "locationBg": "ОНЛАЙН",
+      "imageSrc": "/images/community/finance_event.png",
+      "tags": [
+        "recommended",
+        "business",
+        "online"
+      ]
+    },
+    {
+      "id": "evt-3",
+      "title": "Tech Leadership Workshop",
+      "titleBg": "Работилница за Технологично Лидерство",
+      "speaker": {
+        "id": "spk-3",
+        "name": "Michael Chen",
+        "nameBg": "Майкъл Чен",
+        "expertId": "expert-3",
+        "avatarSrc": "/images/avatars/avatar_3.png",
+        "role": "UX Design Lead at Airbnb",
+        "roleBg": "Водещ UX дизайнер в Airbnb"
+      },
+      "description": "An intensive half-day workshop for emerging tech leaders. Learn how to build resilient teams, manage technical debt, and drive innovation within your organization.",
+      "descriptionBg": "Интензивна полудневна работилница за нововъзникващи технологични лидери. Научете как да изграждате устойчиви екипи.",
+      "date": "2026-08-25T14:00:00Z",
+      "displayDate": "Tue, 25 Aug",
+      "displayDateBg": "Втор, 25 Авг",
+      "location": "LIVE, Sofia",
+      "locationBg": "НА ЖИВО, София",
+      "imageSrc": "/images/community/tech_event.png",
+      "tags": [
+        "recommended",
+        "top_speakers",
+        "on_site"
+      ],
+      "price": "€15"
+    },
+    {
+      "id": "evt-4",
+      "title": "Past AI Conference",
+      "titleBg": "Минала ИИ Конференция",
+      "speaker": {
+        "id": "spk-4",
+        "name": "Elena Rostova",
+        "nameBg": "Елена Ростова",
+        "expertId": "expert-2",
+        "avatarSrc": "/images/avatars/avatar_2.png",
+        "role": "Head of Engineering at Spotify",
+        "roleBg": "Ръководител инженеринг в Spotify"
+      },
+      "description": "This is a past event and should not be displayed in the list of upcoming events. However, we are adding more text here so that it perfectly matches the three lines requirement for the layout. Ensure this is long enough.",
+      "descriptionBg": "Това е минало събитие и не трябва да се показва в списъка с предстоящи събития. Въпреки това добавяме още текст тук, за да съвпадне перфектно с изискването за три реда в дизайна. Уверете се, че е достатъчно дълго.",
+      "date": "2023-01-01T10:00:00Z",
+      "displayDate": "Mon, 1 Jan",
+      "displayDateBg": "Пон, 1 Яну",
+      "location": "ONLINE",
+      "locationBg": "ОНЛАЙН",
+      "imageSrc": "/images/community/ai_event.png",
+      "tags": [
+        "recommended",
+        "ai",
+        "online"
+      ]
+    },
+    {
+      "id": "evt-5",
+      "title": "Startup Pitch Night",
+      "titleBg": "Вечер на Стартиращите Компании",
+      "speaker": {
+        "id": "spk-5",
+        "name": "Michael Chang",
+        "nameBg": "Майкъл Чанг",
+        "role": "Startup Investor",
+        "roleBg": "Инвеститор"
+      },
+      "description": "Watch early-stage startups pitch their innovative ideas to top venture capitalists. Network with founders, investors, and industry experts. Find out who will secure the next big funding round.",
+      "descriptionBg": "Гледайте как стартиращи компании в ранен етап представят своите иновативни идеи пред топ рискови капиталисти. Създайте контакти с основатели, инвеститори и експерти от индустрията. Разберете кой ще осигури следващия голям кръг на финансиране.",
+      "date": "2026-09-10T18:00:00Z",
+      "displayDate": "Thu, 10 Sep",
+      "displayDateBg": "Четв, 10 Сеп",
+      "location": "LIVE, London",
+      "locationBg": "НА ЖИВО, Лондон",
+      "imageSrc": "/images/community/summit.png",
+      "tags": [
+        "business",
+        "on_site"
+      ],
+      "price": "€10"
+    },
+    {
+      "id": "evt-6",
+      "title": "Web3 & Blockchain Summit",
+      "titleBg": "Среща на върха Web3 и Блокчейн",
+      "speaker": {
+        "id": "spk-6",
+        "name": "Sophia Martinez",
+        "nameBg": "София Мартинес",
+        "role": "Blockchain Architect",
+        "roleBg": "Блокчейн Архитект"
+      },
+      "description": "Explore the future of decentralized internet and blockchain applications with industry leaders. Learn about smart contracts, digital assets, and the transition to a more open, transparent web infrastructure.",
+      "descriptionBg": "Изследвайте бъдещето на децентрализирания интернет и блокчейн приложенията с лидери в индустрията. Научете за смарт договори, дигитални активи и прехода към по-отворена и прозрачна уеб инфраструктура.",
+      "date": "2026-09-15T10:00:00Z",
+      "displayDate": "Tue, 15 Sep",
+      "displayDateBg": "Втор, 15 Сеп",
+      "location": "ONLINE",
+      "locationBg": "ОНЛАЙН",
+      "imageSrc": "/images/community/ai_event.png",
+      "tags": [
+        "business",
+        "online"
+      ]
+    },
+    {
+      "id": "evt-7",
+      "title": "Design Systems Masterclass",
+      "titleBg": "Майсторски Клас по Дизайн Системи",
+      "speaker": {
+        "id": "spk-7",
+        "name": "Alex Rivera",
+        "nameBg": "Алекс Ривера",
+        "role": "Design Systems Engineer",
+        "roleBg": "Инженер на дизайн системи"
+      },
+      "description": "A deep dive into creating scalable and maintainable design systems for enterprise applications. Discover the best practices for building component libraries, managing design tokens, and aligning design with development.",
+      "descriptionBg": "Дълбоко гмуркане в създаването на мащабируеми и лесни за поддръжка дизайн системи за корпоративни приложения. Открийте най-добрите практики за изграждане на библиотеки с компоненти, управление на дизайн токени и съгласуване на дизайна с разработката.",
+      "date": "2026-09-20T14:00:00Z",
+      "displayDate": "Sun, 20 Sep",
+      "displayDateBg": "Нед, 20 Сеп",
+      "location": "LIVE, Berlin",
+      "locationBg": "НА ЖИВО, Берлин",
+      "imageSrc": "/images/community/summit.png",
+      "tags": [
+        "business",
+        "on_site"
+      ],
+      "price": "€49"
+    }
+  ],
+  "textbooks": {
+    "en": [
+      {
+        "id": "material-innovation-outlook",
+        "title": "Innovation Outlook 2026",
+        "excerpt": "Key trends, data, and practical frameworks shaping the future of business innovation across fast-moving markets.",
+        "authorLabel": "Author:",
+        "authorName": "Andrew Nikolov",
+        "authorExpertId": "expert-1",
+        "imageUrl": "/images/community/summit_event.png",
+        "pdfUrl": "/en/learn?material=innovation-outlook",
+        "previewPdfUrl": "/test.pdf",
+        "salesUrl": "/en/learn?material=innovation-outlook",
+        "category": "Innovation",
+        "format": "PDF",
+        "price": "€20",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": true,
+        "createdAt": "2026-01-16T10:00:00Z"
+      },
+      {
+        "id": "material-ai-product-playbook",
+        "title": "AI Product Strategy Playbook",
+        "excerpt": "A field guide for teams building AI-enabled products, from opportunity mapping to responsible launch plans.",
+        "authorLabel": "Author:",
+        "authorName": "Maya Petrova",
+        "authorExpertId": "expert-2",
+        "imageUrl": "/images/community/ai_event.png",
+        "pdfUrl": "/en/learn?material=ai-product-playbook",
+        "salesUrl": "/en/learn?material=ai-product-playbook",
+        "category": "AI",
+        "format": "Guide",
+        "price": "€35",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": true,
+        "createdAt": "2026-02-08T10:00:00Z"
+      },
+      {
+        "id": "material-fintech-models",
+        "title": "Fintech Business Models",
+        "excerpt": "Understand the revenue models, compliance patterns, and customer journeys that drive modern finance platforms.",
+        "authorLabel": "Author:",
+        "authorName": "Michael Chen",
+        "authorExpertId": "expert-3",
+        "imageUrl": "/images/community/finance_event.png",
+        "pdfUrl": "/en/learn?material=fintech-models",
+        "salesUrl": "/en/learn?material=fintech-models",
+        "category": "Business",
+        "format": "Report",
+        "price": "€28",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": true,
+        "createdAt": "2026-02-20T10:00:00Z"
+      },
+      {
+        "id": "material-founder-sales",
+        "title": "Founder Sales System",
+        "excerpt": "A practical workbook for positioning, outreach, discovery calls, and follow-up sequences for early-stage founders.",
+        "authorLabel": "Author:",
+        "authorName": "Elena Georgieva",
+        "authorExpertId": "expert-4",
+        "imageUrl": "/images/platform/slide_connect.png",
+        "pdfUrl": "/en/learn?material=founder-sales",
+        "salesUrl": "/en/learn?material=founder-sales",
+        "category": "Business",
+        "format": "Workbook",
+        "price": "€18",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": false,
+        "createdAt": "2026-03-02T10:00:00Z"
+      },
+      {
+        "id": "material-tech-leadership",
+        "title": "Technology Leadership Toolkit",
+        "excerpt": "Templates and principles for leading engineering teams, prioritizing roadmaps, and communicating technical risk.",
+        "authorLabel": "Author:",
+        "authorName": "David Kim",
+        "authorExpertId": "expert-1",
+        "imageUrl": "/images/community/tech_event.png",
+        "pdfUrl": "/en/learn?material=tech-leadership",
+        "salesUrl": "/en/learn?material=tech-leadership",
+        "category": "Technology",
+        "format": "Toolkit",
+        "price": "€32",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": true,
+        "createdAt": "2026-03-10T10:00:00Z"
+      },
+      {
+        "id": "material-market-entry",
+        "title": "Bulgaria Market Entry Notes",
+        "excerpt": "A concise guide to market research, local partnerships, pricing validation, and first customer acquisition.",
+        "authorLabel": "Author:",
+        "authorName": "Jane Smith",
+        "imageUrl": "/images/platform/slide_jobs.png",
+        "pdfUrl": "/en/learn?material=market-entry",
+        "salesUrl": "/en/learn?material=market-entry",
+        "category": "Business",
+        "format": "Notes",
+        "price": "€15",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": false,
+        "createdAt": "2026-03-21T10:00:00Z"
+      },
+      {
+        "id": "material-design-systems",
+        "title": "Design Systems for Scale",
+        "excerpt": "Learn how to define tokens, document components, and align product teams around reusable interface patterns.",
+        "authorLabel": "Author:",
+        "authorName": "Sarah Ivanova",
+        "imageUrl": "/images/platform/slide_skills.png",
+        "pdfUrl": "/en/learn?material=design-systems",
+        "salesUrl": "/en/learn?material=design-systems",
+        "category": "Technology",
+        "format": "Guide",
+        "price": "€24",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": false,
+        "createdAt": "2026-04-04T10:00:00Z"
+      },
+      {
+        "id": "material-cybersecurity-basics",
+        "title": "Cybersecurity Basics for Teams",
+        "excerpt": "Protect web products against common vulnerabilities and build practical security habits inside product teams.",
+        "authorLabel": "Author:",
+        "authorName": "Bob Brown",
+        "imageUrl": "/images/default_textbook_cover.png",
+        "pdfUrl": "/en/learn?material=cybersecurity-basics",
+        "salesUrl": "/en/learn?material=cybersecurity-basics",
+        "category": "Technology",
+        "format": "Checklist",
+        "price": "€12",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": false,
+        "createdAt": "2026-04-12T10:00:00Z"
+      },
+      {
+        "id": "material-community-growth",
+        "title": "Community Growth Manual",
+        "excerpt": "A structured manual for building expert communities, running member rituals, and measuring engagement.",
+        "authorLabel": "Author:",
+        "authorName": "Andrew Nikolov",
+        "authorExpertId": "expert-1",
+        "imageUrl": "/images/platform/slide_events.png",
+        "pdfUrl": "/en/learn?material=community-growth",
+        "salesUrl": "/en/learn?material=community-growth",
+        "category": "Innovation",
+        "format": "Manual",
+        "price": "€22",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": true,
+        "createdAt": "2026-04-24T10:00:00Z"
+      }
+    ],
+    "bg": [
+      {
+        "id": "material-innovation-outlook",
+        "title": "Прогноза за иновациите 2026",
+        "excerpt": "Ключови тенденции, данни и практически модели, които оформят бъдещето на бизнес иновациите.",
+        "authorLabel": "Автор:",
+        "authorName": "Андрей Николов",
+        "authorExpertId": "expert-1",
+        "imageUrl": "/images/community/summit_event.png",
+        "pdfUrl": "/bg/learn?material=innovation-outlook",
+        "previewPdfUrl": "/test.pdf",
+        "salesUrl": "/bg/learn?material=innovation-outlook",
+        "category": "Иновации",
+        "format": "PDF",
+        "price": "€20",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": true,
+        "createdAt": "2026-01-16T10:00:00Z"
+      },
+      {
+        "id": "material-ai-product-playbook",
+        "title": "AI продуктова стратегия",
+        "excerpt": "Практическо ръководство за екипи, които създават AI продукти - от идея до отговорно пускане.",
+        "authorLabel": "Автор:",
+        "authorName": "Мая Петрова",
+        "authorExpertId": "expert-2",
+        "imageUrl": "/images/community/ai_event.png",
+        "pdfUrl": "/bg/learn?material=ai-product-playbook",
+        "salesUrl": "/bg/learn?material=ai-product-playbook",
+        "category": "Изкуствен интелект",
+        "format": "Ръководство",
+        "price": "€35",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": true,
+        "createdAt": "2026-02-08T10:00:00Z"
+      },
+      {
+        "id": "material-fintech-models",
+        "title": "Финтех бизнес модели",
+        "excerpt": "Разберете приходните модели, регулаторните рамки и клиентските пътеки във финансовите платформи.",
+        "authorLabel": "Автор:",
+        "authorName": "Майкъл Чен",
+        "authorExpertId": "expert-3",
+        "imageUrl": "/images/community/finance_event.png",
+        "pdfUrl": "/bg/learn?material=fintech-models",
+        "salesUrl": "/bg/learn?material=fintech-models",
+        "category": "Бизнес",
+        "format": "Доклад",
+        "price": "€28",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": true,
+        "createdAt": "2026-02-20T10:00:00Z"
+      },
+      {
+        "id": "material-founder-sales",
+        "title": "Система за основателски продажби",
+        "excerpt": "Работна тетрадка за позициониране, контакт с клиенти, discovery разговори и последваща комуникация.",
+        "authorLabel": "Автор:",
+        "authorName": "Елена Георгиева",
+        "authorExpertId": "expert-4",
+        "imageUrl": "/images/platform/slide_connect.png",
+        "pdfUrl": "/bg/learn?material=founder-sales",
+        "salesUrl": "/bg/learn?material=founder-sales",
+        "category": "Бизнес",
+        "format": "Работна тетрадка",
+        "price": "€18",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": false,
+        "createdAt": "2026-03-02T10:00:00Z"
+      },
+      {
+        "id": "material-tech-leadership",
+        "title": "Инструменти за технологично лидерство",
+        "excerpt": "Шаблони и принципи за водене на инженерни екипи, пътни карти и комуникация на технически риск.",
+        "authorLabel": "Автор:",
+        "authorName": "Дейвид Ким",
+        "authorExpertId": "expert-1",
+        "imageUrl": "/images/community/tech_event.png",
+        "pdfUrl": "/bg/learn?material=tech-leadership",
+        "salesUrl": "/bg/learn?material=tech-leadership",
+        "category": "Технологии",
+        "format": "Инструментариум",
+        "price": "€32",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": true,
+        "createdAt": "2026-03-10T10:00:00Z"
+      },
+      {
+        "id": "material-market-entry",
+        "title": "Бележки за навлизане на българския пазар",
+        "excerpt": "Кратко ръководство за пазарно проучване, партньорства, валидиране на цени и първи клиенти.",
+        "authorLabel": "Автор:",
+        "authorName": "Джейн Смит",
+        "imageUrl": "/images/platform/slide_jobs.png",
+        "pdfUrl": "/bg/learn?material=market-entry",
+        "salesUrl": "/bg/learn?material=market-entry",
+        "category": "Бизнес",
+        "format": "Бележки",
+        "price": "€15",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": false,
+        "createdAt": "2026-03-21T10:00:00Z"
+      },
+      {
+        "id": "material-design-systems",
+        "title": "Дизайн системи за мащаб",
+        "excerpt": "Научете как да дефинирате токени, документирате компоненти и синхронизирате продуктови екипи.",
+        "authorLabel": "Автор:",
+        "authorName": "Сара Иванова",
+        "imageUrl": "/images/platform/slide_skills.png",
+        "pdfUrl": "/bg/learn?material=design-systems",
+        "salesUrl": "/bg/learn?material=design-systems",
+        "category": "Технологии",
+        "format": "Ръководство",
+        "price": "€24",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": false,
+        "createdAt": "2026-04-04T10:00:00Z"
+      },
+      {
+        "id": "material-cybersecurity-basics",
+        "title": "Основи на киберсигурността за екипи",
+        "excerpt": "Защитете уеб продукти от чести уязвимости и изградете практически навици за сигурност.",
+        "authorLabel": "Автор:",
+        "authorName": "Боб Браун",
+        "imageUrl": "/images/default_textbook_cover.png",
+        "pdfUrl": "/bg/learn?material=cybersecurity-basics",
+        "salesUrl": "/bg/learn?material=cybersecurity-basics",
+        "category": "Технологии",
+        "format": "Чеклист",
+        "price": "€12",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": false,
+        "createdAt": "2026-04-12T10:00:00Z"
+      },
+      {
+        "id": "material-community-growth",
+        "title": "Наръчник за растеж на общност",
+        "excerpt": "Структуриран наръчник за експертни общности, ритуали за членове и измерване на ангажираността.",
+        "authorLabel": "Автор:",
+        "authorName": "Андрей Николов",
+        "authorExpertId": "expert-1",
+        "imageUrl": "/images/platform/slide_events.png",
+        "pdfUrl": "/bg/learn?material=community-growth",
+        "salesUrl": "/bg/learn?material=community-growth",
+        "category": "Иновации",
+        "format": "Наръчник",
+        "price": "€22",
+        "badge": "PDF",
+        "hasPreview": true,
+        "isTrending": true,
+        "createdAt": "2026-04-24T10:00:00Z"
+      }
+    ]
+  },
+  "projects": {
+    "en": [
+      {
+        "id": "digital-bridges",
+        "title": "Digital Bridges: Supporting Local Communities Through Technology",
+        "description": "The project develops digital access and strengthens local communities through education, practical technology solutions, and partnership programs. It supports digital literacy, civic organizations, and new cooperation between business, nonprofits, and residents.",
+        "code": "BG16RFPR001-2.003-0147-C01",
+        "date": "02/04/2026",
+        "imageUrl": "/images/platform/slide_connect.png",
+        "href": "https://hashtag-innovations.com/projects/digital-bridges"
+      },
+      {
+        "id": "innovation-labs",
+        "title": "Innovation Labs for Young Entrepreneurs",
+        "description": "A sponsored initiative that gives early-stage teams access to mentors, workshops, and shared tools for testing ideas. The program helps founders validate customer needs, prepare pilots, and build stronger local business networks.",
+        "code": "BG16RFPR001-2.003-0182-C01",
+        "date": "18/04/2026",
+        "imageUrl": "/images/community/summit_event.png",
+        "href": "https://hashtag-innovations.com/projects/innovation-labs"
+      },
+      {
+        "id": "skills-for-future",
+        "title": "Skills for the Future Workforce",
+        "description": "This social campaign brings practical technology training to professionals and students who want to adapt to a changing labor market. Activities include public sessions, expert clinics, and resource kits for local organizations.",
+        "code": "BG16RFPR001-2.003-0201-C01",
+        "date": "06/05/2026",
+        "imageUrl": "/images/community/ai_event.png",
+        "href": "https://hashtag-innovations.com/projects/skills-for-future"
+      },
+      {
+        "id": "green-tech-network",
+        "title": "Green Tech Network for Sustainable Growth",
+        "description": "The project connects companies, experts, and community partners around sustainable technology practices. It promotes responsible innovation, environmental education, and collaboration on measurable impact initiatives.",
+        "code": "BG16RFPR001-2.003-0234-C01",
+        "date": "28/05/2026",
+        "imageUrl": "/images/platform/slide_skills.png",
+        "href": "https://hashtag-innovations.com/projects/green-tech-network"
+      }
+    ],
+    "bg": [
+      {
+        "id": "digital-bridges",
+        "title": "Дигитални мостове: подкрепа на местни общности чрез технологии",
+        "description": "Проектът развива дигиталната достъпност и укрепва местните общности чрез образователни инициативи, технологични решения и партньорски програми. В рамките му се реализират дейности за повишаване на дигиталната грамотност, подкрепа на обществени организации и създаване на нови възможности за сътрудничество между бизнес, неправителствен сектор и граждани.",
+        "code": "BG16RFPR001-2.003-0147-C01",
+        "date": "02/04/2026",
+        "imageUrl": "/images/platform/slide_connect.png",
+        "href": "https://hashtag-innovations.com/projects/digital-bridges"
+      },
+      {
+        "id": "innovation-labs",
+        "title": "Иновационни лаборатории за млади предприемачи",
+        "description": "Спонсорирана инициатива, която предоставя на ранни екипи достъп до ментори, работилници и общи инструменти за тестване на идеи. Програмата помага на основателите да валидират нуждите на клиентите, да подготвят пилотни решения и да изграждат по-силни местни бизнес мрежи.",
+        "code": "BG16RFPR001-2.003-0182-C01",
+        "date": "18/04/2026",
+        "imageUrl": "/images/community/summit_event.png",
+        "href": "https://hashtag-innovations.com/projects/innovation-labs"
+      },
+      {
+        "id": "skills-for-future",
+        "title": "Умения за работната сила на бъдещето",
+        "description": "Социалната кампания предоставя практическо технологично обучение на професионалисти и студенти, които искат да се адаптират към променящия се пазар на труда. Дейностите включват публични сесии, експертни консултации и ресурсни комплекти за местни организации.",
+        "code": "BG16RFPR001-2.003-0201-C01",
+        "date": "06/05/2026",
+        "imageUrl": "/images/community/ai_event.png",
+        "href": "https://hashtag-innovations.com/projects/skills-for-future"
+      },
+      {
+        "id": "green-tech-network",
+        "title": "Зелена технологична мрежа за устойчив растеж",
+        "description": "Проектът свързва компании, експерти и общностни партньори около устойчиви технологични практики. Той насърчава отговорните иновации, екологичното образование и сътрудничеството по инициативи с измеримо въздействие.",
+        "code": "BG16RFPR001-2.003-0234-C01",
+        "date": "28/05/2026",
+        "imageUrl": "/images/platform/slide_skills.png",
+        "href": "https://hashtag-innovations.com/projects/green-tech-network"
+      }
+    ]
+  },
+  "upcomingEvents": {
+    "en": [
+      {
+        "id": 1,
+        "title": "Past Summit 2025",
+        "speakerName": "Jane Doe",
+        "description": "An old event that already happened.",
+        "dateIso": "2025-05-20T10:00:00Z",
+        "location": "On site, Varna"
+      },
+      {
+        "id": 2,
+        "eventId": "evt-1",
+        "isFeaturedHero": true,
+        "title": "Business Innovation Summit 2026",
+        "speakerName": "Andrey Nikolov",
+        "speakerExpertId": "expert-4",
+        "description": "Join 500+ leaders for insights on AI, digital transformation, and strategic growth...",
+        "dateIso": "2026-08-15T10:00:00Z",
+        "location": "On site, Sofia"
+      },
+      {
+        "id": 3,
+        "title": "Future of Digital Transformation",
+        "speakerName": "Michael Smith",
+        "description": "Explore the newest tools helping organizations build scalable and resilient architectures.",
+        "dateIso": "2026-09-20T10:00:00Z",
+        "location": "On site, Plovdiv"
+      }
+    ],
+    "bg": [
+      {
+        "id": 1,
+        "title": "AI & ML in Finance Conference 2024",
+        "speakerName": "Джейн Доу",
+        "description": "Навлизане дълбоко в това как алгоритмите за машинно обучение трансформират съвременното банкиране, управление на риска...",
+        "dateIso": "2024-05-15T10:00:00Z",
+        "location": "Онлайн"
+      },
+      {
+        "id": 2,
+        "eventId": "evt-1",
+        "isFeaturedHero": true,
+        "title": "Business Innovation Summit 2026",
+        "speakerName": "Андрей Николов",
+        "speakerExpertId": "expert-4",
+        "description": "Присъединете се към 500+ лидери за прозрения относно AI, дигитална трансформация и стратегически растеж...",
+        "dateIso": "2026-08-15T10:00:00Z",
+        "location": "На място, София"
+      },
+      {
+        "id": 3,
+        "title": "Бъдещето на Web3 и Блокчейн",
+        "speakerName": "Майкъл Смит",
+        "description": "Разгледайте децентрализацията на мрежата и новите финансови модели.",
+        "dateIso": "2026-10-10T10:00:00Z",
+        "location": "Онлайн"
+      }
+    ]
+  }
+}

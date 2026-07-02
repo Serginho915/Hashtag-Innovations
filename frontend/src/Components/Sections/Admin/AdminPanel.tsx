@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./AdminPanel.module.scss";
 
 type FieldType =
@@ -12,16 +12,19 @@ type FieldType =
   | "number"
   | "date"
   | "datetime"
-  | "url";
+  | "url"
+  | "file";
 
 type FieldValue = string | number | boolean;
 type AdminRecord = Record<string, FieldValue> & { id: string };
+type RecordsByResource = Record<string, AdminRecord[]>;
 
 interface AdminField {
   key: string;
   label: string;
   type: FieldType;
   options?: string[];
+  accept?: string;
   fullWidth?: boolean;
 }
 
@@ -38,6 +41,26 @@ interface ResourceConfig {
 const statusOptions = ["draft", "published", "archived"];
 const kindOptions = ["", "article", "event", "expert", "learn_material", "project"];
 const contentTypeOptions = ["news", "blog"];
+const resourceHelpText: Record<string, string> = {
+  categories:
+    "Categories group content by topic and type, so articles, events, learning materials and projects can be organized and filtered.",
+  tags:
+    "Tags add flexible labels to content, helping mark topics, highlights, recommendations and cross-category relationships.",
+  organizations:
+    "Organizations store companies, partners and institutions that can be connected to experts, events and projects.",
+  experts:
+    "Experts describe people shown on the site, including their profile, expertise, availability and consultation details.",
+  expert_sessions:
+    "Expert Sessions define bookable or featured sessions connected to an expert, including title, description and price.",
+  articles:
+    "Articles manage news, blog posts and insights that appear in content sections across the site.",
+  events:
+    "Events manage upcoming or past activities, including speakers, organizers, dates, location and registration content.",
+  learn_materials:
+    "Learn Materials manage educational resources such as guides, PDFs and paid or previewable learning content.",
+  projects:
+    "Projects describe portfolio or community initiatives, including organization, date, status and external links.",
+};
 
 const resources: ResourceConfig[] = [
   {
@@ -50,7 +73,6 @@ const resources: ResourceConfig[] = [
       { key: "name", label: "Name", type: "text" },
       { key: "slug", label: "Slug", type: "text" },
       { key: "kind", label: "Kind", type: "select", options: kindOptions },
-      { key: "description", label: "Description", type: "textarea", fullWidth: true },
       { key: "is_active", label: "Active", type: "boolean" },
     ],
     records: [
@@ -59,7 +81,6 @@ const resources: ResourceConfig[] = [
         name: "Business",
         slug: "business",
         kind: "article",
-        description: "Insights, news and blog content for business readers.",
         is_active: true,
       },
       {
@@ -67,7 +88,6 @@ const resources: ResourceConfig[] = [
         name: "Technology",
         slug: "technology",
         kind: "event",
-        description: "Technology events and platform materials.",
         is_active: true,
       },
     ],
@@ -77,12 +97,11 @@ const resources: ResourceConfig[] = [
     label: "Tags",
     singular: "Tag",
     accent: "#D62612",
-    columns: ["name", "slug", "kind", "show_dot", "is_active"],
+    columns: ["name", "slug", "kind", "is_active"],
     fields: [
       { key: "name", label: "Name", type: "text" },
       { key: "slug", label: "Slug", type: "text" },
       { key: "kind", label: "Kind", type: "select", options: kindOptions },
-      { key: "show_dot", label: "Show dot", type: "boolean" },
       { key: "is_active", label: "Active", type: "boolean" },
     ],
     records: [
@@ -91,7 +110,6 @@ const resources: ResourceConfig[] = [
         name: "Recommended",
         slug: "recommended",
         kind: "event",
-        show_dot: true,
         is_active: true,
       },
       {
@@ -99,7 +117,6 @@ const resources: ResourceConfig[] = [
         name: "AI",
         slug: "ai",
         kind: "article",
-        show_dot: false,
         is_active: true,
       },
     ],
@@ -113,7 +130,7 @@ const resources: ResourceConfig[] = [
     fields: [
       { key: "name", label: "Name", type: "text" },
       { key: "slug", label: "Slug", type: "text" },
-      { key: "logo", label: "Logo path", type: "text" },
+      { key: "logo", label: "Logo", type: "file", accept: "image/*" },
       { key: "website_url", label: "Website URL", type: "url" },
       { key: "description", label: "Description", type: "textarea", fullWidth: true },
       { key: "is_active", label: "Active", type: "boolean" },
@@ -142,7 +159,7 @@ const resources: ResourceConfig[] = [
       { key: "role", label: "Role", type: "text" },
       { key: "company_name", label: "Company name", type: "text" },
       { key: "organization", label: "Organization", type: "text" },
-      { key: "photo", label: "Photo path", type: "text" },
+      { key: "photo", label: "Photo", type: "file", accept: "image/*" },
       { key: "quote", label: "Quote", type: "textarea", fullWidth: true },
       { key: "bio", label: "Bio", type: "textarea", fullWidth: true },
       { key: "expertise", label: "Expertise", type: "textarea" },
@@ -218,7 +235,7 @@ const resources: ResourceConfig[] = [
       { key: "tags", label: "Tags", type: "text" },
       { key: "author", label: "Author expert", type: "text" },
       { key: "author_name", label: "Author name", type: "text" },
-      { key: "image", label: "Image path", type: "text" },
+      { key: "image", label: "Image", type: "file", accept: "image/*" },
       { key: "excerpt", label: "Excerpt", type: "textarea", fullWidth: true },
       { key: "lead", label: "Lead", type: "textarea", fullWidth: true },
       { key: "body", label: "Body", type: "textarea", fullWidth: true },
@@ -271,8 +288,8 @@ const resources: ResourceConfig[] = [
       { key: "timezone", label: "Timezone", type: "text" },
       { key: "location", label: "Location", type: "text" },
       { key: "price_label", label: "Price label", type: "text" },
-      { key: "image", label: "Image path", type: "text" },
-      { key: "hero_image", label: "Hero image path", type: "text" },
+      { key: "image", label: "Image", type: "file", accept: "image/*" },
+      { key: "hero_image", label: "Hero image", type: "file", accept: "image/*" },
       { key: "status", label: "Status", type: "select", options: statusOptions },
       { key: "is_featured_hero", label: "Featured hero", type: "boolean" },
     ],
@@ -314,7 +331,7 @@ const resources: ResourceConfig[] = [
       { key: "author", label: "Author expert", type: "text" },
       { key: "author_name", label: "Author name", type: "text" },
       { key: "excerpt", label: "Excerpt", type: "textarea", fullWidth: true },
-      { key: "cover_image", label: "Cover image path", type: "text" },
+      { key: "cover_image", label: "Cover image", type: "file", accept: "image/*" },
       { key: "pdf_file", label: "PDF file path", type: "text" },
       { key: "preview_pdf_file", label: "Preview PDF path", type: "text" },
       { key: "sales_url", label: "Sales URL", type: "url" },
@@ -365,8 +382,7 @@ const resources: ResourceConfig[] = [
       { key: "description", label: "Description", type: "textarea", fullWidth: true },
       { key: "code", label: "Code", type: "text" },
       { key: "project_date", label: "Project date", type: "date" },
-      { key: "image", label: "Image path", type: "text" },
-      { key: "external_url", label: "External URL", type: "url" },
+      { key: "image", label: "Image", type: "file", accept: "image/*" },
       { key: "status", label: "Status", type: "select", options: statusOptions },
       { key: "is_featured", label: "Featured", type: "boolean" },
     ],
@@ -382,7 +398,6 @@ const resources: ResourceConfig[] = [
         code: "HI-24",
         project_date: "2026-05-20",
         image: "/ProjectImg.png",
-        external_url: "",
         status: "published",
         is_featured: true,
       },
@@ -422,6 +437,18 @@ const formatValue = (value: FieldValue | undefined) => {
   }
 
   return String(value);
+};
+
+const formatOptionLabel = (value: string) => {
+  if (!value) {
+    return "Any";
+  }
+
+  return value
+    .split("_")
+    .filter(Boolean)
+    .map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
+    .join(" ");
 };
 
 const EditIcon = () => (
@@ -480,12 +507,73 @@ export const AdminPanel = () => {
   const [activeKey, setActiveKey] = useState(resources[0].key);
   const [query, setQuery] = useState("");
   const [recordsByResource, setRecordsByResource] = useState(
-    () => Object.fromEntries(resources.map((resource) => [resource.key, resource.records])),
+    () => Object.fromEntries(resources.map((resource) => [resource.key, [] as AdminRecord[]])),
   );
+  const [isLoadingRecords, setIsLoadingRecords] = useState(true);
+  const [recordsError, setRecordsError] = useState("");
   const [editingRecord, setEditingRecord] = useState<AdminRecord | null>(null);
   const [editingMode, setEditingMode] = useState<"create" | "edit">("edit");
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadRecords = async () => {
+      setIsLoadingRecords(true);
+      setRecordsError("");
+
+      const response = await fetch("/admin/api/resources", {
+        cache: "no-store",
+      }).catch(() => null);
+
+      if (!isMounted) {
+        return;
+      }
+
+      if (!response) {
+        setRecordsError("Could not connect to admin API.");
+        setIsLoadingRecords(false);
+        return;
+      }
+
+      if (response.status === 401) {
+        window.location.assign("/admin/login");
+        return;
+      }
+
+      if (!response.ok) {
+        setRecordsError("Could not load records from the database.");
+        setIsLoadingRecords(false);
+        return;
+      }
+
+      const payload = (await response.json().catch(() => null)) as RecordsByResource | null;
+
+      if (!payload) {
+        setRecordsError("Admin API returned an invalid response.");
+        setIsLoadingRecords(false);
+        return;
+      }
+
+      setRecordsByResource((current) =>
+        Object.fromEntries(
+          resources.map((resource) => [
+            resource.key,
+            Array.isArray(payload[resource.key]) ? payload[resource.key] : current[resource.key] ?? [],
+          ]),
+        ),
+      );
+      setIsLoadingRecords(false);
+    };
+
+    void loadRecords();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const activeResource = resources.find((resource) => resource.key === activeKey) ?? resources[0];
+  const activeResourceHelpText = resourceHelpText[activeResource.key];
   const activeRecords = useMemo(
     () => recordsByResource[activeResource.key] ?? [],
     [activeResource.key, recordsByResource],
@@ -624,15 +712,15 @@ export const AdminPanel = () => {
             <div>
               <div className={styles.titleHeading}>
                 <h1>{activeResource.label}</h1>
-                {activeResource.key === "categories" && (
+                {activeResourceHelpText && (
                   <button
                     className={styles.helpButton}
                     type="button"
-                    aria-label="Categories help"
+                    aria-label={`${activeResource.label} help`}
                   >
                     <HelpIcon />
                     <span className={styles.helpTooltip} role="tooltip">
-                      Categories group content by topic and type, so articles, events, learning materials and projects can be organized and filtered.
+                      {activeResourceHelpText}
                     </span>
                   </button>
                 )}
@@ -701,7 +789,19 @@ export const AdminPanel = () => {
               </tbody>
             </table>
 
-            {filteredRecords.length === 0 && (
+            {isLoadingRecords && (
+              <div className={styles.emptyState}>
+                <h2>Loading records...</h2>
+              </div>
+            )}
+
+            {!isLoadingRecords && recordsError && (
+              <div className={styles.emptyState}>
+                <h2>{recordsError}</h2>
+              </div>
+            )}
+
+            {!isLoadingRecords && !recordsError && filteredRecords.length === 0 && (
               <div className={styles.emptyState}>
                 <h2>No records found</h2>
               </div>
@@ -753,6 +853,23 @@ export const AdminPanel = () => {
                           onChange={(event) => updateEditingValue(field, event.target.value)}
                           rows={field.fullWidth ? 5 : 3}
                         />
+                      ) : field.type === "file" ? (
+                        <span className={styles.fileField}>
+                          <input
+                            type="file"
+                            accept={field.accept}
+                            onChange={(event) => {
+                              const file = event.target.files?.[0];
+
+                              if (file) {
+                                updateEditingValue(field, file.name);
+                              }
+                            }}
+                          />
+                          {editingRecord[field.key] && (
+                            <span>{`Selected: ${String(editingRecord[field.key])}`}</span>
+                          )}
+                        </span>
                       ) : field.type === "select" ? (
                         <select
                           value={String(editingRecord[field.key] ?? "")}
@@ -760,7 +877,7 @@ export const AdminPanel = () => {
                         >
                           {field.options?.map((option) => (
                             <option key={option || "blank"} value={option}>
-                              {option || "Any"}
+                              {formatOptionLabel(option)}
                             </option>
                           ))}
                         </select>
