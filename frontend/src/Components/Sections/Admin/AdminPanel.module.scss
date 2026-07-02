@@ -251,6 +251,8 @@
   gap: 18px;
 
   > div:first-child {
+    position: relative;
+    z-index: 2;
     margin-right: auto;
   }
 
@@ -260,6 +262,7 @@
     right: 0;
     bottom: -5px;
     left: 0;
+    z-index: 1;
     height: 2px;
     background: #000;
   }
@@ -284,6 +287,66 @@
   }
 }
 
+.titleHeading {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.helpButton {
+  position: relative;
+  min-width: 20px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #69698b;
+  font-family: vars.$font-manrope;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1;
+  cursor: help;
+  transform: translate(-4px, -8px);
+
+  &:hover,
+  &:focus-visible {
+    color: #000;
+    outline: none;
+
+    .helpTooltip {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, 0);
+    }
+  }
+}
+
+.helpTooltip {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  z-index: 80;
+  width: min(320px, 80vw);
+  padding: 10px 12px;
+  border: 1px solid #c0c0d2;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
+  color: #363636;
+  font-family: vars.$font-manrope;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.45;
+  opacity: 0;
+  pointer-events: none;
+  text-align: left;
+  transform: translate(-50%, 4px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
 .eyebrow {
   display: block;
   margin-bottom: 4px;
@@ -292,49 +355,6 @@
   font-weight: 800;
   letter-spacing: 0;
   text-transform: uppercase;
-}
-
-.metricsRow {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-bottom: 1px solid #c0c0d2;
-
-  @include mobile {
-    grid-template-columns: 1fr;
-  }
-}
-
-.metric {
-  min-height: 78px;
-  padding: 16px 18px;
-  border-right: 1px solid #e3e3ea;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-
-  &:last-child {
-    border-right: 0;
-  }
-
-  span {
-    color: #69698b;
-    font-size: 13px;
-    font-weight: 800;
-    text-transform: uppercase;
-  }
-
-  strong {
-    color: #000;
-    font-size: 28px;
-    font-weight: 800;
-    line-height: 1;
-  }
-
-  @include mobile {
-    border-right: 0;
-    border-bottom: 1px solid #e3e3ea;
-  }
 }
 
 .toolbar {

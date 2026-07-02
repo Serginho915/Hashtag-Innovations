@@ -472,6 +472,10 @@ const DeleteIcon = () => (
   </svg>
 );
 
+const HelpIcon = () => (
+  <span aria-hidden="true">?</span>
+);
+
 export const AdminPanel = () => {
   const [activeKey, setActiveKey] = useState(resources[0].key);
   const [query, setQuery] = useState("");
@@ -618,31 +622,25 @@ export const AdminPanel = () => {
         <section className={styles.contentArea}>
           <div className={styles.titleLine}>
             <div>
-              <h1>{activeResource.label}</h1>
+              <div className={styles.titleHeading}>
+                <h1>{activeResource.label}</h1>
+                {activeResource.key === "categories" && (
+                  <button
+                    className={styles.helpButton}
+                    type="button"
+                    aria-label="Categories help"
+                  >
+                    <HelpIcon />
+                    <span className={styles.helpTooltip} role="tooltip">
+                      Categories group content by topic and type, so articles, events, learning materials and projects can be organized and filtered.
+                    </span>
+                  </button>
+                )}
+              </div>
             </div>
             <button className={styles.primaryButton} type="button" onClick={openCreate}>
               New record
             </button>
-          </div>
-
-          <div className={styles.metricsRow}>
-            <div className={styles.metric}>
-              <span>Total</span>
-              <strong>{activeRecords.length}</strong>
-            </div>
-            <div className={styles.metric}>
-              <span>Visible</span>
-              <strong>{filteredRecords.length}</strong>
-            </div>
-            <div className={styles.metric}>
-              <span>Published</span>
-              <strong>
-                {
-                  activeRecords.filter((record) => record.status === "published" || record.is_active === true)
-                    .length
-                }
-              </strong>
-            </div>
           </div>
 
           <div className={styles.toolbar}>
