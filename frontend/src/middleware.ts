@@ -6,6 +6,10 @@ const defaultLocale = 'bg';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (pathname === '/admin' || pathname.startsWith('/admin/')) {
+    return NextResponse.next();
+  }
   
   // Check if there is any supported locale in the pathname
   const pathnameHasLocale = locales.some(
