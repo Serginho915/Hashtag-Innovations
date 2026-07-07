@@ -1,4 +1,5 @@
 import ast
+import html
 import json
 from decimal import Decimal, InvalidOperation
 
@@ -107,6 +108,14 @@ def localized_public_id(slug, lang):
     return text
 
 
+ARTICLE_TRANSLATED_FIELDS = (
+    "title",
+    "excerpt",
+    "lead",
+    "promoted_label",
+    "body",
+)
+
 EXPERT_TRANSLATED_FIELDS = (
     "name",
     "role",
@@ -209,8 +218,6 @@ def serialize_expert(expert, lang="en"):
             continue
 
         service_price = getattr(expert, template["price_field"])
-        if service_price is None:
-            service_price = expert.consultation_price
 
         sessions.append(
             {
@@ -231,7 +238,7 @@ def serialize_expert(expert, lang="en"):
         "quote": translated["quote"],
         "availableFor": analytics.get("availableFor", []),
         "expertise": translated["expertise"] or [],
-        "price": float(expert.consultation_price) if expert.consultation_price is not None else None,
+        "price": float(expert.service_consultation_price) if expert.service_consultation_price is not None else None,
         "languages": translated["languages"] or [],
         "industries": translated["industries"] or [],
         "bio": text_list_value(translated["bio"]),
@@ -247,26 +254,52 @@ def serialize_expert(expert, lang="en"):
     }
 
 
-def serialize_article(article):
-    body = article.body or {}
+def article_translation(article, lang):
+    translations = article.translations if isinstance(article.translations, dict) else {}
+    translated = translations.get(lang) if isinstance(translations.get(lang), dict) else {}
+    fallback_lang = "en" if lang != "en" else "bg"
+    fallback = translations.get(fallback_lang) if isinstance(translations.get(fallback_lang), dict) else {}
+
+    def get(field):
+        value = translated.get(field)
+        if value not in (None, "", [], {}):
+            return value
+        value = fallback.get(field)
+        if value not in (None, "", [], {}):
+            return value
+        return getattr(article, field)
+
+    return {field: get(field) for field in ARTICLE_TRANSLATED_FIELDS}
+
+
+def serialize_article(article, lang="en"):
+    translated = article_translation(article, lang)
+    body = translated["body"] if isinstance(translated["body"], dict) else {}
+    author = article.author
+    author_translated = expert_translation(author, lang) if author else {}
+    author_name = author_translated.get("name") or translated.get("author_name") or article.author_name
+    author_expert_id = localized_public_id(author.slug, "") if author else ""
+    author_avatar_url = file_url(author.photo) if author else ""
+    time_to_read = body.get("timeToRead") or body.get("readTime")
+
     return {
         "id": body.get("_mock_id") or article.slug,
         "category": article.category.name if article.category else "",
-        "title": article.title,
+        "title": translated["title"],
         "date": article.published_at.isoformat() if article.published_at else "",
         "displayDate": body.get("displayDate"),
-        "timeToRead": body.get("timeToRead"),
-        "readTime": body.get("readTime"),
+        "timeToRead": time_to_read,
+        "readTime": time_to_read,
         "imageUrl": file_url(article.image),
-        "excerpt": article.excerpt,
-        "lead": article.lead,
+        "excerpt": translated["excerpt"],
+        "lead": translated["lead"],
         "bodySections": body.get("sections", []),
-        "promotedLabel": article.promoted_label,
+        "promotedLabel": translated["promoted_label"],
         "hashtags": body.get("hashtags", []),
-        "authorName": article.author_name,
-        "authorLabel": body.get("authorLabel"),
-        "authorExpertId": body.get("authorExpertId"),
-        "authorAvatarUrl": body.get("authorAvatarUrl"),
+        "authorName": author_name,
+        "authorLabel": "by" if lang == "en" else "от",
+        "authorExpertId": author_expert_id,
+        "authorAvatarUrl": author_avatar_url,
         "tags": [tag.name for tag in article.tags.all()],
     }
 
@@ -467,7 +500,6 @@ def serialize_admin_expert(expert):
         "experience_en": admin_expert_translation_value(expert, "en", "experience"),
         "experience_bg": admin_expert_translation_value(expert, "bg", "experience"),
         "analytics": admin_json_value(expert.analytics),
-        "consultation_price": admin_decimal_value(expert.consultation_price),
         "is_available_for_consultation": expert.is_available_for_consultation,
         "service_consultation": expert.service_consultation,
         "service_consultation_price": admin_decimal_value(expert.service_consultation_price),
@@ -492,21 +524,94 @@ def serialize_admin_expert_session(session):
     }
 
 
+def raw_article_translation(article, lang):
+    translations = article.translations if isinstance(article.translations, dict) else {}
+    translated = translations.get(lang)
+
+    if isinstance(translated, dict):
+        return translated
+
+    if translations:
+        return {}
+
+    return {
+        "title": article.title,
+        "excerpt": article.excerpt,
+        "lead": article.lead,
+        "promoted_label": article.promoted_label,
+        "body": article.body if isinstance(article.body, dict) else {},
+    }
+
+
+def admin_article_translation_value(article, lang, field):
+    translated = raw_article_translation(article, lang)
+    value = translated.get(field)
+    if field == "body":
+        return value if isinstance(value, dict) else {}
+    return value or ""
+
+
+def article_sections_admin_value(body):
+    sections = body.get("sections", []) if isinstance(body, dict) else []
+    if not isinstance(sections, list):
+        return ""
+
+    html_parts = []
+    for section in sections:
+        if not isinstance(section, dict):
+            text = str(section).strip()
+            if text:
+                html_parts.append(f"<p>{html.escape(text)}</p>")
+            continue
+
+        raw_html = section.get("html")
+        if raw_html:
+            html_parts.append(str(raw_html))
+            continue
+
+        title = str(section.get("title", "") or "").strip()
+        if title:
+            html_parts.append(f"<h2>{html.escape(title)}</h2>")
+
+        for paragraph in text_list_value(section.get("paragraphs", [])):
+            html_parts.append(f"<p>{html.escape(paragraph)}</p>")
+
+    return "\n".join(html_parts)
+
+
 def serialize_admin_article(article):
+    body_en = admin_article_translation_value(article, "en", "body")
+    body_bg = admin_article_translation_value(article, "bg", "body")
+    shared_body = body_en or body_bg
+
     return {
         "id": str(article.id),
         "article_type": article.article_type,
         "title": article.title,
+        "title_en": admin_article_translation_value(article, "en", "title"),
+        "title_bg": admin_article_translation_value(article, "bg", "title"),
         "slug": article.slug,
         "category": str(article.category) if article.category else "",
         "tags": admin_related_names(article.tags.all()),
-        "author": str(article.author) if article.author else "",
+        "author": article.author.slug if article.author else "",
         "author_name": article.author_name,
         "image": admin_file_value(article.image),
         "excerpt": article.excerpt,
+        "excerpt_en": admin_article_translation_value(article, "en", "excerpt"),
+        "excerpt_bg": admin_article_translation_value(article, "bg", "excerpt"),
         "lead": article.lead,
+        "lead_en": admin_article_translation_value(article, "en", "lead"),
+        "lead_bg": admin_article_translation_value(article, "bg", "lead"),
         "body": admin_json_value(article.body),
+        "body_sections_en": article_sections_admin_value(body_en),
+        "body_sections_bg": article_sections_admin_value(body_bg),
+        "hashtags_en": admin_json_value(body_en.get("hashtags", [])),
+        "hashtags_bg": admin_json_value(body_bg.get("hashtags", [])),
+        "display_date": shared_body.get("displayDate", ""),
+        "time_to_read": shared_body.get("timeToRead", "") or shared_body.get("readTime", ""),
         "promoted_label": article.promoted_label,
+        "promoted_label_en": admin_article_translation_value(article, "en", "promoted_label"),
+        "promoted_label_bg": admin_article_translation_value(article, "bg", "promoted_label"),
         "read_time": article.read_time or 0,
         "published_at": admin_datetime_value(article.published_at),
         "status": article.status,
@@ -613,7 +718,6 @@ ADMIN_RESOURCE_CONFIG = {
             "organization",
             "photo",
             "analytics",
-            "consultation_price",
             "is_available_for_consultation",
             "service_consultation",
             "service_consultation_price",
@@ -632,17 +736,11 @@ ADMIN_RESOURCE_CONFIG = {
         "model": Article,
         "fields": [
             "article_type",
-            "title",
             "slug",
             "category",
             "tags",
             "author",
-            "author_name",
             "image",
-            "excerpt",
-            "lead",
-            "body",
-            "promoted_label",
             "read_time",
             "published_at",
             "status",
@@ -650,8 +748,7 @@ ADMIN_RESOURCE_CONFIG = {
         ],
         "foreign_keys": {"category": Category, "author": Expert},
         "many_to_many": {"tags": Tag},
-        "json_fields": {"body": dict},
-        "slug_source": "title",
+        "slug_source": "title_en",
     },
     "events": {
         "model": Event,
@@ -883,6 +980,8 @@ def ensure_slug(model, instance, payload, config):
     source = payload.get(source_field, "") if source_field else ""
     if not source and source_field == "name_en":
         source = payload.get("name_bg", "")
+    if not source and source_field == "title_en":
+        source = payload.get("title_bg", "")
     instance.slug = make_unique_slug(model, source, instance)
 
 
@@ -925,6 +1024,113 @@ def apply_expert_translations(instance, payload):
     instance.translations = translations
 
 
+def normalize_article_sections(value):
+    if isinstance(value, str):
+        text = value.strip()
+        if not text:
+            return []
+        try:
+            sections = json.loads(text)
+        except json.JSONDecodeError:
+            return [{"html": text}]
+    elif isinstance(value, list):
+        sections = value
+    else:
+        sections = coerce_json_value(value, list)
+
+    if isinstance(sections, dict):
+        sections = [sections]
+
+    normalized = []
+
+    for section in sections:
+        if isinstance(section, dict):
+            raw_html = str(section.get("html", "") or "").strip()
+            if raw_html:
+                normalized.append({"html": raw_html})
+                continue
+
+            paragraphs = section.get("paragraphs", [])
+            normalized.append(
+                {
+                    "title": str(section.get("title", "") or ""),
+                    "paragraphs": text_list_value(paragraphs),
+                }
+            )
+            continue
+
+        text = str(section).strip()
+        if text:
+            normalized.append({"title": "", "paragraphs": [text]})
+
+    return normalized
+
+
+def coerce_article_body(payload, lang, current_body):
+    body = dict(current_body) if isinstance(current_body, dict) else {}
+
+    field_map = {
+        f"body_sections_{lang}": ("sections", normalize_article_sections),
+        f"hashtags_{lang}": ("hashtags", text_list_value),
+        "display_date": ("displayDate", str),
+        "time_to_read": ("timeToRead", str),
+    }
+
+    for payload_key, (body_key, coercer) in field_map.items():
+        if payload_key not in payload:
+            continue
+
+        value = payload[payload_key]
+        if coercer is str:
+            body[body_key] = "" if value is None else str(value)
+        else:
+            body[body_key] = coercer(value)
+
+    if "timeToRead" in body:
+        body["readTime"] = body.get("timeToRead", "")
+
+    body.pop("_lang", None)
+    body.pop("authorLabel", None)
+    body.pop("authorExpertId", None)
+    body.pop("authorAvatarUrl", None)
+    return body
+
+
+def apply_article_translations(instance, payload):
+    translations = dict(instance.translations or {})
+    body_keys = {
+        "body_sections",
+        "hashtags",
+        "display_date",
+        "time_to_read",
+    }
+
+    for lang in ("en", "bg"):
+        current = dict(translations.get(lang) or {})
+
+        for field in ("title", "excerpt", "lead", "promoted_label"):
+            payload_key = f"{field}_{lang}"
+            if payload_key in payload:
+                current[field] = "" if payload[payload_key] is None else str(payload[payload_key])
+
+        if any(f"{key}_{lang}" in payload for key in body_keys):
+            current["body"] = coerce_article_body(payload, lang, current.get("body"))
+
+        translations[lang] = current
+
+    en_translation = translations.get("en") or {}
+    bg_translation = translations.get("bg") or {}
+    fallback = en_translation if en_translation.get("title") else bg_translation
+
+    for field in ARTICLE_TRANSLATED_FIELDS:
+        value = fallback.get(field)
+        if value in (None, "", [], {}):
+            continue
+        setattr(instance, field, value)
+
+    instance.translations = translations
+
+
 def save_admin_record(resource_key, payload, instance=None):
     config = admin_config(resource_key)
     if not config:
@@ -936,6 +1142,8 @@ def save_admin_record(resource_key, payload, instance=None):
 
     if resource_key == "experts":
         apply_expert_translations(instance, payload)
+    if resource_key == "articles":
+        apply_article_translations(instance, payload)
 
     for field_name in config["fields"]:
         if field_name not in payload:
@@ -1061,9 +1269,11 @@ def site_data(request):
         for expert in Expert.objects.filter(is_active=True)
     ]
     news = [
-        serialize_article(article)
-        for article in Article.objects.filter(status="published").order_by("-published_at")
-        if article_matches_lang(article, lang)
+        serialize_article(article, lang)
+        for article in Article.objects.filter(status="published")
+        .select_related("category", "author")
+        .prefetch_related("tags")
+        .order_by("-published_at")
     ]
     events = [serialize_event(event) for event in Event.objects.filter(status="published").order_by("starts_at")]
     upcoming_events = [

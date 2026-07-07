@@ -253,9 +253,18 @@
   gap: 24px;
 
   h2,
-  p {
+  p,
+  ul,
+  ol,
+  blockquote {
     margin: 0;
     font-family: $font-manrope;
+  }
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
 
   h2 {
@@ -273,13 +282,36 @@
     line-height: 28px;
   }
 
+  ul,
+  ol {
+    width: min(690px, 100%);
+    padding-left: 26px;
+    color: #000;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+  }
+
+  blockquote {
+    width: min(690px, 100%);
+    padding-left: 18px;
+    border-left: 3px solid #c0c0d2;
+    color: #4a5565;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+  }
+
   @include mobile {
     h2 {
       font-size: 24px;
       line-height: 30px;
     }
 
-    p {
+    p,
+    ul,
+    ol,
+    blockquote {
       font-size: 18px;
       line-height: 26px;
     }

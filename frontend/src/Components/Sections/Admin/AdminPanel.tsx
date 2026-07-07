@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import styles from "./AdminPanel.module.scss";
 
@@ -29,6 +31,11 @@ type AnalyticsValue = {
   attendance?: string;
   experienceYears?: string;
   [key: string]: unknown;
+};
+type ArticleSection = {
+  title?: string;
+  paragraphs?: string[];
+  html?: string;
 };
 
 interface AdminField {
@@ -186,7 +193,6 @@ const resources: ResourceConfig[] = [
       { key: "experience_en", label: "Experience EN", type: "textarea" },
       { key: "experience_bg", label: "Experience BG", type: "textarea" },
       { key: "analytics", label: "Analytics", type: "textarea", fullWidth: true },
-      { key: "consultation_price", label: "Consultation price", type: "number" },
       { key: "is_available_for_consultation", label: "Available for consultation", type: "boolean" },
       { key: "service_consultation", label: "Consultation", type: "boolean" },
       { key: "service_consultation_price", label: "Consultation price", type: "number" },
@@ -222,7 +228,6 @@ const resources: ResourceConfig[] = [
         experience_en: "Digital Strategy Lead at Hashtag Innovations",
         experience_bg: "Лийд дигитална стратегия в Hashtag Innovations",
         analytics: "consultations: 120, attendance: 94%",
-        consultation_price: 120,
         is_available_for_consultation: true,
         service_consultation: true,
         service_consultation_price: 120,
@@ -240,20 +245,28 @@ const resources: ResourceConfig[] = [
     label: "Articles",
     singular: "Article",
     accent: "#111827",
-    columns: ["title", "article_type", "category", "status", "published_at"],
+    columns: ["title_en", "title_bg", "article_type", "status", "published_at"],
     fields: [
       { key: "article_type", label: "Article type", type: "select", options: contentTypeOptions },
-      { key: "title", label: "Title", type: "text" },
       { key: "slug", label: "Slug", type: "text" },
+      { key: "title_en", label: "Title EN", type: "text" },
+      { key: "title_bg", label: "Title BG", type: "text" },
       { key: "category", label: "Category", type: "text" },
       { key: "tags", label: "Tags", type: "text" },
       { key: "author", label: "Author expert", type: "text" },
-      { key: "author_name", label: "Author name", type: "text" },
       { key: "image", label: "Image", type: "file", accept: "image/*" },
-      { key: "excerpt", label: "Excerpt", type: "textarea", fullWidth: true },
-      { key: "lead", label: "Lead", type: "textarea", fullWidth: true },
-      { key: "body", label: "Body", type: "textarea", fullWidth: true },
-      { key: "promoted_label", label: "Promoted label", type: "text" },
+      { key: "excerpt_en", label: "Excerpt EN", type: "textarea" },
+      { key: "excerpt_bg", label: "Excerpt BG", type: "textarea" },
+      { key: "lead_en", label: "Lead EN", type: "textarea", fullWidth: true },
+      { key: "lead_bg", label: "Lead BG", type: "textarea", fullWidth: true },
+      { key: "body_sections_en", label: "Body sections EN", type: "textarea", fullWidth: true },
+      { key: "body_sections_bg", label: "Body sections BG", type: "textarea", fullWidth: true },
+      { key: "hashtags_en", label: "Hashtags EN", type: "textarea" },
+      { key: "hashtags_bg", label: "Hashtags BG", type: "textarea" },
+      { key: "display_date", label: "Display date", type: "text" },
+      { key: "time_to_read", label: "Time to read", type: "text" },
+      { key: "promoted_label_en", label: "Promoted label EN", type: "text" },
+      { key: "promoted_label_bg", label: "Promoted label BG", type: "text" },
       { key: "read_time", label: "Read time", type: "number" },
       { key: "published_at", label: "Published at", type: "datetime" },
       { key: "status", label: "Status", type: "select", options: statusOptions },
@@ -263,17 +276,25 @@ const resources: ResourceConfig[] = [
       {
         id: "article-1",
         article_type: "news",
-        title: "Digital well-being becomes a product priority",
+        title_en: "Digital well-being becomes a product priority",
+        title_bg: "Digital well-being becomes a product priority",
         slug: "digital-wellbeing-product-priority",
         category: "Business",
         tags: "wellbeing, teams",
-        author: "Elena Petrova",
-        author_name: "Elena Petrova",
+        author: "expert-1",
         image: "/images/community/summit_event.png",
-        excerpt: "A short look at healthier digital work habits.",
-        lead: "Digital well-being has moved from a soft benefit to a real business priority.",
-        body: "Section 1: Teams need calmer systems.",
-        promoted_label: "Featured",
+        excerpt_en: "A short look at healthier digital work habits.",
+        excerpt_bg: "A short look at healthier digital work habits.",
+        lead_en: "Digital well-being has moved from a soft benefit to a real business priority.",
+        lead_bg: "Digital well-being has moved from a soft benefit to a real business priority.",
+        body_sections_en: "<h2>Section 1</h2><p>Teams need calmer systems.</p>",
+        body_sections_bg: "<h2>Section 1</h2><p>Teams need calmer systems.</p>",
+        hashtags_en: "wellbeing, teams",
+        hashtags_bg: "wellbeing, teams",
+        display_date: "17/06/2026",
+        time_to_read: "5 min read",
+        promoted_label_en: "Featured",
+        promoted_label_bg: "Featured",
         read_time: 5,
         published_at: "2026-06-17T10:00",
         status: "published",
@@ -613,6 +634,98 @@ const TagsEditor = ({ label, value, onChange }: TagsEditorProps) => {
   );
 };
 
+interface ArticleSectionsEditorProps {
+  label: string;
+  value: FieldValue | undefined;
+  onChange: (value: string) => void;
+}
+
+const escapeHtml = (value: string) => value
+  .replaceAll("&", "&amp;")
+  .replaceAll("<", "&lt;")
+  .replaceAll(">", "&gt;")
+  .replaceAll('"', "&quot;");
+
+const textToHtml = (value: string) => value
+  .split(/\n{2,}/)
+  .map((item) => item.trim())
+  .filter(Boolean)
+  .map((item) => `<p>${escapeHtml(item)}</p>`)
+  .join("");
+
+const articleSectionsToHtml = (value: FieldValue | undefined) => {
+  const rawValue = String(value ?? "").trim();
+  const sections = parseJsonValue<ArticleSection[]>(value, [])
+    .filter((section) => section && typeof section === "object")
+    .map((section) => ({
+      title: String(section.title ?? ""),
+      html: String(section.html ?? ""),
+      paragraphs: Array.isArray(section.paragraphs)
+        ? section.paragraphs.map((paragraph) => String(paragraph))
+        : [],
+    }));
+
+  if (!sections.length) {
+    if (!rawValue) {
+      return "";
+    }
+
+    return rawValue.startsWith("<") ? rawValue : textToHtml(rawValue);
+  }
+
+  return sections.map((section) => {
+    if (section.html) {
+      return section.html;
+    }
+
+    const title = section.title ? `<h2>${escapeHtml(section.title)}</h2>` : "";
+    const paragraphs = section.paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("");
+    return `${title}${paragraphs}`;
+  }).join("");
+};
+
+const ArticleSectionsEditor = ({ label, value, onChange }: ArticleSectionsEditorProps) => {
+  const htmlValue = useMemo(() => articleSectionsToHtml(value), [value]);
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: htmlValue,
+    immediatelyRender: false,
+    editorProps: {
+      attributes: {
+        class: styles.richTextSurface,
+      },
+    },
+    onUpdate: ({ editor: activeEditor }) => {
+      onChange(activeEditor.getHTML());
+    },
+  });
+
+  useEffect(() => {
+    if (!editor || editor.getHTML() === htmlValue) {
+      return;
+    }
+
+    editor.commands.setContent(htmlValue, { emitUpdate: false });
+  }, [editor, htmlValue]);
+
+  return (
+    <div className={`${styles.formField} ${styles.fullWidth}`}>
+      <span>{label}</span>
+      <div className={styles.richTextEditor}>
+        <div className={styles.richTextToolbar}>
+          <button type="button" onClick={() => editor?.chain().focus().toggleBold().run()} className={editor?.isActive("bold") ? styles.activeToolButton : ""}>B</button>
+          <button type="button" onClick={() => editor?.chain().focus().toggleItalic().run()} className={editor?.isActive("italic") ? styles.activeToolButton : ""}>I</button>
+          <button type="button" onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()} className={editor?.isActive("heading", { level: 2 }) ? styles.activeToolButton : ""}>H2</button>
+          <button type="button" onClick={() => editor?.chain().focus().toggleBulletList().run()} className={editor?.isActive("bulletList") ? styles.activeToolButton : ""}>List</button>
+          <button type="button" onClick={() => editor?.chain().focus().toggleOrderedList().run()} className={editor?.isActive("orderedList") ? styles.activeToolButton : ""}>1.</button>
+          <button type="button" onClick={() => editor?.chain().focus().toggleBlockquote().run()} className={editor?.isActive("blockquote") ? styles.activeToolButton : ""}>Quote</button>
+        </div>
+        <EditorContent editor={editor} />
+      </div>
+    </div>
+  );
+};
+
 interface BioEditorProps {
   label: string;
   value: FieldValue | undefined;
@@ -665,7 +778,6 @@ const ExperienceEditor = ({ label, value, onChange }: ExperienceEditorProps) => 
     updateEntries([
       ...entries,
       {
-        id: `experience-${Date.now()}`,
         role: "",
         company: "",
         period: "",
@@ -888,9 +1000,57 @@ export const AdminPanel = () => {
     });
   };
 
+  const expertOptions = recordsByResource.experts ?? [];
+
   const renderEditorField = (field: AdminField) => {
     if (!editingRecord) {
       return null;
+    }
+
+    if (activeResource.key === "articles" && field.key === "author") {
+      return (
+        <label key={field.key} className={styles.formField}>
+          <span>{field.label}</span>
+          <select
+            value={String(editingRecord[field.key] ?? "")}
+            onChange={(event) => updateEditingValue(field, event.target.value)}
+          >
+            <option value="">No author</option>
+            {expertOptions.map((expert) => {
+              const value = String(expert.slug || expert.id);
+              const label = String(expert.name_en || expert.name_bg || expert.name || value);
+
+              return (
+                <option key={expert.id} value={value}>
+                  {label}
+                </option>
+              );
+            })}
+          </select>
+        </label>
+      );
+    }
+
+    if (activeResource.key === "articles" && ["body_sections_en", "body_sections_bg"].includes(field.key)) {
+      return (
+        <ArticleSectionsEditor
+          key={field.key}
+          label={field.label}
+          value={editingRecord[field.key]}
+          onChange={(value) => updateEditingValue(field, value)}
+        />
+      );
+    }
+
+    if (activeResource.key === "articles" && ["hashtags_en", "hashtags_bg"].includes(field.key)) {
+      return (
+        <TagsEditor
+          key={field.key}
+          label={field.label}
+          value={editingRecord[field.key]}
+          onChange={(value) => updateEditingValue(field, value)}
+        />
+      );
     }
 
     if (activeResource.key === "experts" && ["bio_en", "bio_bg"].includes(field.key)) {

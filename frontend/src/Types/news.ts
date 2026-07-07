@@ -11,7 +11,8 @@ export interface NewsItem {
   lead?: string;
   bodySections?: Array<{
     title?: string;
-    paragraphs: string[];
+    paragraphs?: string[];
+    html?: string;
   }>;
   promotedLabel?: string;
   hashtags?: string[];

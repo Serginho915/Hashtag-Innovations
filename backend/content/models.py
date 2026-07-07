@@ -105,12 +105,6 @@ class Expert(TimeStampedModel):
     )
     translations = models.JSONField(default=dict, blank=True)
     analytics = models.JSONField(default=dict, blank=True)
-    consultation_price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        blank=True,
-        null=True,
-    )
     is_available_for_consultation = models.BooleanField(default=False)
     service_consultation = models.BooleanField(default=False)
     service_consultation_price = models.DecimalField(
@@ -191,6 +185,7 @@ class Article(TimeStampedModel):
         blank=True,
         help_text="Structured article content sections.",
     )
+    translations = models.JSONField(default=dict, blank=True)
     promoted_label = models.CharField(max_length=120, blank=True)
     read_time = models.PositiveSmallIntegerField(
         blank=True,

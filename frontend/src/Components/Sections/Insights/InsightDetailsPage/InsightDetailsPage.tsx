@@ -176,10 +176,16 @@ export const InsightDetailsPage: React.FC<InsightDetailsPageProps> = ({ insight,
         <div className={styles.body}>
           {bodySections.map((section, index) => (
             <section key={`${section.title || 'section'}-${index}`} className={styles.bodySection}>
-              {section.title && <h2>{section.title}</h2>}
-              {section.paragraphs.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
+              {section.html ? (
+                <div dangerouslySetInnerHTML={{ __html: section.html }} />
+              ) : (
+                <>
+                  {section.title && <h2>{section.title}</h2>}
+                  {(section.paragraphs || []).map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </>
+              )}
             </section>
           ))}
         </div>

@@ -110,5 +110,11 @@ export const getProjectById = cache(async (id: string, lang: string): Promise<Pr
 export const getInsightById = cache(async (id: string, lang: string): Promise<NewsItem | undefined> => {
   const data = await getSiteData(lang);
 
-  return data.insights.find((insight) => insight.id === id);
+  const localizedId = id
+    .replace(/-en-/g, `-${lang}-`)
+    .replace(/-bg-/g, `-${lang}-`)
+    .replace(/-en$/g, `-${lang}`)
+    .replace(/-bg$/g, `-${lang}`);
+
+  return data.insights.find((insight) => insight.id === id || insight.id === localizedId);
 });

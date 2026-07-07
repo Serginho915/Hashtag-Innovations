@@ -37,6 +37,15 @@ def make_slug(value, fallback):
     return slugify(str(value), allow_unicode=True)[:220] or fallback
 
 
+def base_localized_id(value):
+    text = str(value or "")
+    text = text.replace("-en-", "-").replace("-bg-", "-")
+    for suffix in ("-en", "-bg"):
+        if text.endswith(suffix):
+            return text[: -len(suffix)]
+    return text
+
+
 def parse_iso(value):
     parsed = parse_datetime(str(value)) if value else None
     if parsed and timezone.is_naive(parsed):
@@ -159,7 +168,6 @@ class Command(BaseCommand):
                         "availableTimes": fallback.get("availableTimes") or {},
                         "availableFor": as_list(fallback.get("availableFor")),
                     },
-                    "consultation_price": fallback.get("price"),
                     "is_available_for_consultation": bool(fallback.get("availableFor")),
                     "service_consultation": True,
                     "service_consultation_price": fallback.get("price"),
@@ -174,39 +182,58 @@ class Command(BaseCommand):
             expert.tags.set(self.get_tags(fallback.get("expertise"), ContentKind.EXPERT))
 
     def seed_articles(self, data):
+        grouped = {}
         for lang, articles in data["news"].items():
             for item in articles:
-                category = self.get_category(item.get("category"), ContentKind.ARTICLE)
-                article, _ = Article.objects.update_or_create(
-                    slug=str(item.get("id")),
-                    defaults={
-                        "article_type": ArticleType.NEWS,
-                        "title": item.get("title", ""),
-                        "category": category,
-                        "author_name": item.get("authorName", ""),
-                        "image": image_name(item.get("imageUrl")),
-                        "excerpt": item.get("excerpt", ""),
-                        "lead": item.get("lead", ""),
-                        "body": {
-                            "sections": as_list(item.get("bodySections")),
-                            "hashtags": as_list(item.get("hashtags")),
-                            "authorLabel": item.get("authorLabel"),
-                            "authorExpertId": item.get("authorExpertId"),
-                            "authorAvatarUrl": item.get("authorAvatarUrl"),
-                            "displayDate": item.get("displayDate"),
-                            "timeToRead": item.get("timeToRead"),
-                            "readTime": item.get("readTime"),
-                            "_mock_id": item.get("id"),
-                            "_lang": lang,
-                        },
-                        "promoted_label": item.get("promotedLabel", ""),
-                        "read_time": parse_price(item.get("readTime")) or 5,
-                        "published_at": parse_iso(item.get("date") or item.get("createdAt")),
-                        "status": PublishStatus.PUBLISHED,
-                        "is_featured": bool(item.get("promotedLabel")),
+                grouped.setdefault(base_localized_id(item.get("id")), {})[lang] = item
+
+        for article_id, translations_source in grouped.items():
+            fallback = translations_source.get("en") or translations_source.get("bg") or {}
+            translations = {}
+
+            for lang, item in translations_source.items():
+                translations[lang] = {
+                    "title": item.get("title", ""),
+                    "author_name": item.get("authorName", ""),
+                    "excerpt": item.get("excerpt", ""),
+                    "lead": item.get("lead", ""),
+                    "promoted_label": item.get("promotedLabel", ""),
+                    "body": {
+                        "sections": as_list(item.get("bodySections")),
+                        "hashtags": as_list(item.get("hashtags")),
+                        "displayDate": item.get("displayDate"),
+                        "timeToRead": item.get("timeToRead"),
+                        "readTime": item.get("readTime"),
+                        "_mock_id": item.get("id"),
                     },
-                )
-                article.tags.set(self.get_tags(item.get("tags"), ContentKind.ARTICLE))
+                }
+
+            fallback_translation = translations.get("en") or translations.get("bg") or {}
+            fallback_body = fallback_translation.get("body", {})
+            category = self.get_category(fallback.get("category"), ContentKind.ARTICLE)
+            author_slug = fallback.get("authorExpertId")
+            author = Expert.objects.filter(slug=author_slug).first() if author_slug else None
+            article, _ = Article.objects.update_or_create(
+                slug=article_id,
+                defaults={
+                    "article_type": ArticleType.NEWS,
+                    "title": fallback_translation.get("title", ""),
+                    "category": category,
+                    "author": author,
+                    "author_name": fallback_translation.get("author_name", ""),
+                    "image": image_name(fallback.get("imageUrl")),
+                    "excerpt": fallback_translation.get("excerpt", ""),
+                    "lead": fallback_translation.get("lead", ""),
+                    "body": fallback_body,
+                    "translations": translations,
+                    "promoted_label": fallback_translation.get("promoted_label", ""),
+                    "read_time": parse_price(fallback.get("readTime")) or 5,
+                    "published_at": parse_iso(fallback.get("date") or fallback.get("createdAt")),
+                    "status": PublishStatus.PUBLISHED,
+                    "is_featured": bool(fallback.get("promotedLabel")),
+                },
+            )
+            article.tags.set(self.get_tags(fallback.get("tags"), ContentKind.ARTICLE))
 
     def seed_events(self, data):
         for item in data["events"]:
