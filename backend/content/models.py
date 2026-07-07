@@ -103,6 +103,7 @@ class Expert(TimeStampedModel):
         blank=True,
         help_text="List of experience entries, kept inside the expert model.",
     )
+    translations = models.JSONField(default=dict, blank=True)
     analytics = models.JSONField(default=dict, blank=True)
     consultation_price = models.DecimalField(
         max_digits=10,
@@ -111,6 +112,27 @@ class Expert(TimeStampedModel):
         null=True,
     )
     is_available_for_consultation = models.BooleanField(default=False)
+    service_consultation = models.BooleanField(default=False)
+    service_consultation_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
+    )
+    service_mentorship = models.BooleanField(default=False)
+    service_mentorship_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
+    )
+    service_project_analysis = models.BooleanField(default=False)
+    service_project_analysis_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
+    )
     is_featured = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     tags = models.ManyToManyField(Tag, related_name="experts", blank=True)

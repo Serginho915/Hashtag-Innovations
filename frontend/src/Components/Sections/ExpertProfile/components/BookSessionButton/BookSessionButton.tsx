@@ -21,6 +21,7 @@ interface Props {
 
 export const BookSessionButton: React.FC<Props> = ({ expert, session, t, lang }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const buttonText = lang === 'bg' ? 'Към плащане' : lang === 'ru' ? 'К оплате' : 'Continue to payment';
 
   return (
     <>
@@ -28,7 +29,7 @@ export const BookSessionButton: React.FC<Props> = ({ expert, session, t, lang })
         className={styles.bookBtn} 
         onClick={() => setIsModalOpen(true)}
       >
-        {t.bookNow}
+        {buttonText || t.bookNow}
       </button>
 
       {isModalOpen && (

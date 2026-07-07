@@ -15,6 +15,7 @@ interface Props {
 
 export const ExpertSessions: React.FC<Props> = ({ expert, sessions, t, lang }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const sessionsTitle = lang === 'bg' ? 'Консултации' : lang === 'ru' ? 'Консультации' : 'Consultations';
 
   if (!sessions || sessions.length === 0) return null;
 
@@ -23,7 +24,7 @@ export const ExpertSessions: React.FC<Props> = ({ expert, sessions, t, lang }) =
       <div className={styles.sessionsHeader}>
         <div className={styles.sessionsHeaderLeft}>
           <div className={styles.headerDot}></div>
-          <h2 className={styles.sectionTitle}>{t.availableSessions}</h2>
+          <h2 className={styles.sectionTitle}>{sessionsTitle || t.availableSessions}</h2>
         </div>
         <button 
           className={styles.mobileViewButton}

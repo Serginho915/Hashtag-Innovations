@@ -6,13 +6,6 @@ import { TextbookItem } from '../Types/textbook.ts';
 import { CommunityEvent } from '../Types/community.ts';
 import { ProjectItem } from '../Types/project.ts';
 
-import { MOCK_EXPERTS_EN, MOCK_EXPERTS_BG } from '../mockData/expertsMock.ts';
-import { MOCK_NEWS_EN, MOCK_NEWS_BG } from '../mockData/newsMock.ts';
-import { MOCK_UPCOMING_EVENTS_EN, MOCK_UPCOMING_EVENTS_BG } from '../mockData/upcomingEventMock.ts';
-import { MOCK_EVENTS } from '../mockData/communityMock.ts';
-import { MOCK_TEXTBOOKS_EN, MOCK_TEXTBOOKS_BG } from '../mockData/exploreAndLearnMock.ts';
-import { MOCK_PROJECTS_EN, MOCK_PROJECTS_BG } from '../mockData/projectsMock.ts';
-
 export interface HomePageData {
   experts: Expert[];
   news: NewsItem[];
@@ -44,37 +37,16 @@ const getBackendApiUrl = () =>
     process.env.NEXT_PUBLIC_API_URL ||
     'http://localhost:8000').replace(/\/$/, '');
 
-const getMockSiteData = (lang: string): SiteData => {
-  const isBg = lang === 'bg';
-  const insights = (isBg ? MOCK_NEWS_BG : MOCK_NEWS_EN) as NewsItem[];
-
-  return {
-    experts: (isBg ? MOCK_EXPERTS_BG : MOCK_EXPERTS_EN) as Expert[],
-    news: insights,
-    upcomingEvents: (isBg ? MOCK_UPCOMING_EVENTS_BG : MOCK_UPCOMING_EVENTS_EN) as UpcomingEventData[],
-    communityEvents: MOCK_EVENTS as CommunityEvent[],
-    textbooks: (isBg ? MOCK_TEXTBOOKS_BG : MOCK_TEXTBOOKS_EN) as TextbookItem[],
-    popularInsights: insights,
-    insights,
-    relatedEvents: MOCK_EVENTS as CommunityEvent[],
-    projects: isBg ? MOCK_PROJECTS_BG : MOCK_PROJECTS_EN,
-  };
-};
-
 const getSiteData = cache(async (lang: string): Promise<SiteData> => {
-  try {
-    const response = await fetch(`${getBackendApiUrl()}/api/site-data/?lang=${lang}`, {
-      cache: 'no-store',
-    });
+  const response = await fetch(`${getBackendApiUrl()}/api/site-data/?lang=${lang}`, {
+    cache: 'no-store',
+  });
 
-    if (!response.ok) {
-      throw new Error(`Backend returned ${response.status}`);
-    }
-
-    return (await response.json()) as SiteData;
-  } catch {
-    return getMockSiteData(lang);
+  if (!response.ok) {
+    throw new Error(`Failed to load site data from database. Backend returned ${response.status}.`);
   }
+
+  return (await response.json()) as SiteData;
 });
 
 export const getHomePageData = cache(async (lang: string): Promise<HomePageData> => {

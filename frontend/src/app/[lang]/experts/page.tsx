@@ -2,10 +2,10 @@ import React from 'react';
 import { Breadcrumbs } from '../../../Components/UI/Breadcrumbs/Breadcrumbs.tsx';
 import styles from './ExpertsPage.module.scss';
 import { translations } from './translations.ts';
-import { MOCK_EXPERTS_EN, MOCK_EXPERTS_BG } from '../../../mockData/expertsMock.ts';
 import { ExpertsHeader } from '../../../Components/Sections/Experts/ExpertsHeader/ExpertsHeader.tsx';
 import { AllExpertsSection } from '../../../Components/Sections/Experts/AllExpertsSection/AllExpertsSection.tsx';
 import { TopRatedSlider } from '../../../Components/Sections/Experts/TopRatedSlider/TopRatedSlider.tsx';
+import { getHomePageData } from '../../../api/index.ts';
 
 interface ExpertsPageProps {
   params: Promise<{
@@ -24,7 +24,7 @@ export default async function ExpertsPage({ params, searchParams }: ExpertsPageP
     { labelKey: 'experts' }
   ];
 
-  const initialExperts = lang === 'bg' ? MOCK_EXPERTS_BG : MOCK_EXPERTS_EN;
+  const { experts: initialExperts } = await getHomePageData(lang);
 
   // URL State
   const selectedExpertise = typeof sp.expertise === 'string' ? sp.expertise : null;

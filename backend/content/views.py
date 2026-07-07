@@ -1,10 +1,19 @@
 import ast
 import json
+from decimal import Decimal, InvalidOperation
 
+from django.conf import settings
 from django.contrib.auth import authenticate
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError, transaction
+from django.db.models import Q
 from django.http import JsonResponse
+from django.utils import timezone
+from django.utils.dateparse import parse_date, parse_datetime
+from django.utils.text import slugify
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_http_methods
 from django.views.decorators.http import require_POST
 
 from content.models import (
@@ -12,7 +21,6 @@ from content.models import (
     Category,
     Event,
     Expert,
-    ExpertSession,
     LearnMaterial,
     Organization,
     Project,
@@ -82,36 +90,153 @@ def text_list_value(value):
 
 
 def lang_filter(queryset, lang):
-    return queryset.filter(slug__endswith=f"-{lang}")
+    return queryset.filter(Q(slug__endswith=f"-{lang}") | ~Q(slug__regex=r"-(en|bg)$"))
 
 
-def serialize_expert(expert):
+def article_matches_lang(article, lang):
+    body = article.body if isinstance(article.body, dict) else {}
+    return not body.get("_lang") or body.get("_lang") == lang
+
+
+def localized_public_id(slug, lang):
+    text = str(slug)
+    suffixes = [f"-{lang}"] if lang else ["-bg", "-en"]
+    for suffix in suffixes:
+        if suffix and text.endswith(suffix):
+            return text[: -len(suffix)]
+    return text
+
+
+EXPERT_TRANSLATED_FIELDS = (
+    "name",
+    "role",
+    "company_name",
+    "quote",
+    "bio",
+    "expertise",
+    "industries",
+    "languages",
+    "experience",
+)
+
+EXPERT_SERVICE_TEMPLATES = {
+    "consultation": {
+        "flag": "service_consultation",
+        "price_field": "service_consultation_price",
+        "title": {
+            "en": "Consultation",
+            "bg": "Консултация",
+            "ru": "Консультация",
+        },
+        "subtitle": {
+            "en": "Focused expert consultation",
+            "bg": "Фокусирана експертна консултация",
+            "ru": "Фокусная экспертная консультация",
+        },
+        "description": {
+            "en": "A practical session for a specific question, challenge or decision.",
+            "bg": "Практическа сесия за конкретен въпрос, предизвикателство или решение.",
+            "ru": "Практическая сессия по конкретному вопросу, задаче или решению.",
+        },
+    },
+    "mentorship": {
+        "flag": "service_mentorship",
+        "price_field": "service_mentorship_price",
+        "title": {
+            "en": "Mentorship",
+            "bg": "Менторство",
+            "ru": "Менторство",
+        },
+        "subtitle": {
+            "en": "Guided expert support",
+            "bg": "Насочена експертна подкрепа",
+            "ru": "Экспертное сопровождение",
+        },
+        "description": {
+            "en": "Ongoing guidance for founders, teams or professionals who need expert direction.",
+            "bg": "Насоки за основатели, екипи или професионалисти, които имат нужда от експертна посока.",
+            "ru": "Сопровождение для основателей, команд или специалистов, которым нужен экспертный ориентир.",
+        },
+    },
+    "project_analysis": {
+        "flag": "service_project_analysis",
+        "price_field": "service_project_analysis_price",
+        "title": {
+            "en": "Project analysis",
+            "bg": "Анализ на проект",
+            "ru": "Анализ проекта",
+        },
+        "subtitle": {
+            "en": "Structured project review",
+            "bg": "Структуриран преглед на проект",
+            "ru": "Структурный разбор проекта",
+        },
+        "description": {
+            "en": "An expert review of the current state, risks and next steps for a project.",
+            "bg": "Експертен преглед на текущото състояние, рисковете и следващите стъпки на проект.",
+            "ru": "Экспертный обзор текущего состояния, рисков и следующих шагов проекта.",
+        },
+    },
+}
+
+
+def expert_translation(expert, lang):
+    translations = expert.translations if isinstance(expert.translations, dict) else {}
+    translated = translations.get(lang) if isinstance(translations.get(lang), dict) else {}
+    fallback_lang = "en" if lang != "en" else "bg"
+    fallback = translations.get(fallback_lang) if isinstance(translations.get(fallback_lang), dict) else {}
+
+    def get(field):
+        value = translated.get(field)
+        if value not in (None, "", [], {}):
+            return value
+        value = fallback.get(field)
+        if value not in (None, "", [], {}):
+            return value
+        return getattr(expert, field)
+
+    return {field: get(field) for field in EXPERT_TRANSLATED_FIELDS}
+
+
+def serialize_expert(expert, lang="en"):
     analytics = expert.analytics or {}
-    sessions = [
-        {
-            "id": f"session-{session.id}",
-            "title": session.title,
-            "subtitle": session.subtitle,
-            "description": session.description,
-            "price": float(session.price) if session.price is not None else 0,
-        }
-        for session in expert.sessions.filter(is_active=True)
-    ]
+    translated = expert_translation(expert, lang)
+    service_lang = lang if lang in {"en", "bg", "ru"} else "en"
+    sessions = []
+
+    for service_id, template in EXPERT_SERVICE_TEMPLATES.items():
+        if not getattr(expert, template["flag"]):
+            continue
+
+        service_price = getattr(expert, template["price_field"])
+        if service_price is None:
+            service_price = expert.consultation_price
+
+        sessions.append(
+            {
+                "id": service_id,
+                "title": template["title"][service_lang],
+                "subtitle": template["subtitle"][service_lang],
+                "description": template["description"][service_lang],
+                "price": float(service_price) if service_price is not None else 0,
+            }
+        )
+
     return {
-        "id": analytics.get("_mock_id") or expert.slug.rsplit("-", 1)[0],
-        "name": expert.name,
-        "role": expert.role,
-        "company": expert.company_name,
+        "id": analytics.get("_mock_id") or localized_public_id(expert.slug, ""),
+        "name": translated["name"],
+        "role": translated["role"],
+        "company": translated["company_name"],
         "imageUrl": file_url(expert.photo),
-        "quote": expert.quote,
+        "quote": translated["quote"],
         "availableFor": analytics.get("availableFor", []),
-        "expertise": expert.expertise or [],
+        "expertise": translated["expertise"] or [],
         "price": float(expert.consultation_price) if expert.consultation_price is not None else None,
-        "languages": expert.languages or [],
-        "industries": expert.industries or [],
-        "bio": text_list_value(expert.bio),
+        "languages": translated["languages"] or [],
+        "industries": translated["industries"] or [],
+        "bio": text_list_value(translated["bio"]),
         "sessions": sessions,
-        "experienceList": expert.experience or [],
+        "experienceList": translated["experience"] or [],
         "analytics": {
             "consultations": analytics.get("consultations", ""),
             "attendance": analytics.get("attendance", ""),
@@ -194,7 +319,13 @@ def serialize_upcoming_event(event, lang):
 
 
 def serialize_material(material):
-    slug = material.slug.rsplit("-", 1)[0]
+    raw = material.slug
+    lang = ""
+    if str(raw).endswith("-bg"):
+        lang = "bg"
+    elif str(raw).endswith("-en"):
+        lang = "en"
+    slug = localized_public_id(raw, lang)
     return {
         "id": slug,
         "title": material.title,
@@ -216,7 +347,7 @@ def serialize_material(material):
 
 
 def serialize_project(project, lang):
-    project_id = project.slug.rsplit("-", 1)[0]
+    project_id = localized_public_id(project.slug, lang)
 
     return {
         "id": project_id,
@@ -290,24 +421,60 @@ def serialize_admin_organization(organization):
     }
 
 
+def admin_expert_translation_value(expert, lang, field):
+    translated = expert_translation(expert, lang)
+    value = translated[field]
+
+    if field in {"bio", "expertise", "industries", "languages", "experience"}:
+        if field == "bio":
+            value = text_list_value(value)
+        return admin_json_value(value)
+
+    return value or ""
+
+
 def serialize_admin_expert(expert):
     return {
         "id": str(expert.id),
         "name": expert.name,
+        "name_en": admin_expert_translation_value(expert, "en", "name"),
+        "name_bg": admin_expert_translation_value(expert, "bg", "name"),
         "slug": expert.slug,
         "role": expert.role,
+        "role_en": admin_expert_translation_value(expert, "en", "role"),
+        "role_bg": admin_expert_translation_value(expert, "bg", "role"),
         "company_name": expert.company_name,
+        "company_name_en": admin_expert_translation_value(expert, "en", "company_name"),
+        "company_name_bg": admin_expert_translation_value(expert, "bg", "company_name"),
         "organization": str(expert.organization) if expert.organization else "",
         "photo": admin_file_value(expert.photo),
         "quote": expert.quote,
+        "quote_en": admin_expert_translation_value(expert, "en", "quote"),
+        "quote_bg": admin_expert_translation_value(expert, "bg", "quote"),
         "bio": admin_json_value(text_list_value(expert.bio)),
+        "bio_en": admin_expert_translation_value(expert, "en", "bio"),
+        "bio_bg": admin_expert_translation_value(expert, "bg", "bio"),
         "expertise": admin_json_value(expert.expertise),
+        "expertise_en": admin_expert_translation_value(expert, "en", "expertise"),
+        "expertise_bg": admin_expert_translation_value(expert, "bg", "expertise"),
         "industries": admin_json_value(expert.industries),
+        "industries_en": admin_expert_translation_value(expert, "en", "industries"),
+        "industries_bg": admin_expert_translation_value(expert, "bg", "industries"),
         "languages": admin_json_value(expert.languages),
+        "languages_en": admin_expert_translation_value(expert, "en", "languages"),
+        "languages_bg": admin_expert_translation_value(expert, "bg", "languages"),
         "experience": admin_json_value(expert.experience),
+        "experience_en": admin_expert_translation_value(expert, "en", "experience"),
+        "experience_bg": admin_expert_translation_value(expert, "bg", "experience"),
         "analytics": admin_json_value(expert.analytics),
         "consultation_price": admin_decimal_value(expert.consultation_price),
         "is_available_for_consultation": expert.is_available_for_consultation,
+        "service_consultation": expert.service_consultation,
+        "service_consultation_price": admin_decimal_value(expert.service_consultation_price),
+        "service_mentorship": expert.service_mentorship,
+        "service_mentorship_price": admin_decimal_value(expert.service_mentorship_price),
+        "service_project_analysis": expert.service_project_analysis,
+        "service_project_analysis_price": admin_decimal_value(expert.service_project_analysis_price),
         "is_featured": expert.is_featured,
         "is_active": expert.is_active,
     }
@@ -412,6 +579,438 @@ def serialize_admin_project(project):
     }
 
 
+ADMIN_SERIALIZERS = {
+    "categories": serialize_admin_category,
+    "tags": serialize_admin_tag,
+    "organizations": serialize_admin_organization,
+    "experts": serialize_admin_expert,
+    "articles": serialize_admin_article,
+    "events": serialize_admin_event,
+    "learn_materials": serialize_admin_learn_material,
+    "projects": serialize_admin_project,
+}
+
+ADMIN_RESOURCE_CONFIG = {
+    "categories": {
+        "model": Category,
+        "fields": ["name", "slug", "kind", "is_active"],
+        "slug_source": "name",
+    },
+    "tags": {
+        "model": Tag,
+        "fields": ["name", "slug", "kind", "is_active"],
+        "slug_source": "name",
+    },
+    "organizations": {
+        "model": Organization,
+        "fields": ["name", "slug", "logo", "website_url", "description", "is_active"],
+        "slug_source": "name",
+    },
+    "experts": {
+        "model": Expert,
+        "fields": [
+            "slug",
+            "organization",
+            "photo",
+            "analytics",
+            "consultation_price",
+            "is_available_for_consultation",
+            "service_consultation",
+            "service_consultation_price",
+            "service_mentorship",
+            "service_mentorship_price",
+            "service_project_analysis",
+            "service_project_analysis_price",
+            "is_featured",
+            "is_active",
+        ],
+        "foreign_keys": {"organization": Organization},
+        "json_fields": {"analytics": dict},
+        "slug_source": "name_en",
+    },
+    "articles": {
+        "model": Article,
+        "fields": [
+            "article_type",
+            "title",
+            "slug",
+            "category",
+            "tags",
+            "author",
+            "author_name",
+            "image",
+            "excerpt",
+            "lead",
+            "body",
+            "promoted_label",
+            "read_time",
+            "published_at",
+            "status",
+            "is_featured",
+        ],
+        "foreign_keys": {"category": Category, "author": Expert},
+        "many_to_many": {"tags": Tag},
+        "json_fields": {"body": dict},
+        "slug_source": "title",
+    },
+    "events": {
+        "model": Event,
+        "fields": [
+            "title",
+            "slug",
+            "category",
+            "tags",
+            "expert",
+            "organizers",
+            "partners",
+            "related_articles",
+            "description",
+            "detail_description",
+            "starts_at",
+            "timezone",
+            "location",
+            "price_label",
+            "image",
+            "hero_image",
+            "status",
+            "is_featured_hero",
+        ],
+        "foreign_keys": {"category": Category, "expert": Expert},
+        "many_to_many": {"tags": Tag, "organizers": Organization, "partners": Organization, "related_articles": Article},
+        "slug_source": "title",
+    },
+    "learn_materials": {
+        "model": LearnMaterial,
+        "fields": [
+            "title",
+            "slug",
+            "category",
+            "tags",
+            "author",
+            "author_name",
+            "excerpt",
+            "cover_image",
+            "pdf_file",
+            "preview_pdf_file",
+            "sales_url",
+            "format_label",
+            "price",
+            "badge",
+            "has_preview",
+            "is_trending",
+            "status",
+            "published_at",
+        ],
+        "foreign_keys": {"category": Category, "author": Expert},
+        "many_to_many": {"tags": Tag},
+        "slug_source": "title",
+    },
+    "projects": {
+        "model": Project,
+        "fields": [
+            "title",
+            "slug",
+            "category",
+            "tags",
+            "organization",
+            "description",
+            "code",
+            "project_date",
+            "image",
+            "status",
+            "is_featured",
+        ],
+        "foreign_keys": {"category": Category, "organization": Organization},
+        "many_to_many": {"tags": Tag},
+        "slug_source": "title",
+    },
+}
+
+
+def admin_error(message, status=400):
+    return JsonResponse({"error": message}, status=status)
+
+
+def admin_config(resource_key):
+    return ADMIN_RESOURCE_CONFIG.get(resource_key)
+
+
+def parse_payload(request):
+    try:
+        return json.loads(request.body or "{}")
+    except json.JSONDecodeError:
+        raise ValueError("Invalid JSON request body")
+
+
+def split_related_values(value):
+    if value in (None, ""):
+        return []
+    if isinstance(value, list):
+        return [str(item).strip() for item in value if str(item).strip()]
+    return [item.strip() for item in str(value).split(",") if item.strip()]
+
+
+def normalize_file_name(value):
+    if not value:
+        return ""
+    name = str(value).strip()
+    media_url = getattr(settings, "MEDIA_URL", "/media/")
+    if media_url and name.startswith(media_url):
+        name = name[len(media_url) :]
+    return name.lstrip("/")
+
+
+def coerce_json_value(value, default_factory):
+    if value in (None, ""):
+        return default_factory()
+    if isinstance(value, (list, dict)):
+        return value
+    text = str(value).strip()
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        if default_factory is list:
+            return text_list_value(text)
+        raise ValidationError("Enter valid JSON.")
+
+
+def coerce_value(model, field_name, value, config):
+    field = model._meta.get_field(field_name)
+
+    if field_name in config.get("json_fields", {}):
+        return coerce_json_value(value, config["json_fields"][field_name])
+
+    if field_name == "bio" and isinstance(value, str):
+        try:
+            parsed = json.loads(value)
+        except json.JSONDecodeError:
+            parsed = None
+        if isinstance(parsed, list):
+            return "\n".join(str(item) for item in parsed)
+        return value
+
+    if field.__class__.__name__ in {"ImageField", "FileField"}:
+        return normalize_file_name(value)
+
+    if field.get_internal_type() == "BooleanField":
+        if isinstance(value, bool):
+            return value
+        return str(value).strip().lower() in {"1", "true", "yes", "on"}
+
+    if field.get_internal_type() in {"IntegerField", "PositiveIntegerField", "PositiveSmallIntegerField"}:
+        return int(value) if value not in (None, "") else None
+
+    if field.get_internal_type() == "DecimalField":
+        if value in (None, ""):
+            return None
+        try:
+            return Decimal(str(value).replace(",", "."))
+        except InvalidOperation:
+            raise ValidationError("Enter a valid number.")
+
+    if field.get_internal_type() == "DateField":
+        if value in (None, ""):
+            return None
+        parsed = parse_date(str(value))
+        if not parsed:
+            raise ValidationError("Enter a valid date.")
+        return parsed
+
+    if field.get_internal_type() == "DateTimeField":
+        if value in (None, ""):
+            return None
+        parsed = parse_datetime(str(value))
+        if not parsed:
+            raise ValidationError("Enter a valid date and time.")
+        if timezone.is_naive(parsed):
+            parsed = timezone.make_aware(parsed, timezone=timezone.get_current_timezone())
+        return parsed
+
+    return "" if value is None else str(value)
+
+
+def resolve_related(model, value):
+    values = split_related_values(value)
+    if not values:
+        return None
+
+    lookup = values[0]
+    queryset = model.objects.all()
+    if lookup.isdigit():
+        found = queryset.filter(id=int(lookup)).first()
+        if found:
+            return found
+
+    query = Q()
+    if hasattr(model, "slug"):
+        query |= Q(slug=lookup)
+    if hasattr(model, "name"):
+        query |= Q(name=lookup)
+    if hasattr(model, "title"):
+        query |= Q(title=lookup)
+
+    return queryset.filter(query).first()
+
+
+def resolve_many(model, value):
+    related = []
+    for lookup in split_related_values(value):
+        item = resolve_related(model, lookup)
+        if item:
+            related.append(item)
+    return related
+
+
+def make_unique_slug(model, base, instance=None):
+    slug = slugify(str(base or "item"), allow_unicode=True)[:220] or "item"
+    candidate = slug
+    counter = 2
+
+    while model.objects.filter(slug=candidate).exclude(id=getattr(instance, "id", None)).exists():
+        suffix = f"-{counter}"
+        candidate = f"{slug[: 240 - len(suffix)]}{suffix}"
+        counter += 1
+
+    return candidate
+
+
+def ensure_slug(model, instance, payload, config):
+    if not hasattr(model, "slug"):
+        return
+    if str(getattr(instance, "slug", "") or "").strip():
+        return
+    source_field = config.get("slug_source")
+    source = payload.get(source_field, "") if source_field else ""
+    if not source and source_field == "name_en":
+        source = payload.get("name_bg", "")
+    instance.slug = make_unique_slug(model, source, instance)
+
+
+def coerce_expert_translation_field(field, value):
+    if field in {"expertise", "industries", "languages", "experience"}:
+        fallback = list
+        return coerce_json_value(value, fallback)
+
+    if field == "bio":
+        return text_list_value(value)
+
+    return "" if value is None else str(value)
+
+
+def apply_expert_translations(instance, payload):
+    translations = dict(instance.translations or {})
+
+    for lang in ("en", "bg"):
+        current = dict(translations.get(lang) or {})
+
+        for field in EXPERT_TRANSLATED_FIELDS:
+            payload_key = f"{field}_{lang}"
+            if payload_key not in payload:
+                continue
+            current[field] = coerce_expert_translation_field(field, payload[payload_key])
+
+        translations[lang] = current
+
+    en_translation = translations.get("en") or {}
+    bg_translation = translations.get("bg") or {}
+    fallback = en_translation if en_translation.get("name") else bg_translation
+    for field in EXPERT_TRANSLATED_FIELDS:
+        value = fallback.get(field)
+        if value in (None, "", [], {}):
+            continue
+        if field == "bio" and isinstance(value, list):
+            value = "\n".join(str(item) for item in value)
+        setattr(instance, field, value)
+
+    instance.translations = translations
+
+
+def save_admin_record(resource_key, payload, instance=None):
+    config = admin_config(resource_key)
+    if not config:
+        raise ValidationError("Unknown admin resource.")
+
+    model = config["model"]
+    instance = instance or model()
+    many_to_many_values = {}
+
+    if resource_key == "experts":
+        apply_expert_translations(instance, payload)
+
+    for field_name in config["fields"]:
+        if field_name not in payload:
+            continue
+
+        if field_name in config.get("many_to_many", {}):
+            many_to_many_values[field_name] = resolve_many(config["many_to_many"][field_name], payload[field_name])
+            continue
+
+        if field_name in config.get("foreign_keys", {}):
+            setattr(instance, field_name, resolve_related(config["foreign_keys"][field_name], payload[field_name]))
+            continue
+
+        setattr(instance, field_name, coerce_value(model, field_name, payload[field_name], config))
+
+    ensure_slug(model, instance, payload, config)
+    instance.full_clean()
+    instance.save()
+
+    for field_name, values in many_to_many_values.items():
+        getattr(instance, field_name).set(values)
+
+    return instance
+
+
+@csrf_exempt
+@require_POST
+def admin_resource_create(request, resource_key):
+    config = admin_config(resource_key)
+    if not config:
+        return admin_error("Unknown admin resource.", 404)
+
+    try:
+        payload = parse_payload(request)
+        with transaction.atomic():
+            instance = save_admin_record(resource_key, payload)
+    except ValueError as error:
+        return admin_error(str(error))
+    except ValidationError as error:
+        return admin_error(error.message_dict if hasattr(error, "message_dict") else error.messages)
+    except IntegrityError:
+        return admin_error("A record with these unique values already exists.")
+
+    return JsonResponse(ADMIN_SERIALIZERS[resource_key](instance), status=201)
+
+
+@csrf_exempt
+@require_http_methods(["PATCH", "PUT", "DELETE"])
+def admin_resource_detail(request, resource_key, record_id):
+    config = admin_config(resource_key)
+    if not config:
+        return admin_error("Unknown admin resource.", 404)
+
+    instance = config["model"].objects.filter(id=record_id).first()
+    if not instance:
+        return admin_error("Record not found.", 404)
+
+    if request.method == "DELETE":
+        instance.delete()
+        return JsonResponse({"ok": True})
+
+    try:
+        payload = parse_payload(request)
+        with transaction.atomic():
+            instance = save_admin_record(resource_key, payload, instance)
+    except ValueError as error:
+        return admin_error(str(error))
+    except ValidationError as error:
+        return admin_error(error.message_dict if hasattr(error, "message_dict") else error.messages)
+    except IntegrityError:
+        return admin_error("A record with these unique values already exists.")
+
+    return JsonResponse(ADMIN_SERIALIZERS[resource_key](instance))
+
+
 @require_GET
 def admin_resources(request):
     return JsonResponse(
@@ -425,10 +1024,6 @@ def admin_resources(request):
             "experts": [
                 serialize_admin_expert(item)
                 for item in Expert.objects.select_related("organization").prefetch_related("tags")
-            ],
-            "expert_sessions": [
-                serialize_admin_expert_session(item)
-                for item in ExpertSession.objects.select_related("expert")
             ],
             "articles": [
                 serialize_admin_article(item)
@@ -461,10 +1056,14 @@ def site_data(request):
     if lang not in {"en", "bg"}:
         lang = "bg"
 
-    experts = [serialize_expert(expert) for expert in lang_filter(Expert.objects.filter(is_active=True), lang)]
+    experts = [
+        serialize_expert(expert, lang)
+        for expert in Expert.objects.filter(is_active=True)
+    ]
     news = [
         serialize_article(article)
-        for article in Article.objects.filter(status="published", slug__contains=f"-{lang}-").order_by("-published_at")
+        for article in Article.objects.filter(status="published").order_by("-published_at")
+        if article_matches_lang(article, lang)
     ]
     events = [serialize_event(event) for event in Event.objects.filter(status="published").order_by("starts_at")]
     upcoming_events = [

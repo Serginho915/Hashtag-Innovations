@@ -15,7 +15,6 @@ from content.models import (
     ContentKind,
     Event,
     Expert,
-    ExpertSession,
     LearnMaterial,
     Organization,
     Project,
@@ -115,50 +114,64 @@ class Command(BaseCommand):
         return tags
 
     def seed_experts(self, data):
+        grouped = {}
         for lang, experts in data["experts"].items():
             for item in experts:
                 mock_id = str(item.get("id", "expert"))
-                expert, _ = Expert.objects.update_or_create(
-                    slug=f"{mock_id}-{lang}",
-                    defaults={
-                        "name": item.get("name", ""),
-                        "role": item.get("role", ""),
-                        "company_name": item.get("company", ""),
-                        "organization": self.organization,
-                        "photo": image_name(item.get("imageUrl")),
-                        "quote": item.get("quote", ""),
-                        "bio": json.dumps(as_list(item.get("bio")), ensure_ascii=False),
-                        "expertise": as_list(item.get("expertise")),
-                        "industries": as_list(item.get("industries")),
-                        "languages": as_list(item.get("languages")),
-                        "experience": as_list(item.get("experienceList")),
-                        "analytics": {
-                            **(item.get("analytics") or {}),
-                            "_mock_id": mock_id,
-                            "_lang": lang,
-                            "availableDates": as_list(item.get("availableDates")),
-                            "availableTimes": item.get("availableTimes") or {},
-                            "availableFor": as_list(item.get("availableFor")),
-                        },
-                        "consultation_price": item.get("price"),
-                        "is_available_for_consultation": bool(item.get("availableFor")),
-                        "is_featured": mock_id in {"expert-1", "expert-4"},
-                        "is_active": True,
-                    },
-                )
-                expert.tags.set(self.get_tags(item.get("expertise"), ContentKind.EXPERT))
+                grouped.setdefault(mock_id, {})[lang] = item
 
-                for session in as_list(item.get("sessions")):
-                    ExpertSession.objects.update_or_create(
-                        expert=expert,
-                        title=session.get("title", ""),
-                        defaults={
-                            "subtitle": session.get("subtitle", ""),
-                            "description": session.get("description", ""),
-                            "price": session.get("price"),
-                            "is_active": True,
-                        },
-                    )
+        for mock_id, translations_source in grouped.items():
+            fallback = translations_source.get("en") or translations_source.get("bg") or {}
+            translations = {}
+
+            for lang, item in translations_source.items():
+                translations[lang] = {
+                    "name": item.get("name", ""),
+                    "role": item.get("role", ""),
+                    "company_name": item.get("company", ""),
+                    "quote": item.get("quote", ""),
+                    "bio": as_list(item.get("bio")),
+                    "expertise": as_list(item.get("expertise")),
+                    "industries": as_list(item.get("industries")),
+                    "languages": as_list(item.get("languages")),
+                    "experience": as_list(item.get("experienceList")),
+                }
+
+            expert, _ = Expert.objects.update_or_create(
+                slug=mock_id,
+                defaults={
+                    "name": fallback.get("name", ""),
+                    "role": fallback.get("role", ""),
+                    "company_name": fallback.get("company", ""),
+                    "organization": self.organization,
+                    "photo": image_name(fallback.get("imageUrl")),
+                    "quote": fallback.get("quote", ""),
+                    "bio": "\n".join(as_list(fallback.get("bio"))),
+                    "expertise": as_list(fallback.get("expertise")),
+                    "industries": as_list(fallback.get("industries")),
+                    "languages": as_list(fallback.get("languages")),
+                    "experience": as_list(fallback.get("experienceList")),
+                    "translations": translations,
+                    "analytics": {
+                        **(fallback.get("analytics") or {}),
+                        "_mock_id": mock_id,
+                        "availableDates": as_list(fallback.get("availableDates")),
+                        "availableTimes": fallback.get("availableTimes") or {},
+                        "availableFor": as_list(fallback.get("availableFor")),
+                    },
+                    "consultation_price": fallback.get("price"),
+                    "is_available_for_consultation": bool(fallback.get("availableFor")),
+                    "service_consultation": True,
+                    "service_consultation_price": fallback.get("price"),
+                    "service_mentorship": True,
+                    "service_mentorship_price": fallback.get("price"),
+                    "service_project_analysis": True,
+                    "service_project_analysis_price": fallback.get("price"),
+                    "is_featured": mock_id in {"expert-1", "expert-4"},
+                    "is_active": True,
+                },
+            )
+            expert.tags.set(self.get_tags(fallback.get("expertise"), ContentKind.EXPERT))
 
     def seed_articles(self, data):
         for lang, articles in data["news"].items():

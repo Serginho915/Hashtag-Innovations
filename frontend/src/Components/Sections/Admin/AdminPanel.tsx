@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import styles from "./AdminPanel.module.scss";
 
 type FieldType =
@@ -18,6 +18,18 @@ type FieldType =
 type FieldValue = string | number | boolean;
 type AdminRecord = Record<string, FieldValue> & { id: string };
 type RecordsByResource = Record<string, AdminRecord[]>;
+type ExperienceEntry = {
+  id?: string;
+  role: string;
+  company: string;
+  period: string;
+};
+type AnalyticsValue = {
+  consultations?: string;
+  attendance?: string;
+  experienceYears?: string;
+  [key: string]: unknown;
+};
 
 interface AdminField {
   key: string;
@@ -50,8 +62,6 @@ const resourceHelpText: Record<string, string> = {
     "Organizations store companies, partners and institutions that can be connected to experts, events and projects.",
   experts:
     "Experts describe people shown on the site, including their profile, expertise, availability and consultation details.",
-  expert_sessions:
-    "Expert Sessions define bookable or featured sessions connected to an expert, including title, description and price.",
   articles:
     "Articles manage news, blog posts and insights that appear in content sections across the site.",
   events:
@@ -152,71 +162,75 @@ const resources: ResourceConfig[] = [
     label: "Experts",
     singular: "Expert",
     accent: "#AE73F1",
-    columns: ["name", "role", "company_name", "is_available_for_consultation", "is_active"],
+    columns: ["name_en", "name_bg", "service_consultation", "service_mentorship", "service_project_analysis", "is_active"],
     fields: [
-      { key: "name", label: "Name", type: "text" },
-      { key: "slug", label: "Slug", type: "text" },
-      { key: "role", label: "Role", type: "text" },
-      { key: "company_name", label: "Company name", type: "text" },
+      { key: "slug", label: "Slug", type: "text", fullWidth: true },
+      { key: "name_en", label: "Name EN", type: "text" },
+      { key: "name_bg", label: "Name BG", type: "text" },
+      { key: "role_en", label: "Role EN", type: "text" },
+      { key: "role_bg", label: "Role BG", type: "text" },
+      { key: "company_name_en", label: "Company name EN", type: "text" },
+      { key: "company_name_bg", label: "Company name BG", type: "text" },
       { key: "organization", label: "Organization", type: "text" },
       { key: "photo", label: "Photo", type: "file", accept: "image/*" },
-      { key: "quote", label: "Quote", type: "textarea", fullWidth: true },
-      { key: "bio", label: "Bio", type: "textarea", fullWidth: true },
-      { key: "expertise", label: "Expertise", type: "textarea" },
-      { key: "industries", label: "Industries", type: "textarea" },
-      { key: "languages", label: "Languages", type: "textarea" },
-      { key: "experience", label: "Experience", type: "textarea", fullWidth: true },
+      { key: "quote_en", label: "Quote EN", type: "textarea" },
+      { key: "quote_bg", label: "Quote BG", type: "textarea" },
+      { key: "bio_en", label: "Bio EN", type: "textarea" },
+      { key: "bio_bg", label: "Bio BG", type: "textarea" },
+      { key: "expertise_en", label: "Expertise EN", type: "textarea" },
+      { key: "expertise_bg", label: "Expertise BG", type: "textarea" },
+      { key: "industries_en", label: "Industries EN", type: "textarea" },
+      { key: "industries_bg", label: "Industries BG", type: "textarea" },
+      { key: "languages_en", label: "Languages EN", type: "textarea" },
+      { key: "languages_bg", label: "Languages BG", type: "textarea" },
+      { key: "experience_en", label: "Experience EN", type: "textarea" },
+      { key: "experience_bg", label: "Experience BG", type: "textarea" },
       { key: "analytics", label: "Analytics", type: "textarea", fullWidth: true },
       { key: "consultation_price", label: "Consultation price", type: "number" },
       { key: "is_available_for_consultation", label: "Available for consultation", type: "boolean" },
+      { key: "service_consultation", label: "Consultation", type: "boolean" },
+      { key: "service_consultation_price", label: "Consultation price", type: "number" },
+      { key: "service_mentorship", label: "Mentorship", type: "boolean" },
+      { key: "service_mentorship_price", label: "Mentorship price", type: "number" },
+      { key: "service_project_analysis", label: "Project analysis", type: "boolean" },
+      { key: "service_project_analysis_price", label: "Project analysis price", type: "number" },
       { key: "is_featured", label: "Featured", type: "boolean" },
       { key: "is_active", label: "Active", type: "boolean" },
     ],
     records: [
       {
         id: "expert-1",
-        name: "Elena Petrova",
         slug: "elena-petrova",
-        role: "Digital strategy lead",
-        company_name: "Hashtag Innovations",
+        name_en: "Elena Petrova",
+        name_bg: "Елена Петрова",
+        role_en: "Digital strategy lead",
+        role_bg: "Лийд дигитална стратегия",
+        company_name_en: "Hashtag Innovations",
+        company_name_bg: "Hashtag Innovations",
         organization: "Hashtag Innovations",
         photo: "/images/avatars/avatar_1.png",
-        quote: "Strong products start with clear operational habits.",
-        bio: "Advises teams on digital operations and content strategy.",
-        expertise: "Strategy, Product, Operations",
-        industries: "SaaS, Education, Media",
-        languages: "English, Bulgarian",
-        experience: "Digital Strategy Lead at Hashtag Innovations",
+        quote_en: "Strong products start with clear operational habits.",
+        quote_bg: "Силните продукти започват с ясни оперативни навици.",
+        bio_en: "Advises teams on digital operations and content strategy.",
+        bio_bg: "Консултира екипи по дигитални операции и стратегия за съдържание.",
+        expertise_en: "Strategy, Product, Operations",
+        expertise_bg: "Стратегия, Продукт, Операции",
+        industries_en: "SaaS, Education, Media",
+        industries_bg: "SaaS, Образование, Медии",
+        languages_en: "English, Bulgarian",
+        languages_bg: "Английски, Български",
+        experience_en: "Digital Strategy Lead at Hashtag Innovations",
+        experience_bg: "Лийд дигитална стратегия в Hashtag Innovations",
         analytics: "consultations: 120, attendance: 94%",
         consultation_price: 120,
         is_available_for_consultation: true,
+        service_consultation: true,
+        service_consultation_price: 120,
+        service_mentorship: true,
+        service_mentorship_price: 180,
+        service_project_analysis: true,
+        service_project_analysis_price: 250,
         is_featured: true,
-        is_active: true,
-      },
-    ],
-  },
-  {
-    key: "expert_sessions",
-    label: "Expert Sessions",
-    singular: "Expert Session",
-    accent: "#4A5565",
-    columns: ["title", "expert", "price", "is_active"],
-    fields: [
-      { key: "expert", label: "Expert", type: "text" },
-      { key: "title", label: "Title", type: "text" },
-      { key: "subtitle", label: "Subtitle", type: "text" },
-      { key: "description", label: "Description", type: "textarea", fullWidth: true },
-      { key: "price", label: "Price", type: "number" },
-      { key: "is_active", label: "Active", type: "boolean" },
-    ],
-    records: [
-      {
-        id: "session-1",
-        expert: "Elena Petrova",
-        title: "Strategy review",
-        subtitle: "Focused product and content consultation",
-        description: "A focused session for teams that need a clear next step.",
-        price: 120,
         is_active: true,
       },
     ],
@@ -451,6 +465,43 @@ const formatOptionLabel = (value: string) => {
     .join(" ");
 };
 
+const readApiError = async (response: Response) => {
+  const payload = await response.json().catch(() => null) as { error?: unknown } | null;
+
+  if (!payload?.error) {
+    return "The database did not accept this change.";
+  }
+
+  return typeof payload.error === "string" ? payload.error : JSON.stringify(payload.error);
+};
+
+const parseJsonValue = <T,>(value: FieldValue | undefined, fallback: T): T => {
+  if (typeof value !== "string" || !value.trim()) {
+    return fallback;
+  }
+
+  try {
+    return JSON.parse(value) as T;
+  } catch {
+    return fallback;
+  }
+};
+
+const parseStringList = (value: FieldValue | undefined) => {
+  const parsed = parseJsonValue<unknown>(value, null);
+
+  if (Array.isArray(parsed)) {
+    return parsed.map((item) => String(item).trim()).filter(Boolean);
+  }
+
+  return String(value ?? "")
+    .split(/[\n,]/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
+const stringifyJsonField = (value: unknown) => JSON.stringify(value, null, 2);
+
 const EditIcon = () => (
   <svg aria-hidden="true" viewBox="0 0 20 20" focusable="false">
     <path
@@ -503,6 +554,205 @@ const HelpIcon = () => (
   <span aria-hidden="true">?</span>
 );
 
+interface TagsEditorProps {
+  label: string;
+  value: FieldValue | undefined;
+  onChange: (value: string) => void;
+}
+
+const TagsEditor = ({ label, value, onChange }: TagsEditorProps) => {
+  const [draft, setDraft] = useState("");
+  const tags = parseStringList(value);
+
+  const commitTag = () => {
+    const nextTag = draft.trim();
+
+    if (!nextTag || tags.some((tag) => tag.toLowerCase() === nextTag.toLowerCase())) {
+      setDraft("");
+      return;
+    }
+
+    onChange(stringifyJsonField([...tags, nextTag]));
+    setDraft("");
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    onChange(stringifyJsonField(tags.filter((tag) => tag !== tagToRemove)));
+  };
+
+  return (
+    <div className={styles.formField}>
+      <span>{label}</span>
+      <div className={styles.tagsEditor}>
+        <div className={styles.tagsList}>
+          {tags.map((tag) => (
+            <button key={tag} type="button" onClick={() => removeTag(tag)} title="Remove tag">
+              <span>{tag}</span>
+              <strong aria-hidden="true">x</strong>
+            </button>
+          ))}
+        </div>
+        <div className={styles.tagInputLine}>
+          <input
+            value={draft}
+            onChange={(event) => setDraft(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === ",") {
+                event.preventDefault();
+                commitTag();
+              }
+            }}
+            onBlur={commitTag}
+          />
+          <button type="button" onMouseDown={(event) => event.preventDefault()} onClick={commitTag}>
+            Add
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface BioEditorProps {
+  label: string;
+  value: FieldValue | undefined;
+  onChange: (value: string) => void;
+}
+
+const BioEditor = ({ label, value, onChange }: BioEditorProps) => {
+  const paragraphs = parseStringList(value);
+  const [draftText, setDraftText] = useState(() => paragraphs.join("\n\n"));
+
+  const updateText = (nextValue: string) => {
+    setDraftText(nextValue);
+
+    const nextParagraphs = nextValue
+      .split(/\n{2,}/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+    onChange(stringifyJsonField(nextParagraphs));
+  };
+
+  return (
+    <div className={styles.formField}>
+      <span>{label}</span>
+      <textarea value={draftText} onChange={(event) => updateText(event.target.value)} rows={8} />
+    </div>
+  );
+};
+
+interface ExperienceEditorProps {
+  label: string;
+  value: FieldValue | undefined;
+  onChange: (value: string) => void;
+}
+
+const ExperienceEditor = ({ label, value, onChange }: ExperienceEditorProps) => {
+  const entries = parseJsonValue<ExperienceEntry[]>(value, []).filter((entry) => typeof entry === "object");
+
+  const updateEntries = (nextEntries: ExperienceEntry[]) => {
+    onChange(stringifyJsonField(nextEntries));
+  };
+
+  const updateEntry = (index: number, key: keyof ExperienceEntry, nextValue: string) => {
+    updateEntries(entries.map((entry, entryIndex) => (
+      entryIndex === index ? { ...entry, [key]: nextValue } : entry
+    )));
+  };
+
+  const addEntry = () => {
+    updateEntries([
+      ...entries,
+      {
+        id: `experience-${Date.now()}`,
+        role: "",
+        company: "",
+        period: "",
+      },
+    ]);
+  };
+
+  const removeEntry = (index: number) => {
+    updateEntries(entries.filter((_, entryIndex) => entryIndex !== index));
+  };
+
+  return (
+    <div className={styles.formField}>
+      <span>{label}</span>
+      <div className={styles.experienceEditor}>
+        {entries.map((entry, index) => (
+          <div className={styles.experienceItem} key={entry.id || index}>
+            <label>
+              <span>Role</span>
+              <input value={entry.role ?? ""} onChange={(event) => updateEntry(index, "role", event.target.value)} />
+            </label>
+            <label>
+              <span>Company</span>
+              <input value={entry.company ?? ""} onChange={(event) => updateEntry(index, "company", event.target.value)} />
+            </label>
+            <label>
+              <span>Period</span>
+              <input value={entry.period ?? ""} onChange={(event) => updateEntry(index, "period", event.target.value)} />
+            </label>
+            <button type="button" onClick={() => removeEntry(index)} title="Remove experience">
+              Remove
+            </button>
+          </div>
+        ))}
+        <button className={styles.addInlineButton} type="button" onClick={addEntry}>
+          Add experience
+        </button>
+      </div>
+    </div>
+  );
+};
+
+interface AnalyticsEditorProps {
+  value: FieldValue | undefined;
+  onChange: (value: string) => void;
+}
+
+const AnalyticsEditor = ({ value, onChange }: AnalyticsEditorProps) => {
+  const analytics = parseJsonValue<AnalyticsValue>(value, {});
+
+  const updateAnalytics = (key: keyof AnalyticsValue, nextValue: string) => {
+    onChange(stringifyJsonField({
+      ...analytics,
+      [key]: nextValue,
+    }));
+  };
+
+  return (
+    <div className={`${styles.formField} ${styles.fullWidth}`}>
+      <span>Analytics</span>
+      <div className={styles.analyticsEditor}>
+        <label>
+          <span>Consultations</span>
+          <input
+            value={String(analytics.consultations ?? "")}
+            onChange={(event) => updateAnalytics("consultations", event.target.value)}
+          />
+        </label>
+        <label>
+          <span>Attendance</span>
+          <input
+            value={String(analytics.attendance ?? "")}
+            onChange={(event) => updateAnalytics("attendance", event.target.value)}
+          />
+        </label>
+        <label>
+          <span>Experience years</span>
+          <input
+            value={String(analytics.experienceYears ?? "")}
+            onChange={(event) => updateAnalytics("experienceYears", event.target.value)}
+          />
+        </label>
+      </div>
+    </div>
+  );
+};
+
 export const AdminPanel = () => {
   const [activeKey, setActiveKey] = useState(resources[0].key);
   const [query, setQuery] = useState("");
@@ -513,6 +763,8 @@ export const AdminPanel = () => {
   const [recordsError, setRecordsError] = useState("");
   const [editingRecord, setEditingRecord] = useState<AdminRecord | null>(null);
   const [editingMode, setEditingMode] = useState<"create" | "edit">("edit");
+  const [mutationError, setMutationError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -595,15 +847,18 @@ export const AdminPanel = () => {
 
   const openCreate = () => {
     setEditingMode("create");
+    setMutationError("");
     setEditingRecord(makeBlankRecord(activeResource));
   };
 
   const openEdit = (record: AdminRecord) => {
     setEditingMode("edit");
+    setMutationError("");
     setEditingRecord({ ...record });
   };
 
   const closeEditor = () => {
+    setMutationError("");
     setEditingRecord(null);
   };
 
@@ -620,8 +875,261 @@ export const AdminPanel = () => {
     });
   };
 
-  const saveRecord = () => {
+  const updateEditingKey = (key: string, value: FieldValue) => {
+    setEditingRecord((current) => {
+      if (!current) {
+        return current;
+      }
+
+      return {
+        ...current,
+        [key]: value,
+      };
+    });
+  };
+
+  const renderEditorField = (field: AdminField) => {
     if (!editingRecord) {
+      return null;
+    }
+
+    if (activeResource.key === "experts" && ["bio_en", "bio_bg"].includes(field.key)) {
+      return (
+        <BioEditor
+          key={field.key}
+          label={field.label}
+          value={editingRecord[field.key]}
+          onChange={(value) => updateEditingValue(field, value)}
+        />
+      );
+    }
+
+    if (
+      activeResource.key === "experts" &&
+      ["expertise_en", "expertise_bg", "industries_en", "industries_bg", "languages_en", "languages_bg"].includes(field.key)
+    ) {
+      return (
+        <TagsEditor
+          key={field.key}
+          label={field.label}
+          value={editingRecord[field.key]}
+          onChange={(value) => updateEditingValue(field, value)}
+        />
+      );
+    }
+
+    if (activeResource.key === "experts" && ["experience_en", "experience_bg"].includes(field.key)) {
+      return (
+        <ExperienceEditor
+          key={field.key}
+          label={field.label}
+          value={editingRecord[field.key]}
+          onChange={(value) => updateEditingValue(field, value)}
+        />
+      );
+    }
+
+    if (activeResource.key === "experts" && field.key === "analytics") {
+      return (
+        <AnalyticsEditor
+          key={field.key}
+          value={editingRecord[field.key]}
+          onChange={(value) => updateEditingValue(field, value)}
+        />
+      );
+    }
+
+    if (activeResource.key === "experts" && field.key === "is_available_for_consultation") {
+      const isAvailable = Boolean(editingRecord.is_available_for_consultation);
+      const serviceFields = [
+        { key: "service_consultation", priceKey: "service_consultation_price", label: "Consultation" },
+        { key: "service_mentorship", priceKey: "service_mentorship_price", label: "Mentorship" },
+        { key: "service_project_analysis", priceKey: "service_project_analysis_price", label: "Project analysis" },
+      ];
+
+      return (
+        <div key={field.key} className={`${styles.formField} ${styles.fullWidth}`}>
+          <span className={styles.checkboxField}>
+            <input
+              type="checkbox"
+              checked={isAvailable}
+              onChange={(event) => {
+                const nextValue = event.target.checked;
+                updateEditingKey("is_available_for_consultation", nextValue);
+
+                if (!nextValue) {
+                  serviceFields.forEach((serviceField) => updateEditingKey(serviceField.key, false));
+                }
+              }}
+            />
+            <span>{field.label}</span>
+          </span>
+
+          <div className={`${styles.serviceSubFields} ${!isAvailable ? styles.disabledServiceSubFields : ""}`}>
+            {serviceFields.map((serviceField) => {
+              const isServiceEnabled = isAvailable && Boolean(editingRecord[serviceField.key]);
+
+              return (
+                <Fragment key={serviceField.key}>
+                  <label className={styles.serviceCheckboxField}>
+                    <input
+                      type="checkbox"
+                      checked={Boolean(editingRecord[serviceField.key])}
+                      disabled={!isAvailable}
+                      onChange={(event) => updateEditingKey(serviceField.key, event.target.checked)}
+                    />
+                    <span>{serviceField.label}</span>
+                  </label>
+                  <label className={styles.servicePriceField}>
+                    <span>{serviceField.label} price</span>
+                    <input
+                      type="number"
+                      value={String(editingRecord[serviceField.priceKey] ?? 0)}
+                      disabled={!isServiceEnabled}
+                      onChange={(event) => updateEditingKey(serviceField.priceKey, Number(event.target.value))}
+                    />
+                  </label>
+                </Fragment>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    if (
+      activeResource.key === "experts" &&
+      [
+        "service_consultation",
+        "service_consultation_price",
+        "service_mentorship",
+        "service_mentorship_price",
+        "service_project_analysis",
+        "service_project_analysis_price",
+      ].includes(field.key)
+    ) {
+      return null;
+    }
+
+    return (
+      <label
+        key={field.key}
+        className={`${styles.formField} ${field.fullWidth ? styles.fullWidth : ""} ${
+          field.type === "boolean" ? styles.booleanFormField : ""
+        }`}
+      >
+        {field.type === "boolean" ? (
+          <span className={styles.checkboxField}>
+            <input
+              type="checkbox"
+              checked={Boolean(editingRecord[field.key])}
+              onChange={(event) => updateEditingValue(field, event.target.checked)}
+            />
+            <span>{field.label}</span>
+          </span>
+        ) : (
+          <>
+            <span>{field.label}</span>
+            {field.type === "textarea" ? (
+              <textarea
+                value={String(editingRecord[field.key] ?? "")}
+                onChange={(event) => updateEditingValue(field, event.target.value)}
+                rows={field.fullWidth ? 5 : 3}
+              />
+            ) : field.type === "file" ? (
+              <span className={styles.fileField}>
+                <input
+                  type="file"
+                  accept={field.accept}
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+
+                    if (file) {
+                      updateEditingValue(field, file.name);
+                    }
+                  }}
+                />
+                {editingRecord[field.key] && (
+                  <span>{`Selected: ${String(editingRecord[field.key])}`}</span>
+                )}
+              </span>
+            ) : field.type === "select" ? (
+              <select
+                value={String(editingRecord[field.key] ?? "")}
+                onChange={(event) => updateEditingValue(field, event.target.value)}
+              >
+                {field.options?.map((option) => (
+                  <option key={option || "blank"} value={option}>
+                    {formatOptionLabel(option)}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type={
+                  field.type === "datetime"
+                    ? "datetime-local"
+                    : field.type === "url"
+                      ? "url"
+                      : field.type
+                }
+                value={String(editingRecord[field.key] ?? "")}
+                onChange={(event) =>
+                  updateEditingValue(
+                    field,
+                    field.type === "number" ? Number(event.target.value) : event.target.value,
+                  )
+                }
+              />
+            )}
+          </>
+        )}
+      </label>
+    );
+  };
+
+  const saveRecord = async () => {
+    if (!editingRecord) {
+      return;
+    }
+
+    setIsSaving(true);
+    setMutationError("");
+
+    const response = await fetch("/admin/api/resources", {
+      method: editingMode === "create" ? "POST" : "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        resourceKey: activeResource.key,
+        recordId: editingMode === "edit" ? editingRecord.id : undefined,
+        record: editingRecord,
+      }),
+    }).catch(() => null);
+
+    if (!response) {
+      setMutationError("Could not connect to the admin API.");
+      setIsSaving(false);
+      return;
+    }
+
+    if (response.status === 401) {
+      window.location.assign("/admin/login");
+      return;
+    }
+
+    if (!response.ok) {
+      setMutationError(await readApiError(response));
+      setIsSaving(false);
+      return;
+    }
+
+    const savedRecord = (await response.json().catch(() => null)) as AdminRecord | null;
+
+    if (!savedRecord?.id) {
+      setMutationError("Admin API returned an invalid saved record.");
+      setIsSaving(false);
       return;
     }
 
@@ -629,9 +1137,9 @@ export const AdminPanel = () => {
       const records = current[activeResource.key] ?? [];
       const nextRecords =
         editingMode === "create"
-          ? [editingRecord, ...records]
+          ? [savedRecord, ...records]
           : records.map((record) =>
-              record.id === editingRecord.id ? editingRecord : record,
+              record.id === savedRecord.id ? savedRecord : record,
             );
 
       return {
@@ -640,13 +1148,40 @@ export const AdminPanel = () => {
       };
     });
 
+    setIsSaving(false);
     closeEditor();
   };
 
-  const deleteRecord = (recordId: string) => {
+  const deleteRecord = async (recordId: string) => {
     const isConfirmed = window.confirm("Are you sure you want to delete this record?");
 
     if (!isConfirmed) {
+      return;
+    }
+
+    const response = await fetch("/admin/api/resources", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        resourceKey: activeResource.key,
+        recordId,
+      }),
+    }).catch(() => null);
+
+    if (!response) {
+      setRecordsError("Could not connect to the admin API.");
+      return;
+    }
+
+    if (response.status === 401) {
+      window.location.assign("/admin/login");
+      return;
+    }
+
+    if (!response.ok) {
+      setRecordsError(await readApiError(response));
       return;
     }
 
@@ -830,87 +1365,20 @@ export const AdminPanel = () => {
             </div>
 
             <div className={styles.formGrid}>
-              {activeResource.fields.map((field) => (
-                <label
-                  key={field.key}
-                  className={`${styles.formField} ${field.fullWidth ? styles.fullWidth : ""}`}
-                >
-                  {field.type === "boolean" ? (
-                    <span className={styles.checkboxField}>
-                      <input
-                        type="checkbox"
-                        checked={Boolean(editingRecord[field.key])}
-                        onChange={(event) => updateEditingValue(field, event.target.checked)}
-                      />
-                      <span>{field.label}</span>
-                    </span>
-                  ) : (
-                    <>
-                      <span>{field.label}</span>
-                      {field.type === "textarea" ? (
-                        <textarea
-                          value={String(editingRecord[field.key] ?? "")}
-                          onChange={(event) => updateEditingValue(field, event.target.value)}
-                          rows={field.fullWidth ? 5 : 3}
-                        />
-                      ) : field.type === "file" ? (
-                        <span className={styles.fileField}>
-                          <input
-                            type="file"
-                            accept={field.accept}
-                            onChange={(event) => {
-                              const file = event.target.files?.[0];
-
-                              if (file) {
-                                updateEditingValue(field, file.name);
-                              }
-                            }}
-                          />
-                          {editingRecord[field.key] && (
-                            <span>{`Selected: ${String(editingRecord[field.key])}`}</span>
-                          )}
-                        </span>
-                      ) : field.type === "select" ? (
-                        <select
-                          value={String(editingRecord[field.key] ?? "")}
-                          onChange={(event) => updateEditingValue(field, event.target.value)}
-                        >
-                          {field.options?.map((option) => (
-                            <option key={option || "blank"} value={option}>
-                              {formatOptionLabel(option)}
-                            </option>
-                          ))}
-                        </select>
-                      ) : (
-                        <input
-                          type={
-                            field.type === "datetime"
-                              ? "datetime-local"
-                              : field.type === "url"
-                                ? "url"
-                                : field.type
-                          }
-                          value={String(editingRecord[field.key] ?? "")}
-                          onChange={(event) =>
-                            updateEditingValue(
-                              field,
-                              field.type === "number" ? Number(event.target.value) : event.target.value,
-                            )
-                          }
-                        />
-                      )}
-                    </>
-                  )}
-                </label>
-              ))}
+              {activeResource.fields.map((field) => renderEditorField(field))}
             </div>
 
             <div className={styles.editorFooter}>
+              {mutationError && (
+                <p className={styles.editorError} role="alert">
+                  {mutationError}
+                </p>
+              )}
               <button className={styles.secondaryButton} type="button" onClick={closeEditor}>
                 Cancel
               </button>
-              <button className={styles.primaryButton} type="button" onClick={saveRecord}>
-                Save
+              <button className={styles.primaryButton} type="button" onClick={saveRecord} disabled={isSaving}>
+                {isSaving ? "Saving..." : "Save"}
               </button>
             </div>
           </section>

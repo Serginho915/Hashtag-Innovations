@@ -508,6 +508,11 @@
   &:hover {
     background: #363636;
   }
+
+  &:disabled {
+    opacity: 0.58;
+    cursor: wait;
+  }
 }
 
 .secondaryButton {
@@ -541,23 +546,22 @@
   inset: 0;
   z-index: 80;
   display: flex;
-  justify-content: flex-end;
-  background: rgba(0, 0, 0, 0.36);
+  background: #fff;
 }
 
 .editor {
-  width: min(760px, 100%);
+  width: 100vw;
   height: 100vh;
-  padding: 28px;
+  padding: 32px 40px;
   display: flex;
   flex-direction: column;
   gap: 22px;
   background: #fff;
   overflow-y: auto;
-  box-shadow: -16px 0 36px rgba(15, 23, 42, 0.16);
+  box-shadow: none;
 
   @include mobile {
-    padding: 22px 16px;
+    padding: 20px 16px;
   }
 }
 
@@ -629,6 +633,14 @@
   grid-column: 1 / -1;
 }
 
+.booleanFormField {
+  padding-top: 26px;
+
+  @include mobile {
+    padding-top: 0;
+  }
+}
+
 .checkboxField {
   min-height: 42px;
   padding: 10px 12px;
@@ -646,6 +658,83 @@
     min-height: 18px;
     padding: 0;
     accent-color: #000;
+  }
+}
+
+.serviceSubFields {
+  margin-left: 18px;
+  padding: 12px 12px 12px 18px;
+  border-left: 3px solid #c0c0d2;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  grid-auto-flow: column;
+  grid-template-rows: auto auto;
+  transition: opacity 0.2s ease;
+
+  @include tablet {
+    grid-template-columns: 1fr;
+    grid-auto-flow: row;
+    grid-template-rows: none;
+  }
+}
+
+.disabledServiceSubFields {
+  opacity: 0.48;
+}
+
+.serviceCheckboxField,
+.servicePriceField {
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid #c0c0d2;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  color: #000;
+  font-size: 14px;
+  font-weight: 800;
+
+  input {
+    width: 18px;
+    height: 18px;
+    accent-color: #000;
+  }
+
+  &:has(input:disabled) {
+    background: #f8f8f8;
+    cursor: not-allowed;
+  }
+}
+
+.servicePriceField {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 9px 12px;
+
+  > span {
+    color: #4a5565;
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  input {
+    width: 100%;
+    height: 24px;
+    min-height: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #000;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    outline: none;
   }
 }
 
@@ -678,6 +767,178 @@
   }
 }
 
+.tagsEditor,
+.experienceEditor,
+.analyticsEditor {
+  border: 1px solid #c0c0d2;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.tagsEditor {
+  min-height: 42px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tagsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  &:empty {
+    display: none;
+  }
+
+  button {
+    min-height: 30px;
+    padding: 5px 8px 5px 10px;
+    border: 1px solid #e3e3ea;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f8f8f8;
+    color: #000;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+
+    &:hover {
+      border-color: #000;
+    }
+
+    strong {
+      font-size: 14px;
+      line-height: 1;
+    }
+  }
+}
+
+.tagInputLine {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+
+  input {
+    min-height: 38px;
+    border: 0 !important;
+    background: #f8f8f8 !important;
+  }
+
+  button {
+    min-height: 38px;
+    padding: 8px 12px;
+    border: 1px solid #000;
+    border-radius: 8px;
+    background: #000;
+    color: #fff;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+}
+
+.experienceEditor {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.analyticsEditor {
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+
+  @include tablet {
+    grid-template-columns: 1fr;
+  }
+
+  label {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  span {
+    color: #4a5565;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+}
+
+.experienceItem {
+  padding: 12px;
+  border: 1px solid #e3e3ea;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  align-items: end;
+  gap: 10px;
+  background: #fafafa;
+
+  @include tablet {
+    grid-template-columns: 1fr;
+  }
+
+  label {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  span {
+    color: #4a5565;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  button {
+    min-height: 42px;
+    padding: 9px 12px;
+    border: 1px solid #c0c0d2;
+    border-radius: 8px;
+    background: #fff;
+    color: #d62612;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+
+    &:hover {
+      border-color: #d62612;
+    }
+  }
+}
+
+.addInlineButton {
+  min-height: 42px;
+  padding: 10px 14px;
+  border: 1px solid #000;
+  border-radius: 8px;
+  align-self: flex-start;
+  background: #000;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+
+  &:hover {
+    background: #363636;
+  }
+}
+
 .editorFooter {
   position: sticky;
   bottom: -28px;
@@ -687,6 +948,15 @@
   justify-content: flex-end;
   gap: 10px;
   background: #fff;
+}
+
+.editorError {
+  margin: 0 auto 0 0;
+  max-width: 420px;
+  color: #d62612;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
 }
 
 .emptyState {
