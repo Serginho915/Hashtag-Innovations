@@ -104,8 +104,7 @@ export const InsightDetailsPage: React.FC<InsightDetailsPageProps> = ({ insight,
     ? insight.bodySections
     : [{ paragraphs: [insight.excerpt || ''] }];
   const primaryMetaItems = [
-    ...(insight.hashtags?.length ? insight.hashtags : insight.promotedLabel ? [insight.promotedLabel] : []),
-    insight.timeToRead || insight.readTime,
+    ...(insight.hashtags?.length ? insight.hashtags : []),
   ].filter(Boolean) as string[];
 
   return (

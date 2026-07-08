@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './CatalogExpertCard.module.scss';
 import Link from 'next/link';
 import { Expert } from '../../../../Types/expert.ts';
+import { formatExpertRoleCompany } from '../../../../Lib/expert.ts';
 
 interface CatalogExpertCardProps {
   expert: Expert;
@@ -10,14 +11,15 @@ interface CatalogExpertCardProps {
 }
 
 export const CatalogExpertCard: React.FC<CatalogExpertCardProps> = ({ expert, lang, availableForLabel }) => {
+  const roleWithCompany = formatExpertRoleCompany(expert, lang);
+
   return (
     <Link href={`/${lang}/experts/${expert.id}`} style={{ textDecoration: 'none', display: 'flex' }}>
       <div className={styles.catalogCard}>
         <div className={styles.cardHeader}>
           <div className={styles.expertName}>{expert.name}</div>
           <div className={styles.roleGroup}>
-            <div className={styles.roleText}>{expert.role}</div>
-            <div className={styles.companyText}>{expert.company}</div>
+            <div className={styles.roleText}>{roleWithCompany}</div>
           </div>
         </div>
         

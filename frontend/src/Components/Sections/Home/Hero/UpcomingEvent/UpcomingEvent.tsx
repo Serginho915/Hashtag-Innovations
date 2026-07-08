@@ -25,8 +25,7 @@ export const UpcomingEvent = ({ lang, events }: UpcomingEventProps) => {
   futureEvents.sort((a: UpcomingEventData, b: UpcomingEventData) => new Date(a.dateIso).getTime() - new Date(b.dateIso).getTime());
 
   // Fallback to the last event in array if no future events
-  const featuredEvent = eventsData.find((event) => event.isFeaturedHero);
-  const nearestEvent = featuredEvent || (futureEvents.length > 0 ? futureEvents[0] : eventsData[eventsData.length - 1]);
+  const nearestEvent = futureEvents.length > 0 ? futureEvents[0] : eventsData[eventsData.length - 1];
 
   if (!nearestEvent) {
     return null;

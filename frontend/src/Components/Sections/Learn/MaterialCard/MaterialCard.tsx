@@ -47,10 +47,15 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
   const [purchaseInitialStep, setPurchaseInitialStep] = useState<'overview' | 'checkout'>('overview');
-  const href = material.salesUrl || material.pdfUrl || `/${lang}/learn?material=${material.id || material.title}`;
-  const classNames = [styles.card, styles[variant]].join(' ');
+  const canPreview = Boolean(material.previewPdfUrl);
+  const href = material.pdfUrl || `/${lang}/learn?material=${material.id || material.title}`;
+  const classNames = [styles.card, styles[variant], !canPreview && styles.previewUnavailable].filter(Boolean).join(' ');
   const authorHref = material.authorExpertId ? `/${lang}/experts/${material.authorExpertId}` : undefined;
-  const openPreview = () => setIsPreviewOpen(true);
+  const openPreview = () => {
+    if (canPreview) {
+      setIsPreviewOpen(true);
+    }
+  };
   const closePreview = () => setIsPreviewOpen(false);
   const closePurchase = () => setIsPurchaseOpen(false);
   const openPurchaseModal = (initialStep: 'overview' | 'checkout' = 'overview') => {
@@ -62,6 +67,10 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({
     openPurchaseModal('overview');
   };
   const openPreviewFromPurchase = () => {
+    if (!canPreview) {
+      return;
+    }
+
     setIsPurchaseOpen(false);
     setIsPreviewOpen(true);
   };
@@ -83,10 +92,11 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({
       <article
         id={anchorId}
         className={classNames}
-        role="button"
-        tabIndex={0}
+        role={canPreview ? 'button' : undefined}
+        tabIndex={canPreview ? 0 : undefined}
         onClick={openPreview}
-        onKeyDown={handleKeyDown}
+        onKeyDown={canPreview ? handleKeyDown : undefined}
+        aria-disabled={!canPreview}
         aria-label={`${previewText}: ${material.title}`}
       >
         <div className={styles.media}>
@@ -94,14 +104,12 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({
           <div className={styles.badges}>
             <span className={styles.badge}>
               <FileIcon />
-              {material.badge || material.format || 'PDF'}
+              {material.badge || 'PDF'}
             </span>
-            {material.hasPreview && (
-              <span className={styles.badge}>
-                <EyeIcon />
-                {previewText}
-              </span>
-            )}
+            <span className={[styles.badge, !canPreview && styles.disabledBadge].filter(Boolean).join(' ')}>
+              <EyeIcon />
+              {previewText}
+            </span>
           </div>
         </div>
 

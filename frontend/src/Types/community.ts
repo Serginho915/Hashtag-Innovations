@@ -21,17 +21,14 @@ export interface CommunityEvent {
   location: string;
   locationBg?: string;
   imageSrc?: string;
-  heroImageSrc?: string;
   tags: string[]; // Array of tag IDs, e.g., ['recommended', 'business']
   price?: string;
   startTime?: string;
-  timezone?: string;
   detailDescription?: string;
   detailDescriptionBg?: string;
   speakers?: CommunitySpeaker[];
   organizers?: EventOrganization[];
   partners?: EventOrganization[];
-  relatedArticleIds?: string[];
 }
 
 export interface EventOrganization {

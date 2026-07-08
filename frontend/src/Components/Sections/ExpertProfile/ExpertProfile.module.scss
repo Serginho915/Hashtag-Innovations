@@ -295,6 +295,62 @@
   }
 }
 
+.bioHtml {
+  color: black;
+  font-size: 20px;
+  font-family: $font-manrope;
+  font-weight: 700;
+  line-height: 28px;
+
+  p,
+  ul,
+  ol,
+  blockquote,
+  h2 {
+    margin: 0;
+  }
+
+  p + p,
+  p + ul,
+  p + ol,
+  ul + p,
+  ol + p,
+  blockquote + p,
+  h2 + p {
+    margin-top: 12px;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+  }
+
+  li + li {
+    margin-top: 8px;
+  }
+
+  h2 {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 36px;
+  }
+
+  blockquote {
+    padding-left: 16px;
+    border-left: 3px solid #C0C0D2;
+  }
+
+  @include mobile {
+    font-size: 16px;
+    line-height: 24px;
+
+    h2 {
+      font-size: 24px;
+      line-height: 30px;
+    }
+  }
+}
+
 .bioList {
   margin: 0;
   padding-left: 24px;

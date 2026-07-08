@@ -1,16 +1,18 @@
 import React from 'react';
 import Image from 'next/image';
 import { Expert } from '../../../../Types/expert.ts';
+import { formatExpertRoleCompany } from '../../../../Lib/expert.ts';
 import styles from '../ExpertProfile.module.scss';
 import type { ExpertsTranslations } from '../../../../app/[lang]/experts/translations.ts';
 
 interface Props {
   expert: Expert;
   t: ExpertsTranslations;
+  lang: string;
 }
 
-export const ExpertProfileHeader: React.FC<Props> = ({ expert, t }) => {
-  const roleWithCompany = [expert.role, expert.company].filter(Boolean).join("\u00A0");
+export const ExpertProfileHeader: React.FC<Props> = ({ expert, t, lang }) => {
+  const roleWithCompany = formatExpertRoleCompany(expert, lang);
 
   return (
     <div className={styles.headerBlock}>

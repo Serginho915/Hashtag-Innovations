@@ -48,6 +48,7 @@ export const MaterialPurchaseModal: React.FC<MaterialPurchaseModalProps> = ({
   initialStep = 'overview',
 }) => {
   const t = translations[lang as keyof typeof translations] || translations.en;
+  const canPreview = Boolean(material.previewPdfUrl);
   const [step, setStep] = useState<Step>(initialStep);
   const [formValues, setFormValues] = useState<FormState>({
     name: '',
@@ -154,7 +155,9 @@ export const MaterialPurchaseModal: React.FC<MaterialPurchaseModalProps> = ({
               </div>
 
               <div className={styles.actions}>
-                <button className={styles.secondaryAction} type="button" onClick={onPreview}>{t.preview}</button>
+                <button className={styles.secondaryAction} type="button" onClick={onPreview} disabled={!canPreview}>
+                  {t.preview}
+                </button>
                 <button className={styles.primaryAction} type="button" onClick={() => setStep('checkout')}>{t.get}</button>
               </div>
             </div>
@@ -165,7 +168,7 @@ export const MaterialPurchaseModal: React.FC<MaterialPurchaseModalProps> = ({
                   <Image src={material.imageUrl} alt={material.title} fill className={styles.image} sizes="225px" />
                   <span className={styles.pdfBadge}>
                     <PdfIcon />
-                    {material.badge || material.format || 'PDF'}
+                    {material.badge || 'PDF'}
                   </span>
                 </div>
                 <div className={styles.checkoutIntro}>

@@ -236,29 +236,6 @@
   object-fit: cover;
 }
 
-.readTimeBadge {
-  position: absolute;
-  left: 8px;
-  top: 8px;
-  padding: 4px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: #fff;
-  color: #69698B;
-  font-family: $font-manrope;
-  font-size: 14px;
-  font-weight: 700;
-
-  @include mobile {
-    left: 12px;
-    top: 12px;
-    padding: 4px 8px;
-    gap: 8px;
-    font-size: 12px;
-  }
-}
-
 .readIcon {
   width: 14px;
   height: 14px;

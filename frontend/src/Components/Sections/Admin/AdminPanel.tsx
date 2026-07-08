@@ -59,12 +59,9 @@ interface ResourceConfig {
 
 const statusOptions = ["draft", "published", "archived"];
 const kindOptions = ["", "article", "event", "expert", "learn_material", "project"];
-const contentTypeOptions = ["news", "blog"];
 const resourceHelpText: Record<string, string> = {
   categories:
     "Categories group content by topic and type, so articles, events, learning materials and projects can be organized and filtered.",
-  tags:
-    "Tags add flexible labels to content, helping mark topics, highlights, recommendations and cross-category relationships.",
   organizations:
     "Organizations store companies, partners and institutions that can be connected to experts, events and projects.",
   experts:
@@ -85,9 +82,10 @@ const resources: ResourceConfig[] = [
     label: "Categories",
     singular: "Category",
     accent: "#0F0FFF",
-    columns: ["name", "slug", "kind", "is_active"],
+    columns: ["name_en", "name_bg", "slug", "kind", "is_active"],
     fields: [
-      { key: "name", label: "Name", type: "text" },
+      { key: "name_en", label: "Name EN", type: "text" },
+      { key: "name_bg", label: "Name BG", type: "text" },
       { key: "slug", label: "Slug", type: "text" },
       { key: "kind", label: "Kind", type: "select", options: kindOptions },
       { key: "is_active", label: "Active", type: "boolean" },
@@ -95,45 +93,18 @@ const resources: ResourceConfig[] = [
     records: [
       {
         id: "category-1",
-        name: "Business",
+        name_en: "Business",
+        name_bg: "Бизнес",
         slug: "business",
         kind: "article",
         is_active: true,
       },
       {
         id: "category-2",
-        name: "Technology",
+        name_en: "Technology",
+        name_bg: "Технологии",
         slug: "technology",
         kind: "event",
-        is_active: true,
-      },
-    ],
-  },
-  {
-    key: "tags",
-    label: "Tags",
-    singular: "Tag",
-    accent: "#D62612",
-    columns: ["name", "slug", "kind", "is_active"],
-    fields: [
-      { key: "name", label: "Name", type: "text" },
-      { key: "slug", label: "Slug", type: "text" },
-      { key: "kind", label: "Kind", type: "select", options: kindOptions },
-      { key: "is_active", label: "Active", type: "boolean" },
-    ],
-    records: [
-      {
-        id: "tag-1",
-        name: "Recommended",
-        slug: "recommended",
-        kind: "event",
-        is_active: true,
-      },
-      {
-        id: "tag-2",
-        name: "AI",
-        slug: "ai",
-        kind: "article",
         is_active: true,
       },
     ],
@@ -185,11 +156,8 @@ const resources: ResourceConfig[] = [
       { key: "bio_en", label: "Bio EN", type: "textarea" },
       { key: "bio_bg", label: "Bio BG", type: "textarea" },
       { key: "expertise_en", label: "Expertise EN", type: "textarea" },
-      { key: "expertise_bg", label: "Expertise BG", type: "textarea" },
       { key: "industries_en", label: "Industries EN", type: "textarea" },
-      { key: "industries_bg", label: "Industries BG", type: "textarea" },
       { key: "languages_en", label: "Languages EN", type: "textarea" },
-      { key: "languages_bg", label: "Languages BG", type: "textarea" },
       { key: "experience_en", label: "Experience EN", type: "textarea" },
       { key: "experience_bg", label: "Experience BG", type: "textarea" },
       { key: "analytics", label: "Analytics", type: "textarea", fullWidth: true },
@@ -220,11 +188,8 @@ const resources: ResourceConfig[] = [
         bio_en: "Advises teams on digital operations and content strategy.",
         bio_bg: "Консултира екипи по дигитални операции и стратегия за съдържание.",
         expertise_en: "Strategy, Product, Operations",
-        expertise_bg: "Стратегия, Продукт, Операции",
         industries_en: "SaaS, Education, Media",
-        industries_bg: "SaaS, Образование, Медии",
         languages_en: "English, Bulgarian",
-        languages_bg: "Английски, Български",
         experience_en: "Digital Strategy Lead at Hashtag Innovations",
         experience_bg: "Лийд дигитална стратегия в Hashtag Innovations",
         analytics: "consultations: 120, attendance: 94%",
@@ -245,14 +210,11 @@ const resources: ResourceConfig[] = [
     label: "Articles",
     singular: "Article",
     accent: "#111827",
-    columns: ["title_en", "title_bg", "article_type", "status", "published_at"],
+    columns: ["title_en", "title_bg", "published_at", "status"],
     fields: [
-      { key: "article_type", label: "Article type", type: "select", options: contentTypeOptions },
       { key: "slug", label: "Slug", type: "text" },
       { key: "title_en", label: "Title EN", type: "text" },
       { key: "title_bg", label: "Title BG", type: "text" },
-      { key: "category", label: "Category", type: "text" },
-      { key: "tags", label: "Tags", type: "text" },
       { key: "author", label: "Author expert", type: "text" },
       { key: "image", label: "Image", type: "file", accept: "image/*" },
       { key: "excerpt_en", label: "Excerpt EN", type: "textarea" },
@@ -261,13 +223,7 @@ const resources: ResourceConfig[] = [
       { key: "lead_bg", label: "Lead BG", type: "textarea", fullWidth: true },
       { key: "body_sections_en", label: "Body sections EN", type: "textarea", fullWidth: true },
       { key: "body_sections_bg", label: "Body sections BG", type: "textarea", fullWidth: true },
-      { key: "hashtags_en", label: "Hashtags EN", type: "textarea" },
-      { key: "hashtags_bg", label: "Hashtags BG", type: "textarea" },
-      { key: "display_date", label: "Display date", type: "text" },
-      { key: "time_to_read", label: "Time to read", type: "text" },
-      { key: "promoted_label_en", label: "Promoted label EN", type: "text" },
-      { key: "promoted_label_bg", label: "Promoted label BG", type: "text" },
-      { key: "read_time", label: "Read time", type: "number" },
+      { key: "hashtags_en", label: "Hashtags", type: "textarea" },
       { key: "published_at", label: "Published at", type: "datetime" },
       { key: "status", label: "Status", type: "select", options: statusOptions },
       { key: "is_featured", label: "Featured", type: "boolean" },
@@ -275,12 +231,9 @@ const resources: ResourceConfig[] = [
     records: [
       {
         id: "article-1",
-        article_type: "news",
         title_en: "Digital well-being becomes a product priority",
         title_bg: "Digital well-being becomes a product priority",
         slug: "digital-wellbeing-product-priority",
-        category: "Business",
-        tags: "wellbeing, teams",
         author: "expert-1",
         image: "/images/community/summit_event.png",
         excerpt_en: "A short look at healthier digital work habits.",
@@ -290,12 +243,6 @@ const resources: ResourceConfig[] = [
         body_sections_en: "<h2>Section 1</h2><p>Teams need calmer systems.</p>",
         body_sections_bg: "<h2>Section 1</h2><p>Teams need calmer systems.</p>",
         hashtags_en: "wellbeing, teams",
-        hashtags_bg: "wellbeing, teams",
-        display_date: "17/06/2026",
-        time_to_read: "5 min read",
-        promoted_label_en: "Featured",
-        promoted_label_bg: "Featured",
-        read_time: 5,
         published_at: "2026-06-17T10:00",
         status: "published",
         is_featured: true,
@@ -307,48 +254,46 @@ const resources: ResourceConfig[] = [
     label: "Events",
     singular: "Event",
     accent: "#D62612",
-    columns: ["title", "expert", "starts_at", "location", "status"],
+    columns: ["title_en", "title_bg", "expert", "starts_at", "location", "status"],
     fields: [
-      { key: "title", label: "Title", type: "text" },
       { key: "slug", label: "Slug", type: "text" },
       { key: "category", label: "Category", type: "text" },
-      { key: "tags", label: "Tags", type: "text" },
+      { key: "title_en", label: "Title EN", type: "text" },
+      { key: "title_bg", label: "Title BG", type: "text" },
+      { key: "price", label: "Price", type: "text" },
       { key: "expert", label: "Expert", type: "text" },
       { key: "organizers", label: "Organizers", type: "text" },
       { key: "partners", label: "Partners", type: "text" },
-      { key: "related_articles", label: "Related articles", type: "text" },
-      { key: "description", label: "Description", type: "textarea", fullWidth: true },
-      { key: "detail_description", label: "Detail description", type: "textarea", fullWidth: true },
+      { key: "short_description_en", label: "Short description EN", type: "textarea", fullWidth: true },
+      { key: "short_description_bg", label: "Short description BG", type: "textarea", fullWidth: true },
+      { key: "detail_description_en", label: "Detail description EN", type: "textarea", fullWidth: true },
+      { key: "detail_description_bg", label: "Detail description BG", type: "textarea", fullWidth: true },
       { key: "starts_at", label: "Starts at", type: "datetime" },
-      { key: "timezone", label: "Timezone", type: "text" },
       { key: "location", label: "Location", type: "text" },
-      { key: "price_label", label: "Price label", type: "text" },
+      { key: "tags", label: "Tags", type: "text" },
       { key: "image", label: "Image", type: "file", accept: "image/*" },
-      { key: "hero_image", label: "Hero image", type: "file", accept: "image/*" },
       { key: "status", label: "Status", type: "select", options: statusOptions },
-      { key: "is_featured_hero", label: "Featured hero", type: "boolean" },
     ],
     records: [
       {
         id: "event-1",
-        title: "Product systems breakfast",
+        title_en: "Product systems breakfast",
+        title_bg: "Product systems breakfast",
         slug: "product-systems-breakfast",
         category: "Technology",
         tags: "recommended, product",
-        expert: "Elena Petrova",
+        expert: "expert-1",
         organizers: "Hashtag Innovations",
         partners: "Hashtag Innovations",
-        related_articles: "Digital well-being becomes a product priority",
-        description: "A morning session for operational product teams.",
-        detail_description: "Discussion, examples and a short Q&A.",
+        short_description_en: "A morning session for operational product teams.",
+        short_description_bg: "A morning session for operational product teams.",
+        detail_description_en: "<p>Discussion, examples and a short Q&A.</p>",
+        detail_description_bg: "<p>Discussion, examples and a short Q&A.</p>",
         starts_at: "2026-07-24T09:30",
-        timezone: "Europe/Sofia",
         location: "Sofia",
-        price_label: "Free",
+        price: "Free",
         image: "/images/community/tech_event.png",
-        hero_image: "/images/community/summit.png",
         status: "published",
-        is_featured_hero: true,
       },
     ],
   },
@@ -357,23 +302,22 @@ const resources: ResourceConfig[] = [
     label: "Learn Materials",
     singular: "Learn Material",
     accent: "#69698B",
-    columns: ["title", "author_name", "format_label", "price", "status"],
+    columns: ["title_en", "title_bg", "author", "price", "status"],
     fields: [
-      { key: "title", label: "Title", type: "text" },
       { key: "slug", label: "Slug", type: "text" },
+      { key: "title_en", label: "Title EN", type: "text" },
+      { key: "title_bg", label: "Title BG", type: "text" },
       { key: "category", label: "Category", type: "text" },
       { key: "tags", label: "Tags", type: "text" },
       { key: "author", label: "Author expert", type: "text" },
-      { key: "author_name", label: "Author name", type: "text" },
-      { key: "excerpt", label: "Excerpt", type: "textarea", fullWidth: true },
+      { key: "excerpt_en", label: "Excerpt EN", type: "textarea", fullWidth: true },
+      { key: "excerpt_bg", label: "Excerpt BG", type: "textarea", fullWidth: true },
       { key: "cover_image", label: "Cover image", type: "file", accept: "image/*" },
-      { key: "pdf_file", label: "PDF file path", type: "text" },
-      { key: "preview_pdf_file", label: "Preview PDF path", type: "text" },
-      { key: "sales_url", label: "Sales URL", type: "url" },
-      { key: "format_label", label: "Format label", type: "text" },
+      { key: "pdf_file", label: "PDF file", type: "file", accept: "application/pdf" },
+      { key: "preview_pdf_file", label: "Preview PDF", type: "file", accept: "application/pdf" },
       { key: "price", label: "Price", type: "number" },
-      { key: "badge", label: "Badge", type: "text" },
-      { key: "has_preview", label: "Has preview", type: "boolean" },
+      { key: "badge_en", label: "Badge EN", type: "text" },
+      { key: "badge_bg", label: "Badge BG", type: "text" },
       { key: "is_trending", label: "Trending", type: "boolean" },
       { key: "status", label: "Status", type: "select", options: statusOptions },
       { key: "published_at", label: "Published at", type: "datetime" },
@@ -381,21 +325,20 @@ const resources: ResourceConfig[] = [
     records: [
       {
         id: "material-1",
-        title: "Design systems field guide",
+        title_en: "Design systems field guide",
+        title_bg: "Design systems field guide",
         slug: "design-systems-field-guide",
         category: "Technology",
-        tags: "design, product",
-        author: "Elena Petrova",
-        author_name: "Elena Petrova",
-        excerpt: "Define tokens, document components and align teams.",
+        tags: "product",
+        author: "expert-1",
+        excerpt_en: "Define tokens, document components and align teams.",
+        excerpt_bg: "Define tokens, document components and align teams.",
         cover_image: "/images/default_textbook_cover.png",
         pdf_file: "/test.pdf",
         preview_pdf_file: "/test.pdf",
-        sales_url: "",
-        format_label: "PDF",
         price: 49,
-        badge: "Trending",
-        has_preview: true,
+        badge_en: "Trending",
+        badge_bg: "Trending",
         is_trending: true,
         status: "published",
         published_at: "2026-06-14T12:00",
@@ -407,32 +350,46 @@ const resources: ResourceConfig[] = [
     label: "Projects",
     singular: "Project",
     accent: "#C0C0D2",
-    columns: ["title", "code", "organization", "project_date", "status"],
+    columns: ["title_en", "title_bg", "code", "published_at", "status"],
     fields: [
-      { key: "title", label: "Title", type: "text" },
       { key: "slug", label: "Slug", type: "text" },
+      { key: "title_en", label: "Title EN", type: "text" },
+      { key: "title_bg", label: "Title BG", type: "text" },
       { key: "category", label: "Category", type: "text" },
       { key: "tags", label: "Tags", type: "text" },
       { key: "organization", label: "Organization", type: "text" },
-      { key: "description", label: "Description", type: "textarea", fullWidth: true },
       { key: "code", label: "Code", type: "text" },
-      { key: "project_date", label: "Project date", type: "date" },
       { key: "image", label: "Image", type: "file", accept: "image/*" },
+      { key: "excerpt_en", label: "Excerpt EN", type: "textarea" },
+      { key: "excerpt_bg", label: "Excerpt BG", type: "textarea" },
+      { key: "lead_en", label: "Lead EN", type: "textarea", fullWidth: true },
+      { key: "lead_bg", label: "Lead BG", type: "textarea", fullWidth: true },
+      { key: "body_sections_en", label: "Body sections EN", type: "textarea", fullWidth: true },
+      { key: "body_sections_bg", label: "Body sections BG", type: "textarea", fullWidth: true },
+      { key: "hashtags_en", label: "Hashtags", type: "textarea" },
+      { key: "published_at", label: "Published at", type: "datetime" },
       { key: "status", label: "Status", type: "select", options: statusOptions },
       { key: "is_featured", label: "Featured", type: "boolean" },
     ],
     records: [
       {
         id: "project-1",
-        title: "Community learning platform",
+        title_en: "Community learning platform",
+        title_bg: "Community learning platform",
         slug: "community-learning-platform",
         category: "Technology",
         tags: "community, education",
         organization: "Hashtag Innovations",
-        description: "A digital learning hub for experts and teams.",
         code: "HI-24",
-        project_date: "2026-05-20",
         image: "/ProjectImg.png",
+        excerpt_en: "A digital learning hub for experts and teams.",
+        excerpt_bg: "A digital learning hub for experts and teams.",
+        lead_en: "A digital learning hub for experts and teams.",
+        lead_bg: "A digital learning hub for experts and teams.",
+        body_sections_en: "<p>A digital learning hub for experts and teams.</p>",
+        body_sections_bg: "<p>A digital learning hub for experts and teams.</p>",
+        hashtags_en: "community, education",
+        published_at: "2026-05-20T10:00",
         status: "published",
         is_featured: true,
       },
@@ -472,6 +429,24 @@ const formatValue = (value: FieldValue | undefined) => {
   }
 
   return String(value);
+};
+
+const formatTableValue = (column: string, value: FieldValue | undefined) => {
+  if ((column.endsWith("_at") || column.endsWith("_date")) && typeof value === "string" && value) {
+    const parsedDate = new Date(value);
+
+    if (!Number.isNaN(parsedDate.getTime())) {
+      return new Intl.DateTimeFormat("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: column.endsWith("_at") ? "2-digit" : undefined,
+        minute: column.endsWith("_at") ? "2-digit" : undefined,
+      }).format(parsedDate);
+    }
+  }
+
+  return formatValue(value);
 };
 
 const formatOptionLabel = (value: string) => {
@@ -666,6 +641,14 @@ const articleSectionsToHtml = (value: FieldValue | undefined) => {
     }));
 
   if (!sections.length) {
+    const textItems = parseStringList(value);
+
+    if (textItems.length) {
+      return textItems.map((item) => (
+        item.trim().startsWith("<") ? item : `<p>${escapeHtml(item)}</p>`
+      )).join("");
+    }
+
     if (!rawValue) {
       return "";
     }
@@ -726,31 +709,64 @@ const ArticleSectionsEditor = ({ label, value, onChange }: ArticleSectionsEditor
   );
 };
 
-interface BioEditorProps {
+interface RelatedPickerProps {
   label: string;
   value: FieldValue | undefined;
+  options: AdminRecord[];
+  emptyLabel: string;
   onChange: (value: string) => void;
 }
 
-const BioEditor = ({ label, value, onChange }: BioEditorProps) => {
-  const paragraphs = parseStringList(value);
-  const [draftText, setDraftText] = useState(() => paragraphs.join("\n\n"));
+const RelatedPicker = ({ label, value, options, emptyLabel, onChange }: RelatedPickerProps) => {
+  const selected = parseStringList(value);
+  const selectedLookup = new Set(selected.map((item) => item.toLowerCase()));
+  const availableOptions = options.filter((option) => {
+    const optionValue = String(option.slug || option.id || option.name || "");
+    const optionLabel = String(option.name_en || option.name_bg || option.name || option.title_en || option.title || optionValue);
 
-  const updateText = (nextValue: string) => {
-    setDraftText(nextValue);
+    return !selectedLookup.has(optionValue.toLowerCase()) && !selectedLookup.has(optionLabel.toLowerCase());
+  });
 
-    const nextParagraphs = nextValue
-      .split(/\n{2,}/)
-      .map((item) => item.trim())
-      .filter(Boolean);
+  const addValue = (nextValue: string) => {
+    if (!nextValue) {
+      return;
+    }
+    onChange(stringifyJsonField([...selected, nextValue]));
+  };
 
-    onChange(stringifyJsonField(nextParagraphs));
+  const removeValue = (valueToRemove: string) => {
+    onChange(stringifyJsonField(selected.filter((item) => item !== valueToRemove)));
   };
 
   return (
     <div className={styles.formField}>
       <span>{label}</span>
-      <textarea value={draftText} onChange={(event) => updateText(event.target.value)} rows={8} />
+      <div className={styles.tagsEditor}>
+        <div className={styles.tagsList}>
+          {selected.map((item) => (
+            <button key={item} type="button" onClick={() => removeValue(item)} title="Remove item">
+              <span>{item}</span>
+              <strong aria-hidden="true">x</strong>
+            </button>
+          ))}
+        </div>
+        <div className={styles.tagInputLine}>
+          <select value="" onChange={(event) => addValue(event.target.value)}>
+            <option value="">{emptyLabel}</option>
+            {availableOptions.map((option) => {
+              const fallbackValue = String(option.slug || option.id);
+              const optionLabel = String(option.name_en || option.name_bg || option.name || option.title_en || option.title || fallbackValue);
+              const optionValue = optionLabel || String(option.slug || option.id);
+
+              return (
+                <option key={option.id} value={optionValue}>
+                  {optionLabel}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      </div>
     </div>
   );
 };
@@ -1001,13 +1017,24 @@ export const AdminPanel = () => {
   };
 
   const expertOptions = recordsByResource.experts ?? [];
+  const organizationOptions = recordsByResource.organizations ?? [];
+  const categoryOptions = recordsByResource.categories ?? [];
+  const resourceKindMap: Record<string, string> = {
+    articles: "article",
+    events: "event",
+    learn_materials: "learn_material",
+    projects: "project",
+  };
 
   const renderEditorField = (field: AdminField) => {
     if (!editingRecord) {
       return null;
     }
 
-    if (activeResource.key === "articles" && field.key === "author") {
+    if (
+      ((activeResource.key === "articles" || activeResource.key === "learn_materials") && field.key === "author") ||
+      (activeResource.key === "events" && field.key === "expert")
+    ) {
       return (
         <label key={field.key} className={styles.formField}>
           <span>{field.label}</span>
@@ -1015,7 +1042,7 @@ export const AdminPanel = () => {
             value={String(editingRecord[field.key] ?? "")}
             onChange={(event) => updateEditingValue(field, event.target.value)}
           >
-            <option value="">No author</option>
+            <option value="">{activeResource.key === "events" ? "No expert" : "No author"}</option>
             {expertOptions.map((expert) => {
               const value = String(expert.slug || expert.id);
               const label = String(expert.name_en || expert.name_bg || expert.name || value);
@@ -1031,7 +1058,107 @@ export const AdminPanel = () => {
       );
     }
 
-    if (activeResource.key === "articles" && ["body_sections_en", "body_sections_bg"].includes(field.key)) {
+    if (activeResource.key === "events" && ["organizers", "partners"].includes(field.key)) {
+      return (
+        <RelatedPicker
+          key={field.key}
+          label={field.label}
+          value={editingRecord[field.key]}
+          options={organizationOptions}
+          emptyLabel="Add company"
+          onChange={(value) => updateEditingValue(field, value)}
+        />
+      );
+    }
+
+    if (field.key === "category") {
+      const currentValue = String(editingRecord[field.key] ?? "");
+      const activeKind = resourceKindMap[activeResource.key] ?? "";
+      const availableCategories = categoryOptions.filter((category) => {
+        const categoryKind = String(category.kind ?? "");
+        return !categoryKind || !activeKind || categoryKind === activeKind;
+      });
+      const selectedCategory = availableCategories.find((category) => (
+        [category.slug, category.id, category.name_en, category.name_bg, category.name]
+          .some((value) => String(value ?? "") === currentValue)
+      ));
+      const selectValue = String(selectedCategory?.slug || selectedCategory?.id || currentValue);
+
+      return (
+        <label key={field.key} className={styles.formField}>
+          <span>{field.label}</span>
+          <select
+            value={selectValue}
+            onChange={(event) => updateEditingValue(field, event.target.value)}
+          >
+            <option value="">No category</option>
+            {selectValue && !selectedCategory && (
+              <option value={selectValue}>{currentValue}</option>
+            )}
+            {availableCategories.map((category) => {
+              const value = String(category.slug || category.id);
+              const label = String(category.name_en || category.name || value);
+              const labelBg = String(category.name_bg || "");
+
+              return (
+                <option key={category.id} value={value}>
+                  {labelBg ? `${label} / ${labelBg}` : label}
+                </option>
+              );
+            })}
+          </select>
+        </label>
+      );
+    }
+
+    if (activeResource.key === "experts" && field.key === "organization") {
+      const currentValue = String(editingRecord[field.key] ?? "");
+      const selectedOrganization = organizationOptions.find((organization) => (
+        [organization.slug, organization.id, organization.name].some((value) => String(value ?? "") === currentValue)
+      ));
+      const selectValue = String(selectedOrganization?.slug || selectedOrganization?.id || currentValue);
+
+      return (
+        <label key={field.key} className={styles.formField}>
+          <span>{field.label}</span>
+          <select
+            value={selectValue}
+            onChange={(event) => updateEditingValue(field, event.target.value)}
+          >
+            <option value="">No organization</option>
+            {selectValue && !selectedOrganization && (
+              <option value={selectValue}>{currentValue}</option>
+            )}
+            {organizationOptions.map((organization) => {
+              const value = String(organization.slug || organization.id);
+              const label = String(organization.name || value);
+
+              return (
+                <option key={organization.id} value={value}>
+                  {label}
+                </option>
+              );
+            })}
+          </select>
+        </label>
+      );
+    }
+
+    if (["events", "learn_materials", "projects"].includes(activeResource.key) && field.key === "tags") {
+      return (
+        <TagsEditor
+          key={field.key}
+          label={field.label}
+          value={editingRecord[field.key]}
+          onChange={(value) => updateEditingValue(field, value)}
+        />
+      );
+    }
+
+    if (
+      ["articles", "projects"].includes(activeResource.key) &&
+      ["body_sections_en", "body_sections_bg"].includes(field.key)
+    ) {
       return (
         <ArticleSectionsEditor
           key={field.key}
@@ -1042,7 +1169,18 @@ export const AdminPanel = () => {
       );
     }
 
-    if (activeResource.key === "articles" && ["hashtags_en", "hashtags_bg"].includes(field.key)) {
+    if (activeResource.key === "events" && ["detail_description_en", "detail_description_bg"].includes(field.key)) {
+      return (
+        <ArticleSectionsEditor
+          key={field.key}
+          label={field.label}
+          value={editingRecord[field.key]}
+          onChange={(value) => updateEditingValue(field, value)}
+        />
+      );
+    }
+
+    if (["articles", "projects"].includes(activeResource.key) && field.key === "hashtags_en") {
       return (
         <TagsEditor
           key={field.key}
@@ -1055,7 +1193,7 @@ export const AdminPanel = () => {
 
     if (activeResource.key === "experts" && ["bio_en", "bio_bg"].includes(field.key)) {
       return (
-        <BioEditor
+        <ArticleSectionsEditor
           key={field.key}
           label={field.label}
           value={editingRecord[field.key]}
@@ -1066,7 +1204,7 @@ export const AdminPanel = () => {
 
     if (
       activeResource.key === "experts" &&
-      ["expertise_en", "expertise_bg", "industries_en", "industries_bg", "languages_en", "languages_bg"].includes(field.key)
+      ["expertise_en", "industries_en", "languages_en"].includes(field.key)
     ) {
       return (
         <TagsEditor
@@ -1246,6 +1384,44 @@ export const AdminPanel = () => {
         )}
       </label>
     );
+  };
+
+  const renderEditorRows = () => {
+    const renderedFields = [];
+    const fields = activeResource.fields;
+
+    for (let index = 0; index < fields.length; index += 1) {
+      const field = fields[index];
+      const nextField = fields[index + 1];
+      const languageMatch = field.key.match(/^(.*)_en$/);
+      const eventPairKey = activeResource.key === "events" ? `${field.key}:${nextField?.key || ""}` : "";
+
+      if (eventPairKey === "slug:category" || eventPairKey === "organizers:partners") {
+        renderedFields.push(
+          <div key={`${field.key}-${nextField?.key}-pair`} className={styles.languagePair}>
+            {renderEditorField(field)}
+            {nextField ? renderEditorField(nextField) : null}
+          </div>,
+        );
+        index += 1;
+        continue;
+      }
+
+      if (languageMatch && nextField?.key === `${languageMatch[1]}_bg`) {
+        renderedFields.push(
+          <div key={`${languageMatch[1]}-language-pair`} className={styles.languagePair}>
+            {renderEditorField(field)}
+            {renderEditorField(nextField)}
+          </div>,
+        );
+        index += 1;
+        continue;
+      }
+
+      renderedFields.push(renderEditorField(field));
+    }
+
+    return renderedFields;
   };
 
   const saveRecord = async () => {
@@ -1454,12 +1630,12 @@ export const AdminPanel = () => {
                       <td key={column}>
                         <span
                           className={
-                            column === "status" || column.startsWith("is_") || column === "article_type"
+                            column === "status" || column.startsWith("is_")
                               ? styles.valuePill
                               : ""
                           }
                         >
-                          {formatValue(record[column])}
+                          {formatTableValue(column, record[column])}
                         </span>
                       </td>
                     ))}
@@ -1525,7 +1701,7 @@ export const AdminPanel = () => {
             </div>
 
             <div className={styles.formGrid}>
-              {activeResource.fields.map((field) => renderEditorField(field))}
+              {renderEditorRows()}
             </div>
 
             <div className={styles.editorFooter}>

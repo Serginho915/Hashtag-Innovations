@@ -53,7 +53,19 @@ const renderInlineText = (value: string) =>
     return <React.Fragment key={`${part.text}-${index}`}>{part.text}</React.Fragment>;
   });
 
+const isHtmlBlock = (value: string) => /<\/?[a-z][\s\S]*>/i.test(value);
+
 const renderBioBlock = (paragraph: string, idx: number, suffix = '') => {
+  if (isHtmlBlock(paragraph)) {
+    return (
+      <div
+        key={idx}
+        className={styles.bioHtml}
+        dangerouslySetInnerHTML={{ __html: paragraph }}
+      />
+    );
+  }
+
   const lines = paragraph.split('\n');
   const isList = lines.some((line) => line.trim().startsWith('- '));
 

@@ -47,10 +47,14 @@ export const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({ project,
   const shareText = encodeURIComponent(`${project.title} ${absoluteShareUrl}`);
   const newsletterId = `project-newsletter-${project.id}`;
   const metaItems = [
+    ...(project.hashtags?.length ? project.hashtags : []),
     project.code && `${t.projectCode}: ${project.code}`,
     project.organization && `${t.organization}: ${project.organization}`,
     project.category,
   ].filter(Boolean) as string[];
+  const bodySections = project.bodySections?.length
+    ? project.bodySections
+    : [{ title: t.overview, paragraphs: getProjectParagraphs(project.description) }];
   const shareLinks = [
     { label: 'X', text: 'X', href: `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}` },
     { label: 'Facebook', text: 'f', href: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}` },
@@ -120,12 +124,20 @@ export const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({ project,
 
       <section className={styles.articleGrid}>
         <div className={styles.body}>
-          <section className={styles.bodySection}>
-            <h2>{t.overview}</h2>
-            {getProjectParagraphs(project.description).map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </section>
+          {bodySections.map((section, index) => (
+            <section key={`${section.title || 'section'}-${index}`} className={styles.bodySection}>
+              {section.html ? (
+                <div dangerouslySetInnerHTML={{ __html: section.html }} />
+              ) : (
+                <>
+                  {section.title && <h2>{section.title}</h2>}
+                  {(section.paragraphs || []).map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </>
+              )}
+            </section>
+          ))}
         </div>
 
         <aside className={styles.sidebar}>

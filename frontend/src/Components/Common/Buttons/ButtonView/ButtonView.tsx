@@ -4,14 +4,22 @@ import styles from './ButtonView.module.scss';
 
 interface ButtonViewProps {
   className?: string;
+  disabled?: boolean;
   href?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   text?: string;
   variant?: 'compact' | 'pill';
 }
 
-export const ButtonView: React.FC<ButtonViewProps> = ({ className, href, onClick, text = 'View', variant = 'compact' }) => {
-  const classNames = [styles.buttonView, styles[variant], className].filter(Boolean).join(' ');
+export const ButtonView: React.FC<ButtonViewProps> = ({
+  className,
+  disabled = false,
+  href,
+  onClick,
+  text = 'View',
+  variant = 'compact',
+}) => {
+  const classNames = [styles.buttonView, styles[variant], disabled && styles.disabled, className].filter(Boolean).join(' ');
   const content = (
     <>
       <span className={styles.buttonText}>{text}</span>
@@ -23,7 +31,7 @@ export const ButtonView: React.FC<ButtonViewProps> = ({ className, href, onClick
     </>
   );
 
-  if (href) {
+  if (href && !disabled) {
     return (
       <Link href={href} className={classNames}>
         {content}
@@ -33,7 +41,7 @@ export const ButtonView: React.FC<ButtonViewProps> = ({ className, href, onClick
 
   if (onClick) {
     return (
-      <button type="button" className={classNames} onClick={onClick}>
+      <button type="button" className={classNames} onClick={onClick} disabled={disabled}>
         {content}
       </button>
     );

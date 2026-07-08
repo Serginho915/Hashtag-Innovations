@@ -93,6 +93,12 @@
   }
 }
 
+.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .buttonText {
   min-width: max-content;
   padding-right: 40px;

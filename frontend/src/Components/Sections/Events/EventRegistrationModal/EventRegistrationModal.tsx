@@ -105,7 +105,7 @@ export const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({
             <div className={styles.imagePriceContainer}>
               <img 
                 className={styles.eventImage} 
-                src={event.heroImageSrc || event.imageSrc || '/images/community/summit_event.png'} 
+                src={event.imageSrc || '/images/community/summit_event.png'} 
                 alt={displayTitle} 
               />
               <div className={styles.priceRow}>

@@ -23,13 +23,10 @@ class ContentKind(models.TextChoices):
     PROJECT = "project", "Project"
 
 
-class ArticleType(models.TextChoices):
-    NEWS = "news", "News"
-    BLOG = "blog", "Blog"
-
-
 class Category(TimeStampedModel):
     name = models.CharField(max_length=120)
+    name_en = models.CharField(max_length=120, blank=True)
+    name_bg = models.CharField(max_length=120, blank=True)
     slug = models.SlugField(max_length=140, unique=True)
     kind = models.CharField(
         max_length=32,
@@ -44,25 +41,7 @@ class Category(TimeStampedModel):
         verbose_name_plural = "categories"
 
     def __str__(self) -> str:
-        return self.name
-
-
-class Tag(TimeStampedModel):
-    name = models.CharField(max_length=80)
-    slug = models.SlugField(max_length=100, unique=True)
-    kind = models.CharField(
-        max_length=32,
-        choices=ContentKind.choices,
-        blank=True,
-        help_text="Leave empty if the tag can be reused across content types.",
-    )
-    is_active = models.BooleanField(default=True)
-
-    class Meta:
-        ordering = ["name"]
-
-    def __str__(self) -> str:
-        return self.name
+        return self.name_en or self.name
 
 
 class Organization(TimeStampedModel):
@@ -129,7 +108,6 @@ class Expert(TimeStampedModel):
     )
     is_featured = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    tags = models.ManyToManyField(Tag, related_name="experts", blank=True)
 
     class Meta:
         ordering = ["name"]
@@ -158,17 +136,8 @@ class ExpertSession(TimeStampedModel):
 
 
 class Article(TimeStampedModel):
-    article_type = models.CharField(max_length=16, choices=ArticleType.choices)
     title = models.CharField(max_length=220)
     slug = models.SlugField(max_length=240, unique=True)
-    category = models.ForeignKey(
-        Category,
-        on_delete=models.SET_NULL,
-        related_name="articles",
-        blank=True,
-        null=True,
-    )
-    tags = models.ManyToManyField(Tag, related_name="articles", blank=True)
     author = models.ForeignKey(
         Expert,
         on_delete=models.SET_NULL,
@@ -186,12 +155,6 @@ class Article(TimeStampedModel):
         help_text="Structured article content sections.",
     )
     translations = models.JSONField(default=dict, blank=True)
-    promoted_label = models.CharField(max_length=120, blank=True)
-    read_time = models.PositiveSmallIntegerField(
-        blank=True,
-        null=True,
-        help_text="Estimated reading time in minutes.",
-    )
     published_at = models.DateTimeField(blank=True, null=True)
     status = models.CharField(
         max_length=16,
@@ -217,7 +180,7 @@ class Event(TimeStampedModel):
         blank=True,
         null=True,
     )
-    tags = models.ManyToManyField(Tag, related_name="events", blank=True)
+    tags = models.JSONField(default=list, blank=True)
     expert = models.ForeignKey(
         Expert,
         on_delete=models.SET_NULL,
@@ -235,25 +198,18 @@ class Event(TimeStampedModel):
         related_name="partner_events",
         blank=True,
     )
-    related_articles = models.ManyToManyField(
-        Article,
-        related_name="related_events",
-        blank=True,
-    )
-    description = models.TextField(blank=True)
+    short_description = models.TextField(blank=True)
     detail_description = models.TextField(blank=True)
+    translations = models.JSONField(default=dict, blank=True)
     starts_at = models.DateTimeField()
-    timezone = models.CharField(max_length=64, blank=True)
     location = models.CharField(max_length=220, blank=True)
-    price_label = models.CharField(max_length=80, blank=True)
+    price = models.CharField(max_length=80, blank=True)
     image = models.ImageField(upload_to="events/images/", blank=True)
-    hero_image = models.ImageField(upload_to="events/hero/", blank=True)
     status = models.CharField(
         max_length=16,
         choices=PublishStatus.choices,
         default=PublishStatus.DRAFT,
     )
-    is_featured_hero = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["starts_at"]
@@ -272,7 +228,7 @@ class LearnMaterial(TimeStampedModel):
         blank=True,
         null=True,
     )
-    tags = models.ManyToManyField(Tag, related_name="learn_materials", blank=True)
+    tags = models.JSONField(default=list, blank=True)
     author = models.ForeignKey(
         Expert,
         on_delete=models.SET_NULL,
@@ -280,19 +236,16 @@ class LearnMaterial(TimeStampedModel):
         blank=True,
         null=True,
     )
-    author_name = models.CharField(max_length=160, blank=True)
     excerpt = models.TextField(blank=True)
+    translations = models.JSONField(default=dict, blank=True)
     cover_image = models.ImageField(upload_to="learn_materials/covers/", blank=True)
     pdf_file = models.FileField(upload_to="learn_materials/pdfs/", blank=True)
     preview_pdf_file = models.FileField(
         upload_to="learn_materials/previews/",
         blank=True,
     )
-    sales_url = models.URLField(blank=True)
-    format_label = models.CharField(max_length=80, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     badge = models.CharField(max_length=80, blank=True)
-    has_preview = models.BooleanField(default=False)
     is_trending = models.BooleanField(default=False)
     status = models.CharField(
         max_length=16,
@@ -318,7 +271,7 @@ class Project(TimeStampedModel):
         blank=True,
         null=True,
     )
-    tags = models.ManyToManyField(Tag, related_name="projects", blank=True)
+    tags = models.JSONField(default=list, blank=True)
     organization = models.ForeignKey(
         Organization,
         on_delete=models.SET_NULL,
@@ -326,9 +279,16 @@ class Project(TimeStampedModel):
         blank=True,
         null=True,
     )
-    description = models.TextField(blank=True)
+    excerpt = models.TextField(blank=True)
+    lead = models.TextField(blank=True)
+    body = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Structured project content sections.",
+    )
+    translations = models.JSONField(default=dict, blank=True)
     code = models.CharField(max_length=80, blank=True)
-    project_date = models.DateField(blank=True, null=True)
+    published_at = models.DateTimeField(blank=True, null=True)
     image = models.ImageField(upload_to="projects/images/", blank=True)
     status = models.CharField(
         max_length=16,
@@ -338,7 +298,7 @@ class Project(TimeStampedModel):
     is_featured = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ["-project_date", "-created_at"]
+        ordering = ["-published_at", "-created_at"]
 
     def __str__(self) -> str:
         return self.title

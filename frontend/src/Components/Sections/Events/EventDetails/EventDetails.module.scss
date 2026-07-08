@@ -278,8 +278,34 @@
   flex-direction: column;
   gap: 20px;
 
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
   p {
     margin: 0;
+    color: #000;
+    font-family: $font-manrope;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 26px;
+  }
+
+  h2 {
+    margin: 8px 0 0;
+    color: #000;
+    font-family: $font-eb-garamond;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 36px;
+  }
+
+  ul,
+  ol {
+    margin: 0;
+    padding-left: 22px;
     color: #000;
     font-family: $font-manrope;
     font-size: 18px;
@@ -300,7 +326,7 @@
 
 .relatedGrid {
   display: grid;
-  grid-template-columns: minmax(0, 684px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 684px);
   align-items: stretch;
   gap: 36px;
 

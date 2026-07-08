@@ -240,6 +240,11 @@
   outline-offset: -1px;
   font-size: 14px;
   font-weight: 700;
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
 }
 
 .primaryAction {

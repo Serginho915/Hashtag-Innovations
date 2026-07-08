@@ -10,7 +10,6 @@ export const MOCK_UPCOMING_EVENTS_EN = [
   {
     id: 2,
     eventId: "evt-1",
-    isFeaturedHero: true,
     title: "Business Innovation Summit 2026",
     speakerName: "Andrey Nikolov",
     speakerExpertId: "expert-4",
@@ -40,7 +39,6 @@ export const MOCK_UPCOMING_EVENTS_BG = [
   {
     id: 2,
     eventId: "evt-1",
-    isFeaturedHero: true,
     title: "Business Innovation Summit 2026",
     speakerName: "Андрей Николов",
     speakerExpertId: "expert-4",

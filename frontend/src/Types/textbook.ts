@@ -8,12 +8,9 @@ export interface TextbookItem {
   imageUrl: string;
   pdfUrl: string;
   previewPdfUrl?: string;
-  salesUrl?: string;
   category?: string;
-  format?: string;
   price?: string;
   badge?: string;
-  hasPreview?: boolean;
   isTrending?: boolean;
   createdAt?: string;
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Expert } from '../../../../../Types/expert.ts';
+import { formatExpertRoleCompany } from '../../../../../Lib/expert.ts';
 import { Modal } from '../../../../UI/Modal/Modal.tsx';
 import { isValidEmail } from '../../../../../Lib/validation.ts';
 import styles from './BookingModal.module.scss';
@@ -33,6 +34,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [additional, setAdditional] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [errors, setErrors] = useState<{ name?: string; email?: string; terms?: string }>({});
+  const roleWithCompany = formatExpertRoleCompany(expert, lang);
 
   const paymentTitle = lang === 'bg' ? 'Данни за плащане' : lang === 'ru' ? 'Данные для оплаты' : 'Payment details';
   const paymentDescription =
@@ -101,8 +103,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   <span className={styles.nameText}>{expert.name}</span>
                 </div>
                 <div className={styles.expertRoleRow}>
-                  <span className={styles.roleText}>{expert.role}</span>
-                  <span className={styles.companyText}>{expert.company}</span>
+                  <span className={styles.roleText}>{roleWithCompany}</span>
                 </div>
               </div>
 

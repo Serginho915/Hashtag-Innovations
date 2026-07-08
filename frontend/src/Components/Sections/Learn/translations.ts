@@ -3,7 +3,6 @@ export interface LearnTranslations {
   subtitle: string;
   search: string;
   topic: string;
-  format: string;
   all: string;
   get: string;
   preview: string;
@@ -25,7 +24,6 @@ export const translations: Record<string, LearnTranslations> = {
     subtitle: 'Explore expert-built reports, business models, papers, guides, and practical learning materials created for ambitious professionals.',
     search: 'Search',
     topic: 'Topic',
-    format: 'Format',
     all: 'All',
     get: 'Get',
     preview: 'Preview',
@@ -45,7 +43,6 @@ export const translations: Record<string, LearnTranslations> = {
     subtitle: 'Разгледайте експертни доклади, бизнес модели, научни статии, ръководства и практически обучителни материали за амбициозни професионалисти.',
     search: 'Търсене',
     topic: 'Тема',
-    format: 'Формат',
     all: 'Всички',
     get: 'Вземи',
     preview: 'Преглед',

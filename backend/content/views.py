@@ -25,7 +25,6 @@ from content.models import (
     LearnMaterial,
     Organization,
     Project,
-    Tag,
 )
 
 
@@ -108,12 +107,39 @@ def localized_public_id(slug, lang):
     return text
 
 
+def category_name(category, lang="en"):
+    if not category:
+        return ""
+    if lang == "bg":
+        return category.name_bg or category.name_en or category.name
+    return category.name_en or category.name
+
+
 ARTICLE_TRANSLATED_FIELDS = (
     "title",
     "excerpt",
     "lead",
-    "promoted_label",
     "body",
+)
+
+PROJECT_TRANSLATED_FIELDS = (
+    "title",
+    "excerpt",
+    "lead",
+    "description",
+    "body",
+)
+
+EVENT_TRANSLATED_FIELDS = (
+    "title",
+    "short_description",
+    "detail_description",
+)
+
+LEARN_MATERIAL_TRANSLATED_FIELDS = (
+    "title",
+    "excerpt",
+    "badge",
 )
 
 EXPERT_TRANSLATED_FIELDS = (
@@ -127,6 +153,8 @@ EXPERT_TRANSLATED_FIELDS = (
     "languages",
     "experience",
 )
+
+EXPERT_ENGLISH_ONLY_TAG_FIELDS = {"expertise", "industries", "languages"}
 
 EXPERT_SERVICE_TEMPLATES = {
     "consultation": {
@@ -194,8 +222,16 @@ def expert_translation(expert, lang):
     translated = translations.get(lang) if isinstance(translations.get(lang), dict) else {}
     fallback_lang = "en" if lang != "en" else "bg"
     fallback = translations.get(fallback_lang) if isinstance(translations.get(fallback_lang), dict) else {}
+    english = translations.get("en") if isinstance(translations.get("en"), dict) else {}
 
     def get(field):
+        if field in EXPERT_ENGLISH_ONLY_TAG_FIELDS:
+            value = english.get(field)
+            if value not in (None, "", [], {}):
+                return value
+            value = getattr(expert, field)
+            return value if value not in (None, "", [], {}) else []
+
         value = translated.get(field)
         if value not in (None, "", [], {}):
             return value
@@ -275,105 +311,146 @@ def article_translation(article, lang):
 def serialize_article(article, lang="en"):
     translated = article_translation(article, lang)
     body = translated["body"] if isinstance(translated["body"], dict) else {}
+    english_body = article_translation(article, "en")["body"]
+    english_body = english_body if isinstance(english_body, dict) else {}
     author = article.author
     author_translated = expert_translation(author, lang) if author else {}
     author_name = author_translated.get("name") or translated.get("author_name") or article.author_name
     author_expert_id = localized_public_id(author.slug, "") if author else ""
     author_avatar_url = file_url(author.photo) if author else ""
-    time_to_read = body.get("timeToRead") or body.get("readTime")
+    display_date = article.published_at.strftime("%d/%m/%Y") if article.published_at else ""
 
     return {
         "id": body.get("_mock_id") or article.slug,
-        "category": article.category.name if article.category else "",
+        "category": "",
         "title": translated["title"],
         "date": article.published_at.isoformat() if article.published_at else "",
-        "displayDate": body.get("displayDate"),
-        "timeToRead": time_to_read,
-        "readTime": time_to_read,
+        "displayDate": display_date,
         "imageUrl": file_url(article.image),
         "excerpt": translated["excerpt"],
         "lead": translated["lead"],
         "bodySections": body.get("sections", []),
-        "promotedLabel": translated["promoted_label"],
-        "hashtags": body.get("hashtags", []),
+        "hashtags": text_list_value(english_body.get("hashtags", [])),
         "authorName": author_name,
         "authorLabel": "by" if lang == "en" else "от",
         "authorExpertId": author_expert_id,
         "authorAvatarUrl": author_avatar_url,
-        "tags": [tag.name for tag in article.tags.all()],
+        "tags": [],
     }
 
 
-def serialize_event(event):
-    try:
-        raw = json.loads(event.detail_description or "{}")
-    except json.JSONDecodeError:
-        raw = {}
-    if raw:
-        return raw
+def event_translation(event, lang):
+    translations = event.translations if isinstance(event.translations, dict) else {}
+    translated = translations.get(lang) if isinstance(translations.get(lang), dict) else {}
+    fallback_lang = "en" if lang != "en" else "bg"
+    fallback = translations.get(fallback_lang) if isinstance(translations.get(fallback_lang), dict) else {}
+
+    def get(field):
+        value = translated.get(field)
+        if value not in (None, "", [], {}):
+            return value
+        value = fallback.get(field)
+        if value not in (None, "", [], {}):
+            return value
+        return getattr(event, field, "")
+
+    return {
+        field: get(field)
+        for field in EVENT_TRANSLATED_FIELDS
+    }
+
+
+def serialize_event(event, lang="en"):
+    translated = event_translation(event, lang)
+    expert_translated = expert_translation(event.expert, lang) if event.expert else {}
+    speaker_name = expert_translated.get("name") if event.expert else ""
+    speaker = {
+        "id": str(event.expert.id) if event.expert else "",
+        "name": speaker_name,
+        "expertId": localized_public_id(event.expert.slug, "") if event.expert else "",
+        "role": expert_translated.get("role", "") if event.expert else "",
+        "avatarSrc": file_url(event.expert.photo) if event.expert else "",
+    }
+
     return {
         "id": event.slug,
-        "title": event.title,
-        "speaker": {"id": "", "name": event.expert.name if event.expert else ""},
-        "description": event.description,
+        "title": translated["title"],
+        "speaker": speaker,
+        "description": translated["short_description"],
         "date": event.starts_at.isoformat(),
         "displayDate": event.starts_at.strftime("%a, %d %b"),
         "location": event.location,
         "imageSrc": file_url(event.image),
-        "heroImageSrc": file_url(event.hero_image),
-        "tags": [tag.name for tag in event.tags.all()],
-        "price": event.price_label,
-        "timezone": event.timezone,
+        "tags": text_list_value(event.tags),
+        "price": event.price,
+        "startTime": event.starts_at.strftime("%H:%M"),
+        "detailDescription": translated["detail_description"],
+        "speakers": [speaker] if event.expert else [],
+        "organizers": [serialize_event_organization(item) for item in event.organizers.all()],
+        "partners": [serialize_event_organization(item) for item in event.partners.all()],
+    }
+
+
+def serialize_event_organization(organization):
+    return {
+        "id": str(organization.id),
+        "name": organization.name,
+        "logoSrc": file_url(organization.logo),
     }
 
 
 def serialize_upcoming_event(event, lang):
-    raw = serialize_event(event)
-    title = raw.get("titleBg") if lang == "bg" and raw.get("titleBg") else raw.get("title", event.title)
-    description = (
-        raw.get("descriptionBg")
-        if lang == "bg" and raw.get("descriptionBg")
-        else raw.get("description", event.description)
-    )
-    speaker = raw.get("speaker") or {}
-    speaker_name = speaker.get("nameBg") if lang == "bg" and speaker.get("nameBg") else speaker.get("name", "")
-    location = raw.get("locationBg") if lang == "bg" and raw.get("locationBg") else raw.get("location", "")
+    translated = event_translation(event, lang)
+    expert_translated = expert_translation(event.expert, lang) if event.expert else {}
     return {
         "id": event.id,
         "eventId": event.slug,
-        "isFeaturedHero": event.is_featured_hero,
-        "title": title,
-        "speakerName": speaker_name,
-        "speakerExpertId": speaker.get("expertId"),
-        "description": description,
+        "title": translated["title"],
+        "speakerName": expert_translated.get("name", "") if event.expert else "",
+        "speakerExpertId": localized_public_id(event.expert.slug, "") if event.expert else "",
+        "description": translated["short_description"],
         "dateIso": event.starts_at.isoformat(),
-        "location": location,
+        "location": event.location,
     }
 
 
-def serialize_material(material):
-    raw = material.slug
-    lang = ""
-    if str(raw).endswith("-bg"):
-        lang = "bg"
-    elif str(raw).endswith("-en"):
-        lang = "en"
-    slug = localized_public_id(raw, lang)
+def learn_material_translation(material, lang):
+    translations = material.translations if isinstance(material.translations, dict) else {}
+    translated = translations.get(lang) if isinstance(translations.get(lang), dict) else {}
+    fallback_lang = "en" if lang != "en" else "bg"
+    fallback = translations.get(fallback_lang) if isinstance(translations.get(fallback_lang), dict) else {}
+
+    def get(field):
+        value = translated.get(field)
+        if value not in (None, "", [], {}):
+            return value
+        value = fallback.get(field)
+        if value not in (None, "", [], {}):
+            return value
+        return getattr(material, field, "")
+
     return {
-        "id": slug,
-        "title": material.title,
-        "excerpt": material.excerpt,
+        field: get(field)
+        for field in LEARN_MATERIAL_TRANSLATED_FIELDS
+    }
+
+
+def serialize_material(material, lang="en"):
+    translated = learn_material_translation(material, lang)
+    author_translated = expert_translation(material.author, lang) if material.author else {}
+    return {
+        "id": material.slug,
+        "title": translated["title"],
+        "excerpt": translated["excerpt"],
         "authorLabel": "Author:",
-        "authorName": material.author_name,
+        "authorName": author_translated.get("name", "") if material.author else "",
+        "authorExpertId": localized_public_id(material.author.slug, "") if material.author else "",
         "imageUrl": file_url(material.cover_image),
         "pdfUrl": file_url(material.pdf_file),
         "previewPdfUrl": file_url(material.preview_pdf_file),
-        "salesUrl": material.sales_url,
-        "category": material.category.name if material.category else "",
-        "format": material.format_label,
-        "price": f"€{material.price:g}" if material.price is not None else "",
-        "badge": material.badge,
-        "hasPreview": material.has_preview,
+        "category": category_name(material.category, lang),
+        "price": f"â‚¬{material.price:g}" if material.price is not None else "",
+        "badge": translated["badge"],
         "isTrending": material.is_trending,
         "createdAt": material.published_at.isoformat() if material.published_at else "",
     }
@@ -381,18 +458,43 @@ def serialize_material(material):
 
 def serialize_project(project, lang):
     project_id = localized_public_id(project.slug, lang)
+    translations = project.translations if isinstance(project.translations, dict) else {}
+    translated = translations.get(lang) if isinstance(translations.get(lang), dict) else {}
+    english = translations.get("en") if isinstance(translations.get("en"), dict) else {}
+    fallback_lang = "en" if lang != "en" else "bg"
+    fallback = translations.get(fallback_lang) if isinstance(translations.get(fallback_lang), dict) else {}
+
+    def get(field):
+        value = translated.get(field)
+        if value not in (None, "", [], {}):
+            return value
+        value = fallback.get(field)
+        if value not in (None, "", [], {}):
+            return value
+        if field == "description":
+            return project.lead or project.excerpt
+        return getattr(project, field, "")
+
+    body = get("body") if isinstance(get("body"), dict) else {}
+    english_body = english.get("body") if isinstance(english.get("body"), dict) else {}
+    published_at = project.published_at
+    display_date = published_at.strftime("%d/%m/%Y") if published_at else ""
+    date_iso = published_at.isoformat() if published_at else ""
+    description = get("lead") or get("excerpt") or get("description")
 
     return {
         "id": project_id,
-        "title": project.title,
-        "description": project.description,
-        "category": project.category.name if project.category else "",
+        "title": get("title"),
+        "description": description,
+        "category": category_name(project.category, lang),
         "organization": project.organization.name if project.organization else "",
-        "tags": [tag.name for tag in project.tags.all()],
+        "tags": text_list_value(project.tags),
         "code": project.code,
-        "date": project.project_date.strftime("%d/%m/%Y") if project.project_date else "",
-        "dateIso": project.project_date.isoformat() if project.project_date else "",
+        "date": display_date,
+        "dateIso": date_iso,
         "imageUrl": file_url(project.image),
+        "bodySections": body.get("sections", []),
+        "hashtags": text_list_value(english_body.get("hashtags", [])),
         "href": f"/{lang}/projects/{project_id}",
     }
 
@@ -407,7 +509,7 @@ def admin_json_value(value):
 
 
 def admin_datetime_value(value):
-    return value.isoformat(timespec="minutes") if value else ""
+    return timezone.localtime(value).strftime("%Y-%m-%dT%H:%M") if value else ""
 
 
 def admin_date_value(value):
@@ -426,19 +528,11 @@ def serialize_admin_category(category):
     return {
         "id": str(category.id),
         "name": category.name,
+        "name_en": category.name_en,
+        "name_bg": category.name_bg,
         "slug": category.slug,
         "kind": category.kind,
         "is_active": category.is_active,
-    }
-
-
-def serialize_admin_tag(tag):
-    return {
-        "id": str(tag.id),
-        "name": tag.name,
-        "slug": tag.slug,
-        "kind": tag.kind,
-        "is_active": tag.is_active,
     }
 
 
@@ -479,7 +573,7 @@ def serialize_admin_expert(expert):
         "company_name": expert.company_name,
         "company_name_en": admin_expert_translation_value(expert, "en", "company_name"),
         "company_name_bg": admin_expert_translation_value(expert, "bg", "company_name"),
-        "organization": str(expert.organization) if expert.organization else "",
+        "organization": expert.organization.slug if expert.organization else "",
         "photo": admin_file_value(expert.photo),
         "quote": expert.quote,
         "quote_en": admin_expert_translation_value(expert, "en", "quote"),
@@ -489,13 +583,10 @@ def serialize_admin_expert(expert):
         "bio_bg": admin_expert_translation_value(expert, "bg", "bio"),
         "expertise": admin_json_value(expert.expertise),
         "expertise_en": admin_expert_translation_value(expert, "en", "expertise"),
-        "expertise_bg": admin_expert_translation_value(expert, "bg", "expertise"),
         "industries": admin_json_value(expert.industries),
         "industries_en": admin_expert_translation_value(expert, "en", "industries"),
-        "industries_bg": admin_expert_translation_value(expert, "bg", "industries"),
         "languages": admin_json_value(expert.languages),
         "languages_en": admin_expert_translation_value(expert, "en", "languages"),
-        "languages_bg": admin_expert_translation_value(expert, "bg", "languages"),
         "experience": admin_json_value(expert.experience),
         "experience_en": admin_expert_translation_value(expert, "en", "experience"),
         "experience_bg": admin_expert_translation_value(expert, "bg", "experience"),
@@ -538,7 +629,6 @@ def raw_article_translation(article, lang):
         "title": article.title,
         "excerpt": article.excerpt,
         "lead": article.lead,
-        "promoted_label": article.promoted_label,
         "body": article.body if isinstance(article.body, dict) else {},
     }
 
@@ -586,13 +676,10 @@ def serialize_admin_article(article):
 
     return {
         "id": str(article.id),
-        "article_type": article.article_type,
         "title": article.title,
         "title_en": admin_article_translation_value(article, "en", "title"),
         "title_bg": admin_article_translation_value(article, "bg", "title"),
         "slug": article.slug,
-        "category": str(article.category) if article.category else "",
-        "tags": admin_related_names(article.tags.all()),
         "author": article.author.slug if article.author else "",
         "author_name": article.author_name,
         "image": admin_file_value(article.image),
@@ -606,13 +693,6 @@ def serialize_admin_article(article):
         "body_sections_en": article_sections_admin_value(body_en),
         "body_sections_bg": article_sections_admin_value(body_bg),
         "hashtags_en": admin_json_value(body_en.get("hashtags", [])),
-        "hashtags_bg": admin_json_value(body_bg.get("hashtags", [])),
-        "display_date": shared_body.get("displayDate", ""),
-        "time_to_read": shared_body.get("timeToRead", "") or shared_body.get("readTime", ""),
-        "promoted_label": article.promoted_label,
-        "promoted_label_en": admin_article_translation_value(article, "en", "promoted_label"),
-        "promoted_label_bg": admin_article_translation_value(article, "bg", "promoted_label"),
-        "read_time": article.read_time or 0,
         "published_at": admin_datetime_value(article.published_at),
         "status": article.status,
         "is_featured": article.is_featured,
@@ -620,64 +700,115 @@ def serialize_admin_article(article):
 
 
 def serialize_admin_event(event):
+    translations = event.translations if isinstance(event.translations, dict) else {}
+    en = translations.get("en") if isinstance(translations.get("en"), dict) else {}
+    bg = translations.get("bg") if isinstance(translations.get("bg"), dict) else {}
+
     return {
         "id": str(event.id),
         "title": event.title,
+        "title_en": en.get("title", event.title),
+        "title_bg": bg.get("title", ""),
         "slug": event.slug,
-        "category": str(event.category) if event.category else "",
-        "tags": admin_related_names(event.tags.all()),
-        "expert": str(event.expert) if event.expert else "",
+        "category": event.category.slug if event.category else "",
+        "tags": admin_json_value(event.tags),
+        "expert": event.expert.slug if event.expert else "",
         "organizers": admin_related_names(event.organizers.all()),
         "partners": admin_related_names(event.partners.all()),
-        "related_articles": admin_related_names(event.related_articles.all()),
-        "description": event.description,
+        "short_description": event.short_description,
+        "short_description_en": en.get("short_description", event.short_description),
+        "short_description_bg": bg.get("short_description", ""),
         "detail_description": event.detail_description,
+        "detail_description_en": en.get("detail_description", event.detail_description),
+        "detail_description_bg": bg.get("detail_description", ""),
         "starts_at": admin_datetime_value(event.starts_at),
-        "timezone": event.timezone,
         "location": event.location,
-        "price_label": event.price_label,
+        "price": event.price,
         "image": admin_file_value(event.image),
-        "hero_image": admin_file_value(event.hero_image),
         "status": event.status,
-        "is_featured_hero": event.is_featured_hero,
     }
 
 
 def serialize_admin_learn_material(material):
+    translations = material.translations if isinstance(material.translations, dict) else {}
+    en = translations.get("en") if isinstance(translations.get("en"), dict) else {}
+    bg = translations.get("bg") if isinstance(translations.get("bg"), dict) else {}
+
     return {
         "id": str(material.id),
         "title": material.title,
+        "title_en": en.get("title", material.title),
+        "title_bg": bg.get("title", ""),
         "slug": material.slug,
-        "category": str(material.category) if material.category else "",
-        "tags": admin_related_names(material.tags.all()),
-        "author": str(material.author) if material.author else "",
-        "author_name": material.author_name,
+        "category": material.category.slug if material.category else "",
+        "tags": admin_json_value(material.tags),
+        "author": material.author.slug if material.author else "",
         "excerpt": material.excerpt,
+        "excerpt_en": en.get("excerpt", material.excerpt),
+        "excerpt_bg": bg.get("excerpt", ""),
         "cover_image": admin_file_value(material.cover_image),
         "pdf_file": admin_file_value(material.pdf_file),
         "preview_pdf_file": admin_file_value(material.preview_pdf_file),
-        "sales_url": material.sales_url,
-        "format_label": material.format_label,
         "price": admin_decimal_value(material.price),
         "badge": material.badge,
-        "has_preview": material.has_preview,
+        "badge_en": en.get("badge", material.badge),
+        "badge_bg": bg.get("badge", ""),
         "is_trending": material.is_trending,
         "status": material.status,
         "published_at": admin_datetime_value(material.published_at),
     }
 
 
+def raw_project_translation(project, lang):
+    translations = project.translations if isinstance(project.translations, dict) else {}
+    translated = translations.get(lang)
+
+    if isinstance(translated, dict):
+        return translated
+
+    if translations:
+        return {}
+
+    return {
+        "title": project.title,
+        "excerpt": project.excerpt or project.lead,
+        "lead": project.lead or project.excerpt,
+        "description": project.lead or project.excerpt,
+        "body": project.body if isinstance(project.body, dict) else {},
+    }
+
+
+def admin_project_translation_value(project, lang, field):
+    translated = raw_project_translation(project, lang)
+    value = translated.get(field)
+    if field == "body":
+        return value if isinstance(value, dict) else {}
+    return value or ""
+
+
 def serialize_admin_project(project):
+    body_en = admin_project_translation_value(project, "en", "body")
+    body_bg = admin_project_translation_value(project, "bg", "body")
+    shared_body = body_en or body_bg
+
     return {
         "id": str(project.id),
         "title": project.title,
+        "title_en": admin_project_translation_value(project, "en", "title"),
+        "title_bg": admin_project_translation_value(project, "bg", "title"),
         "slug": project.slug,
-        "category": str(project.category) if project.category else "",
-        "tags": admin_related_names(project.tags.all()),
+        "category": project.category.slug if project.category else "",
+        "tags": admin_json_value(project.tags),
         "organization": str(project.organization) if project.organization else "",
-        "description": project.description,
+        "excerpt_en": admin_project_translation_value(project, "en", "excerpt"),
+        "excerpt_bg": admin_project_translation_value(project, "bg", "excerpt"),
+        "lead_en": admin_project_translation_value(project, "en", "lead"),
+        "lead_bg": admin_project_translation_value(project, "bg", "lead"),
+        "body_sections_en": article_sections_admin_value(body_en),
+        "body_sections_bg": article_sections_admin_value(body_bg),
+        "hashtags_en": admin_json_value(body_en.get("hashtags", [])),
         "code": project.code,
-        "project_date": admin_date_value(project.project_date),
+        "published_at": admin_datetime_value(project.published_at),
         "image": admin_file_value(project.image),
         "status": project.status,
         "is_featured": project.is_featured,
@@ -686,7 +817,6 @@ def serialize_admin_project(project):
 
 ADMIN_SERIALIZERS = {
     "categories": serialize_admin_category,
-    "tags": serialize_admin_tag,
     "organizations": serialize_admin_organization,
     "experts": serialize_admin_expert,
     "articles": serialize_admin_article,
@@ -698,13 +828,8 @@ ADMIN_SERIALIZERS = {
 ADMIN_RESOURCE_CONFIG = {
     "categories": {
         "model": Category,
-        "fields": ["name", "slug", "kind", "is_active"],
-        "slug_source": "name",
-    },
-    "tags": {
-        "model": Tag,
-        "fields": ["name", "slug", "kind", "is_active"],
-        "slug_source": "name",
+        "fields": ["name_en", "name_bg", "slug", "kind", "is_active"],
+        "slug_source": "name_en",
     },
     "organizations": {
         "model": Organization,
@@ -735,91 +860,71 @@ ADMIN_RESOURCE_CONFIG = {
     "articles": {
         "model": Article,
         "fields": [
-            "article_type",
             "slug",
-            "category",
-            "tags",
             "author",
             "image",
-            "read_time",
             "published_at",
             "status",
             "is_featured",
         ],
-        "foreign_keys": {"category": Category, "author": Expert},
-        "many_to_many": {"tags": Tag},
+        "foreign_keys": {"author": Expert},
         "slug_source": "title_en",
     },
     "events": {
         "model": Event,
         "fields": [
-            "title",
             "slug",
             "category",
             "tags",
             "expert",
             "organizers",
             "partners",
-            "related_articles",
-            "description",
-            "detail_description",
             "starts_at",
-            "timezone",
             "location",
-            "price_label",
+            "price",
             "image",
-            "hero_image",
             "status",
-            "is_featured_hero",
         ],
         "foreign_keys": {"category": Category, "expert": Expert},
-        "many_to_many": {"tags": Tag, "organizers": Organization, "partners": Organization, "related_articles": Article},
-        "slug_source": "title",
+        "many_to_many": {"organizers": Organization, "partners": Organization},
+        "json_fields": {"tags": list},
+        "slug_source": "title_en",
     },
     "learn_materials": {
         "model": LearnMaterial,
         "fields": [
-            "title",
             "slug",
             "category",
             "tags",
             "author",
-            "author_name",
-            "excerpt",
             "cover_image",
             "pdf_file",
             "preview_pdf_file",
-            "sales_url",
-            "format_label",
             "price",
-            "badge",
-            "has_preview",
             "is_trending",
             "status",
             "published_at",
         ],
         "foreign_keys": {"category": Category, "author": Expert},
-        "many_to_many": {"tags": Tag},
-        "slug_source": "title",
+        "json_fields": {"tags": list},
+        "slug_source": "title_en",
     },
     "projects": {
         "model": Project,
         "fields": [
-            "title",
             "slug",
             "category",
             "tags",
             "organization",
-            "description",
             "code",
-            "project_date",
             "image",
+            "published_at",
             "status",
             "is_featured",
         ],
         "foreign_keys": {"category": Category, "organization": Organization},
-        "many_to_many": {"tags": Tag},
-        "slug_source": "title",
+        "json_fields": {"tags": list},
+        "slug_source": "title_en",
     },
 }
 
@@ -844,6 +949,12 @@ def split_related_values(value):
         return []
     if isinstance(value, list):
         return [str(item).strip() for item in value if str(item).strip()]
+    try:
+        parsed = json.loads(str(value))
+    except json.JSONDecodeError:
+        parsed = None
+    if isinstance(parsed, list):
+        return [str(item).strip() for item in parsed if str(item).strip()]
     return [item.strip() for item in str(value).split(",") if item.strip()]
 
 
@@ -958,6 +1069,25 @@ def resolve_many(model, value):
     return related
 
 
+def rich_text_list_value(value):
+    if isinstance(value, list):
+        return text_list_value(value)
+
+    text = "" if value is None else str(value).strip()
+    if not text or text in {"<p></p>", "<p><br></p>"}:
+        return []
+
+    try:
+        parsed = json.loads(text)
+    except json.JSONDecodeError:
+        parsed = None
+
+    if isinstance(parsed, list):
+        return text_list_value(parsed)
+
+    return [text]
+
+
 def make_unique_slug(model, base, instance=None):
     slug = slugify(str(base or "item"), allow_unicode=True)[:220] or "item"
     candidate = slug
@@ -991,7 +1121,7 @@ def coerce_expert_translation_field(field, value):
         return coerce_json_value(value, fallback)
 
     if field == "bio":
-        return text_list_value(value)
+        return rich_text_list_value(value)
 
     return "" if value is None else str(value)
 
@@ -1007,6 +1137,10 @@ def apply_expert_translations(instance, payload):
             if payload_key not in payload:
                 continue
             current[field] = coerce_expert_translation_field(field, payload[payload_key])
+
+        if lang == "bg":
+            for field in EXPERT_ENGLISH_ONLY_TAG_FIELDS:
+                current.pop(field, None)
 
         translations[lang] = current
 
@@ -1071,10 +1205,9 @@ def coerce_article_body(payload, lang, current_body):
 
     field_map = {
         f"body_sections_{lang}": ("sections", normalize_article_sections),
-        f"hashtags_{lang}": ("hashtags", text_list_value),
-        "display_date": ("displayDate", str),
-        "time_to_read": ("timeToRead", str),
     }
+    if lang == "en":
+        field_map[f"hashtags_{lang}"] = ("hashtags", text_list_value)
 
     for payload_key, (body_key, coercer) in field_map.items():
         if payload_key not in payload:
@@ -1086,10 +1219,13 @@ def coerce_article_body(payload, lang, current_body):
         else:
             body[body_key] = coercer(value)
 
-    if "timeToRead" in body:
-        body["readTime"] = body.get("timeToRead", "")
+    if lang == "bg":
+        body.pop("hashtags", None)
 
     body.pop("_lang", None)
+    body.pop("timeToRead", None)
+    body.pop("readTime", None)
+    body.pop("displayDate", None)
     body.pop("authorLabel", None)
     body.pop("authorExpertId", None)
     body.pop("authorAvatarUrl", None)
@@ -1101,14 +1237,12 @@ def apply_article_translations(instance, payload):
     body_keys = {
         "body_sections",
         "hashtags",
-        "display_date",
-        "time_to_read",
     }
 
     for lang in ("en", "bg"):
         current = dict(translations.get(lang) or {})
 
-        for field in ("title", "excerpt", "lead", "promoted_label"):
+        for field in ("title", "excerpt", "lead"):
             payload_key = f"{field}_{lang}"
             if payload_key in payload:
                 current[field] = "" if payload[payload_key] is None else str(payload[payload_key])
@@ -1131,6 +1265,95 @@ def apply_article_translations(instance, payload):
     instance.translations = translations
 
 
+def apply_project_translations(instance, payload):
+    translations = dict(instance.translations or {})
+    body_keys = {
+        "body_sections",
+        "hashtags",
+    }
+
+    for lang in ("en", "bg"):
+        current = dict(translations.get(lang) or {})
+
+        for field in ("title", "excerpt", "lead"):
+            payload_key = f"{field}_{lang}"
+            if payload_key in payload:
+                current[field] = "" if payload[payload_key] is None else str(payload[payload_key])
+
+        if "lead" in current:
+            current["description"] = current.get("lead", "")
+
+        if any(f"{key}_{lang}" in payload for key in body_keys):
+            current["body"] = coerce_article_body(payload, lang, current.get("body"))
+
+        translations[lang] = current
+
+    en_translation = translations.get("en") or {}
+    bg_translation = translations.get("bg") or {}
+    fallback = en_translation if en_translation.get("title") else bg_translation
+
+    for field in PROJECT_TRANSLATED_FIELDS:
+        value = fallback.get(field)
+        if value in (None, "", [], {}):
+            continue
+        if hasattr(instance, field):
+            setattr(instance, field, value)
+
+    instance.translations = translations
+
+
+def apply_event_translations(instance, payload):
+    translations = dict(instance.translations or {})
+
+    for lang in ("en", "bg"):
+        current = dict(translations.get(lang) or {})
+
+        for field in EVENT_TRANSLATED_FIELDS:
+            payload_key = f"{field}_{lang}"
+            if payload_key in payload:
+                current[field] = "" if payload[payload_key] is None else str(payload[payload_key])
+
+        translations[lang] = current
+
+    en_translation = translations.get("en") or {}
+    bg_translation = translations.get("bg") or {}
+    fallback = en_translation if en_translation.get("title") else bg_translation
+
+    for field in EVENT_TRANSLATED_FIELDS:
+        value = fallback.get(field)
+        if value in (None, "", [], {}):
+            continue
+        setattr(instance, field, value)
+
+    instance.translations = translations
+
+
+def apply_learn_material_translations(instance, payload):
+    translations = dict(instance.translations or {})
+
+    for lang in ("en", "bg"):
+        current = dict(translations.get(lang) or {})
+
+        for field in LEARN_MATERIAL_TRANSLATED_FIELDS:
+            payload_key = f"{field}_{lang}"
+            if payload_key in payload:
+                current[field] = "" if payload[payload_key] is None else str(payload[payload_key])
+
+        translations[lang] = current
+
+    en_translation = translations.get("en") or {}
+    bg_translation = translations.get("bg") or {}
+    fallback = en_translation if en_translation.get("title") else bg_translation
+
+    for field in LEARN_MATERIAL_TRANSLATED_FIELDS:
+        value = fallback.get(field)
+        if value in (None, "", [], {}):
+            continue
+        setattr(instance, field, value)
+
+    instance.translations = translations
+
+
 def save_admin_record(resource_key, payload, instance=None):
     config = admin_config(resource_key)
     if not config:
@@ -1144,6 +1367,12 @@ def save_admin_record(resource_key, payload, instance=None):
         apply_expert_translations(instance, payload)
     if resource_key == "articles":
         apply_article_translations(instance, payload)
+    if resource_key == "projects":
+        apply_project_translations(instance, payload)
+    if resource_key == "events":
+        apply_event_translations(instance, payload)
+    if resource_key == "learn_materials":
+        apply_learn_material_translations(instance, payload)
 
     for field_name in config["fields"]:
         if field_name not in payload:
@@ -1158,6 +1387,13 @@ def save_admin_record(resource_key, payload, instance=None):
             continue
 
         setattr(instance, field_name, coerce_value(model, field_name, payload[field_name], config))
+
+    if resource_key == "categories":
+        instance.name = (
+            str(payload.get("name_en") or "").strip()
+            or str(payload.get("name_bg") or "").strip()
+            or instance.name
+        )
 
     ensure_slug(model, instance, payload, config)
     instance.full_clean()
@@ -1224,35 +1460,32 @@ def admin_resources(request):
     return JsonResponse(
         {
             "categories": [serialize_admin_category(item) for item in Category.objects.all()],
-            "tags": [serialize_admin_tag(item) for item in Tag.objects.all()],
             "organizations": [
                 serialize_admin_organization(item)
                 for item in Organization.objects.all()
             ],
             "experts": [
                 serialize_admin_expert(item)
-                for item in Expert.objects.select_related("organization").prefetch_related("tags")
+                for item in Expert.objects.select_related("organization")
             ],
             "articles": [
                 serialize_admin_article(item)
-                for item in Article.objects.select_related("category", "author").prefetch_related("tags")
+                for item in Article.objects.select_related("author")
             ],
             "events": [
                 serialize_admin_event(item)
                 for item in Event.objects.select_related("category", "expert").prefetch_related(
-                    "tags",
                     "organizers",
                     "partners",
-                    "related_articles",
                 )
             ],
             "learn_materials": [
                 serialize_admin_learn_material(item)
-                for item in LearnMaterial.objects.select_related("category", "author").prefetch_related("tags")
+                for item in LearnMaterial.objects.select_related("category", "author")
             ],
             "projects": [
                 serialize_admin_project(item)
-                for item in Project.objects.select_related("category", "organization").prefetch_related("tags")
+                for item in Project.objects.select_related("category", "organization")
             ],
         }
     )
@@ -1271,25 +1504,29 @@ def site_data(request):
     news = [
         serialize_article(article, lang)
         for article in Article.objects.filter(status="published")
-        .select_related("category", "author")
-        .prefetch_related("tags")
+        .select_related("author")
         .order_by("-published_at")
     ]
-    events = [serialize_event(event) for event in Event.objects.filter(status="published").order_by("starts_at")]
+    events_queryset = Event.objects.filter(status="published").select_related("expert").prefetch_related(
+        "organizers",
+        "partners",
+    ).order_by("starts_at")
+    events = [serialize_event(event, lang) for event in events_queryset]
     upcoming_events = [
         serialize_upcoming_event(event, lang)
-        for event in Event.objects.filter(status="published").order_by("starts_at")
+        for event in events_queryset
     ]
     textbooks = [
-        serialize_material(material)
-        for material in lang_filter(LearnMaterial.objects.filter(status="published"), lang).order_by("-published_at")
+        serialize_material(material, lang)
+        for material in LearnMaterial.objects.filter(status="published")
+        .select_related("category", "author")
+        .order_by("-published_at")
     ]
     projects = [
         serialize_project(project, lang)
-        for project in lang_filter(
-            Project.objects.filter(status="published").select_related("category", "organization").prefetch_related("tags"),
-            lang,
-        ).order_by("-project_date")
+        for project in Project.objects.filter(status="published")
+        .select_related("category", "organization")
+        .order_by("-published_at")
     ]
 
     return JsonResponse(

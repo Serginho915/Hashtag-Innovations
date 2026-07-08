@@ -4,8 +4,6 @@ export interface NewsItem {
   title: string;
   date: string;
   displayDate?: string;
-  timeToRead?: string;
-  readTime?: string;
   imageUrl: string;
   excerpt?: string;
   lead?: string;
@@ -14,7 +12,6 @@ export interface NewsItem {
     paragraphs?: string[];
     html?: string;
   }>;
-  promotedLabel?: string;
   hashtags?: string[];
   authorName?: string;
   authorLabel?: string;

@@ -68,8 +68,8 @@ export const getExpertById = cache(async (id: string, lang: string): Promise<Exp
   return data.experts.find((expert) => expert.id === id);
 });
 
-export const getEventById = cache(async (id: string): Promise<CommunityEvent | undefined> => {
-  const data = await getSiteData('en');
+export const getEventById = cache(async (id: string, lang: string): Promise<CommunityEvent | undefined> => {
+  const data = await getSiteData(lang);
 
   return data.communityEvents.find((event) => event.id === id);
 });
@@ -103,8 +103,13 @@ export const getProjectsPageData = cache(async (lang: string): Promise<ProjectsP
 
 export const getProjectById = cache(async (id: string, lang: string): Promise<ProjectItem | undefined> => {
   const data = await getSiteData(lang);
+  const normalizedId = id
+    .replace(/-en-/g, "-")
+    .replace(/-bg-/g, "-")
+    .replace(/-en$/g, "")
+    .replace(/-bg$/g, "");
 
-  return data.projects.find((project) => project.id === id);
+  return data.projects.find((project) => project.id === id || project.id === normalizedId);
 });
 
 export const getInsightById = cache(async (id: string, lang: string): Promise<NewsItem | undefined> => {

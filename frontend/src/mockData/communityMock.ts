@@ -14,11 +14,9 @@ export const MOCK_EVENTS: CommunityEvent[] = [
     location: "LIVE, Sofia",
     locationBg: "НА ЖИВО, София",
     imageSrc: "/images/community/summit_event.png",
-    heroImageSrc: "/images/community/summit_event.png",
     tags: ["recommended", "business", "on_site"],
     price: "€80",
     startTime: "11:00",
-    timezone: "GMT+3",
     detailDescription: "We invite you to an upcoming business event where leading experts and entrepreneurs will gather to exchange experience and discuss current trends. The program includes inspiring talks, practical workshops, and networking opportunities. It is a strong opportunity to expand your knowledge, find new partners, and gain valuable insights for developing your business.",
     detailDescriptionBg: "Каним ви на предстоящо бизнес събитие, където водещи експерти и предприемачи ще се съберат, за да обменят опит и да обсъдят актуални тенденции. Програмата включва вдъхновяващи лекции, практически работилници и възможности за нетуъркинг. Това е отлична възможност да разширите знанията си, да намерите нови партньори и да получите ценни идеи за развитието на вашия бизнес.",
     speakers: [
@@ -66,7 +64,6 @@ export const MOCK_EVENTS: CommunityEvent[] = [
       { id: "partner-1", name: "itStep", logoSrc: "https://placehold.co/120x40/000000/FFFFFF?text=itStep" },
       { id: "partner-2", name: "Miray group", logoSrc: "https://placehold.co/120x40/000000/FFFFFF?text=Miray" }
     ],
-    relatedArticleIds: ["article-1", "article-2", "article-3", "article-4", "article-5", "article-6"]
   },
   {
     id: "evt-2",

@@ -34,7 +34,7 @@ const ExpertProfile: React.FC<ExpertProfileProps> = ({ expert, similarExperts, t
       />
 
       {/* Header */}
-      <ExpertProfileHeader expert={expert} t={t} />
+      <ExpertProfileHeader expert={expert} t={t} lang={lang} />
 
       {/* Main Content Layout */}
       <div className={styles.mainContent}>

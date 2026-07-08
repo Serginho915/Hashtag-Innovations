@@ -1,11 +1,9 @@
 import React from 'react';
 import { Breadcrumbs } from '../../../UI/Breadcrumbs/Breadcrumbs.tsx';
 import { CommunityEvent } from '../../../../Types/community.ts';
-import { NewsItem } from '../../../../Types/news.ts';
 import { EventOrganizationsBlock } from '../EventOrganizationsBlock/EventOrganizationsBlock.tsx';
 import { EventSpeakersBlock } from '../EventSpeakersBlock/EventSpeakersBlock.tsx';
 import { RelatedEventsBlock } from '../RelatedEventsBlock/RelatedEventsBlock.tsx';
-import { RelevantArticlesBlock } from '../RelevantArticlesBlock/RelevantArticlesBlock.tsx';
 import { EventRegisterButton } from '../EventRegisterButton/EventRegisterButton.tsx';
 import styles from './EventDetails.module.scss';
 import { translations } from './translations.ts';
@@ -13,7 +11,6 @@ import { translations } from './translations.ts';
 interface EventDetailsProps {
   event: CommunityEvent;
   relatedEvents: CommunityEvent[];
-  relatedArticles: NewsItem[];
   lang: string;
 }
 
@@ -53,7 +50,7 @@ const getTagLabel = (tag: string, lang: string) => tagLabels[tag]?.[lang] || tag
 
 const normalizeLocation = (location: string) => location.replace(/^(LIVE|НА ЖИВО),\s*/i, '');
 
-export const EventDetails: React.FC<EventDetailsProps> = ({ event, relatedEvents, relatedArticles, lang }) => {
+export const EventDetails: React.FC<EventDetailsProps> = ({ event, relatedEvents, lang }) => {
   const t = translations[lang as keyof typeof translations] || translations.en;
   const title = getEventTitle(event, lang);
   const description = getEventDescription(event, lang);
@@ -87,7 +84,7 @@ export const EventDetails: React.FC<EventDetailsProps> = ({ event, relatedEvents
       </header>
 
       <div className={styles.heroGrid}>
-        <img className={styles.heroImage} src={event.heroImageSrc || event.imageSrc || '/images/community/summit_event.png'} alt={title} />
+        <img className={styles.heroImage} src={event.imageSrc || '/images/community/summit_event.png'} alt={title} />
 
         <aside className={styles.summaryPanel}>
           <p className={styles.lead}>{description}</p>
@@ -98,7 +95,7 @@ export const EventDetails: React.FC<EventDetailsProps> = ({ event, relatedEvents
             </div>
             <div className={styles.metaLine}>
               <dt><span className={styles.metaIcon}><CalendarIcon /></span>{t.time}</dt>
-              <dd>{event.startTime || '11:00'} <span>({event.timezone || 'GMT+3'})</span></dd>
+              <dd>{event.startTime || '11:00'}</dd>
             </div>
             <div className={styles.metaLine}>
               <dt><span className={styles.metaIcon}><LocationIcon /></span>{t.location}</dt>
@@ -124,7 +121,7 @@ export const EventDetails: React.FC<EventDetailsProps> = ({ event, relatedEvents
       <section className={styles.infoGrid}>
         <article className={styles.detailsBlock}>
           <div className={styles.sectionLabel}>{t.details}</div>
-          <p>{detailDescription}</p>
+          <div dangerouslySetInnerHTML={{ __html: detailDescription }} />
         </article>
 
         <EventSpeakersBlock title={t.speakers} speakers={speakers} lang={lang} />
@@ -144,16 +141,6 @@ export const EventDetails: React.FC<EventDetailsProps> = ({ event, relatedEvents
           events={relatedEvents}
           lang={lang}
         />
-        <div className={styles.articlesColumn}>
-          <div className={styles.articlesColumnInner}>
-            <RelevantArticlesBlock
-              title={t.relatedArticles}
-              readText={t.read}
-              articles={relatedArticles}
-              lang={lang}
-            />
-          </div>
-        </div>
       </section>
 
       <div id="register" className={styles.registerAnchor} aria-hidden="true" />

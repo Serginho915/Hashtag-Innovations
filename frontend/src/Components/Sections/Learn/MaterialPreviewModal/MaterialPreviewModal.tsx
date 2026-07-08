@@ -24,10 +24,7 @@ export const MaterialPreviewModal: React.FC<MaterialPreviewModalProps> = ({
   actionText,
   previewText,
 }) => {
-  const previewParagraphs = [
-    material.excerpt,
-    [material.category, material.format].filter(Boolean).join(' · '),
-  ].filter(Boolean);
+  const previewParagraphs = [material.excerpt, material.category].filter(Boolean);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} className={styles.modal}>
@@ -48,7 +45,7 @@ export const MaterialPreviewModal: React.FC<MaterialPreviewModalProps> = ({
           ) : (
             <div className={styles.mockPage}>
               <div className={styles.mockHeader}>
-                <span>{material.badge || material.format || 'PDF'}</span>
+                <span>{material.badge || 'PDF'}</span>
                 <span>{previewText}</span>
               </div>
               <div className={styles.cover}>
@@ -65,7 +62,7 @@ export const MaterialPreviewModal: React.FC<MaterialPreviewModalProps> = ({
         </div>
 
         <aside className={styles.info}>
-          <div className={styles.kicker}>{material.format || material.badge || 'PDF'}</div>
+          <div className={styles.kicker}>{material.badge || 'PDF'}</div>
           <h2>{material.title}</h2>
           <p>{material.excerpt}</p>
           <div className={styles.meta}>

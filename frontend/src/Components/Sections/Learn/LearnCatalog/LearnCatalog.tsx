@@ -38,38 +38,30 @@ const SearchIcon = () => (
 export const LearnCatalog: React.FC<LearnCatalogProps> = ({ materials, lang, t }) => {
   const [search, setSearch] = useState('');
   const [topic, setTopic] = useState<string | null>(null);
-  const [format, setFormat] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(8);
 
   const topicOptions = useMemo(
     () => toOptions(materials.map((material) => material.category || ''), t.all),
     [materials, t.all]
   );
-  const formatOptions = useMemo(
-    () => toOptions(materials.map((material) => material.format || material.badge || ''), t.all),
-    [materials, t.all]
-  );
-
   const filteredMaterials = useMemo(() => {
     const query = normalize(search);
 
     return materials.filter((material) => {
       const materialTopic = material.category || '';
-      const materialFormat = material.format || material.badge || '';
       const matchesTopic = !topic || materialTopic === topic;
-      const matchesFormat = !format || materialFormat === format;
       const searchable = normalize([
         material.title,
         material.excerpt,
         material.authorName,
         materialTopic,
-        materialFormat,
+        material.badge,
       ].join(' '));
       const matchesSearch = !query || searchable.includes(query);
 
-      return matchesTopic && matchesFormat && matchesSearch;
+      return matchesTopic && matchesSearch;
     });
-  }, [format, materials, search, topic]);
+  }, [materials, search, topic]);
 
   const featuredMaterials = filteredMaterials.slice(0, 2);
   const listMaterials = filteredMaterials.slice(2, visibleCount);
@@ -125,16 +117,6 @@ export const LearnCatalog: React.FC<LearnCatalogProps> = ({ materials, lang, t }
             variant="events"
             onSelect={(value) => {
               setTopic(value);
-              resetVisibleCount();
-            }}
-          />
-          <DropdownFilter
-            label={t.format}
-            options={formatOptions}
-            value={format}
-            variant="events"
-            onSelect={(value) => {
-              setFormat(value);
               resetVisibleCount();
             }}
           />
