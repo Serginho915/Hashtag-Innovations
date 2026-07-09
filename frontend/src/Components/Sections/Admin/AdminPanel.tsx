@@ -55,6 +55,7 @@ interface ResourceConfig {
   fields: AdminField[];
   columns: string[];
   records: AdminRecord[];
+  readOnly?: boolean;
 }
 
 const statusOptions = ["draft", "published", "archived"];
@@ -73,7 +74,9 @@ const resourceHelpText: Record<string, string> = {
   learn_materials:
     "Learn Materials manage educational resources such as guides, PDFs and paid or previewable learning content.",
   projects:
-    "Projects describe portfolio or community initiatives, including organization, date, status and external links.",
+    "Projects use the same editorial structure as articles, with an extra project code.",
+  sales:
+    "Sales list Stripe checkout attempts for consultations, learning materials and event tickets. Webhook confirmation will be added in the next payment phase.",
 };
 
 const resources: ResourceConfig[] = [
@@ -216,15 +219,15 @@ const resources: ResourceConfig[] = [
       { key: "title_en", label: "Title EN", type: "text" },
       { key: "title_bg", label: "Title BG", type: "text" },
       { key: "author", label: "Author expert", type: "text" },
-      { key: "image", label: "Image", type: "file", accept: "image/*" },
+      { key: "published_at", label: "Published at", type: "datetime" },
       { key: "excerpt_en", label: "Excerpt EN", type: "textarea" },
       { key: "excerpt_bg", label: "Excerpt BG", type: "textarea" },
       { key: "lead_en", label: "Lead EN", type: "textarea", fullWidth: true },
       { key: "lead_bg", label: "Lead BG", type: "textarea", fullWidth: true },
       { key: "body_sections_en", label: "Body sections EN", type: "textarea", fullWidth: true },
       { key: "body_sections_bg", label: "Body sections BG", type: "textarea", fullWidth: true },
-      { key: "hashtags_en", label: "Hashtags", type: "textarea" },
-      { key: "published_at", label: "Published at", type: "datetime" },
+      { key: "hashtags_en", label: "Tags", type: "textarea" },
+      { key: "image", label: "Image", type: "file", accept: "image/*" },
       { key: "status", label: "Status", type: "select", options: statusOptions },
       { key: "is_featured", label: "Featured", type: "boolean" },
     ],
@@ -307,17 +310,16 @@ const resources: ResourceConfig[] = [
       { key: "slug", label: "Slug", type: "text" },
       { key: "title_en", label: "Title EN", type: "text" },
       { key: "title_bg", label: "Title BG", type: "text" },
-      { key: "category", label: "Category", type: "text" },
+      { key: "cover_image", label: "Cover image", type: "file", accept: "image/*" },
       { key: "tags", label: "Tags", type: "text" },
       { key: "author", label: "Author expert", type: "text" },
       { key: "excerpt_en", label: "Excerpt EN", type: "textarea", fullWidth: true },
       { key: "excerpt_bg", label: "Excerpt BG", type: "textarea", fullWidth: true },
-      { key: "cover_image", label: "Cover image", type: "file", accept: "image/*" },
-      { key: "pdf_file", label: "PDF file", type: "file", accept: "application/pdf" },
       { key: "preview_pdf_file", label: "Preview PDF", type: "file", accept: "application/pdf" },
+      { key: "pdf_file", label: "PDF file", type: "file", accept: "application/pdf" },
+      { key: "category", label: "Category", type: "text" },
       { key: "price", label: "Price", type: "number" },
-      { key: "badge_en", label: "Badge EN", type: "text" },
-      { key: "badge_bg", label: "Badge BG", type: "text" },
+      { key: "badge", label: "Document format", type: "text" },
       { key: "is_trending", label: "Trending", type: "boolean" },
       { key: "status", label: "Status", type: "select", options: statusOptions },
       { key: "published_at", label: "Published at", type: "datetime" },
@@ -337,8 +339,7 @@ const resources: ResourceConfig[] = [
         pdf_file: "/test.pdf",
         preview_pdf_file: "/test.pdf",
         price: 49,
-        badge_en: "Trending",
-        badge_bg: "Trending",
+        badge: "PDF",
         is_trending: true,
         status: "published",
         published_at: "2026-06-14T12:00",
@@ -353,21 +354,19 @@ const resources: ResourceConfig[] = [
     columns: ["title_en", "title_bg", "code", "published_at", "status"],
     fields: [
       { key: "slug", label: "Slug", type: "text" },
+      { key: "code", label: "Code", type: "text" },
       { key: "title_en", label: "Title EN", type: "text" },
       { key: "title_bg", label: "Title BG", type: "text" },
-      { key: "category", label: "Category", type: "text" },
-      { key: "tags", label: "Tags", type: "text" },
-      { key: "organization", label: "Organization", type: "text" },
-      { key: "code", label: "Code", type: "text" },
-      { key: "image", label: "Image", type: "file", accept: "image/*" },
+      { key: "author", label: "Author expert", type: "text" },
+      { key: "published_at", label: "Published at", type: "datetime" },
       { key: "excerpt_en", label: "Excerpt EN", type: "textarea" },
       { key: "excerpt_bg", label: "Excerpt BG", type: "textarea" },
       { key: "lead_en", label: "Lead EN", type: "textarea", fullWidth: true },
       { key: "lead_bg", label: "Lead BG", type: "textarea", fullWidth: true },
       { key: "body_sections_en", label: "Body sections EN", type: "textarea", fullWidth: true },
       { key: "body_sections_bg", label: "Body sections BG", type: "textarea", fullWidth: true },
-      { key: "hashtags_en", label: "Hashtags", type: "textarea" },
-      { key: "published_at", label: "Published at", type: "datetime" },
+      { key: "hashtags_en", label: "Tags", type: "textarea" },
+      { key: "image", label: "Image", type: "file", accept: "image/*" },
       { key: "status", label: "Status", type: "select", options: statusOptions },
       { key: "is_featured", label: "Featured", type: "boolean" },
     ],
@@ -377,10 +376,8 @@ const resources: ResourceConfig[] = [
         title_en: "Community learning platform",
         title_bg: "Community learning platform",
         slug: "community-learning-platform",
-        category: "Technology",
-        tags: "community, education",
-        organization: "Hashtag Innovations",
         code: "HI-24",
+        author: "expert-1",
         image: "/ProjectImg.png",
         excerpt_en: "A digital learning hub for experts and teams.",
         excerpt_bg: "A digital learning hub for experts and teams.",
@@ -394,6 +391,16 @@ const resources: ResourceConfig[] = [
         is_featured: true,
       },
     ],
+  },
+  {
+    key: "sales",
+    label: "Sales",
+    singular: "Sale",
+    accent: "#076F7F",
+    columns: ["created_at", "purchase_type", "item_title", "customer_email", "amount", "currency", "status"],
+    fields: [],
+    records: [],
+    readOnly: true,
   },
 ];
 
@@ -974,12 +981,20 @@ export const AdminPanel = () => {
   }, [activeRecords, query]);
 
   const openCreate = () => {
+    if (activeResource.readOnly) {
+      return;
+    }
+
     setEditingMode("create");
     setMutationError("");
     setEditingRecord(makeBlankRecord(activeResource));
   };
 
   const openEdit = (record: AdminRecord) => {
+    if (activeResource.readOnly) {
+      return;
+    }
+
     setEditingMode("edit");
     setMutationError("");
     setEditingRecord({ ...record });
@@ -1032,7 +1047,7 @@ export const AdminPanel = () => {
     }
 
     if (
-      ((activeResource.key === "articles" || activeResource.key === "learn_materials") && field.key === "author") ||
+      ((["articles", "learn_materials", "projects"].includes(activeResource.key)) && field.key === "author") ||
       (activeResource.key === "events" && field.key === "expert")
     ) {
       return (
@@ -1597,9 +1612,11 @@ export const AdminPanel = () => {
                 )}
               </div>
             </div>
-            <button className={styles.primaryButton} type="button" onClick={openCreate}>
-              New record
-            </button>
+            {!activeResource.readOnly && (
+              <button className={styles.primaryButton} type="button" onClick={openCreate}>
+                New record
+              </button>
+            )}
           </div>
 
           <div className={styles.toolbar}>
@@ -1620,7 +1637,7 @@ export const AdminPanel = () => {
                   {activeResource.columns.map((column) => (
                     <th key={column}>{column.replaceAll("_", " ")}</th>
                   ))}
-                  <th>Actions</th>
+                  {!activeResource.readOnly && <th>Actions</th>}
                 </tr>
               </thead>
               <tbody>
@@ -1639,22 +1656,24 @@ export const AdminPanel = () => {
                         </span>
                       </td>
                     ))}
-                    <td>
-                      <div className={styles.tableActions}>
-                        <button type="button" onClick={() => openEdit(record)} aria-label="Edit record" title="Edit">
-                          <EditIcon />
-                        </button>
-                        <button
-                          className={`${styles.dangerButton} ${styles.deleteActionButton}`}
-                          type="button"
-                          onClick={() => deleteRecord(record.id)}
-                          aria-label="Delete record"
-                          title="Delete"
-                        >
-                          <DeleteIcon />
-                        </button>
-                      </div>
-                    </td>
+                    {!activeResource.readOnly && (
+                      <td>
+                        <div className={styles.tableActions}>
+                          <button type="button" onClick={() => openEdit(record)} aria-label="Edit record" title="Edit">
+                            <EditIcon />
+                          </button>
+                          <button
+                            className={`${styles.dangerButton} ${styles.deleteActionButton}`}
+                            type="button"
+                            onClick={() => deleteRecord(record.id)}
+                            aria-label="Delete record"
+                            title="Delete"
+                          >
+                            <DeleteIcon />
+                          </button>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>

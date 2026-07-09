@@ -48,7 +48,6 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
   const [purchaseInitialStep, setPurchaseInitialStep] = useState<'overview' | 'checkout'>('overview');
   const canPreview = Boolean(material.previewPdfUrl);
-  const href = material.pdfUrl || `/${lang}/learn?material=${material.id || material.title}`;
   const classNames = [styles.card, styles[variant], !canPreview && styles.previewUnavailable].filter(Boolean).join(' ');
   const authorHref = material.authorExpertId ? `/${lang}/experts/${material.authorExpertId}` : undefined;
   const openPreview = () => {
@@ -148,7 +147,6 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({
         isOpen={isPurchaseOpen}
         onClose={closePurchase}
         onPreview={openPreviewFromPurchase}
-        paymentHref={href}
         lang={lang}
         initialStep={purchaseInitialStep}
       />

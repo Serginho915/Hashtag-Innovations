@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Modal } from '../../../UI/Modal/Modal.tsx';
 import type { TextbookItem } from '../../../../Types/textbook.ts';
 import { isValidEmail } from '../../../../Lib/validation.ts';
+import { createCheckoutSession } from '../../../../Lib/payments.ts';
 import styles from './MaterialPurchaseModal.module.scss';
 import { translations } from './translations.ts';
 
@@ -11,7 +12,6 @@ interface MaterialPurchaseModalProps {
   isOpen: boolean;
   onClose: () => void;
   onPreview: () => void;
-  paymentHref: string;
   lang: string;
   initialStep?: Step;
 }
@@ -43,7 +43,6 @@ export const MaterialPurchaseModal: React.FC<MaterialPurchaseModalProps> = ({
   isOpen,
   onClose,
   onPreview,
-  paymentHref,
   lang,
   initialStep = 'overview',
 }) => {
@@ -56,6 +55,8 @@ export const MaterialPurchaseModal: React.FC<MaterialPurchaseModalProps> = ({
     acceptedTerms: false,
   });
   const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [paymentError, setPaymentError] = useState('');
+  const [isStartingPayment, setIsStartingPayment] = useState(false);
 
   const validateForm = (values: FormState) => {
     const nextErrors: FormErrors = {};
@@ -83,22 +84,44 @@ export const MaterialPurchaseModal: React.FC<MaterialPurchaseModalProps> = ({
     } as FormState;
 
     setFormValues(nextValues);
+    setPaymentError('');
 
     if (Object.keys(formErrors).length > 0) {
       setFormErrors(validateForm(nextValues));
     }
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextErrors = validateForm(formValues);
     setFormErrors(nextErrors);
+    setPaymentError('');
 
     if (Object.keys(nextErrors).length > 0) {
       return;
     }
 
-    window.location.assign(paymentHref);
+    if (!material.id) {
+      setPaymentError('Material cannot be purchased right now.');
+      return;
+    }
+
+    setIsStartingPayment(true);
+
+    try {
+      const checkoutUrl = await createCheckoutSession({
+        purchaseType: 'learn_material',
+        itemId: material.id,
+        customerName: formValues.name,
+        customerEmail: formValues.email,
+        lang,
+      });
+
+      window.location.assign(checkoutUrl);
+    } catch (error) {
+      setPaymentError(error instanceof Error ? error.message : 'Could not start payment.');
+      setIsStartingPayment(false);
+    }
   };
 
   return (
@@ -224,6 +247,7 @@ export const MaterialPurchaseModal: React.FC<MaterialPurchaseModalProps> = ({
                   </span>
                 </label>
                 {formErrors.acceptedTerms && <small className={styles.termsError}>{formErrors.acceptedTerms}</small>}
+                {paymentError && <small className={styles.termsError}>{paymentError}</small>}
               </section>
 
               <div className={styles.totalRow}>
@@ -231,7 +255,9 @@ export const MaterialPurchaseModal: React.FC<MaterialPurchaseModalProps> = ({
                 <strong>{material.price}</strong>
               </div>
 
-              <button className={styles.primaryAction} type="submit">{t.payment}</button>
+              <button className={styles.primaryAction} type="submit" disabled={isStartingPayment}>
+                {isStartingPayment ? t.payment : t.payment}
+              </button>
             </form>
           )}
         </div>

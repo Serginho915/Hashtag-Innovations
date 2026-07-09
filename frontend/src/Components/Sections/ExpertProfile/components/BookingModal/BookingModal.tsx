@@ -3,6 +3,7 @@ import { Expert } from '../../../../../Types/expert.ts';
 import { formatExpertRoleCompany } from '../../../../../Lib/expert.ts';
 import { Modal } from '../../../../UI/Modal/Modal.tsx';
 import { isValidEmail } from '../../../../../Lib/validation.ts';
+import { createCheckoutSession } from '../../../../../Lib/payments.ts';
 import styles from './BookingModal.module.scss';
 import type { ExpertsTranslations } from '../../../../../app/[lang]/experts/translations.ts';
 
@@ -34,6 +35,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [additional, setAdditional] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [errors, setErrors] = useState<{ name?: string; email?: string; terms?: string }>({});
+  const [paymentError, setPaymentError] = useState('');
+  const [isStartingPayment, setIsStartingPayment] = useState(false);
   const roleWithCompany = formatExpertRoleCompany(expert, lang);
 
   const paymentTitle = lang === 'bg' ? 'Данни за плащане' : lang === 'ru' ? 'Данные для оплаты' : 'Payment details';
@@ -52,10 +55,12 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     setEmail('');
     setAdditional('');
     setTermsAccepted(false);
+    setPaymentError('');
+    setIsStartingPayment(false);
     onClose();
   };
 
-  const handleContinueToPayment = () => {
+  const handleContinueToPayment = async () => {
     const newErrors: { name?: string; email?: string; terms?: string } = {};
     if (!name.trim()) newErrors.name = t.errorRequired || 'Required';
     if (!email.trim() || !isValidEmail(email)) newErrors.email = t.errorEmail || 'Invalid email';
@@ -67,15 +72,25 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     }
 
     setErrors({});
-    console.log('Paid consultation checkout prepared:', {
-      expertId: expert.id,
-      sessionId: session.id,
-      name,
-      email,
-      additional,
-      termsAccepted,
-    });
-    resetAndClose();
+    setPaymentError('');
+    setIsStartingPayment(true);
+
+    try {
+      const checkoutUrl = await createCheckoutSession({
+        purchaseType: 'consultation',
+        itemId: expert.id,
+        sessionId: session.id,
+        customerName: name,
+        customerEmail: email,
+        additional,
+        lang,
+      });
+
+      window.location.assign(checkoutUrl);
+    } catch (error) {
+      setPaymentError(error instanceof Error ? error.message : 'Could not start payment.');
+      setIsStartingPayment(false);
+    }
   };
 
   return (
@@ -198,6 +213,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               </div>
             </div>
             {errors.terms && <div className={styles.errorText} style={{ marginTop: '-12px' }}>{errors.terms}</div>}
+            {paymentError && <div className={styles.errorText} style={{ marginTop: '-12px' }}>{paymentError}</div>}
           </div>
         </div>
 
@@ -210,7 +226,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               </div>
             </div>
           </div>
-          <button className={styles.confirmBtn} onClick={handleContinueToPayment}>
+          <button className={styles.confirmBtn} onClick={handleContinueToPayment} disabled={isStartingPayment}>
             {paymentButtonText}
           </button>
         </div>

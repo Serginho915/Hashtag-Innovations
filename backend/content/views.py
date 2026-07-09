@@ -1,11 +1,14 @@
 import ast
 import html
 import json
+import re
 from decimal import Decimal, InvalidOperation
 
+import stripe
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.http import JsonResponse
@@ -25,6 +28,8 @@ from content.models import (
     LearnMaterial,
     Organization,
     Project,
+    PublishStatus,
+    Sale,
 )
 
 
@@ -126,7 +131,6 @@ PROJECT_TRANSLATED_FIELDS = (
     "title",
     "excerpt",
     "lead",
-    "description",
     "body",
 )
 
@@ -139,7 +143,6 @@ EVENT_TRANSLATED_FIELDS = (
 LEARN_MATERIAL_TRANSLATED_FIELDS = (
     "title",
     "excerpt",
-    "badge",
 )
 
 EXPERT_TRANSLATED_FIELDS = (
@@ -450,7 +453,7 @@ def serialize_material(material, lang="en"):
         "previewPdfUrl": file_url(material.preview_pdf_file),
         "category": category_name(material.category, lang),
         "price": f"â‚¬{material.price:g}" if material.price is not None else "",
-        "badge": translated["badge"],
+        "badge": material.badge,
         "isTrending": material.is_trending,
         "createdAt": material.published_at.isoformat() if material.published_at else "",
     }
@@ -461,6 +464,7 @@ def serialize_project(project, lang):
     translations = project.translations if isinstance(project.translations, dict) else {}
     translated = translations.get(lang) if isinstance(translations.get(lang), dict) else {}
     english = translations.get("en") if isinstance(translations.get("en"), dict) else {}
+    author_translated = expert_translation(project.author, lang) if project.author else {}
     fallback_lang = "en" if lang != "en" else "bg"
     fallback = translations.get(fallback_lang) if isinstance(translations.get(fallback_lang), dict) else {}
 
@@ -471,8 +475,6 @@ def serialize_project(project, lang):
         value = fallback.get(field)
         if value not in (None, "", [], {}):
             return value
-        if field == "description":
-            return project.lead or project.excerpt
         return getattr(project, field, "")
 
     body = get("body") if isinstance(get("body"), dict) else {}
@@ -480,21 +482,21 @@ def serialize_project(project, lang):
     published_at = project.published_at
     display_date = published_at.strftime("%d/%m/%Y") if published_at else ""
     date_iso = published_at.isoformat() if published_at else ""
-    description = get("lead") or get("excerpt") or get("description")
+    description = get("lead") or get("excerpt")
 
     return {
         "id": project_id,
         "title": get("title"),
         "description": description,
-        "category": category_name(project.category, lang),
-        "organization": project.organization.name if project.organization else "",
-        "tags": text_list_value(project.tags),
+        "authorName": author_translated.get("name", "") if project.author else project.author_name,
+        "authorExpertId": localized_public_id(project.author.slug, "") if project.author else "",
         "code": project.code,
         "date": display_date,
         "dateIso": date_iso,
         "imageUrl": file_url(project.image),
         "bodySections": body.get("sections", []),
         "hashtags": text_list_value(english_body.get("hashtags", [])),
+        "tags": text_list_value(english_body.get("hashtags", [])),
         "href": f"/{lang}/projects/{project_id}",
     }
 
@@ -751,8 +753,6 @@ def serialize_admin_learn_material(material):
         "preview_pdf_file": admin_file_value(material.preview_pdf_file),
         "price": admin_decimal_value(material.price),
         "badge": material.badge,
-        "badge_en": en.get("badge", material.badge),
-        "badge_bg": bg.get("badge", ""),
         "is_trending": material.is_trending,
         "status": material.status,
         "published_at": admin_datetime_value(material.published_at),
@@ -797,9 +797,10 @@ def serialize_admin_project(project):
         "title_en": admin_project_translation_value(project, "en", "title"),
         "title_bg": admin_project_translation_value(project, "bg", "title"),
         "slug": project.slug,
-        "category": project.category.slug if project.category else "",
-        "tags": admin_json_value(project.tags),
-        "organization": str(project.organization) if project.organization else "",
+        "code": project.code,
+        "author": project.author.slug if project.author else "",
+        "author_name": project.author_name,
+        "image": admin_file_value(project.image),
         "excerpt_en": admin_project_translation_value(project, "en", "excerpt"),
         "excerpt_bg": admin_project_translation_value(project, "bg", "excerpt"),
         "lead_en": admin_project_translation_value(project, "en", "lead"),
@@ -807,11 +808,29 @@ def serialize_admin_project(project):
         "body_sections_en": article_sections_admin_value(body_en),
         "body_sections_bg": article_sections_admin_value(body_bg),
         "hashtags_en": admin_json_value(body_en.get("hashtags", [])),
-        "code": project.code,
         "published_at": admin_datetime_value(project.published_at),
-        "image": admin_file_value(project.image),
         "status": project.status,
         "is_featured": project.is_featured,
+    }
+
+
+def serialize_admin_sale(sale):
+    return {
+        "id": str(sale.id),
+        "created_at": admin_datetime_value(sale.created_at),
+        "purchase_type": sale.purchase_type,
+        "status": sale.status,
+        "customer_name": sale.customer_name,
+        "customer_email": sale.customer_email,
+        "item_id": sale.item_id,
+        "item_title": sale.item_title,
+        "amount": admin_decimal_value(sale.amount),
+        "currency": sale.currency.upper(),
+        "stripe_checkout_session_id": sale.stripe_checkout_session_id,
+        "expert": sale.expert.slug if sale.expert else "",
+        "event": sale.event.slug if sale.event else "",
+        "learn_material": sale.learn_material.slug if sale.learn_material else "",
+        "metadata": admin_json_value(sale.metadata),
     }
 
 
@@ -823,6 +842,7 @@ ADMIN_SERIALIZERS = {
     "events": serialize_admin_event,
     "learn_materials": serialize_admin_learn_material,
     "projects": serialize_admin_project,
+    "sales": serialize_admin_sale,
 }
 
 ADMIN_RESOURCE_CONFIG = {
@@ -901,6 +921,7 @@ ADMIN_RESOURCE_CONFIG = {
             "pdf_file",
             "preview_pdf_file",
             "price",
+            "badge",
             "is_trending",
             "status",
             "published_at",
@@ -913,17 +934,15 @@ ADMIN_RESOURCE_CONFIG = {
         "model": Project,
         "fields": [
             "slug",
-            "category",
-            "tags",
-            "organization",
             "code",
+            "author",
+            "author_name",
             "image",
             "published_at",
             "status",
             "is_featured",
         ],
-        "foreign_keys": {"category": Category, "organization": Organization},
-        "json_fields": {"tags": list},
+        "foreign_keys": {"author": Expert},
         "slug_source": "title_en",
     },
 }
@@ -935,6 +954,232 @@ def admin_error(message, status=400):
 
 def admin_config(resource_key):
     return ADMIN_RESOURCE_CONFIG.get(resource_key)
+
+
+def json_error(message, status=400):
+    return JsonResponse({"error": message}, status=status)
+
+
+def parse_price_amount(value):
+    if value in (None, ""):
+        return None
+
+    if isinstance(value, Decimal):
+        return value
+
+    text = str(value).strip()
+    if not text or text.lower() in {"free", "gratis", "0", "0.00"}:
+        return None
+
+    match = re.search(r"\d+(?:[\.,]\d{1,2})?", text)
+    if not match:
+        return None
+
+    try:
+        return Decimal(match.group(0).replace(",", "."))
+    except InvalidOperation:
+        return None
+
+
+def stripe_unit_amount(amount):
+    return int((amount * Decimal("100")).quantize(Decimal("1")))
+
+
+def find_expert_for_checkout(item_id):
+    lookup = str(item_id or "").strip()
+    if not lookup:
+        return None
+
+    query = Q(slug=lookup)
+    if lookup.isdigit():
+        query |= Q(id=int(lookup))
+
+    expert = Expert.objects.filter(query).first()
+    if expert:
+        return expert
+
+    for candidate in Expert.objects.all():
+        if localized_public_id(candidate.slug, "") == lookup:
+            return candidate
+
+    return None
+
+
+def resolve_checkout_item(payload):
+    purchase_type = str(payload.get("purchaseType", "")).strip()
+    item_id = str(payload.get("itemId", "")).strip()
+    lang = str(payload.get("lang", "bg")).strip()
+    lang = lang if lang in {"en", "bg", "ru"} else "bg"
+
+    if purchase_type == Sale.PurchaseType.LEARN_MATERIAL:
+        material = LearnMaterial.objects.filter(slug=item_id, status=PublishStatus.PUBLISHED).first()
+        if not material:
+            raise ValidationError("Learning material was not found.")
+
+        amount = parse_price_amount(material.price)
+        translated = learn_material_translation(material, lang if lang in {"en", "bg"} else "en")
+        return {
+            "purchase_type": purchase_type,
+            "item_id": material.slug,
+            "item_title": translated["title"] or material.title,
+            "amount": amount,
+            "learn_material": material,
+            "metadata": {"material_slug": material.slug},
+        }
+
+    if purchase_type == Sale.PurchaseType.EVENT_TICKET:
+        event = Event.objects.filter(slug=item_id, status=PublishStatus.PUBLISHED).first()
+        if not event:
+            raise ValidationError("Event was not found.")
+
+        amount = parse_price_amount(event.price)
+        translated = event_translation(event, lang if lang in {"en", "bg"} else "en")
+        return {
+            "purchase_type": purchase_type,
+            "item_id": event.slug,
+            "item_title": translated["title"] or event.title,
+            "amount": amount,
+            "event": event,
+            "metadata": {"event_slug": event.slug},
+        }
+
+    if purchase_type == Sale.PurchaseType.CONSULTATION:
+        expert = find_expert_for_checkout(item_id)
+        session_id = str(payload.get("sessionId", "")).strip()
+        template = EXPERT_SERVICE_TEMPLATES.get(session_id)
+
+        if not expert or not template or not getattr(expert, template["flag"]):
+            raise ValidationError("Consultation session was not found.")
+
+        amount = parse_price_amount(getattr(expert, template["price_field"]))
+        service_lang = lang if lang in {"en", "bg", "ru"} else "en"
+        expert_translated = expert_translation(expert, lang if lang in {"en", "bg"} else "en")
+        session_title = template["title"][service_lang]
+        expert_name = expert_translated.get("name") or expert.name
+        return {
+            "purchase_type": purchase_type,
+            "item_id": f"{expert.slug}:{session_id}",
+            "item_title": f"{session_title} - {expert_name}",
+            "amount": amount,
+            "expert": expert,
+            "metadata": {
+                "expert_slug": expert.slug,
+                "session_id": session_id,
+                "session_title": session_title,
+            },
+        }
+
+    raise ValidationError("Unknown purchase type.")
+
+
+def frontend_checkout_url(base_url, lang, result):
+    return f"{base_url}/{lang}/payment/{result}"
+
+
+@csrf_exempt
+@require_POST
+def create_checkout_session(request):
+    if not settings.STRIPE_SECRET_KEY:
+        return json_error("Stripe secret key is not configured.", 500)
+
+    try:
+        payload = parse_payload(request)
+        checkout_item = resolve_checkout_item(payload)
+    except ValueError as error:
+        return json_error(str(error))
+    except ValidationError as error:
+        message = error.messages[0] if getattr(error, "messages", None) else str(error)
+        return json_error(message)
+
+    customer_name = str(payload.get("customerName", "")).strip()
+    customer_email = str(payload.get("customerEmail", "")).strip()
+    lang = str(payload.get("lang", "bg")).strip()
+    lang = lang if lang in {"en", "bg", "ru"} else "bg"
+    amount = checkout_item["amount"]
+
+    if not customer_name:
+        return json_error("Customer name is required.")
+
+    try:
+        validate_email(customer_email)
+    except ValidationError:
+        return json_error("A valid customer email is required.")
+
+    if amount is None or amount <= 0:
+        return json_error("This item does not have a paid price.")
+
+    currency = settings.STRIPE_CURRENCY
+    frontend_base_url = str(payload.get("frontendBaseUrl") or settings.FRONTEND_BASE_URL).rstrip("/")
+    metadata = {
+        **checkout_item.get("metadata", {}),
+        "purchase_type": checkout_item["purchase_type"],
+        "item_id": checkout_item["item_id"],
+        "customer_name": customer_name,
+        "customer_email": customer_email,
+        "lang": lang,
+    }
+    if payload.get("additional"):
+        metadata["additional"] = str(payload.get("additional"))[:450]
+    stripe_metadata = {key: str(value)[:500] for key, value in metadata.items() if value not in (None, "")}
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            mode="payment",
+            customer_email=customer_email,
+            success_url=f"{frontend_checkout_url(frontend_base_url, lang, 'success')}?session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=frontend_checkout_url(frontend_base_url, lang, "cancel"),
+            line_items=[
+                {
+                    "price_data": {
+                        "currency": currency,
+                        "product_data": {
+                            "name": checkout_item["item_title"],
+                            "metadata": {
+                                "purchase_type": checkout_item["purchase_type"],
+                                "item_id": checkout_item["item_id"],
+                            },
+                        },
+                        "unit_amount": stripe_unit_amount(amount),
+                    },
+                    "quantity": 1,
+                }
+            ],
+            metadata=stripe_metadata,
+            payment_intent_data={"metadata": stripe_metadata},
+        )
+    except Exception as error:
+        return json_error(f"Stripe checkout session could not be created: {error}", 502)
+
+    checkout_url = getattr(checkout_session, "url", "") or checkout_session.get("url", "")
+    checkout_session_id = getattr(checkout_session, "id", "") or checkout_session.get("id", "")
+
+    sale = Sale.objects.create(
+        purchase_type=checkout_item["purchase_type"],
+        status=Sale.Status.PENDING_PAYMENT,
+        customer_name=customer_name,
+        customer_email=customer_email,
+        item_id=checkout_item["item_id"],
+        item_title=checkout_item["item_title"],
+        amount=amount,
+        currency=currency,
+        stripe_checkout_session_id=checkout_session_id,
+        stripe_checkout_url=checkout_url,
+        expert=checkout_item.get("expert"),
+        event=checkout_item.get("event"),
+        learn_material=checkout_item.get("learn_material"),
+        metadata=metadata,
+    )
+
+    return JsonResponse(
+        {
+            "checkoutUrl": checkout_url,
+            "checkoutSessionId": checkout_session_id,
+            "saleId": str(sale.id),
+        },
+        status=201,
+    )
 
 
 def parse_payload(request):
@@ -1485,7 +1730,11 @@ def admin_resources(request):
             ],
             "projects": [
                 serialize_admin_project(item)
-                for item in Project.objects.select_related("category", "organization")
+                for item in Project.objects.select_related("author")
+            ],
+            "sales": [
+                serialize_admin_sale(item)
+                for item in Sale.objects.select_related("expert", "event", "learn_material")
             ],
         }
     )
@@ -1525,7 +1774,7 @@ def site_data(request):
     projects = [
         serialize_project(project, lang)
         for project in Project.objects.filter(status="published")
-        .select_related("category", "organization")
+        .select_related("author")
         .order_by("-published_at")
     ]
 

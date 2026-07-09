@@ -290,7 +290,6 @@ class Command(BaseCommand):
                 translations[lang] = {
                     "title": item.get("title", ""),
                     "excerpt": item.get("excerpt", ""),
-                    "badge": item.get("badge", ""),
                 }
 
             fallback_translation = translations.get("en") or translations.get("bg") or {}
@@ -310,7 +309,7 @@ class Command(BaseCommand):
                     "pdf_file": image_name(fallback.get("pdfUrl")),
                     "preview_pdf_file": image_name(fallback.get("previewPdfUrl")),
                     "price": parse_price(fallback.get("price")),
-                    "badge": fallback_translation.get("badge", ""),
+                    "badge": fallback.get("badge", ""),
                     "is_trending": bool(fallback.get("isTrending")),
                     "status": PublishStatus.PUBLISHED,
                     "published_at": parse_iso(fallback.get("createdAt")),
@@ -349,14 +348,14 @@ class Command(BaseCommand):
                 if project_date
                 else timezone.now()
             )
-            category = self.get_category("Projects", ContentKind.PROJECT)
+            author_slug = fallback.get("authorExpertId")
+            author = Expert.objects.filter(slug=author_slug).first() if author_slug else None
             Project.objects.update_or_create(
                 slug=project_id,
                 defaults={
                     "title": fallback_translation.get("title", ""),
-                    "category": category,
-                    "tags": ["Projects"],
-                    "organization": self.organization,
+                    "author": author,
+                    "author_name": fallback.get("authorName", ""),
                     "excerpt": fallback_translation.get("excerpt", ""),
                     "lead": fallback_translation.get("lead", ""),
                     "body": fallback_body,

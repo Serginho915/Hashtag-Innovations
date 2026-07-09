@@ -19,15 +19,24 @@ interface CommunityFiltersProps {
   activeTag: string;
   onTagChange: (tagId: string) => void;
   lang: string;
+  availableTagIds?: string[];
 }
 
-export const CommunityFilters: React.FC<CommunityFiltersProps> = ({ activeTag, onTagChange, lang }) => {
+export const CommunityFilters: React.FC<CommunityFiltersProps> = ({
+  activeTag,
+  onTagChange,
+  lang,
+  availableTagIds,
+}) => {
   const t = translations[lang] || translations.bg;
+  const visibleFilters = availableTagIds
+    ? filters.filter((filter) => availableTagIds.includes(filter.id))
+    : filters;
 
   return (
     <div className={styles.filtersContainer}>
       <div className={styles.filtersList}>
-        {filters.map((filter) => (
+        {visibleFilters.map((filter) => (
           <div 
             key={filter.id} 
             className={`${styles.filterItem} ${activeTag === filter.id ? styles.active : ''}`}

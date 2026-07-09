@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Modal } from '../../../UI/Modal/Modal.tsx';
 import { isValidEmail } from '../../../../Lib/validation.ts';
+import { createCheckoutSession } from '../../../../Lib/payments.ts';
 import styles from './EventRegistrationModal.module.scss';
 import { CommunityEvent } from '../../../../Types/community.ts';
 import { translations } from './translations.ts';
@@ -44,10 +45,21 @@ export const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({
   const [email, setEmail] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [errors, setErrors] = useState<{ name?: string; email?: string; terms?: string }>({});
+  const [paymentError, setPaymentError] = useState('');
+  const [isStartingPayment, setIsStartingPayment] = useState(false);
 
   const t = translations[lang as keyof typeof translations] || translations.en;
 
-  const handleRegister = (e?: React.FormEvent) => {
+  const resetState = () => {
+    setName('');
+    setEmail('');
+    setTermsAccepted(false);
+    setErrors({});
+    setPaymentError('');
+    setIsStartingPayment(false);
+  };
+
+  const handleRegister = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
     const newErrors: { name?: string; email?: string; terms?: string } = {};
@@ -61,23 +73,29 @@ export const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({
     }
 
     setErrors({});
-    console.log('Registered for event:', {
-      eventId: event.id,
-      name,
-      email,
-      termsAccepted,
-    });
-    // Reset state & close
-    setName('');
-    setEmail('');
-    setTermsAccepted(false);
-    onClose();
+    setPaymentError('');
+    setIsStartingPayment(true);
+
+    try {
+      const checkoutUrl = await createCheckoutSession({
+        purchaseType: 'event_ticket',
+        itemId: event.id,
+        customerName: name,
+        customerEmail: email,
+        lang,
+      });
+
+      window.location.assign(checkoutUrl);
+    } catch (error) {
+      setPaymentError(error instanceof Error ? error.message : 'Could not start payment.');
+      setIsStartingPayment(false);
+    }
   };
 
   return (
     <Modal isOpen={isOpen} onClose={() => {
+      resetState();
       onClose();
-      setErrors({});
     }}>
       <div className={styles.container}>
         <div className={styles.topSection}>
@@ -178,6 +196,7 @@ export const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({
               </div>
             </div>
             {errors.terms && <div className={styles.errorText} style={{ marginTop: '-12px' }}>{errors.terms}</div>}
+            {paymentError && <div className={styles.errorText} style={{ marginTop: '-12px' }}>{paymentError}</div>}
           </div>
         </div>
 
@@ -197,6 +216,7 @@ export const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({
             type="button"
             className={styles.confirmBtn}
             onClick={handleRegister}
+            disabled={isStartingPayment}
           >
             {t.registerBtn}
           </button>

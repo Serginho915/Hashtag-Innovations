@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './Community.module.scss';
 import { CommunityHeader } from './CommunityHeader/CommunityHeader.tsx';
-import { CommunityFilters } from './CommunityFilters/CommunityFilters.tsx';
+import { CommunityFilters, filters } from './CommunityFilters/CommunityFilters.tsx';
 import { CommunityEventsList } from './CommunityEventsList/CommunityEventsList.tsx';
 import { CommunityEvent } from '../../../../Types/community.ts';
 
@@ -13,8 +13,31 @@ interface CommunityInteractiveProps {
 }
 
 export const CommunityInteractive: React.FC<CommunityInteractiveProps> = ({ lang, events }) => {
-  const [activeTag, setActiveTag] = useState<string>('on_site');
+  const now = useMemo(() => new Date(), []);
+  const upcomingEvents = useMemo(
+    () => events.filter((event) => new Date(event.date) >= now),
+    [events, now],
+  );
+  const availableTagIds = useMemo(() => {
+    const upcomingTags = new Set(upcomingEvents.flatMap((event) => event.tags));
+
+    return filters
+      .map((filter) => filter.id)
+      .filter((filterId) => upcomingTags.has(filterId));
+  }, [upcomingEvents]);
+  const [activeTag, setActiveTag] = useState<string>(() => availableTagIds[0] ?? '');
   const scrollRef = React.useRef<HTMLDivElement | null>(null) as React.RefObject<HTMLDivElement>;
+
+  useEffect(() => {
+    if (availableTagIds.length === 0) {
+      setActiveTag('');
+      return;
+    }
+
+    if (!availableTagIds.includes(activeTag)) {
+      setActiveTag(availableTagIds[0]);
+    }
+  }, [activeTag, availableTagIds]);
 
   const scrollUp = () => {
     scrollRef.current?.scrollBy({ top: -400, behavior: 'smooth' });
@@ -24,14 +47,10 @@ export const CommunityInteractive: React.FC<CommunityInteractiveProps> = ({ lang
     scrollRef.current?.scrollBy({ top: 400, behavior: 'smooth' });
   };
 
-  const now = new Date();
-
   // Filter events: only upcoming AND matching the active tag
-  const filteredEvents = events.filter(event => {
-    const eventDate = new Date(event.date);
-    const isUpcoming = eventDate >= now;
+  const filteredEvents = upcomingEvents.filter(event => {
     const hasTag = event.tags.includes(activeTag);
-    return isUpcoming && hasTag;
+    return hasTag;
   }).map(event => ({
     ...event,
     title: lang === 'bg' && event.titleBg ? event.titleBg : event.title,
@@ -46,7 +65,12 @@ export const CommunityInteractive: React.FC<CommunityInteractiveProps> = ({ lang
         <CommunityHeader lang={lang} onScrollUp={scrollUp} onScrollDown={scrollDown} />
         
         <div className={styles.filtersAndEventsRow}>
-          <CommunityFilters activeTag={activeTag} onTagChange={setActiveTag} lang={lang} />
+          <CommunityFilters
+            activeTag={activeTag}
+            onTagChange={setActiveTag}
+            lang={lang}
+            availableTagIds={availableTagIds}
+          />
           
           <CommunityEventsList events={filteredEvents} lang={lang} scrollRef={scrollRef} />
         </div>

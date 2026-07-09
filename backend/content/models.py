@@ -264,21 +264,15 @@ class LearnMaterial(TimeStampedModel):
 class Project(TimeStampedModel):
     title = models.CharField(max_length=220)
     slug = models.SlugField(max_length=240, unique=True)
-    category = models.ForeignKey(
-        Category,
+    author = models.ForeignKey(
+        Expert,
         on_delete=models.SET_NULL,
         related_name="projects",
         blank=True,
         null=True,
     )
-    tags = models.JSONField(default=list, blank=True)
-    organization = models.ForeignKey(
-        Organization,
-        on_delete=models.SET_NULL,
-        related_name="projects",
-        blank=True,
-        null=True,
-    )
+    author_name = models.CharField(max_length=160, blank=True)
+    image = models.ImageField(upload_to="projects/images/", blank=True)
     excerpt = models.TextField(blank=True)
     lead = models.TextField(blank=True)
     body = models.JSONField(
@@ -289,7 +283,6 @@ class Project(TimeStampedModel):
     translations = models.JSONField(default=dict, blank=True)
     code = models.CharField(max_length=80, blank=True)
     published_at = models.DateTimeField(blank=True, null=True)
-    image = models.ImageField(upload_to="projects/images/", blank=True)
     status = models.CharField(
         max_length=16,
         choices=PublishStatus.choices,
@@ -302,3 +295,58 @@ class Project(TimeStampedModel):
 
     def __str__(self) -> str:
         return self.title
+
+
+class Sale(TimeStampedModel):
+    class PurchaseType(models.TextChoices):
+        CONSULTATION = "consultation", "Consultation"
+        LEARN_MATERIAL = "learn_material", "Learn material"
+        EVENT_TICKET = "event_ticket", "Event ticket"
+
+    class Status(models.TextChoices):
+        PENDING_PAYMENT = "pending_payment", "Pending payment"
+        PAID = "paid", "Paid"
+        CANCELED = "canceled", "Canceled"
+
+    purchase_type = models.CharField(max_length=32, choices=PurchaseType.choices)
+    status = models.CharField(
+        max_length=32,
+        choices=Status.choices,
+        default=Status.PENDING_PAYMENT,
+    )
+    customer_name = models.CharField(max_length=160)
+    customer_email = models.EmailField()
+    item_id = models.CharField(max_length=240)
+    item_title = models.CharField(max_length=240)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=8, default="eur")
+    stripe_checkout_session_id = models.CharField(max_length=255, blank=True)
+    stripe_checkout_url = models.TextField(blank=True)
+    expert = models.ForeignKey(
+        Expert,
+        on_delete=models.SET_NULL,
+        related_name="sales",
+        blank=True,
+        null=True,
+    )
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.SET_NULL,
+        related_name="sales",
+        blank=True,
+        null=True,
+    )
+    learn_material = models.ForeignKey(
+        LearnMaterial,
+        on_delete=models.SET_NULL,
+        related_name="sales",
+        blank=True,
+        null=True,
+    )
+    metadata = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self) -> str:
+        return f"{self.get_purchase_type_display()}: {self.item_title}"

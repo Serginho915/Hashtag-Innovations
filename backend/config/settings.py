@@ -119,3 +119,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.AllowAny",
     ],
 }
+
+FRONTEND_BASE_URL = os.getenv("FRONTEND_BASE_URL", "http://localhost:3000").rstrip("/")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
+STRIPE_CURRENCY = os.getenv("STRIPE_CURRENCY", "eur").lower()
