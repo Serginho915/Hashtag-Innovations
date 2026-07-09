@@ -7,6 +7,9 @@ services:
       - .env
     environment:
       DJANGO_DEBUG: "false"
+      DJANGO_ALLOWED_HOSTS: "consultation.bg,www.consultation.bg,localhost,127.0.0.1,backend"
+      DJANGO_CSRF_TRUSTED_ORIGINS: "https://consultation.bg,https://www.consultation.bg"
+      FRONTEND_BASE_URL: "https://consultation.bg"
     ports:
       - "8000:8000"
     restart: unless-stopped
@@ -16,15 +19,21 @@ services:
       context: .
       dockerfile: Dockerfile
       target: runner
+      args:
+        NEXT_PUBLIC_API_URL: "https://consultation.bg"
+        NEXT_PUBLIC_SITE_URL: "https://consultation.bg"
+        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}"
     depends_on:
       - backend
-    env_file:
-      - .env
     environment:
       NODE_ENV: production
       NEXT_TELEMETRY_DISABLED: "1"
-      NEXT_PUBLIC_API_URL: "http://localhost:8000"
+      NEXT_PUBLIC_API_URL: "https://consultation.bg"
+      NEXT_PUBLIC_SITE_URL: "https://consultation.bg"
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}"
       BACKEND_INTERNAL_API_URL: "http://backend:8000"
+      ADMIN_SESSION_SECRET: "${ADMIN_SESSION_SECRET}"
+      ADMIN_API_TOKEN: "${ADMIN_API_TOKEN}"
     ports:
       - "3000:3000"
     restart: unless-stopped
