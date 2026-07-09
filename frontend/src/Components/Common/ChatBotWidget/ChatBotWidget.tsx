@@ -201,24 +201,26 @@ export const ChatBotWidget = () => {
         </section>
       )}
 
-      <button
-        type="button"
-        className={styles.trigger}
-        onClick={() => setIsOpen((prev) => !prev)}
-        aria-label={isOpen ? t.closeLabel : t.openLabel}
-      >
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-          <path
-            d="M6 10.5C6 8.01472 8.01472 6 10.5 6H17.5C19.9853 6 22 8.01472 22 10.5V14.5C22 16.9853 19.9853 19 17.5 19H13L9.5 22V19.0007C7.53818 18.7592 6 17.0867 6 15.0625V10.5Z"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinejoin="round"
-          />
-          <circle cx="11" cy="12.5" r="1" fill="currentColor" />
-          <circle cx="14" cy="12.5" r="1" fill="currentColor" />
-          <circle cx="17" cy="12.5" r="1" fill="currentColor" />
-        </svg>
-      </button>
+      {!isOpen && (
+        <button
+          type="button"
+          className={styles.trigger}
+          onClick={() => setIsOpen(true)}
+          aria-label={t.openLabel}
+        >
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <path
+              d="M6 10.5C6 8.01472 8.01472 6 10.5 6H17.5C19.9853 6 22 8.01472 22 10.5V14.5C22 16.9853 19.9853 19 17.5 19H13L9.5 22V19.0007C7.53818 18.7592 6 17.0867 6 15.0625V10.5Z"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinejoin="round"
+            />
+            <circle cx="11" cy="12.5" r="1" fill="currentColor" />
+            <circle cx="14" cy="12.5" r="1" fill="currentColor" />
+            <circle cx="17" cy="12.5" r="1" fill="currentColor" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 };

@@ -1012,6 +1012,102 @@ def compact_text(value, limit=220):
     return text[:limit]
 
 
+ENGLISH_CHAT_SIGNAL_WORDS = {
+    "a",
+    "about",
+    "ai",
+    "am",
+    "an",
+    "and",
+    "are",
+    "assistant",
+    "book",
+    "business",
+    "buy",
+    "can",
+    "consultation",
+    "consultations",
+    "contact",
+    "do",
+    "does",
+    "event",
+    "events",
+    "expert",
+    "experts",
+    "for",
+    "from",
+    "hashtag",
+    "hello",
+    "help",
+    "hey",
+    "hi",
+    "how",
+    "i",
+    "innovation",
+    "innovations",
+    "insight",
+    "insights",
+    "is",
+    "learn",
+    "learning",
+    "material",
+    "materials",
+    "me",
+    "mentorship",
+    "of",
+    "on",
+    "payment",
+    "price",
+    "pricing",
+    "project",
+    "projects",
+    "refund",
+    "register",
+    "site",
+    "startup",
+    "strategy",
+    "tell",
+    "the",
+    "ticket",
+    "tickets",
+    "to",
+    "website",
+    "what",
+    "when",
+    "where",
+    "who",
+    "with",
+    "you",
+}
+
+
+def detect_chat_response_language(message):
+    text = str(message or "").strip()
+    if not text:
+        return "bg"
+
+    if re.search(r"[\u0400-\u04FF]", text):
+        return "bg"
+
+    if any(character.isalpha() and ord(character) > 127 for character in text):
+        return "bg"
+
+    words = [word.lower() for word in re.findall(r"[A-Za-z]+(?:'[A-Za-z]+)?", text)]
+    if not words:
+        return "bg"
+
+    signal_count = sum(1 for word in words if word in ENGLISH_CHAT_SIGNAL_WORDS)
+    signal_ratio = signal_count / max(len(words), 1)
+
+    if signal_count >= 2 or signal_ratio >= 0.35:
+        return "en"
+
+    if len(words) <= 2 and any(word in ENGLISH_CHAT_SIGNAL_WORDS for word in words):
+        return "en"
+
+    return "bg"
+
+
 def build_chat_site_context(lang):
     lang = lang if lang in {"en", "bg"} else "en"
     now = timezone.now()
@@ -1185,14 +1281,12 @@ def chat_reply(request):
         return json_error(str(error))
 
     message = str(payload.get("message", "") or "").strip()
-    lang = str(payload.get("lang", "bg") or "bg").strip()
-    lang = lang if lang in {"en", "bg"} else "bg"
-
     if not message:
         return json_error("Message is required.")
     if len(message) > 1200:
         return json_error("Message is too long.")
 
+    lang = detect_chat_response_language(message)
     conversation = conversation_from_payload(payload, request, lang)
     user_chat_message = ChatMessage.objects.create(
         conversation=conversation,
