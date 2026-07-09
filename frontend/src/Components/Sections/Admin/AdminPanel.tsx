@@ -37,6 +37,11 @@ type ArticleSection = {
   paragraphs?: string[];
   html?: string;
 };
+type ChatMessageValue = {
+  role?: string;
+  content?: string;
+  created_at?: string;
+};
 
 interface AdminField {
   key: string;
@@ -56,6 +61,7 @@ interface ResourceConfig {
   columns: string[];
   records: AdminRecord[];
   readOnly?: boolean;
+  detailFields?: string[];
 }
 
 const statusOptions = ["draft", "published", "archived"];
@@ -77,6 +83,8 @@ const resourceHelpText: Record<string, string> = {
     "Projects use the same editorial structure as articles, with an extra project code.",
   sales:
     "Sales list Stripe checkout attempts for consultations, learning materials and event tickets. Webhook confirmation will be added in the next payment phase.",
+  chat_conversations:
+    "Chat Conversations show visitor conversations with the website assistant, including the full message history for support and quality review.",
 };
 
 const resources: ResourceConfig[] = [
@@ -402,6 +410,17 @@ const resources: ResourceConfig[] = [
     records: [],
     readOnly: true,
   },
+  {
+    key: "chat_conversations",
+    label: "Chat Conversations",
+    singular: "Chat Conversation",
+    accent: "#4A5565",
+    columns: ["last_message_at", "language", "title", "message_count", "last_user_message"],
+    fields: [],
+    records: [],
+    readOnly: true,
+    detailFields: ["session_id", "created_at", "last_message_at", "language", "user_agent", "ip_address", "messages"],
+  },
 ];
 
 const makeBlankRecord = (resource: ResourceConfig): AdminRecord => {
@@ -549,6 +568,25 @@ const DeleteIcon = () => (
       stroke="#fff"
       strokeLinecap="round"
       strokeWidth="1.2"
+    />
+  </svg>
+);
+
+const ViewIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 20 20" focusable="false">
+    <path
+      d="M2.4 10s2.8-5 7.6-5 7.6 5 7.6 5-2.8 5-7.6 5-7.6-5-7.6-5Z"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.7"
+    />
+    <path
+      d="M10 12.5A2.5 2.5 0 1 0 10 7.5a2.5 2.5 0 0 0 0 5Z"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
     />
   </svg>
 );
@@ -897,6 +935,7 @@ export const AdminPanel = () => {
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
   const [recordsError, setRecordsError] = useState("");
   const [editingRecord, setEditingRecord] = useState<AdminRecord | null>(null);
+  const [viewingRecord, setViewingRecord] = useState<AdminRecord | null>(null);
   const [editingMode, setEditingMode] = useState<"create" | "edit">("edit");
   const [mutationError, setMutationError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -961,6 +1000,7 @@ export const AdminPanel = () => {
 
   const activeResource = resources.find((resource) => resource.key === activeKey) ?? resources[0];
   const activeResourceHelpText = resourceHelpText[activeResource.key];
+  const hasDetailAction = Boolean(activeResource.detailFields?.length);
   const activeRecords = useMemo(
     () => recordsByResource[activeResource.key] ?? [],
     [activeResource.key, recordsByResource],
@@ -1003,6 +1043,14 @@ export const AdminPanel = () => {
   const closeEditor = () => {
     setMutationError("");
     setEditingRecord(null);
+  };
+
+  const openView = (record: AdminRecord) => {
+    setViewingRecord({ ...record });
+  };
+
+  const closeView = () => {
+    setViewingRecord(null);
   };
 
   const updateEditingValue = (field: AdminField, value: FieldValue) => {
@@ -1439,6 +1487,39 @@ export const AdminPanel = () => {
     return renderedFields;
   };
 
+  const renderDetailValue = (key: string, value: FieldValue | undefined) => {
+    if (key === "messages") {
+      const messages = parseJsonValue<ChatMessageValue[]>(value, []);
+
+      if (!messages.length) {
+        return <p className={styles.detailEmpty}>No messages recorded.</p>;
+      }
+
+      return (
+        <div className={styles.conversationMessages}>
+          {messages.map((message, index) => (
+            <article
+              key={`${message.created_at || "message"}-${index}`}
+              className={`${styles.conversationMessage} ${
+                message.role === "user" ? styles.userConversationMessage : styles.assistantConversationMessage
+              }`}
+            >
+              <div className={styles.conversationMeta}>
+                <strong>{message.role === "user" ? "Visitor" : "Assistant"}</strong>
+                <span>{formatTableValue("created_at", message.created_at)}</span>
+              </div>
+              <p>{message.content || "-"}</p>
+            </article>
+          ))}
+        </div>
+      );
+    }
+
+    return <p className={styles.detailText}>{formatTableValue(key, value)}</p>;
+  };
+
+  const detailFields = activeResource.detailFields ?? [];
+
   const saveRecord = async () => {
     if (!editingRecord) {
       return;
@@ -1637,7 +1718,7 @@ export const AdminPanel = () => {
                   {activeResource.columns.map((column) => (
                     <th key={column}>{column.replaceAll("_", " ")}</th>
                   ))}
-                  {!activeResource.readOnly && <th>Actions</th>}
+                  {(!activeResource.readOnly || hasDetailAction) && <th>Actions</th>}
                 </tr>
               </thead>
               <tbody>
@@ -1656,21 +1737,30 @@ export const AdminPanel = () => {
                         </span>
                       </td>
                     ))}
-                    {!activeResource.readOnly && (
+                    {(!activeResource.readOnly || hasDetailAction) && (
                       <td>
                         <div className={styles.tableActions}>
-                          <button type="button" onClick={() => openEdit(record)} aria-label="Edit record" title="Edit">
-                            <EditIcon />
-                          </button>
-                          <button
-                            className={`${styles.dangerButton} ${styles.deleteActionButton}`}
-                            type="button"
-                            onClick={() => deleteRecord(record.id)}
-                            aria-label="Delete record"
-                            title="Delete"
-                          >
-                            <DeleteIcon />
-                          </button>
+                          {hasDetailAction && (
+                            <button type="button" onClick={() => openView(record)} aria-label="View record" title="View">
+                              <ViewIcon />
+                            </button>
+                          )}
+                          {!activeResource.readOnly && (
+                            <>
+                              <button type="button" onClick={() => openEdit(record)} aria-label="Edit record" title="Edit">
+                                <EditIcon />
+                              </button>
+                              <button
+                                className={`${styles.dangerButton} ${styles.deleteActionButton}`}
+                                type="button"
+                                onClick={() => deleteRecord(record.id)}
+                                aria-label="Delete record"
+                                title="Delete"
+                              >
+                                <DeleteIcon />
+                              </button>
+                            </>
+                          )}
                         </div>
                       </td>
                     )}
@@ -1735,6 +1825,38 @@ export const AdminPanel = () => {
               <button className={styles.primaryButton} type="button" onClick={saveRecord} disabled={isSaving}>
                 {isSaving ? "Saving..." : "Save"}
               </button>
+            </div>
+          </section>
+        </div>
+      )}
+
+      {viewingRecord && (
+        <div className={styles.editorBackdrop} role="presentation" onMouseDown={closeView}>
+          <section
+            className={`${styles.editor} ${styles.detailViewer}`}
+            aria-label={`View ${activeResource.singular}`}
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <div className={styles.editorHeader}>
+              <div>
+                <span className={styles.eyebrow}>View</span>
+                <h2>{String(viewingRecord.title || activeResource.singular)}</h2>
+              </div>
+              <button className={styles.iconButton} type="button" onClick={closeView} aria-label="Close viewer">
+                x
+              </button>
+            </div>
+
+            <div className={styles.detailGrid}>
+              {detailFields.map((fieldKey) => (
+                <section
+                  className={`${styles.detailField} ${fieldKey === "messages" ? styles.fullWidth : ""}`}
+                  key={fieldKey}
+                >
+                  <h3>{fieldKey.replaceAll("_", " ")}</h3>
+                  {renderDetailValue(fieldKey, viewingRecord[fieldKey])}
+                </section>
+              ))}
             </div>
           </section>
         </div>

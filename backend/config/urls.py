@@ -7,6 +7,7 @@ from content.views import (
     admin_resource_create,
     admin_resource_detail,
     admin_resources,
+    chat_reply,
     create_checkout_session,
     site_data,
 )
@@ -18,6 +19,7 @@ urlpatterns = [
     path("api/admin/resources/", admin_resources),
     path("api/admin/resources/<str:resource_key>/", admin_resource_create),
     path("api/admin/resources/<str:resource_key>/<int:record_id>/", admin_resource_detail),
+    path("api/chat/", chat_reply),
     path("api/payments/checkout/", create_checkout_session),
     path("api/site-data/", site_data),
     path("api-auth/", include("rest_framework.urls")),

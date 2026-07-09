@@ -2,8 +2,10 @@ import ast
 import html
 import json
 import re
+import uuid
 from decimal import Decimal, InvalidOperation
 
+import requests
 import stripe
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -23,6 +25,8 @@ from django.views.decorators.http import require_POST
 from content.models import (
     Article,
     Category,
+    ChatConversation,
+    ChatMessage,
     Event,
     Expert,
     LearnMaterial,
@@ -31,6 +35,9 @@ from content.models import (
     PublishStatus,
     Sale,
 )
+
+
+OPENROUTER_CHAT_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 
 @csrf_exempt
@@ -834,6 +841,38 @@ def serialize_admin_sale(sale):
     }
 
 
+def serialize_admin_chat_conversation(conversation):
+    messages = list(conversation.messages.all())
+    user_messages = [message for message in messages if message.role == ChatMessage.Role.USER]
+    assistant_messages = [message for message in messages if message.role == ChatMessage.Role.ASSISTANT]
+    last_user_message = user_messages[-1].content if user_messages else ""
+    last_assistant_message = assistant_messages[-1].content if assistant_messages else ""
+
+    return {
+        "id": str(conversation.id),
+        "session_id": str(conversation.session_id),
+        "created_at": admin_datetime_value(conversation.created_at),
+        "last_message_at": admin_datetime_value(conversation.last_message_at),
+        "language": conversation.language,
+        "title": conversation.title,
+        "message_count": len(messages),
+        "last_user_message": last_user_message[:180],
+        "last_assistant_message": last_assistant_message[:180],
+        "user_agent": conversation.user_agent,
+        "ip_address": conversation.ip_address or "",
+        "messages": admin_json_value(
+            [
+                {
+                    "role": message.role,
+                    "content": message.content,
+                    "created_at": admin_datetime_value(message.created_at),
+                }
+                for message in messages
+            ]
+        ),
+    }
+
+
 ADMIN_SERIALIZERS = {
     "categories": serialize_admin_category,
     "organizations": serialize_admin_organization,
@@ -843,6 +882,7 @@ ADMIN_SERIALIZERS = {
     "learn_materials": serialize_admin_learn_material,
     "projects": serialize_admin_project,
     "sales": serialize_admin_sale,
+    "chat_conversations": serialize_admin_chat_conversation,
 }
 
 ADMIN_RESOURCE_CONFIG = {
@@ -958,6 +998,235 @@ def admin_config(resource_key):
 
 def json_error(message, status=400):
     return JsonResponse({"error": message}, status=status)
+
+
+def client_ip(request):
+    forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR", "")
+    if forwarded_for:
+        return forwarded_for.split(",")[0].strip()
+    return request.META.get("REMOTE_ADDR") or None
+
+
+def compact_text(value, limit=220):
+    text = re.sub(r"\s+", " ", str(value or "")).strip()
+    return text[:limit]
+
+
+def build_chat_site_context(lang):
+    lang = lang if lang in {"en", "bg"} else "en"
+    now = timezone.now()
+
+    experts = [
+        serialize_expert(expert, lang)
+        for expert in Expert.objects.filter(is_active=True).order_by("name")[:8]
+    ]
+    events = [
+        serialize_event(event, lang)
+        for event in Event.objects.filter(status=PublishStatus.PUBLISHED, starts_at__gte=now)
+        .select_related("expert", "category")
+        .prefetch_related("organizers", "partners")
+        .order_by("starts_at")[:8]
+    ]
+    materials = [
+        serialize_material(material, lang)
+        for material in LearnMaterial.objects.filter(status=PublishStatus.PUBLISHED)
+        .select_related("category", "author")
+        .order_by("-published_at", "-created_at")[:8]
+    ]
+    insights = [
+        serialize_article(article, lang)
+        for article in Article.objects.filter(status=PublishStatus.PUBLISHED)
+        .select_related("author")
+        .order_by("-published_at", "-created_at")[:6]
+    ]
+    projects = [
+        serialize_project(project, lang)
+        for project in Project.objects.filter(status=PublishStatus.PUBLISHED)
+        .select_related("author")
+        .order_by("-published_at", "-created_at")[:6]
+    ]
+
+    return {
+        "site": "Hashtag Innovations",
+        "purpose": "Platform for business community, expert consultations, events, learning materials, insights and projects.",
+        "navigation": ["/experts", "/events", "/learn", "/insights", "/projects"],
+        "experts": [
+            {
+                "name": item.get("name"),
+                "role": item.get("role"),
+                "company": item.get("company"),
+                "services": [session.get("title") for session in item.get("sessions", [])],
+            }
+            for item in experts
+        ],
+        "upcoming_events": [
+            {
+                "title": item.get("title"),
+                "date": item.get("displayDate"),
+                "time": item.get("startTime"),
+                "location": item.get("location"),
+                "price": item.get("price"),
+            }
+            for item in events
+        ],
+        "learning_materials": [
+            {
+                "title": item.get("title"),
+                "category": item.get("category"),
+                "price": item.get("price"),
+                "author": item.get("authorName"),
+            }
+            for item in materials
+        ],
+        "insights": [
+            {
+                "title": item.get("title"),
+                "excerpt": compact_text(item.get("excerpt"), 160),
+            }
+            for item in insights
+        ],
+        "projects": [
+            {
+                "title": item.get("title"),
+                "description": compact_text(item.get("description"), 160),
+            }
+            for item in projects
+        ],
+    }
+
+
+def chat_system_prompt(lang):
+    language_name = "Bulgarian" if lang == "bg" else "English"
+    return (
+        "You are the Hashtag Innovations website assistant. "
+        f"Answer in {language_name}. "
+        "Help visitors understand the website, find experts, events, learning materials, insights and projects, "
+        "and answer general questions about innovation, digital transformation, startups, product strategy, AI, "
+        "business community, education and entrepreneurship. "
+        "Use the provided site context for concrete site facts. Do not invent unavailable events, prices, people or guarantees. "
+        "For payments, refunds, account issues, legal questions or private support, give general guidance and suggest contacting the team through the website. "
+        "Keep answers friendly, practical and concise."
+    )
+
+
+def openrouter_chat_reply(conversation, user_message, lang):
+    context = build_chat_site_context(lang)
+    recent_messages = [
+        {"role": message.role, "content": message.content}
+        for message in conversation.messages.order_by("-created_at", "-id")[:10]
+    ]
+    recent_messages.reverse()
+
+    payload = {
+        "model": settings.OPENROUTER_MODEL,
+        "messages": [
+            {"role": "system", "content": chat_system_prompt(lang)},
+            {
+                "role": "system",
+                "content": "Current website context JSON:\n" + json.dumps(context, ensure_ascii=False),
+            },
+            *recent_messages,
+        ],
+        "temperature": 0.45,
+        "max_tokens": 650,
+    }
+    response = requests.post(
+        OPENROUTER_CHAT_URL,
+        headers={
+            "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": settings.FRONTEND_BASE_URL,
+            "X-OpenRouter-Title": "Hashtag Innovations",
+        },
+        json=payload,
+        timeout=30,
+    )
+    response.raise_for_status()
+    data = response.json()
+    choices = data.get("choices") if isinstance(data, dict) else []
+    message = choices[0].get("message", {}) if choices else {}
+    answer = str(message.get("content", "")).strip()
+    if not answer:
+        raise ValueError("OpenRouter returned an empty assistant response.")
+    return answer
+
+
+def conversation_from_payload(payload, request, lang):
+    raw_session_id = str(payload.get("conversationId", "") or "").strip()
+
+    if raw_session_id:
+        try:
+            session_id = uuid.UUID(raw_session_id)
+        except ValueError:
+            session_id = None
+
+        if session_id:
+            conversation = ChatConversation.objects.filter(session_id=session_id).first()
+            if conversation:
+                return conversation
+
+    return ChatConversation.objects.create(
+        language=lang,
+        user_agent=str(request.META.get("HTTP_USER_AGENT", ""))[:1000],
+        ip_address=client_ip(request),
+        last_message_at=timezone.now(),
+    )
+
+
+@csrf_exempt
+@require_POST
+def chat_reply(request):
+    if not settings.OPENROUTER_API_KEY:
+        return json_error("OpenRouter API key is not configured.", 500)
+
+    try:
+        payload = parse_payload(request)
+    except ValueError as error:
+        return json_error(str(error))
+
+    message = str(payload.get("message", "") or "").strip()
+    lang = str(payload.get("lang", "bg") or "bg").strip()
+    lang = lang if lang in {"en", "bg"} else "bg"
+
+    if not message:
+        return json_error("Message is required.")
+    if len(message) > 1200:
+        return json_error("Message is too long.")
+
+    conversation = conversation_from_payload(payload, request, lang)
+    user_chat_message = ChatMessage.objects.create(
+        conversation=conversation,
+        role=ChatMessage.Role.USER,
+        content=message,
+    )
+
+    if not conversation.title:
+        conversation.title = compact_text(message, 80)
+    conversation.language = lang
+    conversation.last_message_at = user_chat_message.created_at
+    conversation.save(update_fields=["title", "language", "last_message_at", "updated_at"])
+
+    try:
+        answer = openrouter_chat_reply(conversation, message, lang)
+    except requests.RequestException as error:
+        return json_error(f"Assistant service is unavailable: {error}", 502)
+    except Exception as error:
+        return json_error(f"Assistant could not answer: {error}", 502)
+
+    assistant_message = ChatMessage.objects.create(
+        conversation=conversation,
+        role=ChatMessage.Role.ASSISTANT,
+        content=answer,
+    )
+    conversation.last_message_at = assistant_message.created_at
+    conversation.save(update_fields=["last_message_at", "updated_at"])
+
+    return JsonResponse(
+        {
+            "conversationId": str(conversation.session_id),
+            "message": answer,
+        }
+    )
 
 
 def parse_price_amount(value):
@@ -1735,6 +2004,10 @@ def admin_resources(request):
             "sales": [
                 serialize_admin_sale(item)
                 for item in Sale.objects.select_related("expert", "event", "learn_material")
+            ],
+            "chat_conversations": [
+                serialize_admin_chat_conversation(item)
+                for item in ChatConversation.objects.prefetch_related("messages")
             ],
         }
     )

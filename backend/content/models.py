@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 
 
@@ -350,3 +352,38 @@ class Sale(TimeStampedModel):
 
     def __str__(self) -> str:
         return f"{self.get_purchase_type_display()}: {self.item_title}"
+
+
+class ChatConversation(TimeStampedModel):
+    session_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    language = models.CharField(max_length=8, default="bg")
+    title = models.CharField(max_length=180, blank=True)
+    user_agent = models.TextField(blank=True)
+    ip_address = models.GenericIPAddressField(blank=True, null=True)
+    last_message_at = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        ordering = ["-last_message_at", "-created_at"]
+
+    def __str__(self) -> str:
+        return self.title or str(self.session_id)
+
+
+class ChatMessage(TimeStampedModel):
+    class Role(models.TextChoices):
+        USER = "user", "User"
+        ASSISTANT = "assistant", "Assistant"
+
+    conversation = models.ForeignKey(
+        ChatConversation,
+        on_delete=models.CASCADE,
+        related_name="messages",
+    )
+    role = models.CharField(max_length=16, choices=Role.choices)
+    content = models.TextField()
+
+    class Meta:
+        ordering = ["created_at", "id"]
+
+    def __str__(self) -> str:
+        return f"{self.role}: {self.content[:80]}"

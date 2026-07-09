@@ -20,18 +20,24 @@ const uiText = {
     subtitle: "Online now",
     placeholder: "Type your message...",
     send: "Send",
+    sending: "Sending...",
     greeting: "Hi! I am the Hashtag assistant. How can I help you today?",
+    error: "I could not answer right now. Please try again in a moment.",
   },
   bg: {
-    openLabel: "Отвори чат бот",
-    closeLabel: "Затвори чат бот",
+    openLabel: "Отвори чат бота",
+    closeLabel: "Затвори чат бота",
     title: "Асистент",
     subtitle: "На линия",
     placeholder: "Напиши съобщение...",
     send: "Изпрати",
+    sending: "Изпращане...",
     greeting: "Здравей! Аз съм асистентът на Hashtag. С какво да помогна днес?",
+    error: "Не успях да отговоря сега. Опитайте отново след момент.",
   },
 } as const;
+
+const CONVERSATION_STORAGE_KEY = "hashtag_chat_conversation_id";
 
 export const ChatBotWidget = () => {
   const { language } = useLanguage();
@@ -39,12 +45,18 @@ export const ChatBotWidget = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const [conversationId, setConversationId] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
     { id: 1, role: "bot", text: t.greeting },
   ]);
 
   const nextIdRef = useRef(2);
   const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setConversationId(window.localStorage.getItem(CONVERSATION_STORAGE_KEY) || "");
+  }, []);
 
   useEffect(() => {
     setMessages((current) => {
@@ -60,13 +72,23 @@ export const ChatBotWidget = () => {
       return;
     }
     listRef.current.scrollTop = listRef.current.scrollHeight;
-  }, [messages]);
+  }, [messages, isSending]);
 
-  const canSend = useMemo(() => input.trim().length > 0, [input]);
+  const canSend = useMemo(() => input.trim().length > 0 && !isSending, [input, isSending]);
 
-  const handleSend = () => {
+  const appendBotMessage = (text: string) => {
+    const botMessage: ChatMessage = {
+      id: nextIdRef.current,
+      role: "bot",
+      text,
+    };
+    nextIdRef.current += 1;
+    setMessages((prev) => [...prev, botMessage]);
+  };
+
+  const handleSend = async () => {
     const text = input.trim();
-    if (!text) {
+    if (!text || isSending) {
       return;
     }
 
@@ -79,6 +101,45 @@ export const ChatBotWidget = () => {
 
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
+    setIsSending(true);
+
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        conversationId,
+        message: text,
+        lang: language,
+      }),
+    }).catch(() => null);
+
+    if (!response) {
+      appendBotMessage(t.error);
+      setIsSending(false);
+      return;
+    }
+
+    const payload = await response.json().catch(() => null) as {
+      conversationId?: string;
+      message?: string;
+      error?: string;
+    } | null;
+
+    if (!response.ok || !payload?.message) {
+      appendBotMessage(payload?.error || t.error);
+      setIsSending(false);
+      return;
+    }
+
+    if (payload.conversationId) {
+      setConversationId(payload.conversationId);
+      window.localStorage.setItem(CONVERSATION_STORAGE_KEY, payload.conversationId);
+    }
+
+    appendBotMessage(payload.message);
+    setIsSending(false);
   };
 
   return (
@@ -111,13 +172,18 @@ export const ChatBotWidget = () => {
                 {message.text}
               </div>
             ))}
+            {isSending && (
+              <div className={`${styles.message} ${styles.botMessage}`}>
+                {t.sending}
+              </div>
+            )}
           </div>
 
           <form
             className={styles.inputArea}
             onSubmit={(event) => {
               event.preventDefault();
-              handleSend();
+              void handleSend();
             }}
           >
             <input
@@ -126,9 +192,10 @@ export const ChatBotWidget = () => {
               onChange={(event) => setInput(event.target.value)}
               placeholder={t.placeholder}
               aria-label={t.placeholder}
+              disabled={isSending}
             />
             <button type="submit" className={styles.sendButton} disabled={!canSend}>
-              {t.send}
+              {isSending ? t.sending : t.send}
             </button>
           </form>
         </section>
