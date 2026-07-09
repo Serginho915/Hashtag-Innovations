@@ -4,6 +4,7 @@ import { Language } from "@/Types/Language.ts";
 import "@/Styles/globals.scss";
 import { Header } from "@/Components/Common/Header/Header.tsx";
 import { Footer } from "@/Components/Common/Footer/Footer.tsx";
+import { ChatBotWidget } from "@/Components/Common/ChatBotWidget/ChatBotWidget.tsx";
 import { LanguageProvider } from "@/Context/LanguageContext.tsx";
 import { NavigationProvider } from "@/Context/NavigationContext.tsx";
 
@@ -46,6 +47,7 @@ export default async function RootLayout({
               {children}
             </main>
             <Footer lang={lang} />
+            <ChatBotWidget />
           </NavigationProvider>
         </LanguageProvider>
       </body>

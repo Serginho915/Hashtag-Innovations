@@ -37,16 +37,35 @@ const getBackendApiUrl = () =>
     process.env.NEXT_PUBLIC_API_URL ||
     'http://localhost:8000').replace(/\/$/, '');
 
+const getEmptySiteData = (): SiteData => {
+  return {
+    experts: [],
+    news: [],
+    upcomingEvents: [],
+    communityEvents: [],
+    textbooks: [],
+    popularInsights: [],
+    insights: [],
+    relatedEvents: [],
+    projects: [],
+  };
+};
+
 const getSiteData = cache(async (lang: string): Promise<SiteData> => {
-  const response = await fetch(`${getBackendApiUrl()}/api/site-data/?lang=${lang}`, {
-    cache: 'no-store',
-  });
+  try {
+    const response = await fetch(`${getBackendApiUrl()}/api/site-data/?lang=${lang}`, {
+      cache: 'no-store',
+    });
 
-  if (!response.ok) {
-    throw new Error(`Failed to load site data from database. Backend returned ${response.status}.`);
+    if (!response.ok) {
+      throw new Error(`Backend returned ${response.status}`);
+    }
+
+    return (await response.json()) as SiteData;
+  } catch (error) {
+    console.error('Failed to fetch backend site data.', error);
+    return getEmptySiteData();
   }
-
-  return (await response.json()) as SiteData;
 });
 
 export const getHomePageData = cache(async (lang: string): Promise<HomePageData> => {
