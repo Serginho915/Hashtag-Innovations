@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { EB_Garamond, Manrope } from "next/font/google";
 import { Language } from "@/Types/Language.ts";
 import "@/Styles/globals.scss";
 import { Header } from "@/Components/Common/Header/Header.tsx";
 import { Footer } from "@/Components/Common/Footer/Footer.tsx";
 import { ChatBotWidget } from "@/Components/Common/ChatBotWidget/ChatBotWidget.tsx";
+import { CookieConsent } from "@/Components/Common/CookieConsent/CookieConsent.tsx";
 import { LanguageProvider } from "@/Context/LanguageContext.tsx";
 import { NavigationProvider } from "@/Context/NavigationContext.tsx";
 
@@ -40,6 +42,22 @@ export default async function RootLayout({
   return (
     <html lang={lang} className={`${ebgaramond.variable} ${manrope.variable}`}>
       <body>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-SR64MPBLXQ"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            const analyticsConsent = window.localStorage.getItem('hashtag_cookie_consent') === 'accepted' ? 'granted' : 'denied';
+            gtag('consent', 'default', {
+              analytics_storage: analyticsConsent,
+            });
+            gtag('js', new Date());
+            gtag('config', 'G-SR64MPBLXQ');
+          `}
+        </Script>
         <LanguageProvider initialLang={currentLang}>
           <NavigationProvider>
             <Header lang={lang} />
@@ -48,6 +66,7 @@ export default async function RootLayout({
             </main>
             <Footer lang={lang} />
             <ChatBotWidget />
+            <CookieConsent />
           </NavigationProvider>
         </LanguageProvider>
       </body>

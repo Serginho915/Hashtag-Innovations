@@ -207,9 +207,9 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               </div>
               <div className={styles.termsText}>
                 {t.termsAgree || 'I agree to the '}
-                <a href="#" onClick={(event) => event.stopPropagation()}>{t.termsLink || 'terms of use'}</a>
+                <a href={`/${lang}/terms`} onClick={(event) => event.stopPropagation()}>{t.termsLink || 'terms of use'}</a>
                 {t.and || ' and '}
-                <a href="#" onClick={(event) => event.stopPropagation()}>{t.privacyLink || 'privacy policy'}</a>
+                <a href={`/${lang}/privacy`} onClick={(event) => event.stopPropagation()}>{t.privacyLink || 'privacy policy'}</a>
               </div>
             </div>
             {errors.terms && <div className={styles.errorText} style={{ marginTop: '-12px' }}>{errors.terms}</div>}

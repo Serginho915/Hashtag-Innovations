@@ -11,7 +11,7 @@ interface FooterLegalLinksProps {
   lang: string;
 }
 
-type FooterModal = 'euProject' | 'privacy' | null;
+type FooterModal = 'euProject' | null;
 
 export const FooterLegalLinks: React.FC<FooterLegalLinksProps> = ({ lang }) => {
   const t = translations[lang] || translations.bg;
@@ -19,7 +19,7 @@ export const FooterLegalLinks: React.FC<FooterLegalLinksProps> = ({ lang }) => {
 
   const legalLinks = [
     { label: t.euProject, href: `/${lang}/eu-project`, modal: 'euProject' as const },
-    { label: t.privacy, href: `/${lang}/privacy`, modal: 'privacy' as const },
+    { label: t.privacy, href: `/${lang}/privacy` },
     { label: t.terms, href: `/${lang}/terms` },
     { label: t.cookies, href: `/${lang}/cookies` },
   ];
@@ -66,23 +66,6 @@ export const FooterLegalLinks: React.FC<FooterLegalLinksProps> = ({ lang }) => {
         </div>
       </Modal>
 
-      <Modal isOpen={activeModal === 'privacy'} onClose={closeModal} className={styles.privacyModal} closeButtonClassName={styles.modalClose}>
-        <div className={styles.privacyContent}>
-          <h2>{t.privacyTitle}</h2>
-          <p className={styles.privacyIntro}>{t.privacyIntro}</p>
-          <div className={styles.privacySections}>
-            {t.privacySections.map((section) => (
-              <section key={section.title}>
-                <h3>{section.title}</h3>
-                <p>{section.text}</p>
-              </section>
-            ))}
-          </div>
-          <button type="button" className={styles.modalAction} onClick={closeModal}>
-            {t.close}
-          </button>
-        </div>
-      </Modal>
     </>
   );
 };

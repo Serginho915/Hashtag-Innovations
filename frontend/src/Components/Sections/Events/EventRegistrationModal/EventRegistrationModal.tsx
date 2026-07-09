@@ -190,9 +190,9 @@ export const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({
               </div>
               <div className={styles.termsText}>
                 {t.termsAgree}
-                <a href="#" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>{t.termsLink}</a>
+                <a href={`/${lang}/terms`} onClick={(e) => { e.stopPropagation(); }}>{t.termsLink}</a>
                 {t.and}
-                <a href="#" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>{t.privacyLink}</a>
+                <a href={`/${lang}/privacy`} onClick={(e) => { e.stopPropagation(); }}>{t.privacyLink}</a>
               </div>
             </div>
             {errors.terms && <div className={styles.errorText} style={{ marginTop: '-12px' }}>{errors.terms}</div>}

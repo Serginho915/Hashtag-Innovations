@@ -40,11 +40,11 @@ export const translations: Record<string, {
     euProject: 'EU Project Information',
     privacy: 'Privacy Policy',
     terms: 'Terms of Service',
-    cookies: 'Cookie Settings',
+    cookies: 'Cookie Policy',
     close: 'Close',
     euProjectTitle: 'EU Project Information',
     privacyTitle: 'Privacy Policy',
-    privacyIntro: 'This is temporary privacy policy copy for the Hashtag Innovations platform. It describes how user information is handled across the website, forms, learning materials, events, and expert services.',
+    privacyIntro: 'This policy explains how Hashtag Innovations handles personal data across the website, forms, learning materials, events, expert services, Stripe Checkout and Google Analytics.',
     privacySections: [
       {
         title: 'Information we collect',
@@ -79,12 +79,12 @@ export const translations: Record<string, {
     copyright: '© 2026 Hashtag Innovations. Всички права запазени.',
     euProject: 'ЕС Информация за проекта',
     privacy: 'Политика за поверителност',
-    terms: 'Условия за ползване',
-    cookies: 'Настройки за бисквитки',
+    terms: 'Общи условия',
+    cookies: 'Политика за бисквитки',
     close: 'Затвори',
     euProjectTitle: 'ЕС информация за проекта',
     privacyTitle: 'Политика за поверителност',
-    privacyIntro: 'Това е временен текст за политиката за поверителност на платформата Hashtag Innovations. Той описва как се обработва информацията на потребителите в сайта, формите, учебните материали, събитията и експертните услуги.',
+    privacyIntro: 'Тази политика обяснява как Hashtag Innovations обработва лични данни в сайта, формите, учебните материали, събитията, експертните услуги, Stripe Checkout и Google Analytics.',
     privacySections: [
       {
         title: 'Каква информация събираме',

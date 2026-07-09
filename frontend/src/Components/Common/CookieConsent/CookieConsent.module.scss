@@ -1,0 +1,65 @@
+@use "../../../Styles/mixins.scss" as *;
+@use "../../../Styles/variables.scss" as vars;
+
+.banner {
+  position: fixed;
+  right: 24px;
+  bottom: 104px;
+  z-index: 1190;
+  width: min(420px, calc(100vw - 32px));
+  padding: 16px;
+  border: 1px solid #c0c0d2;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(21, 26, 35, 0.18);
+  color: #1e1e20;
+  font-family: vars.$font-manrope;
+
+  @include tablet {
+    right: 16px;
+    bottom: 84px;
+  }
+}
+
+.text {
+  margin: 0;
+  color: #363636;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.actions {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.button {
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid #000;
+  border-radius: 8px;
+  background: #000;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.secondaryButton {
+  background: #fff;
+  color: #000;
+  border-color: #c0c0d2;
+}
+
+.link {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  color: #000;
+  font-size: 13px;
+  font-weight: 800;
+}

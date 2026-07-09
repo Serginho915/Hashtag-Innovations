@@ -1,0 +1,94 @@
+@use "../../Styles/mixins.scss" as *;
+@use "../../Styles/variables.scss" as vars;
+
+.legalPage {
+  width: min(980px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 72px 0 96px;
+  color: #1e1e20;
+
+  @include tablet {
+    width: min(100% - 32px, 980px);
+    padding: 48px 0 72px;
+  }
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: #69698b;
+  font-family: vars.$font-manrope;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: #000;
+  font-family: vars.$font-eb-garamond;
+  font-size: clamp(42px, 7vw, 76px);
+  font-weight: 700;
+  line-height: 1.02;
+}
+
+.updated {
+  margin: 18px 0 0;
+  color: #4a5565;
+  font-family: vars.$font-manrope;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.intro {
+  margin: 34px 0 0;
+  max-width: 780px;
+  color: #363636;
+  font-family: vars.$font-manrope;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+.sections {
+  margin-top: 44px;
+  display: grid;
+  gap: 28px;
+}
+
+.section {
+  padding-top: 26px;
+  border-top: 1px solid #d9d9e4;
+
+  h2 {
+    margin: 0 0 12px;
+    color: #000;
+    font-family: vars.$font-eb-garamond;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  p {
+    margin: 0;
+    color: #363636;
+    font-family: vars.$font-manrope;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.7;
+  }
+}
+
+.list {
+  margin: 12px 0 0;
+  padding-left: 22px;
+  color: #363636;
+  font-family: vars.$font-manrope;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.7;
+
+  li + li {
+    margin-top: 8px;
+  }
+}
