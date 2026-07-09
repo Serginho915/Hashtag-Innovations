@@ -15,6 +15,11 @@ const getAdminSecret = () =>
   process.env.DJANGO_SECRET_KEY ||
   "unsafe-dev-admin-session-secret";
 
+export const getAdminApiToken = () =>
+  process.env.ADMIN_API_TOKEN ||
+  process.env.DJANGO_SECRET_KEY ||
+  "";
+
 export const getBackendApiUrl = () =>
   (process.env.BACKEND_INTERNAL_API_URL ||
     process.env.NEXT_PUBLIC_API_URL ||

@@ -46,7 +46,13 @@ export const ChatBotWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
-  const [conversationId, setConversationId] = useState("");
+  const [conversationId, setConversationId] = useState(() => {
+    if (typeof window === "undefined") {
+      return "";
+    }
+
+    return window.localStorage.getItem(CONVERSATION_STORAGE_KEY) || "";
+  });
   const [messages, setMessages] = useState<ChatMessage[]>([
     { id: 1, role: "bot", text: t.greeting },
   ]);
@@ -54,25 +60,20 @@ export const ChatBotWidget = () => {
   const nextIdRef = useRef(2);
   const listRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setConversationId(window.localStorage.getItem(CONVERSATION_STORAGE_KEY) || "");
-  }, []);
+  const visibleMessages = useMemo(() => {
+    if (messages.length === 1 && messages[0].role === "bot") {
+      return [{ ...messages[0], text: t.greeting }];
+    }
 
-  useEffect(() => {
-    setMessages((current) => {
-      if (current.length === 1 && current[0].role === "bot") {
-        return [{ ...current[0], text: t.greeting }];
-      }
-      return current;
-    });
-  }, [t.greeting]);
+    return messages;
+  }, [messages, t.greeting]);
 
   useEffect(() => {
     if (!listRef.current) {
       return;
     }
     listRef.current.scrollTop = listRef.current.scrollHeight;
-  }, [messages, isSending]);
+  }, [visibleMessages, isSending]);
 
   const canSend = useMemo(() => input.trim().length > 0 && !isSending, [input, isSending]);
 
@@ -164,7 +165,7 @@ export const ChatBotWidget = () => {
           </header>
 
           <div className={styles.messages} ref={listRef}>
-            {messages.map((message) => (
+            {visibleMessages.map((message) => (
               <div
                 key={message.id}
                 className={`${styles.message} ${message.role === "bot" ? styles.botMessage : styles.userMessage}`}

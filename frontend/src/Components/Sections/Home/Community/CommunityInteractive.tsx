@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from './Community.module.scss';
 import { CommunityHeader } from './CommunityHeader/CommunityHeader.tsx';
 import { CommunityFilters, filters } from './CommunityFilters/CommunityFilters.tsx';
@@ -25,19 +25,9 @@ export const CommunityInteractive: React.FC<CommunityInteractiveProps> = ({ lang
       .map((filter) => filter.id)
       .filter((filterId) => upcomingTags.has(filterId));
   }, [upcomingEvents]);
-  const [activeTag, setActiveTag] = useState<string>(() => availableTagIds[0] ?? '');
+  const [selectedTag, setSelectedTag] = useState('');
+  const activeTag = availableTagIds.includes(selectedTag) ? selectedTag : (availableTagIds[0] ?? '');
   const scrollRef = React.useRef<HTMLDivElement | null>(null) as React.RefObject<HTMLDivElement>;
-
-  useEffect(() => {
-    if (availableTagIds.length === 0) {
-      setActiveTag('');
-      return;
-    }
-
-    if (!availableTagIds.includes(activeTag)) {
-      setActiveTag(availableTagIds[0]);
-    }
-  }, [activeTag, availableTagIds]);
 
   const scrollUp = () => {
     scrollRef.current?.scrollBy({ top: -400, behavior: 'smooth' });
@@ -67,7 +57,7 @@ export const CommunityInteractive: React.FC<CommunityInteractiveProps> = ({ lang
         <div className={styles.filtersAndEventsRow}>
           <CommunityFilters
             activeTag={activeTag}
-            onTagChange={setActiveTag}
+            onTagChange={setSelectedTag}
             lang={lang}
             availableTagIds={availableTagIds}
           />

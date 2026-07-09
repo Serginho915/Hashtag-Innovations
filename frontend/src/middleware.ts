@@ -8,6 +8,10 @@ const defaultLocale = 'bg';
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  if (pathname === '/admin/api' || pathname.startsWith('/admin/api/')) {
+    return NextResponse.next();
+  }
+
   if (pathname === '/admin' || pathname.startsWith('/admin/')) {
     const isLoginPage = pathname === '/admin/login';
     const isAuthenticated = await verifyAdminSession(

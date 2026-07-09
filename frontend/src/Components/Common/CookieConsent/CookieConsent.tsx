@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { useLanguage } from "@/Hooks/useLanguage.ts";
 import styles from "./CookieConsent.module.scss";
 
@@ -13,6 +13,7 @@ declare global {
 
 const STORAGE_KEY = "hashtag_cookie_consent";
 export const COOKIE_SETTINGS_EVENT = "hashtag:open-cookie-settings";
+const COOKIE_CHOICE_EVENT = "hashtag:cookie-choice-changed";
 
 const text = {
   en: {
@@ -29,15 +30,39 @@ const text = {
   },
 } as const;
 
+const getCookieChoice = () => {
+  if (typeof window === "undefined") {
+    return "server";
+  }
+
+  return window.localStorage.getItem(STORAGE_KEY) || "";
+};
+
+const subscribeToCookieChoice = (onStoreChange: () => void) => {
+  const handleStorage = (event: StorageEvent) => {
+    if (event.key === STORAGE_KEY) {
+      onStoreChange();
+    }
+  };
+
+  window.addEventListener("storage", handleStorage);
+  window.addEventListener(COOKIE_CHOICE_EVENT, onStoreChange);
+
+  return () => {
+    window.removeEventListener("storage", handleStorage);
+    window.removeEventListener(COOKIE_CHOICE_EVENT, onStoreChange);
+  };
+};
+
 export const CookieConsent = () => {
   const { language } = useLanguage();
   const t = text[language] ?? text.en;
-  const [isVisible, setIsVisible] = useState(false);
+  const cookieChoice = useSyncExternalStore(subscribeToCookieChoice, getCookieChoice, () => "server");
+  const [isForcedOpen, setIsForcedOpen] = useState(false);
+  const isVisible = isForcedOpen || cookieChoice === "";
 
   useEffect(() => {
-    setIsVisible(!window.localStorage.getItem(STORAGE_KEY));
-
-    const openCookieSettings = () => setIsVisible(true);
+    const openCookieSettings = () => setIsForcedOpen(true);
 
     window.addEventListener(COOKIE_SETTINGS_EVENT, openCookieSettings);
     return () => {
@@ -47,10 +72,11 @@ export const CookieConsent = () => {
 
   const saveChoice = (choice: "accepted" | "declined") => {
     window.localStorage.setItem(STORAGE_KEY, choice);
+    window.dispatchEvent(new Event(COOKIE_CHOICE_EVENT));
     window.gtag?.("consent", "update", {
       analytics_storage: choice === "accepted" ? "granted" : "denied",
     });
-    setIsVisible(false);
+    setIsForcedOpen(false);
   };
 
   if (!isVisible) {

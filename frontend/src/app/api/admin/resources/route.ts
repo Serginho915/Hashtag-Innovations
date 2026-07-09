@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   ADMIN_SESSION_COOKIE,
+  getAdminApiToken,
   getBackendApiUrl,
   verifyAdminSession,
 } from "@/Lib/adminAuth";
 
 const isAdminRequest = async (request: NextRequest) =>
   verifyAdminSession(request.cookies.get(ADMIN_SESSION_COOKIE)?.value);
+
+const adminBackendHeaders = () => ({
+  "X-Admin-Api-Token": getAdminApiToken(),
+});
 
 export async function GET(request: NextRequest) {
   const isAuthenticated = await verifyAdminSession(
@@ -18,6 +23,7 @@ export async function GET(request: NextRequest) {
   }
 
   const backendResponse = await fetch(`${getBackendApiUrl()}/api/admin/resources/`, {
+    headers: adminBackendHeaders(),
     cache: "no-store",
   }).catch(() => null);
 
@@ -63,6 +69,7 @@ const forwardMutation = async (request: NextRequest, method: "POST" | "PATCH" | 
       method,
       headers: {
         "Content-Type": "application/json",
+        ...adminBackendHeaders(),
       },
       body: method === "DELETE" ? undefined : JSON.stringify(body.record ?? {}),
       cache: "no-store",

@@ -1,4 +1,5 @@
 import ast
+import hmac
 import html
 import json
 import re
@@ -990,6 +991,24 @@ ADMIN_RESOURCE_CONFIG = {
 
 def admin_error(message, status=400):
     return JsonResponse({"error": message}, status=status)
+
+
+def admin_api_is_authorized(request):
+    token = request.headers.get("X-Admin-Api-Token", "")
+    expected_token = getattr(settings, "ADMIN_API_TOKEN", "")
+
+    if expected_token and hmac.compare_digest(token, expected_token):
+        return True
+
+    user = getattr(request, "user", None)
+    return bool(user and user.is_authenticated and user.is_active and (user.is_staff or user.is_superuser))
+
+
+def require_admin_api(request):
+    if admin_api_is_authorized(request):
+        return None
+
+    return JsonResponse({"error": "Unauthorized"}, status=401)
 
 
 def admin_config(resource_key):
@@ -2016,6 +2035,10 @@ def save_admin_record(resource_key, payload, instance=None):
 @csrf_exempt
 @require_POST
 def admin_resource_create(request, resource_key):
+    unauthorized = require_admin_api(request)
+    if unauthorized:
+        return unauthorized
+
     config = admin_config(resource_key)
     if not config:
         return admin_error("Unknown admin resource.", 404)
@@ -2037,6 +2060,10 @@ def admin_resource_create(request, resource_key):
 @csrf_exempt
 @require_http_methods(["PATCH", "PUT", "DELETE"])
 def admin_resource_detail(request, resource_key, record_id):
+    unauthorized = require_admin_api(request)
+    if unauthorized:
+        return unauthorized
+
     config = admin_config(resource_key)
     if not config:
         return admin_error("Unknown admin resource.", 404)
@@ -2065,6 +2092,10 @@ def admin_resource_detail(request, resource_key, record_id):
 
 @require_GET
 def admin_resources(request):
+    unauthorized = require_admin_api(request)
+    if unauthorized:
+        return unauthorized
+
     return JsonResponse(
         {
             "categories": [serialize_admin_category(item) for item in Category.objects.all()],
