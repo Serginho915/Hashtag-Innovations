@@ -12,16 +12,17 @@ declare global {
 }
 
 const STORAGE_KEY = "hashtag_cookie_consent";
+export const COOKIE_SETTINGS_EVENT = "hashtag:open-cookie-settings";
 
 const text = {
   en: {
-    body: "We use necessary cookies and, with your consent, Google Analytics cookies to understand how the website is used.",
+    body: "We use necessary cookies to run the website. With your consent, we also use optional analytics technologies to understand usage and improve the service.",
     accept: "Accept analytics",
     decline: "Decline",
     policy: "Cookie Policy",
   },
   bg: {
-    body: "Използваме необходими бисквитки и, с ваше съгласие, Google Analytics бисквитки, за да разбираме как се използва сайтът.",
+    body: "Използваме необходими бисквитки за работата на сайта. С ваше съгласие използваме и незадължителни аналитични технологии, за да разбираме употребата и да подобряваме услугата.",
     accept: "Приемам аналитиката",
     decline: "Отказвам",
     policy: "Политика за бисквитки",
@@ -35,6 +36,13 @@ export const CookieConsent = () => {
 
   useEffect(() => {
     setIsVisible(!window.localStorage.getItem(STORAGE_KEY));
+
+    const openCookieSettings = () => setIsVisible(true);
+
+    window.addEventListener(COOKIE_SETTINGS_EVENT, openCookieSettings);
+    return () => {
+      window.removeEventListener(COOKIE_SETTINGS_EVENT, openCookieSettings);
+    };
   }, []);
 
   const saveChoice = (choice: "accepted" | "declined") => {

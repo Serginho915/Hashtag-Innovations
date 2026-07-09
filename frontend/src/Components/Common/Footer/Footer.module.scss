@@ -286,11 +286,16 @@
 }
 
 .legalLink {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
   color: #4A5565;
   font-size: 14px;
   font-family: $font-manrope;
   font-weight: 400;
   line-height: 20px;
+  cursor: pointer;
   text-decoration: none;
   transition: color 0.2s ease;
 

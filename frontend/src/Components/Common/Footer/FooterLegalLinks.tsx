@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Modal } from '../../UI/Modal/Modal.tsx';
 import styles from './Footer.module.scss';
 import { translations } from './translations.ts';
+import { COOKIE_SETTINGS_EVENT } from '../CookieConsent/CookieConsent.tsx';
 
 interface FooterLegalLinksProps {
   lang: string;
@@ -25,6 +26,9 @@ export const FooterLegalLinks: React.FC<FooterLegalLinksProps> = ({ lang }) => {
   ];
 
   const closeModal = () => setActiveModal(null);
+  const openCookieSettings = () => {
+    window.dispatchEvent(new Event(COOKIE_SETTINGS_EVENT));
+  };
 
   return (
     <>
@@ -48,6 +52,9 @@ export const FooterLegalLinks: React.FC<FooterLegalLinksProps> = ({ lang }) => {
             </Link>
           )
         ))}
+        <button type="button" className={styles.legalLink} onClick={openCookieSettings}>
+          {t.cookieSettings}
+        </button>
       </div>
 
       <Modal isOpen={activeModal === 'euProject'} onClose={closeModal} className={styles.euModal} closeButtonClassName={styles.modalClose}>
