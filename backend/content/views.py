@@ -1496,6 +1496,9 @@ def create_checkout_session(request):
         **checkout_item.get("metadata", {}),
         "purchase_type": checkout_item["purchase_type"],
         "item_id": checkout_item["item_id"],
+        "item_title": checkout_item["item_title"],
+        "amount": str(amount),
+        "currency": currency,
         "customer_name": customer_name,
         "customer_email": customer_email,
         "lang": lang,
@@ -1562,6 +1565,162 @@ def create_checkout_session(request):
         },
         status=201,
     )
+
+
+def stripe_object_value(value, key, default=None):
+    if isinstance(value, dict):
+        return value.get(key, default)
+    return getattr(value, key, default)
+
+
+def session_metadata(checkout_session):
+    metadata = stripe_object_value(checkout_session, "metadata", {}) or {}
+    return dict(metadata) if not isinstance(metadata, dict) else metadata
+
+
+def session_customer_details(checkout_session):
+    details = stripe_object_value(checkout_session, "customer_details", {}) or {}
+    return details if isinstance(details, dict) else {}
+
+
+def checkout_session_is_paid(checkout_session, event_type):
+    if event_type == "checkout.session.async_payment_succeeded":
+        return True
+    return stripe_object_value(checkout_session, "payment_status") in {"paid", "no_payment_required"}
+
+
+def decimal_from_stripe_amount(checkout_session, metadata):
+    amount_total = stripe_object_value(checkout_session, "amount_total")
+    if amount_total is not None:
+        return Decimal(amount_total) / Decimal("100")
+
+    try:
+        return Decimal(str(metadata.get("amount", "0")).replace(",", "."))
+    except InvalidOperation:
+        return Decimal("0")
+
+
+def sale_relations_from_metadata(metadata):
+    purchase_type = metadata.get("purchase_type", "")
+
+    if purchase_type == Sale.PurchaseType.CONSULTATION:
+        expert_slug = metadata.get("expert_slug", "")
+        return {"expert": Expert.objects.filter(slug=expert_slug).first()}
+
+    if purchase_type == Sale.PurchaseType.EVENT_TICKET:
+        event_slug = metadata.get("event_slug", "")
+        return {"event": Event.objects.filter(slug=event_slug).first()}
+
+    if purchase_type == Sale.PurchaseType.LEARN_MATERIAL:
+        material_slug = metadata.get("material_slug", "")
+        return {"learn_material": LearnMaterial.objects.filter(slug=material_slug).first()}
+
+    return {}
+
+
+def upsert_paid_sale_from_checkout_session(checkout_session, event_type):
+    metadata = session_metadata(checkout_session)
+    session_id = stripe_object_value(checkout_session, "id", "")
+    checkout_url = stripe_object_value(checkout_session, "url", "") or ""
+    customer_details = session_customer_details(checkout_session)
+    customer_name = (
+        metadata.get("customer_name")
+        or customer_details.get("name")
+        or ""
+    )
+    customer_email = (
+        metadata.get("customer_email")
+        or stripe_object_value(checkout_session, "customer_email", "")
+        or customer_details.get("email")
+        or ""
+    )
+    currency = (
+        stripe_object_value(checkout_session, "currency", "")
+        or metadata.get("currency")
+        or settings.STRIPE_CURRENCY
+    ).lower()
+    payment_intent = stripe_object_value(checkout_session, "payment_intent", "") or ""
+
+    sale = Sale.objects.filter(stripe_checkout_session_id=session_id).first()
+    if not sale:
+        sale = Sale.objects.create(
+            purchase_type=metadata.get("purchase_type", ""),
+            status=Sale.Status.PENDING_PAYMENT,
+            customer_name=customer_name or "Stripe customer",
+            customer_email=customer_email or "unknown@example.com",
+            item_id=metadata.get("item_id", session_id),
+            item_title=metadata.get("item_title", "Stripe checkout"),
+            amount=decimal_from_stripe_amount(checkout_session, metadata),
+            currency=currency,
+            stripe_checkout_session_id=session_id,
+            stripe_checkout_url=checkout_url,
+            metadata=metadata,
+            **sale_relations_from_metadata(metadata),
+        )
+
+    sale.status = Sale.Status.PAID
+    sale.customer_name = sale.customer_name or customer_name or "Stripe customer"
+    sale.customer_email = sale.customer_email or customer_email or "unknown@example.com"
+    sale.stripe_checkout_url = sale.stripe_checkout_url or checkout_url
+    sale.metadata = {
+        **(sale.metadata or {}),
+        **metadata,
+        "stripe_payment_intent_id": str(payment_intent),
+        "stripe_payment_status": str(stripe_object_value(checkout_session, "payment_status", "")),
+        "stripe_checkout_status": str(stripe_object_value(checkout_session, "status", "")),
+        "stripe_webhook_event_type": event_type,
+        "paid_at": timezone.now().isoformat(),
+    }
+    sale.save(update_fields=[
+        "status",
+        "customer_name",
+        "customer_email",
+        "stripe_checkout_url",
+        "metadata",
+        "updated_at",
+    ])
+    return sale
+
+
+@csrf_exempt
+@require_POST
+def stripe_webhook(request):
+    webhook_secret = settings.STRIPE_WEBHOOK_SECRET
+    if not webhook_secret:
+        return json_error("Stripe webhook secret is not configured.", 500)
+
+    payload = request.body
+    signature = request.META.get("HTTP_STRIPE_SIGNATURE", "")
+
+    try:
+        event = stripe.Webhook.construct_event(payload, signature, webhook_secret)
+    except ValueError:
+        return json_error("Invalid Stripe webhook payload.", 400)
+    except stripe.error.SignatureVerificationError:
+        return json_error("Invalid Stripe webhook signature.", 400)
+
+    event_type = stripe_object_value(event, "type", "")
+    checkout_session = stripe_object_value(stripe_object_value(event, "data", {}), "object", {})
+
+    if event_type in {"checkout.session.completed", "checkout.session.async_payment_succeeded"}:
+        if checkout_session_is_paid(checkout_session, event_type):
+            upsert_paid_sale_from_checkout_session(checkout_session, event_type)
+    elif event_type in {"checkout.session.expired", "checkout.session.async_payment_failed"}:
+        session_id = stripe_object_value(checkout_session, "id", "")
+        sale = Sale.objects.filter(
+            stripe_checkout_session_id=session_id,
+            status=Sale.Status.PENDING_PAYMENT,
+        ).first()
+        if sale:
+            sale.status = Sale.Status.CANCELED
+            sale.metadata = {
+                **(sale.metadata or {}),
+                "stripe_webhook_event_type": event_type,
+                "canceled_at": timezone.now().isoformat(),
+            }
+            sale.save(update_fields=["status", "metadata", "updated_at"])
+
+    return JsonResponse({"received": True})
 
 
 def parse_payload(request):
