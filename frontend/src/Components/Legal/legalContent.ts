@@ -115,7 +115,7 @@ export const legalContent: LegalContent = {
         {
           title: "Payments",
           body:
-            "Payments are processed through Stripe Checkout. The website creates a checkout session and records the sale request in the admin panel. Stripe handles card data and payment processing. Until webhook confirmation is added, admin-panel sales records should be treated as checkout requests rather than final proof of successful payment.",
+            "Payments are processed through Stripe Checkout. The website creates a checkout session and records the sale request in the admin panel. Stripe handles card data and payment processing. Webhook confirmation updates the payment status after Stripe confirms the checkout result.",
         },
         {
           title: "Refunds and cancellations",

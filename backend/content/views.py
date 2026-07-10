@@ -1567,6 +1567,24 @@ def create_checkout_session(request):
     )
 
 
+@require_GET
+def checkout_status(request):
+    session_id = str(request.GET.get("session_id", "") or "").strip()
+    if not session_id:
+        return json_error("Checkout session id is required.")
+
+    sale = Sale.objects.filter(stripe_checkout_session_id=session_id).first()
+    if not sale:
+        return json_error("Checkout session was not found.", 404)
+
+    return JsonResponse(
+        {
+            "purchaseType": sale.purchase_type,
+            "status": sale.status,
+        }
+    )
+
+
 def stripe_object_value(value, key, default=None):
     if isinstance(value, dict):
         return value.get(key, default)

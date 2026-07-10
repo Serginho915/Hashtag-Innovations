@@ -9,6 +9,7 @@ from content.views import (
     admin_resources,
     chat_reply,
     create_checkout_session,
+    checkout_status,
     site_data,
     stripe_webhook,
 )
@@ -22,6 +23,7 @@ urlpatterns = [
     path("api/admin/resources/<str:resource_key>/<int:record_id>/", admin_resource_detail),
     path("api/chat/", chat_reply),
     path("api/payments/checkout/", create_checkout_session),
+    path("api/payments/checkout-status/", checkout_status),
     path("api/payments/webhook/stripe/", stripe_webhook),
     path("api/site-data/", site_data),
     path("api-auth/", include("rest_framework.urls")),

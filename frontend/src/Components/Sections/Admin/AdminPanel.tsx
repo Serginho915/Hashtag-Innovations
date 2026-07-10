@@ -82,7 +82,7 @@ const resourceHelpText: Record<string, string> = {
   projects:
     "Projects use the same editorial structure as articles, with an extra project code.",
   sales:
-    "Sales list Stripe checkout attempts for consultations, learning materials and event tickets. Webhook confirmation will be added in the next payment phase.",
+    "Sales list Stripe checkout attempts and webhook-confirmed payment statuses for consultations, learning materials and event tickets.",
   chat_conversations:
     "Chat Conversations show visitor conversations with the website assistant, including the full message history for support and quality review.",
 };
