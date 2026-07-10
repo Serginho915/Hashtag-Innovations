@@ -947,7 +947,7 @@ export const AdminPanel = () => {
       setIsLoadingRecords(true);
       setRecordsError("");
 
-      const response = await fetch("/api/admin/resources", {
+      const response = await fetch("/admin/api/resources", {
         cache: "no-store",
       }).catch(() => null);
 
@@ -1528,7 +1528,7 @@ export const AdminPanel = () => {
     setIsSaving(true);
     setMutationError("");
 
-    const response = await fetch("/api/admin/resources", {
+    const response = await fetch("/admin/api/resources", {
       method: editingMode === "create" ? "POST" : "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -1591,7 +1591,7 @@ export const AdminPanel = () => {
       return;
     }
 
-    const response = await fetch("/api/admin/resources", {
+    const response = await fetch("/admin/api/resources", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -1626,7 +1626,7 @@ export const AdminPanel = () => {
   };
 
   const logout = async () => {
-    await fetch("/api/admin/logout", {
+    await fetch("/admin/api/logout", {
       method: "POST",
     });
     window.location.assign("/admin/login");

@@ -18,7 +18,7 @@ export const LoginForm = ({ nextPath }: LoginFormProps) => {
     setError("");
     setIsSubmitting(true);
 
-    const response = await fetch("/api/admin/login", {
+    const response = await fetch("/admin/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

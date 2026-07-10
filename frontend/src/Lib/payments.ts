@@ -11,7 +11,7 @@ export interface CheckoutPayload {
 }
 
 export const createCheckoutSession = async (payload: CheckoutPayload) => {
-  const response = await fetch("/api/payments/checkout", {
+  const response = await fetch("/api/payments/checkout/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

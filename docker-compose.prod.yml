@@ -11,7 +11,7 @@ services:
       DJANGO_CSRF_TRUSTED_ORIGINS: "https://consultation.bg,https://www.consultation.bg"
       FRONTEND_BASE_URL: "https://consultation.bg"
     ports:
-      - "8000:8000"
+      - "8012:8000"
     restart: unless-stopped
 
   frontend:
@@ -35,5 +35,5 @@ services:
       ADMIN_SESSION_SECRET: "${ADMIN_SESSION_SECRET}"
       ADMIN_API_TOKEN: "${ADMIN_API_TOKEN}"
     ports:
-      - "3000:3000"
+      - "3003:3000"
     restart: unless-stopped
