@@ -362,9 +362,15 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+
+  @include tablet {
+    align-items: stretch;
+    flex-direction: column;
+  }
 }
 
-.searchField {
+.searchField,
+.filterField {
   width: min(420px, 100%);
   display: flex;
   flex-direction: column;
@@ -377,7 +383,8 @@
     text-transform: uppercase;
   }
 
-  input {
+  input,
+  select {
     width: 100%;
     min-height: 42px;
     padding: 10px 12px;
@@ -391,6 +398,20 @@
       border-color: #000;
     }
   }
+}
+
+.filterGroup {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap: 12px;
+
+  @include tablet {
+    grid-template-columns: 1fr;
+  }
+}
+
+.filterField {
+  width: 100%;
 }
 
 .tableWrap {

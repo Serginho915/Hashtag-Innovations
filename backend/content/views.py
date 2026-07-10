@@ -5,12 +5,14 @@ import json
 import re
 import uuid
 from decimal import Decimal, InvalidOperation
+from pathlib import Path
 
 import requests
 import stripe
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
+from django.core.mail import EmailMessage
 from django.core.validators import validate_email
 from django.db import IntegrityError, transaction
 from django.db.models import Q
@@ -823,6 +825,8 @@ def serialize_admin_project(project):
 
 
 def serialize_admin_sale(sale):
+    metadata = sale.metadata if isinstance(sale.metadata, dict) else {}
+
     return {
         "id": str(sale.id),
         "created_at": admin_datetime_value(sale.created_at),
@@ -830,6 +834,7 @@ def serialize_admin_sale(sale):
         "status": sale.status,
         "customer_name": sale.customer_name,
         "customer_email": sale.customer_email,
+        "customer_message": metadata.get("additional") or metadata.get("message") or "",
         "item_id": sale.item_id,
         "item_title": sale.item_title,
         "amount": admin_decimal_value(sale.amount),
@@ -838,7 +843,7 @@ def serialize_admin_sale(sale):
         "expert": sale.expert.slug if sale.expert else "",
         "event": sale.event.slug if sale.event else "",
         "learn_material": sale.learn_material.slug if sale.learn_material else "",
-        "metadata": admin_json_value(sale.metadata),
+        "metadata": admin_json_value(metadata),
     }
 
 
@@ -1636,6 +1641,92 @@ def sale_relations_from_metadata(metadata):
     return {}
 
 
+def learn_material_for_sale(sale):
+    if sale.learn_material:
+        return sale.learn_material
+
+    metadata = sale.metadata if isinstance(sale.metadata, dict) else {}
+    material_slug = metadata.get("material_slug") or sale.item_id
+
+    return LearnMaterial.objects.filter(slug=material_slug).first()
+
+
+def material_delivery_body(sale, material):
+    customer_name = sale.customer_name.strip() or "there"
+
+    return "\n".join(
+        [
+            f"Hello {customer_name},",
+            "",
+            "Thank you for your purchase.",
+            f"Your PDF material \"{sale.item_title or material.title}\" is attached to this email.",
+            "",
+            "If you have any questions, reply to this email and our team will help you.",
+            "",
+            "Best regards,",
+            "Hashtag Innovations",
+        ]
+    )
+
+
+def mark_material_delivery_failure(sale, error):
+    metadata = sale.metadata if isinstance(sale.metadata, dict) else {}
+    sale.metadata = {
+        **metadata,
+        "material_delivery_email_error": str(error)[:500],
+        "material_delivery_email_failed_at": timezone.now().isoformat(),
+    }
+    sale.save(update_fields=["metadata", "updated_at"])
+
+
+def send_paid_material_email(sale):
+    metadata = sale.metadata if isinstance(sale.metadata, dict) else {}
+
+    if (
+        sale.purchase_type != Sale.PurchaseType.LEARN_MATERIAL
+        or sale.status != Sale.Status.PAID
+        or metadata.get("material_delivery_email_sent_at")
+    ):
+        return False
+
+    material = learn_material_for_sale(sale)
+    if not material:
+        raise ValueError("Learning material for paid sale was not found.")
+
+    if not material.pdf_file:
+        raise ValueError("Learning material does not have a PDF file attached.")
+
+    if settings.EMAIL_BACKEND.endswith(".smtp.EmailBackend") and (
+        not settings.EMAIL_HOST_USER or not settings.EMAIL_HOST_PASSWORD
+    ):
+        raise ValueError("SMTP email credentials are not configured.")
+
+    filename = Path(material.pdf_file.name).name
+
+    with material.pdf_file.open("rb") as pdf_file:
+        pdf_content = pdf_file.read()
+
+    email = EmailMessage(
+        subject=f"Your PDF material: {sale.item_title or material.title}",
+        body=material_delivery_body(sale, material),
+        from_email=settings.MATERIAL_DELIVERY_FROM_EMAIL,
+        to=[sale.customer_email],
+    )
+    email.attach(filename, pdf_content, "application/pdf")
+    email.send(fail_silently=False)
+
+    sale.metadata = {
+        **metadata,
+        "material_delivery_email_sent_at": timezone.now().isoformat(),
+        "material_delivery_email_recipient": sale.customer_email,
+        "material_delivery_email_filename": filename,
+        "material_delivery_email_error": "",
+    }
+    sale.save(update_fields=["metadata", "updated_at"])
+
+    return True
+
+
 def upsert_paid_sale_from_checkout_session(checkout_session, event_type):
     metadata = session_metadata(checkout_session)
     session_id = stripe_object_value(checkout_session, "id", "")
@@ -1697,6 +1788,13 @@ def upsert_paid_sale_from_checkout_session(checkout_session, event_type):
         "metadata",
         "updated_at",
     ])
+
+    try:
+        send_paid_material_email(sale)
+    except Exception as error:
+        mark_material_delivery_failure(sale, error)
+        raise
+
     return sale
 
 

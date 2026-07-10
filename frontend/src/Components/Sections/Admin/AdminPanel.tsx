@@ -66,6 +66,8 @@ interface ResourceConfig {
 
 const statusOptions = ["draft", "published", "archived"];
 const kindOptions = ["", "article", "event", "expert", "learn_material", "project"];
+const salePurchaseTypeOptions = ["consultation", "learn_material", "event_ticket"];
+const saleStatusOptions = ["pending_payment", "paid", "canceled"];
 const resourceHelpText: Record<string, string> = {
   categories:
     "Categories group content by topic and type, so articles, events, learning materials and projects can be organized and filtered.",
@@ -409,6 +411,22 @@ const resources: ResourceConfig[] = [
     fields: [],
     records: [],
     readOnly: true,
+    detailFields: [
+      "created_at",
+      "purchase_type",
+      "status",
+      "item_title",
+      "customer_name",
+      "customer_email",
+      "customer_message",
+      "amount",
+      "currency",
+      "stripe_checkout_session_id",
+      "expert",
+      "event",
+      "learn_material",
+      "metadata",
+    ],
   },
   {
     key: "chat_conversations",
@@ -929,6 +947,8 @@ const AnalyticsEditor = ({ value, onChange }: AnalyticsEditorProps) => {
 export const AdminPanel = () => {
   const [activeKey, setActiveKey] = useState(resources[0].key);
   const [query, setQuery] = useState("");
+  const [salePurchaseTypeFilter, setSalePurchaseTypeFilter] = useState("");
+  const [saleStatusFilter, setSaleStatusFilter] = useState("");
   const [recordsByResource, setRecordsByResource] = useState(
     () => Object.fromEntries(resources.map((resource) => [resource.key, [] as AdminRecord[]])),
   );
@@ -1000,6 +1020,7 @@ export const AdminPanel = () => {
 
   const activeResource = resources.find((resource) => resource.key === activeKey) ?? resources[0];
   const activeResourceHelpText = resourceHelpText[activeResource.key];
+  const isSalesResource = activeResource.key === "sales";
   const hasDetailAction = Boolean(activeResource.detailFields?.length);
   const activeRecords = useMemo(
     () => recordsByResource[activeResource.key] ?? [],
@@ -1009,16 +1030,15 @@ export const AdminPanel = () => {
   const filteredRecords = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
-    if (!normalizedQuery) {
-      return activeRecords;
-    }
-
     return activeRecords.filter((record) =>
-      Object.values(record).some((value) =>
-        String(value).toLowerCase().includes(normalizedQuery),
-      ),
+      (!normalizedQuery ||
+        Object.values(record).some((value) =>
+          String(value).toLowerCase().includes(normalizedQuery),
+        )) &&
+      (!isSalesResource || !salePurchaseTypeFilter || record.purchase_type === salePurchaseTypeFilter) &&
+      (!isSalesResource || !saleStatusFilter || record.status === saleStatusFilter),
     );
-  }, [activeRecords, query]);
+  }, [activeRecords, isSalesResource, query, salePurchaseTypeFilter, saleStatusFilter]);
 
   const openCreate = () => {
     if (activeResource.readOnly) {
@@ -1662,7 +1682,10 @@ export const AdminPanel = () => {
                   onClick={() => {
                     setActiveKey(resource.key);
                     setQuery("");
+                    setSalePurchaseTypeFilter("");
+                    setSaleStatusFilter("");
                     closeEditor();
+                    closeView();
                   }}
                 >
                   <span className={styles.resourceDot} />
@@ -1709,6 +1732,38 @@ export const AdminPanel = () => {
                 placeholder={`Search ${activeResource.label.toLowerCase()}`}
               />
             </label>
+            {isSalesResource && (
+              <div className={styles.filterGroup}>
+                <label className={styles.filterField}>
+                  <span>Purchase type</span>
+                  <select
+                    value={salePurchaseTypeFilter}
+                    onChange={(event) => setSalePurchaseTypeFilter(event.target.value)}
+                  >
+                    <option value="">All purchase types</option>
+                    {salePurchaseTypeOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {formatOptionLabel(option)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className={styles.filterField}>
+                  <span>Status</span>
+                  <select
+                    value={saleStatusFilter}
+                    onChange={(event) => setSaleStatusFilter(event.target.value)}
+                  >
+                    <option value="">All statuses</option>
+                    {saleStatusOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {formatOptionLabel(option)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            )}
           </div>
 
           <div className={styles.tableWrap}>
@@ -1840,7 +1895,7 @@ export const AdminPanel = () => {
             <div className={styles.editorHeader}>
               <div>
                 <span className={styles.eyebrow}>View</span>
-                <h2>{String(viewingRecord.title || activeResource.singular)}</h2>
+                <h2>{String(viewingRecord.title || viewingRecord.item_title || activeResource.singular)}</h2>
               </div>
               <button className={styles.iconButton} type="button" onClick={closeView} aria-label="Close viewer">
                 x
@@ -1850,7 +1905,9 @@ export const AdminPanel = () => {
             <div className={styles.detailGrid}>
               {detailFields.map((fieldKey) => (
                 <section
-                  className={`${styles.detailField} ${fieldKey === "messages" ? styles.fullWidth : ""}`}
+                  className={`${styles.detailField} ${
+                    ["customer_message", "messages", "metadata"].includes(fieldKey) ? styles.fullWidth : ""
+                  }`}
                   key={fieldKey}
                 >
                   <h3>{fieldKey.replaceAll("_", " ")}</h3>
