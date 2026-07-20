@@ -133,10 +133,12 @@
   font-family: $font-manrope;
   font-size: 24px;
   font-weight: 500;
+  line-height: 1.38;
   color: black;
 
   @include mobile {
     font-size: 16px;
+    line-height: 1.45;
   }
 }
 
@@ -797,6 +799,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
 }
 
 .tagsLabel {
@@ -817,6 +820,7 @@
   border-top: 1px solid #373840;
   border-bottom: 1px solid #373840;
   width: 100%;
+  min-width: 0;
   list-style: none;
   margin: 0;
 
@@ -837,6 +841,9 @@
   justify-content: center;
   align-items: center;
   gap: 16px;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 
   @include mobile {
     font-size: 16px;
@@ -866,14 +873,19 @@
 
 .industriesRow {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 7px;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .industriesList {
   display: flex;
   align-items: center;
+  flex: 1 1 260px;
+  flex-wrap: wrap;
+  gap: 6px 0;
+  min-width: 0;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -885,6 +897,7 @@
   font-family: $font-manrope;
   font-weight: 700;
   padding: 0 10px;
+  white-space: nowrap;
 
   @include mobile {
     font-size: 18px;
