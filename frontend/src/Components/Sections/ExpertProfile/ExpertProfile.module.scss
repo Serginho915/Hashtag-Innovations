@@ -811,6 +811,14 @@
   line-height: 28px;
 }
 
+.tagsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
 .tagsList {
   display: flex;
   align-items: center;
@@ -872,10 +880,10 @@
 }
 
 .compactShowMore {
-  align-self: flex-start;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  flex: 0 0 auto;
   width: fit-content;
   border: none;
   background: transparent;

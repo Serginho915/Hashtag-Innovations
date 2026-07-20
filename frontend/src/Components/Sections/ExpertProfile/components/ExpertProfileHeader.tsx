@@ -67,23 +67,25 @@ export const ExpertProfileHeader: React.FC<Props> = ({ expert, t, lang }) => {
         <div className={styles.headerBottomRow}>
           {expertiseItems.length > 0 && (
             <div className={styles.tagsBlock}>
-              <div className={styles.tagsLabel}>{t.expertiseLabel}</div>
+              <div className={styles.tagsHeader}>
+                <div className={styles.tagsLabel}>{t.expertiseLabel}</div>
+                {expertiseItems.length > EXPERTISE_PREVIEW_COUNT && (
+                  <button
+                    type="button"
+                    className={styles.compactShowMore}
+                    onClick={() => setIsExpertiseExpanded((current) => !current)}
+                    aria-expanded={isExpertiseExpanded}
+                  >
+                    <span>{showMoreLabel(lang, isExpertiseExpanded)}</span>
+                    <span className={`${styles.compactChevron} ${isExpertiseExpanded ? styles.compactChevronUp : ''}`} />
+                  </button>
+                )}
+              </div>
               <ul className={styles.tagsList}>
                 {visibleExpertise.map(item => (
                   <li key={item} className={styles.tagItem}>{item}</li>
                 ))}
               </ul>
-              {expertiseItems.length > EXPERTISE_PREVIEW_COUNT && (
-                <button
-                  type="button"
-                  className={styles.compactShowMore}
-                  onClick={() => setIsExpertiseExpanded((current) => !current)}
-                  aria-expanded={isExpertiseExpanded}
-                >
-                  <span>{showMoreLabel(lang, isExpertiseExpanded)}</span>
-                  <span className={`${styles.compactChevron} ${isExpertiseExpanded ? styles.compactChevronUp : ''}`} />
-                </button>
-              )}
             </div>
           )}
 
