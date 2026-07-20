@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Expert } from '../../../../Types/expert.ts';
 import { formatExpertRoleCompany } from '../../../../Lib/expert.ts';
@@ -11,8 +13,33 @@ interface Props {
   lang: string;
 }
 
+const EXPERTISE_PREVIEW_COUNT = 6;
+const INDUSTRIES_PREVIEW_COUNT = 4;
+
+const showMoreLabel = (lang: string, isExpanded: boolean) => {
+  if (lang === 'bg') {
+    return isExpanded ? 'Покажи по-малко' : 'Покажи още';
+  }
+
+  if (lang === 'ru') {
+    return isExpanded ? 'Скрыть' : 'Показать ещё';
+  }
+
+  return isExpanded ? 'Show less' : 'Show more';
+};
+
 export const ExpertProfileHeader: React.FC<Props> = ({ expert, t, lang }) => {
   const roleWithCompany = formatExpertRoleCompany(expert, lang);
+  const [isExpertiseExpanded, setIsExpertiseExpanded] = useState(false);
+  const [isIndustriesExpanded, setIsIndustriesExpanded] = useState(false);
+  const expertiseItems = expert.expertise || [];
+  const industriesItems = expert.industries || [];
+  const visibleExpertise = isExpertiseExpanded
+    ? expertiseItems
+    : expertiseItems.slice(0, EXPERTISE_PREVIEW_COUNT);
+  const visibleIndustries = isIndustriesExpanded
+    ? industriesItems
+    : industriesItems.slice(0, INDUSTRIES_PREVIEW_COUNT);
 
   return (
     <div className={styles.headerBlock}>
@@ -38,25 +65,47 @@ export const ExpertProfileHeader: React.FC<Props> = ({ expert, t, lang }) => {
         </div>
         
         <div className={styles.headerBottomRow}>
-          {expert.expertise && expert.expertise.length > 0 && (
+          {expertiseItems.length > 0 && (
             <div className={styles.tagsBlock}>
               <div className={styles.tagsLabel}>{t.expertiseLabel}</div>
               <ul className={styles.tagsList}>
-                {expert.expertise.map(item => (
+                {visibleExpertise.map(item => (
                   <li key={item} className={styles.tagItem}>{item}</li>
                 ))}
               </ul>
+              {expertiseItems.length > EXPERTISE_PREVIEW_COUNT && (
+                <button
+                  type="button"
+                  className={styles.compactShowMore}
+                  onClick={() => setIsExpertiseExpanded((current) => !current)}
+                  aria-expanded={isExpertiseExpanded}
+                >
+                  <span>{showMoreLabel(lang, isExpertiseExpanded)}</span>
+                  <span className={`${styles.compactChevron} ${isExpertiseExpanded ? styles.compactChevronUp : ''}`} />
+                </button>
+              )}
             </div>
           )}
 
-          {expert.industries && expert.industries.length > 0 && (
+          {industriesItems.length > 0 && (
             <div className={styles.industriesRow}>
               <div className={styles.tagsLabel}>{t.industriesLabel}</div>
               <ul className={styles.industriesList}>
-                {expert.industries.map(item => (
+                {visibleIndustries.map(item => (
                   <li key={item} className={styles.industryItem}>{item}</li>
                 ))}
               </ul>
+              {industriesItems.length > INDUSTRIES_PREVIEW_COUNT && (
+                <button
+                  type="button"
+                  className={styles.compactShowMore}
+                  onClick={() => setIsIndustriesExpanded((current) => !current)}
+                  aria-expanded={isIndustriesExpanded}
+                >
+                  <span>{showMoreLabel(lang, isIndustriesExpanded)}</span>
+                  <span className={`${styles.compactChevron} ${isIndustriesExpanded ? styles.compactChevronUp : ''}`} />
+                </button>
+              )}
             </div>
           )}
         </div>

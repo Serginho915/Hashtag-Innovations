@@ -871,6 +871,40 @@
   border-radius: 50%;
 }
 
+.compactShowMore {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  border: none;
+  background: transparent;
+  padding: 2px 8px;
+  color: #076F7F;
+  font-family: $font-manrope;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  cursor: pointer;
+
+  &:hover {
+    color: #0F0FFF;
+  }
+}
+
+.compactChevron {
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.compactChevronUp {
+  transform: translateY(2px) rotate(225deg);
+}
+
 .industriesRow {
   display: flex;
   align-items: flex-start;
