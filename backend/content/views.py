@@ -1,4 +1,5 @@
 import ast
+import base64
 import hmac
 import html
 import json
@@ -6,11 +7,13 @@ import re
 import uuid
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
+from urllib.parse import quote, unquote
 
 import requests
 import stripe
 from django.conf import settings
 from django.contrib.auth import authenticate
+from django.core.files.base import ContentFile
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
 from django.core.validators import validate_email
@@ -74,14 +77,18 @@ def file_url(field):
     name = getattr(field, "name", "") or ""
     if not name:
         return ""
-    if name.startswith(("http://", "https://", "/")):
+    if name.startswith(("http://", "https://")):
+        return name
+    media_url = getattr(settings, "MEDIA_URL", "/media/")
+    if media_url and name.startswith(media_url):
+        name = normalize_file_name(name)
+        return f"{media_url}{quote(name, safe='/')}"
+    if name.startswith("/"):
         return name
     if name.startswith(("images/", "pdfs/")):
         return f"/{name}"
-    url = getattr(field, "url", "")
-    if url:
-        return url
-    return f"/{name}"
+    name = normalize_file_name(name)
+    return f"{media_url}{quote(name, safe='/')}"
 
 
 def text_list_value(value):
@@ -1867,7 +1874,46 @@ def normalize_file_name(value):
     media_url = getattr(settings, "MEDIA_URL", "/media/")
     if media_url and name.startswith(media_url):
         name = name[len(media_url) :]
+    for _ in range(8):
+        decoded_name = unquote(name)
+        if decoded_name == name:
+            break
+        name = decoded_name
     return name.lstrip("/")
+
+
+def uploaded_file_value(value):
+    if isinstance(value, dict):
+        name = str(value.get("name", "") or "").strip()
+        data_url = str(value.get("dataUrl", "") or "").strip()
+    else:
+        name = ""
+        data_url = str(value or "").strip()
+
+    if not data_url.startswith("data:") or ";base64," not in data_url:
+        return None
+
+    header, encoded_data = data_url.split(";base64,", 1)
+    extension = Path(name).suffix
+    if not extension:
+        mime_extension = {
+            "data:image/jpeg": ".jpg",
+            "data:image/png": ".png",
+            "data:image/gif": ".gif",
+            "data:image/webp": ".webp",
+            "data:application/pdf": ".pdf",
+        }.get(header.split(";", 1)[0], "")
+        extension = mime_extension
+
+    stem = slugify(Path(name).stem, allow_unicode=True)[:80] if name else ""
+    filename = f"{stem or uuid.uuid4().hex}{extension}"
+
+    try:
+        content = base64.b64decode(encoded_data)
+    except (ValueError, TypeError):
+        raise ValidationError("Invalid uploaded file data.")
+
+    return ContentFile(content, name=filename)
 
 
 def coerce_json_value(value, default_factory):
@@ -1900,6 +1946,9 @@ def coerce_value(model, field_name, value, config):
         return value
 
     if field.__class__.__name__ in {"ImageField", "FileField"}:
+        uploaded_file = uploaded_file_value(value)
+        if uploaded_file:
+            return uploaded_file
         return normalize_file_name(value)
 
     if field.get_internal_type() == "BooleanField":
@@ -1987,7 +2036,7 @@ def rich_text_list_value(value):
     if isinstance(parsed, list):
         return text_list_value(parsed)
 
-    return [text]
+    return [paragraph.strip() for paragraph in re.split(r"\n{2,}", text) if paragraph.strip()]
 
 
 def make_unique_slug(model, base, instance=None):

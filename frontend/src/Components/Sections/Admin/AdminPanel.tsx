@@ -17,7 +17,12 @@ type FieldType =
   | "url"
   | "file";
 
-type FieldValue = string | number | boolean;
+type FileUploadValue = {
+  name: string;
+  type: string;
+  dataUrl: string;
+};
+type FieldValue = string | number | boolean | FileUploadValue;
 type AdminRecord = Record<string, FieldValue> & { id: string };
 type RecordsByResource = Record<string, AdminRecord[]>;
 type ExperienceEntry = {
@@ -540,7 +545,44 @@ const parseStringList = (value: FieldValue | undefined) => {
     .filter(Boolean);
 };
 
+const parseParagraphList = (value: FieldValue | undefined) => {
+  const parsed = parseJsonValue<unknown>(value, null);
+
+  if (Array.isArray(parsed)) {
+    return parsed.map((item) => String(item).trim()).filter(Boolean);
+  }
+
+  return String(value ?? "")
+    .split(/\n{2,}/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
+const paragraphTextValue = (value: FieldValue | undefined) =>
+  parseParagraphList(value).join("\n\n");
+
 const stringifyJsonField = (value: unknown) => JSON.stringify(value, null, 2);
+
+const readFileAsDataUrl = (file: File) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => reject(reader.error || new Error("Failed to read file."));
+    reader.readAsDataURL(file);
+  });
+
+const fileFieldLabel = (value: FieldValue | undefined) => {
+  if (!value) {
+    return "";
+  }
+
+  if (typeof value === "object" && "name" in value) {
+    return value.name;
+  }
+
+  return String(value);
+};
 
 const EditIcon = () => (
   <svg aria-hidden="true" viewBox="0 0 20 20" focusable="false">
@@ -704,7 +746,7 @@ const articleSectionsToHtml = (value: FieldValue | undefined) => {
     }));
 
   if (!sections.length) {
-    const textItems = parseStringList(value);
+    const textItems = parseParagraphList(value);
 
     if (textItems.length) {
       return textItems.map((item) => (
@@ -771,6 +813,23 @@ const ArticleSectionsEditor = ({ label, value, onChange }: ArticleSectionsEditor
     </div>
   );
 };
+
+interface ParagraphTextareaProps {
+  label: string;
+  value: FieldValue | undefined;
+  onChange: (value: string) => void;
+}
+
+const ParagraphTextarea = ({ label, value, onChange }: ParagraphTextareaProps) => (
+  <label className={`${styles.formField} ${styles.fullWidth}`}>
+    <span>{label}</span>
+    <textarea
+      value={paragraphTextValue(value)}
+      onChange={(event) => onChange(stringifyJsonField(parseParagraphList(event.target.value)))}
+      rows={7}
+    />
+  </label>
+);
 
 interface RelatedPickerProps {
   label: string;
@@ -1422,16 +1481,22 @@ export const AdminPanel = () => {
                 <input
                   type="file"
                   accept={field.accept}
-                  onChange={(event) => {
+                  onChange={async (event) => {
                     const file = event.target.files?.[0];
 
                     if (file) {
-                      updateEditingValue(field, file.name);
+                      const dataUrl = await readFileAsDataUrl(file);
+
+                      updateEditingValue(field, {
+                        name: file.name,
+                        type: file.type,
+                        dataUrl,
+                      });
                     }
                   }}
                 />
                 {editingRecord[field.key] && (
-                  <span>{`Selected: ${String(editingRecord[field.key])}`}</span>
+                  <span>{`Selected: ${fileFieldLabel(editingRecord[field.key])}`}</span>
                 )}
               </span>
             ) : field.type === "select" ? (

@@ -13,6 +13,7 @@ services:
       DJANGO_SQLITE_NAME: "/app/data/db.sqlite3"
     volumes:
       - ./backend/data:/app/data
+      - ./backend/media:/app/media
     ports:
       - "8012:8000"
     restart: unless-stopped
@@ -26,6 +27,7 @@ services:
         NEXT_PUBLIC_API_URL: "https://consultation.bg"
         NEXT_PUBLIC_SITE_URL: "https://consultation.bg"
         NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}"
+        BACKEND_INTERNAL_API_URL: "http://backend:8000"
     depends_on:
       - backend
     environment:
