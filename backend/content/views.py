@@ -1916,6 +1916,25 @@ def uploaded_file_value(value):
     return ContentFile(content, name=filename)
 
 
+def fit_uploaded_file_name(field, uploaded_file):
+    max_length = getattr(field, "max_length", None)
+    upload_to = getattr(field, "upload_to", "")
+
+    if not max_length or not isinstance(upload_to, str):
+        return uploaded_file
+
+    upload_prefix_length = len(upload_to)
+    available_length = max_length - upload_prefix_length
+
+    if available_length <= 0 or len(uploaded_file.name) <= available_length:
+        return uploaded_file
+
+    suffix = Path(uploaded_file.name).suffix
+    stem_length = max(1, available_length - len(suffix))
+    uploaded_file.name = f"{Path(uploaded_file.name).stem[:stem_length]}{suffix}"
+    return uploaded_file
+
+
 def coerce_json_value(value, default_factory):
     if value in (None, ""):
         return default_factory()
@@ -1948,7 +1967,7 @@ def coerce_value(model, field_name, value, config):
     if field.__class__.__name__ in {"ImageField", "FileField"}:
         uploaded_file = uploaded_file_value(value)
         if uploaded_file:
-            return uploaded_file
+            return fit_uploaded_file_name(field, uploaded_file)
         return normalize_file_name(value)
 
     if field.get_internal_type() == "BooleanField":
