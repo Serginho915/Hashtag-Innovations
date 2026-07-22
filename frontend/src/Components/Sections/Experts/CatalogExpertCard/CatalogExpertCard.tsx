@@ -14,7 +14,7 @@ export const CatalogExpertCard: React.FC<CatalogExpertCardProps> = ({ expert, la
   const roleWithCompany = formatExpertRoleCompany(expert, lang);
 
   return (
-    <Link href={`/${lang}/experts/${expert.id}`} style={{ textDecoration: 'none', display: 'flex' }}>
+    <Link href={`/${lang}/experts/${expert.id}`} className={styles.cardLink}>
       <div className={styles.catalogCard}>
         <div className={styles.cardHeader}>
           <div className={styles.expertName}>{expert.name}</div>

@@ -162,6 +162,7 @@
     flex: 0 0 auto;
     width: calc((100% - 48px) / 4); /* 4 cards */
     min-width: 240px;
+    align-self: stretch;
   }
 
   /* On laptop-sm and below: wrap into a grid */
