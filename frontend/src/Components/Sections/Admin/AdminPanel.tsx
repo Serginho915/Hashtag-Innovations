@@ -510,6 +510,25 @@ const formatOptionLabel = (value: string) => {
     .join(" ");
 };
 
+const formatApiError = (error: unknown): string => {
+  if (typeof error === "string") {
+    return error;
+  }
+
+  if (Array.isArray(error)) {
+    return error.map(formatApiError).filter(Boolean).join("; ");
+  }
+
+  if (error && typeof error === "object") {
+    return Object.entries(error)
+      .map(([key, value]) => `${key.replaceAll("_", " ")}: ${formatApiError(value)}`)
+      .filter(Boolean)
+      .join("; ");
+  }
+
+  return "";
+};
+
 const readApiError = async (response: Response) => {
   const payload = await response.json().catch(() => null) as { error?: unknown } | null;
 
@@ -517,7 +536,7 @@ const readApiError = async (response: Response) => {
     return "The database did not accept this change.";
   }
 
-  return typeof payload.error === "string" ? payload.error : JSON.stringify(payload.error);
+  return formatApiError(payload.error) || "The database did not accept this change.";
 };
 
 const parseJsonValue = <T,>(value: FieldValue | undefined, fallback: T): T => {

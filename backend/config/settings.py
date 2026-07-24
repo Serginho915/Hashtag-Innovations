@@ -36,6 +36,15 @@ ALLOWED_HOSTS = env_list(
 CSRF_TRUSTED_ORIGINS = env_list("DJANGO_CSRF_TRUSTED_ORIGINS")
 
 
+def sqlite_name():
+    value = os.getenv("DJANGO_SQLITE_NAME")
+    if not value:
+        return BASE_DIR / "db.sqlite3"
+
+    path = Path(value)
+    return path if path.is_absolute() else BASE_DIR / path
+
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -80,7 +89,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.getenv("DJANGO_SQLITE_NAME", BASE_DIR / "db.sqlite3"),
+        "NAME": sqlite_name(),
     }
 }
 

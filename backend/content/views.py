@@ -7,7 +7,7 @@ import re
 import uuid
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
-from urllib.parse import quote, unquote
+from urllib.parse import quote, unquote, urlparse
 
 import requests
 import stripe
@@ -1002,7 +1002,29 @@ ADMIN_RESOURCE_CONFIG = {
 
 
 def admin_error(message, status=400):
-    return JsonResponse({"error": message}, status=status)
+    return JsonResponse({"error": format_admin_error(message)}, status=status)
+
+
+def format_admin_error(message):
+    if isinstance(message, ValidationError):
+        if hasattr(message, "message_dict"):
+            return format_admin_error(message.message_dict)
+        return format_admin_error(message.messages)
+
+    if isinstance(message, dict):
+        parts = []
+        for field, errors in message.items():
+            label = str(field).replace("_", " ").capitalize()
+            parts.append(f"{label}: {format_admin_error(errors)}")
+        return "; ".join(parts)
+
+    if isinstance(message, (list, tuple)):
+        return "; ".join(format_admin_error(item) for item in message)
+
+    text = str(message or "").strip()
+    if text.startswith("['") and text.endswith("']"):
+        text = text[2:-2]
+    return text or "The database did not accept this change."
 
 
 def admin_api_is_authorized(request):
@@ -1872,6 +1894,16 @@ def normalize_file_name(value):
         return ""
     name = str(value).strip()
     media_url = getattr(settings, "MEDIA_URL", "/media/")
+
+    parsed = urlparse(name)
+    if parsed.scheme and parsed.netloc:
+        media_path = urlparse(media_url).path if media_url else "/media/"
+        path = parsed.path or ""
+        if media_path and path.startswith(media_path):
+            name = path[len(media_path) :]
+        else:
+            return name
+
     if media_url and name.startswith(media_url):
         name = name[len(media_url) :]
     for _ in range(8):
@@ -1879,6 +1911,8 @@ def normalize_file_name(value):
         if decoded_name == name:
             break
         name = decoded_name
+    if re.match(r"^[A-Za-z]:[\\/]", name) or name.startswith("\\\\"):
+        raise ValidationError("File path must be an uploaded file, a media URL, or a site-relative asset path.")
     return name.lstrip("/")
 
 
