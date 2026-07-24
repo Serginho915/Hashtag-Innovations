@@ -47,14 +47,26 @@ const forwardMutation = async (request: NextRequest, method: "POST" | "PATCH" | 
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await request.json().catch(() => null) as {
+  const requestText = await request.text().catch(() => "");
+  let body: {
     resourceKey?: string;
     recordId?: string;
     record?: Record<string, unknown>;
-  } | null;
+  } | null = null;
+
+  if (requestText) {
+    try {
+      body = JSON.parse(requestText) as typeof body;
+    } catch {
+      return NextResponse.json(
+        { error: "Admin request body is invalid. If you are uploading a file, try a smaller file." },
+        { status: 400 },
+      );
+    }
+  }
 
   if (!body?.resourceKey) {
-    return NextResponse.json({ error: "Missing resource key" }, { status: 400 });
+    return NextResponse.json({ error: "Admin request is missing a resource key." }, { status: 400 });
   }
 
   if (method !== "POST" && !body.recordId) {

@@ -73,6 +73,8 @@ const statusOptions = ["draft", "published", "archived"];
 const kindOptions = ["", "article", "event", "expert", "learn_material", "project"];
 const salePurchaseTypeOptions = ["consultation", "learn_material", "event_ticket"];
 const saleStatusOptions = ["pending_payment", "paid", "canceled"];
+const maxAdminUploadSizeMb = 5;
+const maxAdminUploadSizeBytes = maxAdminUploadSizeMb * 1024 * 1024;
 const resourceHelpText: Record<string, string> = {
   categories:
     "Categories group content by topic and type, so articles, events, learning materials and projects can be organized and filtered.",
@@ -1504,13 +1506,25 @@ export const AdminPanel = () => {
                     const file = event.target.files?.[0];
 
                     if (file) {
-                      const dataUrl = await readFileAsDataUrl(file);
+                      if (file.size > maxAdminUploadSizeBytes) {
+                        event.target.value = "";
+                        setMutationError(`"${file.name}" is too large. Upload a file up to ${maxAdminUploadSizeMb} MB.`);
+                        return;
+                      }
 
-                      updateEditingValue(field, {
-                        name: file.name,
-                        type: file.type,
-                        dataUrl,
-                      });
+                      try {
+                        const dataUrl = await readFileAsDataUrl(file);
+
+                        updateEditingValue(field, {
+                          name: file.name,
+                          type: file.type,
+                          dataUrl,
+                        });
+                        setMutationError("");
+                      } catch {
+                        event.target.value = "";
+                        setMutationError(`Could not read "${file.name}". Try another file.`);
+                      }
                     }
                   }}
                 />
