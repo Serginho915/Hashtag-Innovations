@@ -49,10 +49,8 @@
 
 .cardsGrid {
   align-self: stretch;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   padding-top: 16px;
   padding-bottom: 16px;
@@ -60,6 +58,7 @@
   list-style: none;
 
   @include laptop-sm {
+    display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
     scroll-snap-type: x mandatory;

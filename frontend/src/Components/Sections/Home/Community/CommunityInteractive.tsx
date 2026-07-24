@@ -68,10 +68,10 @@ export const CommunityInteractive: React.FC<CommunityInteractiveProps> = ({ lang
       
       <div className={styles.sidebarColumn}>
         <div className={styles.sidebarPlaceholder}></div>
-        <div className={styles.bannerContent}>
+        {/* <div className={styles.bannerContent}>
           <span>banner</span>
           <div className={styles.bannerIcon}></div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

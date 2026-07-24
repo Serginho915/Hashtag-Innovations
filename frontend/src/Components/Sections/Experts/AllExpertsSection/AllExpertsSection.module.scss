@@ -56,6 +56,7 @@
   & > * {
     flex: 0 0 calc(50% - 8px);
     width: calc(50% - 8px);
+    align-self: stretch;
   }
 
   @include tablet {
@@ -93,6 +94,7 @@
   & > * {
     flex: 0 0 calc((100% - 48px) / 4);
     width: calc((100% - 48px) / 4);
+    align-self: stretch;
   }
 
   @include laptop-sm {
