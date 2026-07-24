@@ -13,6 +13,12 @@ const adminBackendHeaders = () => ({
   "X-Admin-Api-Token": getAdminApiToken(),
 });
 
+type AdminMutationBody = {
+  resourceKey?: string;
+  recordId?: string;
+  record?: Record<string, unknown>;
+};
+
 export async function GET(request: NextRequest) {
   const isAuthenticated = await verifyAdminSession(
     request.cookies.get(ADMIN_SESSION_COOKIE)?.value,
@@ -47,22 +53,45 @@ const forwardMutation = async (request: NextRequest, method: "POST" | "PATCH" | 
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const requestText = await request.text().catch(() => "");
-  let body: {
-    resourceKey?: string;
-    recordId?: string;
-    record?: Record<string, unknown>;
-  } | null = null;
+  const contentType = request.headers.get("content-type") || "";
+  const isMultipart = contentType.includes("multipart/form-data");
+  let body: AdminMutationBody | null = null;
+  let backendBody: BodyInit | undefined;
+  let backendHeaders: Record<string, string> = adminBackendHeaders();
 
-  if (requestText) {
-    try {
-      body = JSON.parse(requestText) as typeof body;
-    } catch {
-      return NextResponse.json(
-        { error: "Admin request body is invalid. If you are uploading a file, try a smaller file." },
-        { status: 400 },
-      );
+  if (isMultipart) {
+    const formData = await request.formData().catch(() => null);
+
+    if (!formData) {
+      return NextResponse.json({ error: "Admin upload request is invalid." }, { status: 400 });
     }
+
+    body = {
+      resourceKey: String(formData.get("resourceKey") || ""),
+      recordId: String(formData.get("recordId") || ""),
+    };
+    formData.delete("resourceKey");
+    formData.delete("recordId");
+    backendBody = formData;
+  } else {
+    const requestText = await request.text().catch(() => "");
+
+    if (requestText) {
+      try {
+        body = JSON.parse(requestText) as AdminMutationBody;
+      } catch {
+        return NextResponse.json(
+          { error: "Admin request body is invalid. If you are uploading a file, try a smaller file." },
+          { status: 400 },
+        );
+      }
+    }
+
+    backendHeaders = {
+      "Content-Type": "application/json",
+      ...backendHeaders,
+    };
+    backendBody = method === "DELETE" ? undefined : JSON.stringify(body?.record ?? {});
   }
 
   if (!body?.resourceKey) {
@@ -79,11 +108,8 @@ const forwardMutation = async (request: NextRequest, method: "POST" | "PATCH" | 
     `${getBackendApiUrl()}/api/admin/resources/${resourcePath}/${recordPath}`,
     {
       method,
-      headers: {
-        "Content-Type": "application/json",
-        ...adminBackendHeaders(),
-      },
-      body: method === "DELETE" ? undefined : JSON.stringify(body.record ?? {}),
+      headers: backendHeaders,
+      body: method === "DELETE" ? undefined : backendBody,
       cache: "no-store",
     },
   ).catch(() => null);

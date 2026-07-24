@@ -1869,6 +1869,12 @@ def stripe_webhook(request):
 
 
 def parse_payload(request):
+    content_type = request.META.get("CONTENT_TYPE", "")
+    if content_type.startswith("multipart/form-data"):
+        payload = {key: value for key, value in request.POST.items()}
+        payload.update({key: value for key, value in request.FILES.items()})
+        return payload
+
     try:
         return json.loads(request.body or "{}")
     except json.JSONDecodeError:
@@ -1917,6 +1923,9 @@ def normalize_file_name(value):
 
 
 def uploaded_file_value(value):
+    if hasattr(value, "chunks") and hasattr(value, "name"):
+        return value
+
     if isinstance(value, dict):
         name = str(value.get("name", "") or "").strip()
         data_url = str(value.get("dataUrl", "") or "").strip()

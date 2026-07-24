@@ -1,12 +1,18 @@
 import json
 import tempfile
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 
 from content.models import Article
 
 
 ADMIN_HEADERS = {"HTTP_X_ADMIN_API_TOKEN": "test-admin-token"}
+TINY_PNG = (
+    b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01"
+    b"\x08\x04\x00\x00\x00\xb5\x1c\x0c\x02\x00\x00\x00\x0bIDATx\xdac\xfc"
+    b"\xff\x1f\x00\x03\x03\x02\x00\xef\xbf\xa7\xdb\x00\x00\x00\x00IEND\xaeB`\x82"
+)
 
 
 @override_settings(ADMIN_API_TOKEN="test-admin-token", MEDIA_ROOT=tempfile.mkdtemp())
@@ -27,6 +33,34 @@ class AdminResourceCreateTests(TestCase):
         self.assertEqual(response.status_code, 201, response.content)
         self.assertTrue(response.json().get("id"))
         return response.json()
+
+    def test_article_multipart_image_upload(self):
+        response = self.client.post(
+            "/api/admin/resources/articles/",
+            data={
+                "slug": "multipart-image-upload-article",
+                "title_en": "Multipart Image Upload Article",
+                "title_bg": "Multipart Image Upload Article BG",
+                "author": "",
+                "image": SimpleUploadedFile("tiny.png", TINY_PNG, content_type="image/png"),
+                "published_at": "2026-07-24T10:00",
+                "excerpt_en": "Excerpt",
+                "excerpt_bg": "Excerpt BG",
+                "lead_en": "Lead",
+                "lead_bg": "Lead BG",
+                "body_sections_en": "<p>Article body</p>",
+                "body_sections_bg": "<p>Article body BG</p>",
+                "hashtags_en": '["admin"]',
+                "status": "draft",
+                "is_featured": False,
+            },
+            **ADMIN_HEADERS,
+        )
+
+        self.assertEqual(response.status_code, 201, response.content)
+        article = Article.objects.get(slug="multipart-image-upload-article")
+        self.assertTrue(article.image.name.startswith("articles/images/"))
+        self.assertTrue(response.json()["image"].startswith("/media/articles/images/"))
 
     def test_can_create_all_editable_admin_resources(self):
         category = self.assert_created(

@@ -20,7 +20,8 @@ type FieldType =
 type FileUploadValue = {
   name: string;
   type: string;
-  dataUrl: string;
+  dataUrl?: string;
+  file?: File;
 };
 type FieldValue = string | number | boolean | FileUploadValue;
 type AdminRecord = Record<string, FieldValue> & { id: string };
@@ -584,15 +585,6 @@ const paragraphTextValue = (value: FieldValue | undefined) =>
 
 const stringifyJsonField = (value: unknown) => JSON.stringify(value, null, 2);
 
-const readFileAsDataUrl = (file: File) =>
-  new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onload = () => resolve(String(reader.result || ""));
-    reader.onerror = () => reject(reader.error || new Error("Failed to read file."));
-    reader.readAsDataURL(file);
-  });
-
 const fileFieldLabel = (value: FieldValue | undefined) => {
   if (!value) {
     return "";
@@ -603,6 +595,56 @@ const fileFieldLabel = (value: FieldValue | undefined) => {
   }
 
   return String(value);
+};
+
+const isFileUploadValue = (value: FieldValue | undefined): value is FileUploadValue =>
+  Boolean(value && typeof value === "object" && "name" in value);
+
+const buildAdminMutationBody = (
+  resourceKey: string,
+  editingMode: "create" | "edit",
+  editingRecord: AdminRecord,
+): { headers?: HeadersInit; body: BodyInit } => {
+  const hasNewFile = Object.values(editingRecord).some((value) => isFileUploadValue(value) && value.file);
+
+  if (!hasNewFile) {
+    return {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        resourceKey,
+        recordId: editingMode === "edit" ? editingRecord.id : undefined,
+        record: editingRecord,
+      }),
+    };
+  }
+
+  const formData = new FormData();
+  formData.append("resourceKey", resourceKey);
+
+  if (editingMode === "edit") {
+    formData.append("recordId", editingRecord.id);
+  }
+
+  Object.entries(editingRecord).forEach(([key, value]) => {
+    if (key === "id") {
+      return;
+    }
+
+    if (isFileUploadValue(value)) {
+      if (value.file) {
+        formData.append(key, value.file, value.name);
+      }
+      return;
+    }
+
+    formData.append(key, String(value ?? ""));
+  });
+
+  return {
+    body: formData,
+  };
 };
 
 const EditIcon = () => (
@@ -1512,19 +1554,12 @@ export const AdminPanel = () => {
                         return;
                       }
 
-                      try {
-                        const dataUrl = await readFileAsDataUrl(file);
-
-                        updateEditingValue(field, {
-                          name: file.name,
-                          type: file.type,
-                          dataUrl,
-                        });
-                        setMutationError("");
-                      } catch {
-                        event.target.value = "";
-                        setMutationError(`Could not read "${file.name}". Try another file.`);
-                      }
+                      updateEditingValue(field, {
+                        name: file.name,
+                        type: file.type,
+                        file,
+                      });
+                      setMutationError("");
                     }
                   }}
                 />
@@ -1646,16 +1681,11 @@ export const AdminPanel = () => {
     setIsSaving(true);
     setMutationError("");
 
+    const mutationBody = buildAdminMutationBody(activeResource.key, editingMode, editingRecord);
     const response = await fetch("/admin/api/resources", {
       method: editingMode === "create" ? "POST" : "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        resourceKey: activeResource.key,
-        recordId: editingMode === "edit" ? editingRecord.id : undefined,
-        record: editingRecord,
-      }),
+      headers: mutationBody.headers,
+      body: mutationBody.body,
     }).catch(() => null);
 
     if (!response) {
