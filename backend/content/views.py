@@ -18,6 +18,7 @@ from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
 from django.core.validators import validate_email
 from django.db import IntegrityError, transaction
+from django.db.utils import OperationalError, ProgrammingError
 from django.db.models import Q
 from django.http import JsonResponse
 from django.utils import timezone
@@ -909,6 +910,16 @@ def serialize_admin_after_sales_service(service):
         "created_at": admin_datetime_value(service.created_at),
         "updated_at": admin_datetime_value(service.updated_at),
     }
+
+
+def serialize_admin_after_sales_services():
+    try:
+        return [
+            serialize_admin_after_sales_service(item)
+            for item in AfterSalesService.objects.all()
+        ]
+    except (OperationalError, ProgrammingError):
+        return []
 
 
 ADMIN_SERIALIZERS = {
@@ -2567,10 +2578,7 @@ def admin_resources(request):
                 serialize_admin_chat_conversation(item)
                 for item in ChatConversation.objects.prefetch_related("messages")
             ],
-            "after_sales_services": [
-                serialize_admin_after_sales_service(item)
-                for item in AfterSalesService.objects.all()
-            ],
+            "after_sales_services": serialize_admin_after_sales_services(),
         }
     )
 
