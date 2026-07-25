@@ -29,6 +29,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.http import require_POST
 
 from content.models import (
+    AfterSalesService,
     Article,
     Category,
     ChatConversation,
@@ -886,6 +887,30 @@ def serialize_admin_chat_conversation(conversation):
     }
 
 
+def serialize_admin_after_sales_service(service):
+    return {
+        "id": str(service.id),
+        "ticket_number": service.ticket_number,
+        "customer_name": service.customer_name,
+        "customer_email": service.customer_email,
+        "customer_phone": service.customer_phone,
+        "company_name": service.company_name,
+        "product_or_service": service.product_or_service,
+        "purchase_reference": service.purchase_reference,
+        "subject": service.subject,
+        "issue_description": service.issue_description,
+        "resolution_notes": service.resolution_notes,
+        "status": service.status,
+        "priority": service.priority,
+        "assigned_to": service.assigned_to,
+        "opened_at": admin_datetime_value(service.opened_at),
+        "due_date": admin_date_value(service.due_date),
+        "resolved_at": admin_datetime_value(service.resolved_at),
+        "created_at": admin_datetime_value(service.created_at),
+        "updated_at": admin_datetime_value(service.updated_at),
+    }
+
+
 ADMIN_SERIALIZERS = {
     "categories": serialize_admin_category,
     "organizations": serialize_admin_organization,
@@ -896,6 +921,7 @@ ADMIN_SERIALIZERS = {
     "projects": serialize_admin_project,
     "sales": serialize_admin_sale,
     "chat_conversations": serialize_admin_chat_conversation,
+    "after_sales_services": serialize_admin_after_sales_service,
 }
 
 ADMIN_RESOURCE_CONFIG = {
@@ -997,6 +1023,27 @@ ADMIN_RESOURCE_CONFIG = {
         ],
         "foreign_keys": {"author": Expert},
         "slug_source": "title_en",
+    },
+    "after_sales_services": {
+        "model": AfterSalesService,
+        "fields": [
+            "ticket_number",
+            "customer_name",
+            "customer_email",
+            "customer_phone",
+            "company_name",
+            "product_or_service",
+            "purchase_reference",
+            "subject",
+            "issue_description",
+            "resolution_notes",
+            "status",
+            "priority",
+            "assigned_to",
+            "opened_at",
+            "due_date",
+            "resolved_at",
+        ],
     },
 }
 
@@ -2519,6 +2566,10 @@ def admin_resources(request):
             "chat_conversations": [
                 serialize_admin_chat_conversation(item)
                 for item in ChatConversation.objects.prefetch_related("messages")
+            ],
+            "after_sales_services": [
+                serialize_admin_after_sales_service(item)
+                for item in AfterSalesService.objects.all()
             ],
         }
     )

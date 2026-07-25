@@ -202,6 +202,27 @@ class AdminResourceCreateTests(TestCase):
                 "is_featured": False,
             },
         )
+        self.assert_created(
+            "after_sales_services",
+            {
+                "ticket_number": "AS-001",
+                "customer_name": "Admin Test Customer",
+                "customer_email": "customer@example.com",
+                "customer_phone": "+359 88 000 0000",
+                "company_name": "Admin Test Organization",
+                "product_or_service": "Consultation",
+                "purchase_reference": "SALE-001",
+                "subject": "Follow-up support request",
+                "issue_description": "Customer needs help after purchase.",
+                "resolution_notes": "Initial contact planned.",
+                "status": "new",
+                "priority": "medium",
+                "assigned_to": "Support team",
+                "opened_at": "2026-07-24T10:00",
+                "due_date": "2026-07-31",
+                "resolved_at": "",
+            },
+        )
 
     def test_article_absolute_media_url_is_saved_as_relative_file_name(self):
         response = self.post_resource(

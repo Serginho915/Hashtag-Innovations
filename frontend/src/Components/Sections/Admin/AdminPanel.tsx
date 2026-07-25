@@ -74,6 +74,8 @@ const statusOptions = ["draft", "published", "archived"];
 const kindOptions = ["", "article", "event", "expert", "learn_material", "project"];
 const salePurchaseTypeOptions = ["consultation", "learn_material", "event_ticket"];
 const saleStatusOptions = ["pending_payment", "paid", "canceled"];
+const afterSalesStatusOptions = ["new", "in_progress", "waiting_customer", "resolved", "closed"];
+const afterSalesPriorityOptions = ["low", "medium", "high", "urgent"];
 const maxAdminUploadSizeMb = 5;
 const maxAdminUploadSizeBytes = maxAdminUploadSizeMb * 1024 * 1024;
 const resourceHelpText: Record<string, string> = {
@@ -95,6 +97,8 @@ const resourceHelpText: Record<string, string> = {
     "Sales list Stripe checkout attempts and webhook-confirmed payment statuses for consultations, learning materials and event tickets.",
   chat_conversations:
     "Chat Conversations show visitor conversations with the website assistant, including the full message history for support and quality review.",
+  after_sales_services:
+    "Послепродажное обслуживание хранит обращения клиентов после покупки: статус, приоритет, ответственного, описание проблемы и заметки по решению.",
 };
 
 const resources: ResourceConfig[] = [
@@ -447,6 +451,32 @@ const resources: ResourceConfig[] = [
     readOnly: true,
     detailFields: ["session_id", "created_at", "last_message_at", "language", "user_agent", "ip_address", "messages"],
   },
+  {
+    key: "after_sales_services",
+    label: "Послепродажное обслуживание",
+    singular: "Обращение",
+    accent: "#0E7490",
+    columns: ["ticket_number", "customer_name", "subject", "status", "priority", "assigned_to", "due_date"],
+    fields: [
+      { key: "ticket_number", label: "Номер обращения", type: "text" },
+      { key: "customer_name", label: "Имя клиента", type: "text" },
+      { key: "customer_email", label: "Email клиента", type: "text" },
+      { key: "customer_phone", label: "Телефон клиента", type: "text" },
+      { key: "company_name", label: "Компания", type: "text" },
+      { key: "product_or_service", label: "Продукт или услуга", type: "text" },
+      { key: "purchase_reference", label: "Связь с покупкой", type: "text" },
+      { key: "subject", label: "Тема обращения", type: "text", fullWidth: true },
+      { key: "issue_description", label: "Описание проблемы", type: "textarea", fullWidth: true },
+      { key: "resolution_notes", label: "Заметки по решению", type: "textarea", fullWidth: true },
+      { key: "status", label: "Статус", type: "select", options: afterSalesStatusOptions },
+      { key: "priority", label: "Приоритет", type: "select", options: afterSalesPriorityOptions },
+      { key: "assigned_to", label: "Ответственный", type: "text" },
+      { key: "opened_at", label: "Дата открытия", type: "datetime" },
+      { key: "due_date", label: "Срок выполнения", type: "date" },
+      { key: "resolved_at", label: "Дата решения", type: "datetime" },
+    ],
+    records: [],
+  },
 ];
 
 const makeBlankRecord = (resource: ResourceConfig): AdminRecord => {
@@ -579,9 +609,6 @@ const parseParagraphList = (value: FieldValue | undefined) => {
     .map((item) => item.trim())
     .filter(Boolean);
 };
-
-const paragraphTextValue = (value: FieldValue | undefined) =>
-  parseParagraphList(value).join("\n\n");
 
 const stringifyJsonField = (value: unknown) => JSON.stringify(value, null, 2);
 
@@ -876,23 +903,6 @@ const ArticleSectionsEditor = ({ label, value, onChange }: ArticleSectionsEditor
     </div>
   );
 };
-
-interface ParagraphTextareaProps {
-  label: string;
-  value: FieldValue | undefined;
-  onChange: (value: string) => void;
-}
-
-const ParagraphTextarea = ({ label, value, onChange }: ParagraphTextareaProps) => (
-  <label className={`${styles.formField} ${styles.fullWidth}`}>
-    <span>{label}</span>
-    <textarea
-      value={paragraphTextValue(value)}
-      onChange={(event) => onChange(stringifyJsonField(parseParagraphList(event.target.value)))}
-      rows={7}
-    />
-  </label>
-);
 
 interface RelatedPickerProps {
   label: string;

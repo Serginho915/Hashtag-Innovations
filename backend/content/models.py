@@ -387,3 +387,49 @@ class ChatMessage(TimeStampedModel):
 
     def __str__(self) -> str:
         return f"{self.role}: {self.content[:80]}"
+
+
+class AfterSalesService(TimeStampedModel):
+    class Status(models.TextChoices):
+        NEW = "new", "New"
+        IN_PROGRESS = "in_progress", "In progress"
+        WAITING_CUSTOMER = "waiting_customer", "Waiting customer"
+        RESOLVED = "resolved", "Resolved"
+        CLOSED = "closed", "Closed"
+
+    class Priority(models.TextChoices):
+        LOW = "low", "Low"
+        MEDIUM = "medium", "Medium"
+        HIGH = "high", "High"
+        URGENT = "urgent", "Urgent"
+
+    ticket_number = models.CharField(max_length=80, blank=True)
+    customer_name = models.CharField(max_length=160, blank=True)
+    customer_email = models.EmailField(blank=True)
+    customer_phone = models.CharField(max_length=80, blank=True)
+    company_name = models.CharField(max_length=180, blank=True)
+    product_or_service = models.CharField(max_length=220, blank=True)
+    purchase_reference = models.CharField(max_length=160, blank=True)
+    subject = models.CharField(max_length=220, blank=True)
+    issue_description = models.TextField(blank=True)
+    resolution_notes = models.TextField(blank=True)
+    status = models.CharField(
+        max_length=32,
+        choices=Status.choices,
+        default=Status.NEW,
+    )
+    priority = models.CharField(
+        max_length=16,
+        choices=Priority.choices,
+        default=Priority.MEDIUM,
+    )
+    assigned_to = models.CharField(max_length=160, blank=True)
+    opened_at = models.DateTimeField(blank=True, null=True)
+    due_date = models.DateField(blank=True, null=True)
+    resolved_at = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        ordering = ["-opened_at", "-created_at"]
+
+    def __str__(self) -> str:
+        return self.subject or self.ticket_number or f"After-sales request {self.id}"
