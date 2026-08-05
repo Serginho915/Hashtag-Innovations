@@ -75,6 +75,10 @@ type AIInsightSettings = {
   prompt: string;
   author: string;
   interval_days: number;
+  generation_status?: "idle" | "running" | "succeeded" | "failed";
+  generation_message?: string;
+  generation_started_at?: string;
+  generation_finished_at?: string;
 };
 
 const statusOptions = ["draft", "published", "archived"];
@@ -1127,6 +1131,32 @@ export const AdminPanel = () => {
   const [isSavingAiSettings, setIsSavingAiSettings] = useState(false);
   const [isGeneratingInsight, setIsGeneratingInsight] = useState(false);
 
+  const fetchAiInsightSettings = async () => {
+    const response = await fetch("/admin/api/ai-insight-settings", {
+      cache: "no-store",
+    }).catch(() => null);
+
+    if (!response) {
+      throw new Error("Could not connect to AI insight settings API.");
+    }
+
+    if (response.status === 401) {
+      window.location.assign("/admin/login");
+      throw new Error("Unauthorized");
+    }
+
+    if (!response.ok) {
+      throw new Error(`Could not load AI insight settings. ${await readApiError(response)}`);
+    }
+
+    const payload = (await response.json().catch(() => null)) as AIInsightSettings | null;
+    if (!payload) {
+      throw new Error("AI insight settings API returned an invalid response.");
+    }
+
+    return payload;
+  };
+
   useEffect(() => {
     let isMounted = true;
 
@@ -1182,40 +1212,18 @@ export const AdminPanel = () => {
       setIsLoadingAiSettings(true);
       setAiSettingsError("");
 
-      const response = await fetch("/admin/api/ai-insight-settings", {
-        cache: "no-store",
-      }).catch(() => null);
-
-      if (!isMounted) {
-        return;
-      }
-
-      if (!response) {
-        setAiSettingsError("Could not connect to AI insight settings API.");
+      const payload = await fetchAiInsightSettings().catch((error) => {
+        setAiSettingsError(error instanceof Error ? error.message : "Could not load AI insight settings.");
         setIsLoadingAiSettings(false);
-        return;
-      }
+        return null;
+      });
 
-      if (response.status === 401) {
-        window.location.assign("/admin/login");
-        return;
-      }
-
-      if (!response.ok) {
-        setAiSettingsError(`Could not load AI insight settings. ${await readApiError(response)}`);
-        setIsLoadingAiSettings(false);
-        return;
-      }
-
-      const payload = (await response.json().catch(() => null)) as AIInsightSettings | null;
-
-      if (!payload) {
-        setAiSettingsError("AI insight settings API returned an invalid response.");
-        setIsLoadingAiSettings(false);
+      if (!isMounted || !payload) {
         return;
       }
 
       setAiInsightSettings(payload);
+      setIsGeneratingInsight(payload.generation_status === "running");
       setIsLoadingAiSettings(false);
     };
 
@@ -1226,6 +1234,35 @@ export const AdminPanel = () => {
       isMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (aiInsightSettings.generation_status !== "running") {
+      return;
+    }
+
+    const intervalId = window.setInterval(async () => {
+      const payload = await fetchAiInsightSettings().catch((error) => {
+        setAiSettingsError(error instanceof Error ? error.message : "Could not load AI insight status.");
+        return null;
+      });
+
+      if (!payload) {
+        return;
+      }
+
+      setAiInsightSettings(payload);
+      if (payload.generation_status === "succeeded") {
+        setAiSettingsNotice(payload.generation_message || "AI insight published.");
+        setIsGeneratingInsight(false);
+      }
+      if (payload.generation_status === "failed") {
+        setAiSettingsError(payload.generation_message || "AI insight generation failed.");
+        setIsGeneratingInsight(false);
+      }
+    }, 5000);
+
+    return () => window.clearInterval(intervalId);
+  }, [aiInsightSettings.generation_status]);
 
   const activeResource = resources.find((resource) => resource.key === activeKey) ?? resources[0];
   const activeResourceHelpText = resourceHelpText[activeResource.key];
@@ -1356,17 +1393,13 @@ export const AdminPanel = () => {
       return;
     }
 
-    const article = (await response.json().catch(() => null)) as AdminRecord | null;
-    if (article?.id) {
-      setRecordsByResource((current) => ({
-        ...current,
-        articles: [article, ...(current.articles ?? []).filter((item) => item.id !== article.id)],
-      }));
-      setAiSettingsNotice(`Published "${String(article.title_en || article.title || "AI insight")}".`);
+    const payload = (await response.json().catch(() => null)) as AIInsightSettings | null;
+    if (payload) {
+      setAiInsightSettings(payload);
+      setAiSettingsNotice(payload.generation_message || "Generation started.");
     } else {
-      setAiSettingsNotice("AI insight published.");
+      setAiSettingsNotice("Generation started.");
     }
-    setIsGeneratingInsight(false);
   };
 
   const updateEditingValue = (field: AdminField, value: FieldValue) => {
@@ -1468,11 +1501,24 @@ export const AdminPanel = () => {
               className={styles.secondaryButton}
               type="button"
               onClick={publishAiInsightNow}
-              disabled={isGeneratingInsight}
+              disabled={isGeneratingInsight || aiInsightSettings.generation_status === "running"}
             >
-              {isGeneratingInsight ? "Publishing..." : "Generate and publish now"}
+              {isGeneratingInsight || aiInsightSettings.generation_status === "running" ? "Publishing..." : "Generate and publish now"}
             </button>
           </div>
+
+          {aiInsightSettings.generation_status && aiInsightSettings.generation_status !== "idle" && (
+            <div className={styles.settingsStatus}>
+              <span>Status</span>
+              <strong>{formatOptionLabel(aiInsightSettings.generation_status)}</strong>
+              {aiInsightSettings.generation_started_at && (
+                <small>Started: {formatTableValue("generation_started_at", aiInsightSettings.generation_started_at)}</small>
+              )}
+              {aiInsightSettings.generation_finished_at && (
+                <small>Finished: {formatTableValue("generation_finished_at", aiInsightSettings.generation_finished_at)}</small>
+              )}
+            </div>
+          )}
 
           {(aiSettingsError || aiSettingsNotice) && (
             <p className={aiSettingsError ? styles.settingsError : styles.settingsNotice} role="status">

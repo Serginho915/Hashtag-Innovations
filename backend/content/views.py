@@ -4,7 +4,9 @@ import hmac
 import html
 import json
 import re
+import threading
 import uuid
+from datetime import timedelta
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from urllib.parse import quote, unquote, urlparse
@@ -17,7 +19,7 @@ from django.core.files.base import ContentFile
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
 from django.core.validators import validate_email
-from django.db import IntegrityError, transaction
+from django.db import IntegrityError, close_old_connections, transaction
 from django.db.utils import OperationalError, ProgrammingError
 from django.db.models import Q
 from django.http import JsonResponse
@@ -44,7 +46,12 @@ from content.models import (
     PublishStatus,
     Sale,
 )
-from content.ai_insights import create_ai_insight, get_ai_insight_settings, save_ai_insight_settings
+from content.ai_insights import (
+    create_ai_insight,
+    ensure_ai_insight_settings,
+    get_ai_insight_settings,
+    save_ai_insight_settings,
+)
 
 
 OPENROUTER_CHAT_URL = "https://openrouter.ai/api/v1/chat/completions"
@@ -930,6 +937,10 @@ def serialize_admin_ai_insight_settings(config=None):
         "prompt": config.prompt or settings.AI_INSIGHTS_PROMPT,
         "author": config.author.slug if config.author else "",
         "interval_days": config.interval_days,
+        "generation_status": getattr(config, "generation_status", AIInsightSettings.GenerationStatus.IDLE),
+        "generation_message": getattr(config, "generation_message", ""),
+        "generation_started_at": admin_datetime_value(getattr(config, "generation_started_at", None)),
+        "generation_finished_at": admin_datetime_value(getattr(config, "generation_finished_at", None)),
     }
 
 
@@ -2624,15 +2635,68 @@ def admin_generate_ai_insight(request):
     if unauthorized:
         return unauthorized
 
+    config = ensure_ai_insight_settings()
+    stale_running_before = timezone.now() - timedelta(minutes=20)
+    if (
+        config.generation_status == AIInsightSettings.GenerationStatus.RUNNING
+        and config.generation_started_at
+        and config.generation_started_at > stale_running_before
+    ):
+        return JsonResponse(serialize_admin_ai_insight_settings(config), status=202)
+
+    config.generation_status = AIInsightSettings.GenerationStatus.RUNNING
+    config.generation_message = "Generation started."
+    config.generation_started_at = timezone.now()
+    config.generation_finished_at = None
+    config.save(
+        update_fields=[
+            "generation_status",
+            "generation_message",
+            "generation_started_at",
+            "generation_finished_at",
+            "updated_at",
+        ]
+    )
+
+    thread = threading.Thread(target=run_ai_insight_generation_job, daemon=True)
+    thread.start()
+
+    return JsonResponse(serialize_admin_ai_insight_settings(config), status=202)
+
+
+def run_ai_insight_generation_job():
+    close_old_connections()
     try:
         article = create_ai_insight(force=True)
     except Exception as error:
-        return admin_error(str(error), status=502)
+        config = ensure_ai_insight_settings()
+        config.generation_status = AIInsightSettings.GenerationStatus.FAILED
+        config.generation_message = str(error)
+        config.generation_finished_at = timezone.now()
+        config.save(
+            update_fields=[
+                "generation_status",
+                "generation_message",
+                "generation_finished_at",
+                "updated_at",
+            ]
+        )
+        close_old_connections()
+        return
 
-    if article is None:
-        return admin_error("AI insight already exists for today.")
-
-    return JsonResponse(serialize_admin_article(article), status=201)
+    config = ensure_ai_insight_settings()
+    config.generation_status = AIInsightSettings.GenerationStatus.SUCCEEDED
+    config.generation_message = f'Published "{article.title}".'
+    config.generation_finished_at = timezone.now()
+    config.save(
+        update_fields=[
+            "generation_status",
+            "generation_message",
+            "generation_finished_at",
+            "updated_at",
+        ]
+    )
+    close_old_connections()
 
 
 @require_GET

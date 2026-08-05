@@ -33,5 +33,5 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(payload ?? { error: "Failed to generate AI insight" }, { status: backendResponse.status });
   }
 
-  return NextResponse.json(payload, { status: 201 });
+  return NextResponse.json(payload, { status: backendResponse.status });
 }

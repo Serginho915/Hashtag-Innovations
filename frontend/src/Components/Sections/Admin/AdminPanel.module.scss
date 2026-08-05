@@ -461,6 +461,34 @@
   color: #d62612;
 }
 
+.settingsStatus {
+  margin-top: 18px;
+  padding: 12px;
+  border: 1px solid #e3e3ea;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  color: #4a5565;
+  font-size: 13px;
+  font-weight: 800;
+
+  span {
+    text-transform: uppercase;
+  }
+
+  strong {
+    color: #000;
+  }
+
+  small {
+    color: #69698b;
+    font: inherit;
+  }
+}
+
 .tableWrap {
   width: 100%;
   overflow-x: auto;

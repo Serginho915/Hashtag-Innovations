@@ -173,6 +173,12 @@ class Article(TimeStampedModel):
 
 
 class AIInsightSettings(TimeStampedModel):
+    class GenerationStatus(models.TextChoices):
+        IDLE = "idle", "Idle"
+        RUNNING = "running", "Running"
+        SUCCEEDED = "succeeded", "Succeeded"
+        FAILED = "failed", "Failed"
+
     prompt = models.TextField(blank=True)
     author = models.ForeignKey(
         Expert,
@@ -182,6 +188,14 @@ class AIInsightSettings(TimeStampedModel):
         null=True,
     )
     interval_days = models.PositiveSmallIntegerField(default=1)
+    generation_status = models.CharField(
+        max_length=16,
+        choices=GenerationStatus.choices,
+        default=GenerationStatus.IDLE,
+    )
+    generation_message = models.TextField(blank=True)
+    generation_started_at = models.DateTimeField(blank=True, null=True)
+    generation_finished_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         verbose_name = "AI insight settings"

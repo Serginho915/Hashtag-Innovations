@@ -56,6 +56,17 @@ def get_ai_insight_settings():
     )
 
 
+def ensure_ai_insight_settings():
+    config = AIInsightSettings.objects.select_related("author").first()
+    if config:
+        return config
+
+    return AIInsightSettings.objects.create(
+        prompt=getattr(settings, "AI_INSIGHTS_PROMPT", "") or DEFAULT_PROMPT,
+        interval_days=max(1, int(getattr(settings, "AI_INSIGHTS_INTERVAL_DAYS", 1))),
+    )
+
+
 def save_ai_insight_settings(payload):
     config = AIInsightSettings.objects.select_related("author").first() or AIInsightSettings()
     if "prompt" in payload:
