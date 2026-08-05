@@ -172,6 +172,25 @@ class Article(TimeStampedModel):
         return self.title
 
 
+class AIInsightSettings(TimeStampedModel):
+    prompt = models.TextField(blank=True)
+    author = models.ForeignKey(
+        Expert,
+        on_delete=models.SET_NULL,
+        related_name="ai_insight_settings",
+        blank=True,
+        null=True,
+    )
+    interval_days = models.PositiveSmallIntegerField(default=1)
+
+    class Meta:
+        verbose_name = "AI insight settings"
+        verbose_name_plural = "AI insight settings"
+
+    def __str__(self) -> str:
+        return "AI insight settings"
+
+
 class Event(TimeStampedModel):
     title = models.CharField(max_length=220)
     slug = models.SlugField(max_length=240, unique=True)

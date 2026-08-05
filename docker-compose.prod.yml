@@ -18,6 +18,25 @@ services:
       - "8012:8000"
     restart: unless-stopped
 
+  ai-insights-worker:
+    build:
+      context: ./backend
+    command: python manage.py run_ai_insight_scheduler
+    depends_on:
+      - backend
+    env_file:
+      - .env
+    environment:
+      DJANGO_DEBUG: "false"
+      DJANGO_ALLOWED_HOSTS: "consultation.bg,www.consultation.bg,localhost,127.0.0.1,backend"
+      DJANGO_CSRF_TRUSTED_ORIGINS: "https://consultation.bg,https://www.consultation.bg"
+      FRONTEND_BASE_URL: "https://consultation.bg"
+      DJANGO_SQLITE_NAME: "/app/data/db.sqlite3"
+    volumes:
+      - ./backend/data:/app/data
+      - ./backend/media:/app/media
+    restart: unless-stopped
+
   frontend:
     build:
       context: .

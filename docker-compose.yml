@@ -10,6 +10,17 @@ services:
     volumes:
       - ./backend:/app
 
+  ai-insights-worker:
+    build:
+      context: ./backend
+    command: python manage.py run_ai_insight_scheduler
+    depends_on:
+      - backend
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+
   frontend:
     build:
       context: .

@@ -4,6 +4,8 @@ from django.conf.urls.static import static
 from django.urls import include, path
 from django.views.static import serve
 from content.views import (
+    admin_ai_insight_settings,
+    admin_generate_ai_insight,
     admin_login,
     admin_resource_create,
     admin_resource_detail,
@@ -19,6 +21,8 @@ from content.views import (
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/admin/login/", admin_login),
+    path("api/admin/ai-insight-settings/", admin_ai_insight_settings),
+    path("api/admin/ai-insight-settings/generate/", admin_generate_ai_insight),
     path("api/admin/resources/", admin_resources),
     path("api/admin/resources/<str:resource_key>/", admin_resource_create),
     path("api/admin/resources/<str:resource_key>/<int:record_id>/", admin_resource_detail),

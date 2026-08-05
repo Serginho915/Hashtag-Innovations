@@ -68,7 +68,14 @@ interface ResourceConfig {
   records: AdminRecord[];
   readOnly?: boolean;
   detailFields?: string[];
+  settingsPanel?: boolean;
 }
+
+type AIInsightSettings = {
+  prompt: string;
+  author: string;
+  interval_days: number;
+};
 
 const statusOptions = ["draft", "published", "archived"];
 const kindOptions = ["", "article", "event", "expert", "learn_material", "project"];
@@ -99,6 +106,8 @@ const resourceHelpText: Record<string, string> = {
     "Chat Conversations show visitor conversations with the website assistant, including the full message history for support and quality review.",
   after_sales_services:
     "After-sales service stores customer support requests after purchase, including status, priority, assignee, issue details and resolution notes.",
+  ai_insight_settings:
+    "AI Insight Settings control the prompt, optional author and daily publishing schedule for automatically generated insight articles.",
 };
 
 const resources: ResourceConfig[] = [
@@ -415,6 +424,17 @@ const resources: ResourceConfig[] = [
     ],
   },
   {
+    key: "ai_insight_settings",
+    label: "AI Insights",
+    singular: "AI Insight Settings",
+    accent: "#155EEF",
+    columns: [],
+    fields: [],
+    records: [],
+    readOnly: true,
+    settingsPanel: true,
+  },
+  {
     key: "sales",
     label: "Sales",
     singular: "Sale",
@@ -563,6 +583,11 @@ const formatApiError = (error: unknown): string => {
 };
 
 const readApiError = async (response: Response) => {
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    return `Request failed with status ${response.status}.`;
+  }
+
   const payload = await response.json().catch(() => null) as { error?: unknown } | null;
 
   if (!payload?.error) {
@@ -1091,6 +1116,16 @@ export const AdminPanel = () => {
   const [editingMode, setEditingMode] = useState<"create" | "edit">("edit");
   const [mutationError, setMutationError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [aiInsightSettings, setAiInsightSettings] = useState<AIInsightSettings>({
+    prompt: "",
+    author: "",
+    interval_days: 1,
+  });
+  const [aiSettingsError, setAiSettingsError] = useState("");
+  const [aiSettingsNotice, setAiSettingsNotice] = useState("");
+  const [isLoadingAiSettings, setIsLoadingAiSettings] = useState(true);
+  const [isSavingAiSettings, setIsSavingAiSettings] = useState(false);
+  const [isGeneratingInsight, setIsGeneratingInsight] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -1143,7 +1178,49 @@ export const AdminPanel = () => {
       setIsLoadingRecords(false);
     };
 
+    const loadAiInsightSettings = async () => {
+      setIsLoadingAiSettings(true);
+      setAiSettingsError("");
+
+      const response = await fetch("/admin/api/ai-insight-settings", {
+        cache: "no-store",
+      }).catch(() => null);
+
+      if (!isMounted) {
+        return;
+      }
+
+      if (!response) {
+        setAiSettingsError("Could not connect to AI insight settings API.");
+        setIsLoadingAiSettings(false);
+        return;
+      }
+
+      if (response.status === 401) {
+        window.location.assign("/admin/login");
+        return;
+      }
+
+      if (!response.ok) {
+        setAiSettingsError(`Could not load AI insight settings. ${await readApiError(response)}`);
+        setIsLoadingAiSettings(false);
+        return;
+      }
+
+      const payload = (await response.json().catch(() => null)) as AIInsightSettings | null;
+
+      if (!payload) {
+        setAiSettingsError("AI insight settings API returned an invalid response.");
+        setIsLoadingAiSettings(false);
+        return;
+      }
+
+      setAiInsightSettings(payload);
+      setIsLoadingAiSettings(false);
+    };
+
     void loadRecords();
+    void loadAiInsightSettings();
 
     return () => {
       isMounted = false;
@@ -1153,6 +1230,7 @@ export const AdminPanel = () => {
   const activeResource = resources.find((resource) => resource.key === activeKey) ?? resources[0];
   const activeResourceHelpText = resourceHelpText[activeResource.key];
   const isSalesResource = activeResource.key === "sales";
+  const isAiInsightSettingsResource = activeResource.key === "ai_insight_settings";
   const hasDetailAction = Boolean(activeResource.detailFields?.length);
   const activeRecords = useMemo(
     () => recordsByResource[activeResource.key] ?? [],
@@ -1205,6 +1283,92 @@ export const AdminPanel = () => {
     setViewingRecord(null);
   };
 
+  const updateAiInsightSettings = (key: keyof AIInsightSettings, value: string | number) => {
+    setAiInsightSettings((current) => ({
+      ...current,
+      [key]: value,
+    }));
+    setAiSettingsNotice("");
+    setAiSettingsError("");
+  };
+
+  const saveAiInsightSettings = async () => {
+    setIsSavingAiSettings(true);
+    setAiSettingsError("");
+    setAiSettingsNotice("");
+
+    const response = await fetch("/admin/api/ai-insight-settings", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(aiInsightSettings),
+    }).catch(() => null);
+
+    if (!response) {
+      setAiSettingsError("Could not connect to AI insight settings API.");
+      setIsSavingAiSettings(false);
+      return;
+    }
+
+    if (response.status === 401) {
+      window.location.assign("/admin/login");
+      return;
+    }
+
+    if (!response.ok) {
+      setAiSettingsError(await readApiError(response));
+      setIsSavingAiSettings(false);
+      return;
+    }
+
+    const payload = (await response.json().catch(() => null)) as AIInsightSettings | null;
+    if (payload) {
+      setAiInsightSettings(payload);
+    }
+    setAiSettingsNotice("Settings saved.");
+    setIsSavingAiSettings(false);
+  };
+
+  const publishAiInsightNow = async () => {
+    setIsGeneratingInsight(true);
+    setAiSettingsError("");
+    setAiSettingsNotice("");
+
+    const response = await fetch("/admin/api/ai-insight-settings/generate", {
+      method: "POST",
+    }).catch(() => null);
+
+    if (!response) {
+      setAiSettingsError("Could not connect to AI insight generator.");
+      setIsGeneratingInsight(false);
+      return;
+    }
+
+    if (response.status === 401) {
+      window.location.assign("/admin/login");
+      return;
+    }
+
+    if (!response.ok) {
+      setAiSettingsError(await readApiError(response));
+      setIsGeneratingInsight(false);
+      return;
+    }
+
+    const article = (await response.json().catch(() => null)) as AdminRecord | null;
+    if (article?.id) {
+      setRecordsByResource((current) => ({
+        ...current,
+        articles: [article, ...(current.articles ?? []).filter((item) => item.id !== article.id)],
+      }));
+      setAiSettingsNotice(`Published "${String(article.title_en || article.title || "AI insight")}".`);
+    } else {
+      setAiSettingsNotice("AI insight published.");
+    }
+    setIsGeneratingInsight(false);
+  };
+
   const updateEditingValue = (field: AdminField, value: FieldValue) => {
     setEditingRecord((current) => {
       if (!current) {
@@ -1240,6 +1404,85 @@ export const AdminPanel = () => {
     learn_materials: "learn_material",
     projects: "project",
   };
+
+  const renderAiInsightSettingsPanel = () => (
+    <div className={styles.settingsPanel}>
+      {isLoadingAiSettings ? (
+        <div className={styles.emptyState}>
+          <h2>Loading settings...</h2>
+        </div>
+      ) : (
+        <>
+          <div className={styles.settingsGrid}>
+            <label className={`${styles.formField} ${styles.fullWidth}`}>
+              <span>Prompt</span>
+              <textarea
+                value={aiInsightSettings.prompt}
+                onChange={(event) => updateAiInsightSettings("prompt", event.target.value)}
+                rows={8}
+              />
+            </label>
+
+            <label className={styles.formField}>
+              <span>Author</span>
+              <select
+                value={aiInsightSettings.author}
+                onChange={(event) => updateAiInsightSettings("author", event.target.value)}
+              >
+                <option value="">No author</option>
+                {expertOptions.map((expert) => {
+                  const value = String(expert.slug || expert.id);
+                  const label = String(expert.name_en || expert.name_bg || expert.name || value);
+
+                  return (
+                    <option key={expert.id} value={value}>
+                      {label}
+                    </option>
+                  );
+                })}
+              </select>
+            </label>
+
+            <label className={styles.formField}>
+              <span>Periodicity, days</span>
+              <input
+                type="number"
+                min="1"
+                value={String(aiInsightSettings.interval_days)}
+                onChange={(event) => updateAiInsightSettings("interval_days", Math.max(1, Number(event.target.value) || 1))}
+              />
+            </label>
+
+          </div>
+
+          <div className={styles.settingsActions}>
+            <button
+              className={styles.primaryButton}
+              type="button"
+              onClick={saveAiInsightSettings}
+              disabled={isSavingAiSettings}
+            >
+              {isSavingAiSettings ? "Saving..." : "Save settings"}
+            </button>
+            <button
+              className={styles.secondaryButton}
+              type="button"
+              onClick={publishAiInsightNow}
+              disabled={isGeneratingInsight}
+            >
+              {isGeneratingInsight ? "Publishing..." : "Generate and publish now"}
+            </button>
+          </div>
+
+          {(aiSettingsError || aiSettingsNotice) && (
+            <p className={aiSettingsError ? styles.settingsError : styles.settingsNotice} role="status">
+              {aiSettingsError || aiSettingsNotice}
+            </p>
+          )}
+        </>
+      )}
+    </div>
+  );
 
   const renderEditorField = (field: AdminField) => {
     if (!editingRecord) {
@@ -1809,7 +2052,7 @@ export const AdminPanel = () => {
           <nav className={styles.resourceNav}>
             {resources.map((resource) => {
               const isActive = resource.key === activeResource.key;
-              const count = recordsByResource[resource.key]?.length ?? 0;
+              const count = resource.settingsPanel ? 1 : recordsByResource[resource.key]?.length ?? 0;
 
               return (
                 <button
@@ -1861,125 +2104,131 @@ export const AdminPanel = () => {
             )}
           </div>
 
-          <div className={styles.toolbar}>
-            <label className={styles.searchField}>
-              <span>Search</span>
-              <input
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder={`Search ${activeResource.label.toLowerCase()}`}
-              />
-            </label>
-            {isSalesResource && (
-              <div className={styles.filterGroup}>
-                <label className={styles.filterField}>
-                  <span>Purchase type</span>
-                  <select
-                    value={salePurchaseTypeFilter}
-                    onChange={(event) => setSalePurchaseTypeFilter(event.target.value)}
-                  >
-                    <option value="">All purchase types</option>
-                    {salePurchaseTypeOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {formatOptionLabel(option)}
-                      </option>
-                    ))}
-                  </select>
+          {isAiInsightSettingsResource ? (
+            renderAiInsightSettingsPanel()
+          ) : (
+            <>
+              <div className={styles.toolbar}>
+                <label className={styles.searchField}>
+                  <span>Search</span>
+                  <input
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                    placeholder={`Search ${activeResource.label.toLowerCase()}`}
+                  />
                 </label>
-                <label className={styles.filterField}>
-                  <span>Status</span>
-                  <select
-                    value={saleStatusFilter}
-                    onChange={(event) => setSaleStatusFilter(event.target.value)}
-                  >
-                    <option value="">All statuses</option>
-                    {saleStatusOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {formatOptionLabel(option)}
-                      </option>
+                {isSalesResource && (
+                  <div className={styles.filterGroup}>
+                    <label className={styles.filterField}>
+                      <span>Purchase type</span>
+                      <select
+                        value={salePurchaseTypeFilter}
+                        onChange={(event) => setSalePurchaseTypeFilter(event.target.value)}
+                      >
+                        <option value="">All purchase types</option>
+                        {salePurchaseTypeOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {formatOptionLabel(option)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className={styles.filterField}>
+                      <span>Status</span>
+                      <select
+                        value={saleStatusFilter}
+                        onChange={(event) => setSaleStatusFilter(event.target.value)}
+                      >
+                        <option value="">All statuses</option>
+                        {saleStatusOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {formatOptionLabel(option)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.tableWrap}>
+                <table className={styles.dataTable}>
+                  <thead>
+                    <tr>
+                      {activeResource.columns.map((column) => (
+                        <th key={column}>{column.replaceAll("_", " ")}</th>
+                      ))}
+                      {(!activeResource.readOnly || hasDetailAction) && <th>Actions</th>}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredRecords.map((record) => (
+                      <tr key={record.id}>
+                        {activeResource.columns.map((column) => (
+                          <td key={column}>
+                            <span
+                              className={
+                                column === "status" || column.startsWith("is_")
+                                  ? styles.valuePill
+                                  : ""
+                              }
+                            >
+                              {formatTableValue(column, record[column])}
+                            </span>
+                          </td>
+                        ))}
+                        {(!activeResource.readOnly || hasDetailAction) && (
+                          <td>
+                            <div className={styles.tableActions}>
+                              {hasDetailAction && (
+                                <button type="button" onClick={() => openView(record)} aria-label="View record" title="View">
+                                  <ViewIcon />
+                                </button>
+                              )}
+                              {!activeResource.readOnly && (
+                                <>
+                                  <button type="button" onClick={() => openEdit(record)} aria-label="Edit record" title="Edit">
+                                    <EditIcon />
+                                  </button>
+                                  <button
+                                    className={`${styles.dangerButton} ${styles.deleteActionButton}`}
+                                    type="button"
+                                    onClick={() => deleteRecord(record.id)}
+                                    aria-label="Delete record"
+                                    title="Delete"
+                                  >
+                                    <DeleteIcon />
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                          </td>
+                        )}
+                      </tr>
                     ))}
-                  </select>
-                </label>
-              </div>
-            )}
-          </div>
+                  </tbody>
+                </table>
 
-          <div className={styles.tableWrap}>
-            <table className={styles.dataTable}>
-              <thead>
-                <tr>
-                  {activeResource.columns.map((column) => (
-                    <th key={column}>{column.replaceAll("_", " ")}</th>
-                  ))}
-                  {(!activeResource.readOnly || hasDetailAction) && <th>Actions</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {filteredRecords.map((record) => (
-                  <tr key={record.id}>
-                    {activeResource.columns.map((column) => (
-                      <td key={column}>
-                        <span
-                          className={
-                            column === "status" || column.startsWith("is_")
-                              ? styles.valuePill
-                              : ""
-                          }
-                        >
-                          {formatTableValue(column, record[column])}
-                        </span>
-                      </td>
-                    ))}
-                    {(!activeResource.readOnly || hasDetailAction) && (
-                      <td>
-                        <div className={styles.tableActions}>
-                          {hasDetailAction && (
-                            <button type="button" onClick={() => openView(record)} aria-label="View record" title="View">
-                              <ViewIcon />
-                            </button>
-                          )}
-                          {!activeResource.readOnly && (
-                            <>
-                              <button type="button" onClick={() => openEdit(record)} aria-label="Edit record" title="Edit">
-                                <EditIcon />
-                              </button>
-                              <button
-                                className={`${styles.dangerButton} ${styles.deleteActionButton}`}
-                                type="button"
-                                onClick={() => deleteRecord(record.id)}
-                                aria-label="Delete record"
-                                title="Delete"
-                              >
-                                <DeleteIcon />
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </td>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                {isLoadingRecords && (
+                  <div className={styles.emptyState}>
+                    <h2>Loading records...</h2>
+                  </div>
+                )}
 
-            {isLoadingRecords && (
-              <div className={styles.emptyState}>
-                <h2>Loading records...</h2>
-              </div>
-            )}
+                {!isLoadingRecords && recordsError && (
+                  <div className={styles.emptyState}>
+                    <h2>{recordsError}</h2>
+                  </div>
+                )}
 
-            {!isLoadingRecords && recordsError && (
-              <div className={styles.emptyState}>
-                <h2>{recordsError}</h2>
+                {!isLoadingRecords && !recordsError && filteredRecords.length === 0 && (
+                  <div className={styles.emptyState}>
+                    <h2>No records found</h2>
+                  </div>
+                )}
               </div>
-            )}
-
-            {!isLoadingRecords && !recordsError && filteredRecords.length === 0 && (
-              <div className={styles.emptyState}>
-                <h2>No records found</h2>
-              </div>
-            )}
-          </div>
+            </>
+          )}
         </section>
       </main>
 

@@ -414,6 +414,53 @@
   width: 100%;
 }
 
+.settingsPanel {
+  width: 100%;
+  padding: 18px;
+  border: 1px solid #e3e3ea;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.settingsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.settingsActions {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.settingsNotice,
+.settingsError {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.settingsNotice {
+  border: 1px solid rgba(0, 150, 110, 0.25);
+  background: rgba(0, 150, 110, 0.08);
+  color: #006b4f;
+}
+
+.settingsError {
+  border: 1px solid rgba(214, 38, 18, 0.25);
+  background: rgba(214, 38, 18, 0.08);
+  color: #d62612;
+}
+
 .tableWrap {
   width: 100%;
   overflow-x: auto;

@@ -78,10 +78,12 @@ export const PopularInsights: React.FC<PopularInsightsProps> = ({ news, lang }) 
                   <div className={styles.featuredExcerpt}>{featuredArticle.excerpt}</div>
                 </Link>
                 <div className={styles.featuredFooter}>
-                  <div className={styles.featuredAuthorGroup}>
-                    <div className={styles.featuredAuthorLabel}>{featuredArticle.authorLabel || t.by}</div>
-                    <AuthorLink name={featuredArticle.authorName || ''} expertId={featuredArticle.authorExpertId} lang={lang} />
-                  </div>
+                  {(featuredArticle.authorName || featuredArticle.authorExpertId) && (
+                    <div className={styles.featuredAuthorGroup}>
+                      <div className={styles.featuredAuthorLabel}>{featuredArticle.authorLabel || t.by}</div>
+                      <AuthorLink name={featuredArticle.authorName || ''} expertId={featuredArticle.authorExpertId} lang={lang} />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -96,7 +98,7 @@ export const PopularInsights: React.FC<PopularInsightsProps> = ({ news, lang }) 
                 title={article.title}
                 excerpt={article.excerpt || ''}
                 authorName={article.authorName || ''}
-                authorLabel={article.authorLabel || t.by}
+                authorLabel={article.authorName ? article.authorLabel || t.by : ''}
                 authorExpertId={article.authorExpertId}
                 authorAvatarUrl={article.authorAvatarUrl}
                 lang={lang}

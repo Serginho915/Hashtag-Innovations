@@ -11,7 +11,7 @@ interface InsightCardProps {
 
 export const InsightCard: React.FC<InsightCardProps> = ({ article, lang, variant = 'grid' }) => {
   const href = `/${lang}/insights/${article.id}`;
-  const authorName = article.authorName || (lang === 'bg' ? 'Автор' : 'Author');
+  const hasAuthor = Boolean(article.authorName || article.authorExpertId);
 
   return (
     <article className={`${styles.card} ${styles[variant]}`}>
@@ -25,12 +25,14 @@ export const InsightCard: React.FC<InsightCardProps> = ({ article, lang, variant
           <h2 className={styles.title}>{article.title}</h2>
         </Link>
         {article.excerpt && <p className={styles.excerpt}>{article.excerpt}</p>}
-        <div className={styles.authorRow}>
-          <span>{article.authorLabel || 'by'}</span>
-          <Link href={article.authorExpertId ? `/${lang}/experts/${article.authorExpertId}` : href} className={styles.authorName}>
-            {authorName}
-          </Link>
-        </div>
+        {hasAuthor && (
+          <div className={styles.authorRow}>
+            <span>{article.authorLabel || 'by'}</span>
+            <Link href={article.authorExpertId ? `/${lang}/experts/${article.authorExpertId}` : href} className={styles.authorName}>
+              {article.authorName}
+            </Link>
+          </div>
+        )}
       </div>
     </article>
   );

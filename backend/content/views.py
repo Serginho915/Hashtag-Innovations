@@ -31,6 +31,7 @@ from django.views.decorators.http import require_POST
 
 from content.models import (
     AfterSalesService,
+    AIInsightSettings,
     Article,
     Category,
     ChatConversation,
@@ -43,6 +44,7 @@ from content.models import (
     PublishStatus,
     Sale,
 )
+from content.ai_insights import create_ai_insight, get_ai_insight_settings, save_ai_insight_settings
 
 
 OPENROUTER_CHAT_URL = "https://openrouter.ai/api/v1/chat/completions"
@@ -920,6 +922,15 @@ def serialize_admin_after_sales_services():
         ]
     except (OperationalError, ProgrammingError):
         return []
+
+
+def serialize_admin_ai_insight_settings(config=None):
+    config = config or get_ai_insight_settings()
+    return {
+        "prompt": config.prompt or settings.AI_INSIGHTS_PROMPT,
+        "author": config.author.slug if config.author else "",
+        "interval_days": config.interval_days,
+    }
 
 
 ADMIN_SERIALIZERS = {
@@ -2581,6 +2592,47 @@ def admin_resources(request):
             "after_sales_services": serialize_admin_after_sales_services(),
         }
     )
+
+
+@csrf_exempt
+@require_http_methods(["GET", "PATCH"])
+def admin_ai_insight_settings(request):
+    unauthorized = require_admin_api(request)
+    if unauthorized:
+        return unauthorized
+
+    if request.method == "GET":
+        return JsonResponse(serialize_admin_ai_insight_settings())
+
+    try:
+        payload = json.loads(request.body or "{}")
+        config = save_ai_insight_settings(payload)
+    except (ValueError, ValidationError) as error:
+        return admin_error(error)
+    except (OperationalError, ProgrammingError):
+        return admin_error("AI insight settings table is not ready. Run database migrations and try again.", status=503)
+    except json.JSONDecodeError:
+        return admin_error("Invalid request body.")
+
+    return JsonResponse(serialize_admin_ai_insight_settings(config))
+
+
+@csrf_exempt
+@require_POST
+def admin_generate_ai_insight(request):
+    unauthorized = require_admin_api(request)
+    if unauthorized:
+        return unauthorized
+
+    try:
+        article = create_ai_insight(force=True)
+    except Exception as error:
+        return admin_error(str(error), status=502)
+
+    if article is None:
+        return admin_error("AI insight already exists for today.")
+
+    return JsonResponse(serialize_admin_article(article), status=201)
 
 
 @require_GET

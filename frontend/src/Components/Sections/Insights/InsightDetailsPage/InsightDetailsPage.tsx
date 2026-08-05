@@ -103,6 +103,7 @@ export const InsightDetailsPage: React.FC<InsightDetailsPageProps> = ({ insight,
   const bodySections = insight.bodySections?.length
     ? insight.bodySections
     : [{ paragraphs: [insight.excerpt || ''] }];
+  const hasAuthor = Boolean(insight.authorName || insight.authorExpertId);
   const primaryMetaItems = [
     ...(insight.hashtags?.length ? insight.hashtags : []),
   ].filter(Boolean) as string[];
@@ -130,18 +131,20 @@ export const InsightDetailsPage: React.FC<InsightDetailsPageProps> = ({ insight,
 
         <div className={styles.heroContent}>
           <div className={styles.byline}>
-            <div className={styles.authorGroup}>
-              <span>{insight.authorLabel || (lang === 'bg' ? 'от' : 'by')}</span>
-              {insight.authorAvatarUrl && (
-                <img className={styles.authorAvatar} src={insight.authorAvatarUrl} alt="" />
-              )}
-              <AuthorLink
-                name={insight.authorName || (lang === 'bg' ? 'Автор' : 'Author')}
-                expertId={insight.authorExpertId}
-                lang={lang}
-                className={styles.authorName}
-              />
-            </div>
+            {hasAuthor && (
+              <div className={styles.authorGroup}>
+                <span>{insight.authorLabel || (lang === 'bg' ? 'от' : 'by')}</span>
+                {insight.authorAvatarUrl && (
+                  <img className={styles.authorAvatar} src={insight.authorAvatarUrl} alt="" />
+                )}
+                <AuthorLink
+                  name={insight.authorName || ''}
+                  expertId={insight.authorExpertId}
+                  lang={lang}
+                  className={styles.authorName}
+                />
+              </div>
+            )}
             <time dateTime={insight.date}>{publishDate}</time>
           </div>
           <p className={styles.lead}>{insight.lead || insight.excerpt}</p>
@@ -212,7 +215,7 @@ export const InsightDetailsPage: React.FC<InsightDetailsPageProps> = ({ insight,
                     className={styles.relatedCard}
                     title={article.title}
                     excerpt={article.excerpt || ''}
-                    authorLabel={article.authorLabel || (lang === 'bg' ? 'от' : 'by')}
+                    authorLabel={article.authorName ? article.authorLabel || (lang === 'bg' ? 'от' : 'by') : ''}
                     authorHref={article.authorExpertId ? `/${lang}/experts/${article.authorExpertId}` : undefined}
                     authorAvatarUrl={article.authorAvatarUrl}
                     readText={t.read}

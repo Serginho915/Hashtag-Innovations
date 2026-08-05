@@ -9,8 +9,8 @@ interface PopularInsightCardProps {
   id: string;
   title: string;
   excerpt: string;
-  authorName: string;
-  authorLabel: string;
+  authorName?: string;
+  authorLabel?: string;
   authorExpertId?: string;
   authorAvatarUrl?: string;
   lang?: string;
@@ -27,6 +27,7 @@ export const PopularInsightCard = ({
   lang = 'en'
 }: PopularInsightCardProps) => {
   const t = translations[lang] || translations.en;
+  const hasAuthor = Boolean(authorName || authorExpertId || authorAvatarUrl);
 
   return (
     <div className={styles.insightCard}>
@@ -38,17 +39,19 @@ export const PopularInsightCard = ({
           <div className={styles.excerpt}>{excerpt}</div>
         </div>
         <div className={styles.footerRow}>
-          <div className={styles.authorGroup}>
-            <div className={styles.authorLabel}>{authorLabel}</div>
-            <div className={styles.authorAvatar}>
-              {authorAvatarUrl ? (
-                <Image src={authorAvatarUrl} alt={authorName} fill style={{ objectFit: 'cover' }} />
-              ) : (
-                <span className={styles.avatarBg} aria-hidden="true" />
-              )}
+          {hasAuthor && (
+            <div className={styles.authorGroup}>
+              <div className={styles.authorLabel}>{authorLabel}</div>
+              <div className={styles.authorAvatar}>
+                {authorAvatarUrl ? (
+                  <Image src={authorAvatarUrl} alt={authorName || ''} fill style={{ objectFit: 'cover' }} />
+                ) : (
+                  <span className={styles.avatarBg} aria-hidden="true" />
+                )}
+              </div>
+              <AuthorLink name={authorName || ''} expertId={authorExpertId} lang={lang} />
             </div>
-            <AuthorLink name={authorName} expertId={authorExpertId} lang={lang} />
-          </div>
+          )}
           <ReadButton text={t.read} href={`/${lang}/insights/${id}`} />
         </div>
       </div>
