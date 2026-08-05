@@ -263,7 +263,10 @@ def call_openrouter_for_article():
         json=payload,
         timeout=60,
     )
-    response.raise_for_status()
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as error:
+        raise ValueError(f"OpenRouter text generation failed: {response.text[:500]}") from error
     data = response.json()
     choices = data.get("choices") if isinstance(data, dict) else []
     message = choices[0].get("message", {}) if choices else {}
@@ -334,7 +337,10 @@ def create_cover_image(article_payload):
         json=payload,
         timeout=180,
     )
-    response.raise_for_status()
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as error:
+        raise ValueError(f"OpenRouter image generation failed: {response.text[:500]}") from error
     data = response.json()
     images = data.get("data") if isinstance(data, dict) else []
     image_data = images[0] if images and isinstance(images[0], dict) else {}
