@@ -270,7 +270,48 @@ def normalize_article_payload(data):
     return result
 
 
-def build_generation_messages(recent_titles):
+def article_topic_context(article):
+    translations = article.translations if isinstance(article.translations, dict) else {}
+    translated = translations.get("en") if isinstance(translations.get("en"), dict) else {}
+    body = translated.get("body") if isinstance(translated.get("body"), dict) else article.body
+    body = body if isinstance(body, dict) else {}
+
+    title = str(translated.get("title") or article.title or "").strip()
+    excerpt = str(translated.get("excerpt") or article.excerpt or "").strip()
+    lead = str(translated.get("lead") or article.lead or "").strip()
+    section_titles = [
+        str(section.get("title", "") or "").strip()
+        for section in body.get("sections", [])
+        if isinstance(section, dict) and str(section.get("title", "") or "").strip()
+    ][:5]
+    hashtags = [
+        str(tag).strip().lstrip("#")
+        for tag in body.get("hashtags", [])
+        if str(tag).strip()
+    ][:8]
+
+    return {
+        "title": title,
+        "excerpt": excerpt,
+        "lead": lead,
+        "section_titles": section_titles,
+        "hashtags": hashtags,
+    }
+
+
+def recent_article_topics(limit=50):
+    articles = (
+        Article.objects.filter(status=PublishStatus.PUBLISHED)
+        .order_by("-published_at", "-created_at")[:limit]
+    )
+    return [
+        context
+        for context in (article_topic_context(article) for article in articles)
+        if context["title"] or context["excerpt"] or context["lead"]
+    ]
+
+
+def build_generation_messages(recent_topics):
     schema = {
         "en": {
             "title": "Short title",
@@ -341,12 +382,14 @@ def build_generation_messages(recent_titles):
     }
     user_prompt = {
         "content_prompt": get_ai_insights_prompt(),
-        "recent_titles_to_avoid": recent_titles,
+        "recent_article_topics_to_avoid": recent_topics,
         "requirements": [
             "Return valid JSON only.",
             "Write no author name, byline, signature, or disclaimer.",
             "Follow content_prompt exactly for article length, structure, source requirements, SEO assets, FAQ, and supporting materials.",
             "Do not shorten, summarize, or omit requested sections unless the content_prompt explicitly asks for a shorter format.",
+            "Do not generate an article on the same topic, market angle, business problem, or strategic thesis as any item in recent_article_topics_to_avoid.",
+            "A new headline is not enough: choose a genuinely different topic from the last 50 published articles.",
             "Make the content specific, useful, and non-generic for business readers.",
             "Use English hashtags in both locales for filtering.",
             "Write image.visual_prompt in English and make it suitable for realistic image generation.",
@@ -369,14 +412,10 @@ def call_openrouter_for_article():
     if not settings.OPENROUTER_API_KEY:
         raise ValueError("OPENROUTER_API_KEY is not configured.")
 
-    recent_titles = list(
-        Article.objects.filter(status=PublishStatus.PUBLISHED)
-        .order_by("-published_at", "-created_at")
-        .values_list("title", flat=True)[:12]
-    )
+    recent_topics = recent_article_topics(limit=50)
     payload = {
         "model": settings.OPENROUTER_MODEL,
-        "messages": build_generation_messages(recent_titles),
+        "messages": build_generation_messages(recent_topics),
         "temperature": float(getattr(settings, "AI_INSIGHTS_TEMPERATURE", 0.8)),
         "max_tokens": int(getattr(settings, "AI_INSIGHTS_MAX_TOKENS", 12000)),
         "response_format": {"type": "json_object"},

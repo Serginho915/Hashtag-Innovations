@@ -1,10 +1,13 @@
 import json
 import tempfile
+from datetime import timedelta
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
+from django.utils import timezone
 
-from content.models import Article
+from content.ai_insights import recent_article_topics
+from content.models import Article, PublishStatus
 
 
 ADMIN_HEADERS = {"HTTP_X_ADMIN_API_TOKEN": "test-admin-token"}
@@ -301,3 +304,37 @@ class AdminResourceCreateTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertIn("File path must be an uploaded file", response.json()["error"])
+
+
+class AIInsightTopicContextTests(TestCase):
+    def test_recent_article_topics_uses_last_50_published_articles(self):
+        now = timezone.now()
+        for index in range(55):
+            Article.objects.create(
+                title=f"Published Topic {index}",
+                slug=f"published-topic-{index}",
+                excerpt=f"Published excerpt {index}",
+                lead=f"Published lead {index}",
+                body={
+                    "sections": [{"title": f"Strategic angle {index}", "paragraphs": ["Body"]}],
+                    "hashtags": [f"Tag{index}"],
+                },
+                published_at=now + timedelta(minutes=index),
+                status=PublishStatus.PUBLISHED,
+            )
+        Article.objects.create(
+            title="Draft Topic",
+            slug="draft-topic",
+            excerpt="Draft excerpt",
+            published_at=now + timedelta(days=1),
+            status=PublishStatus.DRAFT,
+        )
+
+        topics = recent_article_topics()
+
+        self.assertEqual(len(topics), 50)
+        self.assertEqual(topics[0]["title"], "Published Topic 54")
+        self.assertEqual(topics[-1]["title"], "Published Topic 5")
+        self.assertNotIn("Draft Topic", [topic["title"] for topic in topics])
+        self.assertEqual(topics[0]["section_titles"], ["Strategic angle 54"])
+        self.assertEqual(topics[0]["hashtags"], ["Tag54"])
