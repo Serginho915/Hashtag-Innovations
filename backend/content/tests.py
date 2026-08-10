@@ -1,12 +1,13 @@
 import json
 import tempfile
 from datetime import timedelta
+from unittest.mock import patch
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.utils import timezone
 
-from content.ai_insights import recent_article_topics
+from content.ai_insights import call_openrouter_for_article, recent_article_topics
 from content.models import Article, PublishStatus
 
 
@@ -16,6 +17,26 @@ TINY_PNG = (
     b"\x08\x04\x00\x00\x00\xb5\x1c\x0c\x02\x00\x00\x00\x0bIDATx\xdac\xfc"
     b"\xff\x1f\x00\x03\x03\x02\x00\xef\xbf\xa7\xdb\x00\x00\x00\x00IEND\xaeB`\x82"
 )
+
+
+class FakeOpenRouterResponse:
+    def __init__(self, content, finish_reason="stop"):
+        self.content = content
+        self.finish_reason = finish_reason
+        self.text = json.dumps(self.json())
+
+    def json(self):
+        return {
+            "choices": [
+                {
+                    "finish_reason": self.finish_reason,
+                    "message": {"content": self.content},
+                }
+            ]
+        }
+
+    def raise_for_status(self):
+        return None
 
 
 @override_settings(ADMIN_API_TOKEN="test-admin-token", MEDIA_ROOT=tempfile.mkdtemp())
@@ -338,3 +359,39 @@ class AIInsightTopicContextTests(TestCase):
         self.assertNotIn("Draft Topic", [topic["title"] for topic in topics])
         self.assertEqual(topics[0]["section_titles"], ["Strategic angle 54"])
         self.assertEqual(topics[0]["hashtags"], ["Tag54"])
+
+    @override_settings(OPENROUTER_API_KEY="test-key")
+    def test_call_openrouter_repairs_unterminated_json_string(self):
+        malformed_json = '{"en":{"title":"Broken","excerpt":"Open string'
+        repaired_json = json.dumps({
+            "en": {
+                "title": "Repaired Article",
+                "excerpt": "Excerpt",
+                "lead": "Lead",
+                "sections": [{"title": "Section", "paragraphs": ["Paragraph"]}],
+                "hashtags": ["Business"],
+            },
+            "bg": {
+                "title": "Поправена статия",
+                "excerpt": "Кратко описание",
+                "lead": "Увод",
+                "sections": [{"title": "Секция", "paragraphs": ["Абзац"]}],
+                "hashtags": ["Business"],
+            },
+            "image": {
+                "headline": "Repaired Article",
+                "visual_prompt": "Business editorial scene",
+            },
+        })
+
+        with patch(
+            "content.ai_insights.requests.post",
+            side_effect=[
+                FakeOpenRouterResponse(malformed_json),
+                FakeOpenRouterResponse(repaired_json),
+            ],
+        ):
+            payload = call_openrouter_for_article()
+
+        self.assertEqual(payload["en"]["title"], "Repaired Article")
+        self.assertEqual(payload["bg"]["title"], "Поправена статия")

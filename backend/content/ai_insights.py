@@ -146,6 +146,85 @@ def extract_json(text):
     return json.loads(text)
 
 
+def openrouter_headers(title):
+    return {
+        "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": settings.FRONTEND_BASE_URL,
+        "X-OpenRouter-Title": title,
+    }
+
+
+def post_openrouter_chat(payload, title="Hashtag Innovations AI Insights"):
+    response = requests.post(
+        OPENROUTER_CHAT_URL,
+        headers=openrouter_headers(title),
+        json=payload,
+        timeout=120,
+    )
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as error:
+        raise ValueError(f"OpenRouter text generation failed: {response.text[:500]}") from error
+    return response.json()
+
+
+def first_openrouter_message(data):
+    choices = data.get("choices") if isinstance(data, dict) else []
+    choice = choices[0] if choices and isinstance(choices[0], dict) else {}
+    message = choice.get("message", {}) if isinstance(choice.get("message", {}), dict) else {}
+    return message, str(choice.get("finish_reason", "") or "")
+
+
+def repair_article_json(raw_content, decode_error):
+    payload = {
+        "model": settings.OPENROUTER_MODEL,
+        "messages": [
+            {
+                "role": "system",
+                "content": (
+                    "You repair malformed JSON. Return valid JSON only. "
+                    "Do not add markdown, comments, explanations, or prose outside the JSON object."
+                ),
+            },
+            {
+                "role": "user",
+                "content": json.dumps(
+                    {
+                        "error": str(decode_error),
+                        "instructions": [
+                            "Repair the malformed JSON into one complete valid JSON object.",
+                            "Preserve as much article content as possible.",
+                            "If a string or array was cut off, close it cleanly instead of inventing a large continuation.",
+                            "The top-level object must keep the en, bg, and image keys when present.",
+                        ],
+                        "malformed_json": str(raw_content or ""),
+                    },
+                    ensure_ascii=False,
+                ),
+            },
+        ],
+        "temperature": 0,
+        "max_tokens": int(getattr(settings, "AI_INSIGHTS_MAX_TOKENS", 12000)),
+        "response_format": {"type": "json_object"},
+    }
+    data = post_openrouter_chat(payload, title="Hashtag Innovations AI Insight JSON Repair")
+    message, _finish_reason = first_openrouter_message(data)
+    return extract_json(message.get("content", ""))
+
+
+def parse_or_repair_article_json(raw_content):
+    try:
+        return extract_json(raw_content)
+    except json.JSONDecodeError as decode_error:
+        try:
+            return repair_article_json(raw_content, decode_error)
+        except Exception as repair_error:
+            raise ValueError(
+                f"OpenRouter returned invalid JSON and repair failed: {decode_error}"
+            ) from repair_error
+
+
 def normalize_sections(value):
     sections = value if isinstance(value, list) else []
     normalized = []
@@ -413,32 +492,41 @@ def call_openrouter_for_article():
         raise ValueError("OPENROUTER_API_KEY is not configured.")
 
     recent_topics = recent_article_topics(limit=50)
-    payload = {
-        "model": settings.OPENROUTER_MODEL,
-        "messages": build_generation_messages(recent_topics),
-        "temperature": float(getattr(settings, "AI_INSIGHTS_TEMPERATURE", 0.8)),
-        "max_tokens": int(getattr(settings, "AI_INSIGHTS_MAX_TOKENS", 12000)),
-        "response_format": {"type": "json_object"},
-    }
-    response = requests.post(
-        OPENROUTER_CHAT_URL,
-        headers={
-            "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
-            "Content-Type": "application/json",
-            "HTTP-Referer": settings.FRONTEND_BASE_URL,
-            "X-OpenRouter-Title": "Hashtag Innovations AI Insights",
-        },
-        json=payload,
-        timeout=60,
-    )
-    try:
-        response.raise_for_status()
-    except requests.HTTPError as error:
-        raise ValueError(f"OpenRouter text generation failed: {response.text[:500]}") from error
-    data = response.json()
-    choices = data.get("choices") if isinstance(data, dict) else []
-    message = choices[0].get("message", {}) if choices else {}
-    return normalize_article_payload(extract_json(message.get("content", "")))
+    messages = build_generation_messages(recent_topics)
+    last_error = None
+
+    for attempt in range(2):
+        payload = {
+            "model": settings.OPENROUTER_MODEL,
+            "messages": messages,
+            "temperature": 0.3 if attempt else float(getattr(settings, "AI_INSIGHTS_TEMPERATURE", 0.8)),
+            "max_tokens": int(getattr(settings, "AI_INSIGHTS_MAX_TOKENS", 12000)),
+            "response_format": {"type": "json_object"},
+        }
+        data = post_openrouter_chat(payload)
+        message, finish_reason = first_openrouter_message(data)
+        raw_content = message.get("content", "")
+
+        try:
+            return normalize_article_payload(parse_or_repair_article_json(raw_content))
+        except ValueError as error:
+            last_error = error
+            if attempt:
+                break
+            retry_note = (
+                "The previous response was not parseable JSON"
+                f"{' and appears to have been cut off' if finish_reason == 'length' else ''}. "
+                "Regenerate the full article as one valid JSON object. "
+                "Escape all quotes and newlines inside strings. "
+                "Do not stop until every opened string, array, and object is closed."
+            )
+            messages = [
+                *messages,
+                {"role": "assistant", "content": str(raw_content or "")[:4000]},
+                {"role": "user", "content": retry_note},
+            ]
+
+    raise ValueError(f"OpenRouter returned invalid article JSON after retry: {last_error}")
 
 
 def build_cover_prompt(article_payload):
