@@ -64,6 +64,33 @@ const socialIcons = {
 
 export const InsightDetailsPage: React.FC<InsightDetailsPageProps> = ({ insight, relatedInsights, lang }) => {
   const t = translations[lang as keyof typeof translations] || translations.en;
+  const detailLabels = lang === 'bg'
+    ? {
+        marketData: 'Пазарни данни',
+        faq: 'FAQ',
+        sources: 'Източници',
+        statistics: 'Статистики',
+        seo: 'SEO',
+        imageIdeas: 'Идеи за изображения',
+        socialTitles: 'Заглавия за социални мрежи',
+        linkedinPost: 'LinkedIn пост',
+        facebookPost: 'Facebook пост',
+        internalLinks: 'Вътрешни връзки',
+        externalLinks: 'Външни източници',
+      }
+    : {
+        marketData: 'Market Data',
+        faq: 'FAQ',
+        sources: 'Sources',
+        statistics: 'Statistics',
+        seo: 'SEO',
+        imageIdeas: 'Image Ideas',
+        socialTitles: 'Social Titles',
+        linkedinPost: 'LinkedIn Post',
+        facebookPost: 'Facebook Post',
+        internalLinks: 'Internal Links',
+        externalLinks: 'External Sources',
+      };
   const relatedArticles = relatedInsights.slice(0, 3);
   const publishDate = insight.displayDate || formatDate(insight.date, lang);
   const newsletterId = `insight-newsletter-${insight.id}`;
@@ -190,6 +217,125 @@ export const InsightDetailsPage: React.FC<InsightDetailsPageProps> = ({ insight,
               )}
             </section>
           ))}
+
+          {!!insight.statistics?.length && (
+            <section className={styles.bodySection}>
+              <h2>{detailLabels.statistics}</h2>
+              <ul className={styles.detailList}>
+                {insight.statistics.map((item, index) => (
+                  <li key={`${item.label || 'stat'}-${index}`}>
+                    <strong>{item.label}</strong>
+                    {item.value && <span>{item.value}</span>}
+                    {(item.source || item.url) && (
+                      item.url
+                        ? <a href={item.url} target="_blank" rel="noreferrer">{item.source || item.url}</a>
+                        : <span>{item.source}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {!!insight.faq?.length && (
+            <section className={styles.bodySection}>
+              <h2>{detailLabels.faq}</h2>
+              <div className={styles.faqList}>
+                {insight.faq.map((item, index) => (
+                  <div key={`${item.question || 'faq'}-${index}`} className={styles.faqItem}>
+                    {item.question && <h3>{item.question}</h3>}
+                    {item.answer && <p>{item.answer}</p>}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {!!insight.sources?.length && (
+            <section className={styles.bodySection}>
+              <h2>{detailLabels.sources}</h2>
+              <ul className={styles.detailList}>
+                {insight.sources.map((item, index) => (
+                  <li key={`${item.title || 'source'}-${index}`}>
+                    {item.url
+                      ? <a href={item.url} target="_blank" rel="noreferrer"><strong>{item.title || item.url}</strong></a>
+                      : <strong>{item.title}</strong>}
+                    {item.publisher && <span>{item.publisher}</span>}
+                    {item.note && <span>{item.note}</span>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {!!insight.seo && Object.values(insight.seo).some(Boolean) && (
+            <section className={styles.bodySection}>
+              <h2>{detailLabels.seo}</h2>
+              <ul className={styles.detailList}>
+                {insight.seo.meta_title && <li><strong>Meta title</strong><span>{insight.seo.meta_title}</span></li>}
+                {insight.seo.meta_description && <li><strong>Meta description</strong><span>{insight.seo.meta_description}</span></li>}
+                {insight.seo.url_slug && <li><strong>URL slug</strong><span>{insight.seo.url_slug}</span></li>}
+              </ul>
+            </section>
+          )}
+
+          {!!insight.internalLinks?.length && (
+            <section className={styles.bodySection}>
+              <h2>{detailLabels.internalLinks}</h2>
+              <ul>
+                {insight.internalLinks.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </section>
+          )}
+
+          {!!insight.externalLinks?.length && (
+            <section className={styles.bodySection}>
+              <h2>{detailLabels.externalLinks}</h2>
+              <ul className={styles.detailList}>
+                {insight.externalLinks.map((item, index) => (
+                  <li key={`${item.title || 'external'}-${index}`}>
+                    {item.url
+                      ? <a href={item.url} target="_blank" rel="noreferrer"><strong>{item.title || item.url}</strong></a>
+                      : <strong>{item.title}</strong>}
+                    {item.publisher && <span>{item.publisher}</span>}
+                    {item.note && <span>{item.note}</span>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {!!insight.imageIdeas?.length && (
+            <section className={styles.bodySection}>
+              <h2>{detailLabels.imageIdeas}</h2>
+              <ul>
+                {insight.imageIdeas.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </section>
+          )}
+
+          {!!insight.socialTitles?.length && (
+            <section className={styles.bodySection}>
+              <h2>{detailLabels.socialTitles}</h2>
+              <ul>
+                {insight.socialTitles.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </section>
+          )}
+
+          {insight.linkedinPost && (
+            <section className={styles.bodySection}>
+              <h2>{detailLabels.linkedinPost}</h2>
+              <p>{insight.linkedinPost}</p>
+            </section>
+          )}
+
+          {insight.facebookPost && (
+            <section className={styles.bodySection}>
+              <h2>{detailLabels.facebookPost}</h2>
+              <p>{insight.facebookPost}</p>
+            </section>
+          )}
         </div>
 
         <aside className={styles.sidebar}>

@@ -253,7 +253,9 @@
   gap: 24px;
 
   h2,
+  h3,
   p,
+  a,
   ul,
   ol,
   blockquote {
@@ -274,12 +276,27 @@
     line-height: 38px;
   }
 
-  p {
+  h3 {
+    color: #000;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 28px;
+  }
+
+  p,
+  a {
     width: min(690px, 100%);
     color: #000;
     font-size: 20px;
     font-weight: 600;
     line-height: 28px;
+  }
+
+  a {
+    color: #3451b2;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
   }
 
   ul,
@@ -308,7 +325,13 @@
       line-height: 30px;
     }
 
+    h3 {
+      font-size: 20px;
+      line-height: 26px;
+    }
+
     p,
+    a,
     ul,
     ol,
     blockquote {
@@ -316,6 +339,49 @@
       line-height: 26px;
     }
   }
+}
+
+.detailList,
+.faqList,
+.faqItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.detailList {
+  gap: 16px;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  strong,
+  span {
+    font-family: $font-manrope;
+    color: #000;
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  strong {
+    font-weight: 800;
+  }
+
+  span {
+    font-weight: 600;
+  }
+}
+
+.faqList {
+  gap: 22px;
+}
+
+.faqItem {
+  gap: 10px;
 }
 
 .sidebar {

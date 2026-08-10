@@ -139,7 +139,7 @@ OPENROUTER_IMAGE_MODEL = os.getenv("OPENROUTER_IMAGE_MODEL", "openai/gpt-image-2
 AI_INSIGHTS_PROMPT = os.getenv(
     "AI_INSIGHTS_PROMPT",
     (
-        "Create one concise, practical business insight for the Hashtag Innovations audience. "
+        "Create one publish-ready business insight for the Hashtag Innovations audience. "
         "Choose a fresh topic from business strategy, AI adoption, digital transformation, "
         "startup growth, operations, education, sustainability, or innovation."
     ),
@@ -147,7 +147,7 @@ AI_INSIGHTS_PROMPT = os.getenv(
 AI_INSIGHTS_INTERVAL_DAYS = int(os.getenv("AI_INSIGHTS_INTERVAL_DAYS", "1"))
 AI_INSIGHTS_CHECK_SECONDS = int(os.getenv("AI_INSIGHTS_CHECK_SECONDS", "300"))
 AI_INSIGHTS_TEMPERATURE = float(os.getenv("AI_INSIGHTS_TEMPERATURE", "0.8"))
-AI_INSIGHTS_MAX_TOKENS = int(os.getenv("AI_INSIGHTS_MAX_TOKENS", "1800"))
+AI_INSIGHTS_MAX_TOKENS = int(os.getenv("AI_INSIGHTS_MAX_TOKENS", "12000"))
 AI_INSIGHTS_IMAGE_QUALITY = os.getenv("AI_INSIGHTS_IMAGE_QUALITY", "high")
 AI_INSIGHTS_IMAGE_ASPECT_RATIO = os.getenv("AI_INSIGHTS_IMAGE_ASPECT_RATIO", "16:9")
 AI_INSIGHTS_IMAGE_RESOLUTION = os.getenv("AI_INSIGHTS_IMAGE_RESOLUTION", "1K")

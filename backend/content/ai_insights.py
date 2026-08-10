@@ -29,7 +29,7 @@ IMAGE_STYLE_PROMPT = (
     "no distorted hands or faces. The image must work as a 16:9 article cover."
 )
 DEFAULT_PROMPT = (
-    "Create one concise, practical business insight for the Hashtag Innovations audience. "
+    "Create one publish-ready business insight for the Hashtag Innovations audience. "
     "Choose a fresh topic from business strategy, AI adoption, digital transformation, "
     "startup growth, operations, education, sustainability, or innovation. "
     "Return English and Bulgarian versions. Do not mention or invent an author."
@@ -149,7 +149,7 @@ def extract_json(text):
 def normalize_sections(value):
     sections = value if isinstance(value, list) else []
     normalized = []
-    for section in sections[:4]:
+    for section in sections:
         if not isinstance(section, dict):
             continue
         title = str(section.get("title", "") or "").strip()
@@ -157,9 +157,72 @@ def normalize_sections(value):
             str(item).strip()
             for item in section.get("paragraphs", [])
             if str(item).strip()
-        ][:3]
+        ]
         if title or paragraphs:
             normalized.append({"title": title, "paragraphs": paragraphs})
+    return normalized
+
+
+def normalize_list(value, limit=None):
+    items = value if isinstance(value, list) else []
+    normalized = [
+        str(item).strip()
+        for item in items
+        if str(item).strip()
+    ]
+    return normalized[:limit] if limit else normalized
+
+
+def normalize_faq(value):
+    items = value if isinstance(value, list) else []
+    normalized = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        question = str(item.get("question", "") or "").strip()
+        answer = str(item.get("answer", "") or "").strip()
+        if question or answer:
+            normalized.append({"question": question, "answer": answer})
+    return normalized
+
+
+def normalize_sources(value):
+    items = value if isinstance(value, list) else []
+    normalized = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        title = str(item.get("title", "") or "").strip()
+        url = str(item.get("url", "") or "").strip()
+        publisher = str(item.get("publisher", "") or "").strip()
+        note = str(item.get("note", "") or "").strip()
+        if title or url:
+            normalized.append({
+                "title": title,
+                "url": url,
+                "publisher": publisher,
+                "note": note,
+            })
+    return normalized
+
+
+def normalize_statistics(value):
+    items = value if isinstance(value, list) else []
+    normalized = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        label = str(item.get("label", "") or "").strip()
+        value_text = str(item.get("value", "") or "").strip()
+        source = str(item.get("source", "") or "").strip()
+        url = str(item.get("url", "") or "").strip()
+        if label or value_text:
+            normalized.append({
+                "label": label,
+                "value": value_text,
+                "source": source,
+                "url": url,
+            })
     return normalized
 
 
@@ -173,6 +236,16 @@ def normalize_article_payload(data):
             "lead": str(localized.get("lead", "") or "").strip(),
             "body": {
                 "sections": normalize_sections(localized.get("sections")),
+                "faq": normalize_faq(localized.get("faq")),
+                "sources": normalize_sources(localized.get("sources")),
+                "statistics": normalize_statistics(localized.get("statistics")),
+                "image_ideas": normalize_list(localized.get("image_ideas")),
+                "social_titles": normalize_list(localized.get("social_titles")),
+                "linkedin_post": str(localized.get("linkedin_post", "") or "").strip(),
+                "facebook_post": str(localized.get("facebook_post", "") or "").strip(),
+                "internal_links": normalize_list(localized.get("internal_links")),
+                "external_links": normalize_sources(localized.get("external_links")),
+                "seo": localized.get("seo") if isinstance(localized.get("seo"), dict) else {},
                 "hashtags": [
                     str(tag).strip().lstrip("#")
                     for tag in localized.get("hashtags", [])
@@ -204,7 +277,29 @@ def build_generation_messages(recent_titles):
             "excerpt": "One sentence summary",
             "lead": "Two sentence lead",
             "sections": [
-                {"title": "Section title", "paragraphs": ["Short paragraph"]}
+                {"title": "Section title", "paragraphs": ["Paragraph"]}
+            ],
+            "seo": {
+                "meta_title": "SEO title up to 60 characters",
+                "meta_description": "SEO description between 140 and 160 characters",
+                "url_slug": "seo-friendly-url-slug",
+            },
+            "faq": [
+                {"question": "Question", "answer": "Answer"}
+            ],
+            "sources": [
+                {"title": "Source title", "publisher": "Publisher", "url": "https://example.com", "note": "How it supports the article"}
+            ],
+            "statistics": [
+                {"label": "Statistic label", "value": "Statistic value", "source": "Original source", "url": "https://example.com"}
+            ],
+            "image_ideas": ["Image idea"],
+            "social_titles": ["Social network title"],
+            "linkedin_post": "Short LinkedIn post",
+            "facebook_post": "Short Facebook post",
+            "internal_links": ["Internal linking suggestion"],
+            "external_links": [
+                {"title": "External source title", "publisher": "Publisher", "url": "https://example.com", "note": "Why it is authoritative"}
             ],
             "hashtags": ["Business", "AI"],
         },
@@ -214,6 +309,28 @@ def build_generation_messages(recent_titles):
             "lead": "Bulgarian lead",
             "sections": [
                 {"title": "Bulgarian section title", "paragraphs": ["Bulgarian paragraph"]}
+            ],
+            "seo": {
+                "meta_title": "Bulgarian SEO title up to 60 characters",
+                "meta_description": "Bulgarian SEO description between 140 and 160 characters",
+                "url_slug": "bulgarian-seo-friendly-url-slug",
+            },
+            "faq": [
+                {"question": "Bulgarian question", "answer": "Bulgarian answer"}
+            ],
+            "sources": [
+                {"title": "Source title", "publisher": "Publisher", "url": "https://example.com", "note": "Bulgarian note"}
+            ],
+            "statistics": [
+                {"label": "Bulgarian statistic label", "value": "Statistic value", "source": "Original source", "url": "https://example.com"}
+            ],
+            "image_ideas": ["Bulgarian image idea"],
+            "social_titles": ["Bulgarian social network title"],
+            "linkedin_post": "Short Bulgarian LinkedIn post",
+            "facebook_post": "Short Bulgarian Facebook post",
+            "internal_links": ["Bulgarian internal linking suggestion"],
+            "external_links": [
+                {"title": "External source title", "publisher": "Publisher", "url": "https://example.com", "note": "Why it is authoritative"}
             ],
             "hashtags": ["Business", "AI"],
         },
@@ -227,8 +344,9 @@ def build_generation_messages(recent_titles):
         "recent_titles_to_avoid": recent_titles,
         "requirements": [
             "Return valid JSON only.",
-            "Write no author name, byline, signature, source, or disclaimer.",
-            "Keep the article concise: 3 sections, 1-2 paragraphs per section.",
+            "Write no author name, byline, signature, or disclaimer.",
+            "Follow content_prompt exactly for article length, structure, source requirements, SEO assets, FAQ, and supporting materials.",
+            "Do not shorten, summarize, or omit requested sections unless the content_prompt explicitly asks for a shorter format.",
             "Make the content specific, useful, and non-generic for business readers.",
             "Use English hashtags in both locales for filtering.",
             "Write image.visual_prompt in English and make it suitable for realistic image generation.",
@@ -260,7 +378,7 @@ def call_openrouter_for_article():
         "model": settings.OPENROUTER_MODEL,
         "messages": build_generation_messages(recent_titles),
         "temperature": float(getattr(settings, "AI_INSIGHTS_TEMPERATURE", 0.8)),
-        "max_tokens": int(getattr(settings, "AI_INSIGHTS_MAX_TOKENS", 1800)),
+        "max_tokens": int(getattr(settings, "AI_INSIGHTS_MAX_TOKENS", 12000)),
         "response_format": {"type": "json_object"},
     }
     response = requests.post(
