@@ -372,10 +372,10 @@ class AIInsightTopicContextTests(TestCase):
                 "hashtags": ["Business"],
             },
             "bg": {
-                "title": "Поправена статия",
-                "excerpt": "Кратко описание",
-                "lead": "Увод",
-                "sections": [{"title": "Секция", "paragraphs": ["Абзац"]}],
+                "title": "Repaired Article BG",
+                "excerpt": "Excerpt BG",
+                "lead": "Lead BG",
+                "sections": [{"title": "Section BG", "paragraphs": ["Paragraph BG"]}],
                 "hashtags": ["Business"],
             },
             "image": {
@@ -394,4 +394,27 @@ class AIInsightTopicContextTests(TestCase):
             payload = call_openrouter_for_article()
 
         self.assertEqual(payload["en"]["title"], "Repaired Article")
-        self.assertEqual(payload["bg"]["title"], "Поправена статия")
+        self.assertEqual(payload["bg"]["title"], "Repaired Article BG")
+
+    @override_settings(OPENROUTER_API_KEY="test-key")
+    def test_call_openrouter_continues_cut_off_json_before_repair(self):
+        partial_json = '{"en":{"title":"Continued Article","excerpt":"Open'
+        continuation = (
+            ' string","lead":"Lead","sections":[{"title":"Section","paragraphs":["Paragraph"]}],'
+            '"hashtags":["Business"]},'
+            '"bg":{"title":"Continued Article BG","excerpt":"Excerpt BG","lead":"Lead BG",'
+            '"sections":[{"title":"Section BG","paragraphs":["Paragraph BG"]}],"hashtags":["Business"]},'
+            '"image":{"headline":"Continued Article","visual_prompt":"Business editorial scene"}}'
+        )
+
+        with patch(
+            "content.ai_insights.requests.post",
+            side_effect=[
+                FakeOpenRouterResponse(partial_json, finish_reason="length"),
+                FakeOpenRouterResponse(continuation),
+            ],
+        ):
+            payload = call_openrouter_for_article()
+
+        self.assertEqual(payload["en"]["title"], "Continued Article")
+        self.assertEqual(payload["en"]["excerpt"], "Open string")

@@ -213,15 +213,77 @@ def repair_article_json(raw_content, decode_error):
     return extract_json(message.get("content", ""))
 
 
-def parse_or_repair_article_json(raw_content):
+def incomplete_json_error(error):
+    message = str(error)
+    return (
+        "Unterminated string" in message
+        or "Expecting value" in message
+        or "Expecting ',' delimiter" in message
+        or "Expecting property name enclosed in double quotes" in message
+    )
+
+
+def continue_article_json(messages, raw_content, decode_error, max_continuations=3):
+    combined = str(raw_content or "")
+    last_error = decode_error
+
+    for _ in range(max_continuations):
+        payload = {
+            "model": settings.OPENROUTER_MODEL,
+            "messages": [
+                *messages,
+                {"role": "assistant", "content": combined},
+                {
+                    "role": "user",
+                    "content": (
+                        "Continue the previous JSON response from the exact next character. "
+                        "Return only the missing continuation text. "
+                        "Do not repeat any previous text. "
+                        "Do not wrap the answer in markdown. "
+                        "Do not explain anything. "
+                        "Close every open string, array, and object so the combined result is valid JSON."
+                    ),
+                },
+            ],
+            "temperature": 0,
+            "max_tokens": min(8000, int(getattr(settings, "AI_INSIGHTS_MAX_TOKENS", 12000))),
+        }
+        data = post_openrouter_chat(payload, title="Hashtag Innovations AI Insight JSON Continuation")
+        message, _finish_reason = first_openrouter_message(data)
+        continuation = str(message.get("content", "") or "")
+        if not continuation.strip():
+            break
+
+        try:
+            return extract_json(continuation)
+        except json.JSONDecodeError:
+            pass
+
+        combined = f"{combined}{continuation}"
+        try:
+            return extract_json(combined)
+        except json.JSONDecodeError as error:
+            last_error = error
+
+    raise last_error
+
+
+def parse_or_complete_or_repair_article_json(messages, raw_content, finish_reason):
     try:
         return extract_json(raw_content)
     except json.JSONDecodeError as decode_error:
+        completed_content = raw_content
+        if finish_reason == "length" or incomplete_json_error(decode_error):
+            try:
+                return continue_article_json(messages, raw_content, decode_error)
+            except json.JSONDecodeError:
+                pass
+
         try:
-            return repair_article_json(raw_content, decode_error)
+            return repair_article_json(completed_content, decode_error)
         except Exception as repair_error:
             raise ValueError(
-                f"OpenRouter returned invalid JSON and repair failed: {decode_error}"
+                f"OpenRouter returned invalid JSON; continuation and repair failed: {decode_error}"
             ) from repair_error
 
 
@@ -508,7 +570,8 @@ def call_openrouter_for_article():
         raw_content = message.get("content", "")
 
         try:
-            return normalize_article_payload(parse_or_repair_article_json(raw_content))
+            data = parse_or_complete_or_repair_article_json(messages, raw_content, finish_reason)
+            return normalize_article_payload(data)
         except ValueError as error:
             last_error = error
             if attempt:
