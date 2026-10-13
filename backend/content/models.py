@@ -138,8 +138,12 @@ class ExpertSession(TimeStampedModel):
 
 
 class Article(TimeStampedModel):
-    title = models.CharField(max_length=220)
+    title = models.CharField(max_length=300)
     slug = models.SlugField(max_length=240, unique=True)
+    bot_external_id = models.UUIDField(unique=True, null=True, blank=True, editable=False)
+    bot_payload = models.JSONField(null=True, blank=True, editable=False)
+    categories = models.ManyToManyField(Category, blank=True, related_name="articles")
+    tag_names = models.JSONField(default=list, blank=True)
     author = models.ForeignKey(
         Expert,
         on_delete=models.SET_NULL,

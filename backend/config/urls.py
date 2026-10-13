@@ -16,9 +16,15 @@ from content.views import (
     site_data,
     stripe_webhook,
 )
+from content import bot_api
 
 
 urlpatterns = [
+    path("api/bot/v1/options/", bot_api.options),
+    path("api/bot/v1/articles/", bot_api.articles),
+    path("api/bot/v1/articles/<uuid:external_id>/", bot_api.article_detail),
+    path("api/bot/v1/articles/<uuid:external_id>/image/", bot_api.article_image),
+    path("api/bot/v1/articles/<uuid:external_id>/publish/", bot_api.article_publish),
     path("admin/", admin.site.urls),
     path("api/admin/login/", admin_login),
     path("api/admin/ai-insight-settings/", admin_ai_insight_settings),

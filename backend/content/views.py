@@ -353,11 +353,11 @@ def serialize_article(article, lang="en"):
 
     return {
         "id": body.get("_mock_id") or article.slug,
-        "category": "",
+        "category": next((category.name_en or category.name for category in article.categories.all()), ""),
         "title": translated["title"],
         "date": article.published_at.isoformat() if article.published_at else "",
         "displayDate": display_date,
-        "imageUrl": file_url(article.image),
+        "imageUrl": file_url(article.image) or "/images/Logo.svg",
         "excerpt": translated["excerpt"],
         "lead": translated["lead"],
         "bodySections": body.get("sections", []),
@@ -376,7 +376,7 @@ def serialize_article(article, lang="en"):
         "authorLabel": "by" if lang == "en" else "от",
         "authorExpertId": author_expert_id,
         "authorAvatarUrl": author_avatar_url,
-        "tags": [],
+        "tags": article.tag_names,
     }
 
 

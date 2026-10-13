@@ -130,6 +130,7 @@ REST_FRAMEWORK = {
 }
 
 FRONTEND_BASE_URL = os.getenv("FRONTEND_BASE_URL", "http://localhost:3000").rstrip("/")
+BOT_INTEGRATION_TOKEN = os.getenv("BOT_INTEGRATION_TOKEN", "")
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 STRIPE_CURRENCY = os.getenv("STRIPE_CURRENCY", "eur").lower()
