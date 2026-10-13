@@ -10,7 +10,7 @@ services:
       DJANGO_ALLOWED_HOSTS: "consultation.bg,www.consultation.bg,localhost,127.0.0.1,backend"
       DJANGO_CSRF_TRUSTED_ORIGINS: "https://consultation.bg,https://www.consultation.bg"
       FRONTEND_BASE_URL: "https://consultation.bg"
-      DJANGO_SQLITE_NAME: "/app/data/db.sqlite3"
+      DJANGO_SQLITE_NAME: "/app/data/dbb.sqlite3"
     volumes:
       - type: bind
         source: /home/haldaniko/websites/Hashtag-Innovations/backend/data
@@ -35,7 +35,7 @@ services:
       DJANGO_ALLOWED_HOSTS: "consultation.bg,www.consultation.bg,localhost,127.0.0.1,backend"
       DJANGO_CSRF_TRUSTED_ORIGINS: "https://consultation.bg,https://www.consultation.bg"
       FRONTEND_BASE_URL: "https://consultation.bg"
-      DJANGO_SQLITE_NAME: "/app/data/db.sqlite3"
+      DJANGO_SQLITE_NAME: "/app/data/dbb.sqlite3"
     volumes:
       - type: bind
         source: /home/haldaniko/websites/Hashtag-Innovations/backend/data
