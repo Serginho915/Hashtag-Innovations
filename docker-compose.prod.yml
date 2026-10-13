@@ -12,7 +12,11 @@ services:
       FRONTEND_BASE_URL: "https://consultation.bg"
       DJANGO_SQLITE_NAME: "/app/data/db.sqlite3"
     volumes:
-      - ./backend/data:/app/data
+      - type: bind
+        source: /home/haldaniko/websites/Hashtag-Innovations/backend/data
+        target: /app/data
+        bind:
+          create_host_path: false
       - ./backend/media:/app/media
     ports:
       - "8012:8000"
@@ -33,7 +37,11 @@ services:
       FRONTEND_BASE_URL: "https://consultation.bg"
       DJANGO_SQLITE_NAME: "/app/data/db.sqlite3"
     volumes:
-      - ./backend/data:/app/data
+      - type: bind
+        source: /home/haldaniko/websites/Hashtag-Innovations/backend/data
+        target: /app/data
+        bind:
+          create_host_path: false
       - ./backend/media:/app/media
     restart: unless-stopped
 
