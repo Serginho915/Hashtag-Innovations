@@ -87,7 +87,7 @@ const salePurchaseTypeOptions = ["consultation", "learn_material", "event_ticket
 const saleStatusOptions = ["pending_payment", "paid", "canceled"];
 const afterSalesStatusOptions = ["new", "in_progress", "waiting_customer", "resolved", "closed"];
 const afterSalesPriorityOptions = ["low", "medium", "high", "urgent"];
-const maxAdminUploadSizeMb = 5;
+const maxAdminUploadSizeMb = 15;
 const maxAdminUploadSizeBytes = maxAdminUploadSizeMb * 1024 * 1024;
 const resourceHelpText: Record<string, string> = {
   categories:
