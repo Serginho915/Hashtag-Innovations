@@ -5,10 +5,11 @@ from unittest.mock import patch
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
+from django.test.client import BOUNDARY, MULTIPART_CONTENT, encode_multipart
 from django.utils import timezone
 
 from content.ai_insights import call_openrouter_for_article, recent_article_topics
-from content.models import Article, PublishStatus
+from content.models import Article, Event, PublishStatus
 
 
 ADMIN_HEADERS = {"HTTP_X_ADMIN_API_TOKEN": "test-admin-token"}
@@ -85,6 +86,29 @@ class AdminResourceCreateTests(TestCase):
         article = Article.objects.get(slug="multipart-image-upload-article")
         self.assertTrue(article.image.name.startswith("articles/images/"))
         self.assertTrue(response.json()["image"].startswith("/media/articles/images/"))
+
+    def test_event_multipart_image_can_be_replaced(self):
+        event = Event.objects.create(
+            title="Existing Event",
+            slug="existing-event",
+            starts_at=timezone.now() + timedelta(days=1),
+            image=SimpleUploadedFile("original.png", TINY_PNG, content_type="image/png"),
+        )
+        original_image_name = event.image.name
+        replacement = SimpleUploadedFile("replacement.png", TINY_PNG, content_type="image/png")
+
+        response = self.client.patch(
+            f"/api/admin/resources/events/{event.id}/",
+            data=encode_multipart(BOUNDARY, {"image": replacement}),
+            content_type=MULTIPART_CONTENT,
+            **ADMIN_HEADERS,
+        )
+
+        self.assertEqual(response.status_code, 200, response.content)
+        event.refresh_from_db()
+        self.assertNotEqual(event.image.name, original_image_name)
+        self.assertTrue(event.image.name.startswith("events/images/replacement"))
+        self.assertEqual(response.json()["image"], event.image.url)
 
     def test_can_create_all_editable_admin_resources(self):
         category = self.assert_created(

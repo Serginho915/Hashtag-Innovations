@@ -23,6 +23,7 @@ from django.db import IntegrityError, close_old_connections, transaction
 from django.db.utils import OperationalError, ProgrammingError
 from django.db.models import Q
 from django.http import JsonResponse
+from django.http.multipartparser import MultiPartParser, MultiPartParserError
 from django.utils import timezone
 from django.utils.dateparse import parse_date, parse_datetime
 from django.utils.text import slugify
@@ -1961,8 +1962,21 @@ def stripe_webhook(request):
 def parse_payload(request):
     content_type = request.META.get("CONTENT_TYPE", "")
     if content_type.startswith("multipart/form-data"):
-        payload = {key: value for key, value in request.POST.items()}
-        payload.update({key: value for key, value in request.FILES.items()})
+        if request.method == "POST":
+            form_values, files = request.POST, request.FILES
+        else:
+            try:
+                form_values, files = MultiPartParser(
+                    request.META,
+                    request,
+                    request.upload_handlers,
+                    request.encoding,
+                ).parse()
+            except MultiPartParserError as error:
+                raise ValueError("Invalid multipart request body") from error
+
+        payload = {key: value for key, value in form_values.items()}
+        payload.update({key: value for key, value in files.items()})
         return payload
 
     try:
