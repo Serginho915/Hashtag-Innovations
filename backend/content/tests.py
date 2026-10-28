@@ -9,7 +9,7 @@ from django.test.client import BOUNDARY, MULTIPART_CONTENT, encode_multipart
 from django.utils import timezone
 
 from content.ai_insights import call_openrouter_for_article, recent_article_topics
-from content.models import Article, Event, PublishStatus
+from content.models import Article, Event, LearnMaterial, PublishStatus
 
 
 ADMIN_HEADERS = {"HTTP_X_ADMIN_API_TOKEN": "test-admin-token"}
@@ -18,6 +18,7 @@ TINY_PNG = (
     b"\x08\x04\x00\x00\x00\xb5\x1c\x0c\x02\x00\x00\x00\x0bIDATx\xdac\xfc"
     b"\xff\x1f\x00\x03\x03\x02\x00\xef\xbf\xa7\xdb\x00\x00\x00\x00IEND\xaeB`\x82"
 )
+TINY_PDF = b"%PDF-1.4\n1 0 obj<</Type/Catalog>>endobj\n%%EOF\n"
 
 
 class FakeOpenRouterResponse:
@@ -87,6 +88,18 @@ class AdminResourceCreateTests(TestCase):
         self.assertTrue(article.image.name.startswith("articles/images/"))
         self.assertTrue(response.json()["image"].startswith("/media/articles/images/"))
 
+    def test_article_inline_image_upload(self):
+        response = self.client.post(
+            "/api/admin/article-images/",
+            data={
+                "image": SimpleUploadedFile("inline.png", TINY_PNG, content_type="image/png"),
+            },
+            **ADMIN_HEADERS,
+        )
+
+        self.assertEqual(response.status_code, 201, response.content)
+        self.assertTrue(response.json()["url"].startswith("/media/articles/images/inline-"))
+
     def test_event_multipart_image_can_be_replaced(self):
         event = Event.objects.create(
             title="Existing Event",
@@ -109,6 +122,36 @@ class AdminResourceCreateTests(TestCase):
         self.assertNotEqual(event.image.name, original_image_name)
         self.assertTrue(event.image.name.startswith("events/images/replacement"))
         self.assertEqual(response.json()["image"], event.image.url)
+
+    def test_learn_material_can_be_created_with_cover_and_pdf_files(self):
+        response = self.client.post(
+            "/api/admin/resources/learn_materials/",
+            data={
+                "slug": "multipart-learn-material",
+                "title_en": "Multipart Learn Material",
+                "title_bg": "Multipart Learn Material BG",
+                "author": "",
+                "cover_image": SimpleUploadedFile("cover.png", TINY_PNG, content_type="image/png"),
+                "pdf_file": SimpleUploadedFile("material.pdf", TINY_PDF, content_type="application/pdf"),
+                "preview_pdf_file": SimpleUploadedFile("preview.pdf", TINY_PDF, content_type="application/pdf"),
+                "excerpt_en": "Excerpt",
+                "excerpt_bg": "Excerpt BG",
+                "category": "",
+                "tags": '["admin"]',
+                "price": "49",
+                "badge": "PDF",
+                "is_trending": False,
+                "status": "draft",
+                "published_at": "2026-07-23T10:00",
+            },
+            **ADMIN_HEADERS,
+        )
+
+        self.assertEqual(response.status_code, 201, response.content)
+        material = LearnMaterial.objects.get(slug="multipart-learn-material")
+        self.assertTrue(material.cover_image.name.startswith("learn_materials/covers/"))
+        self.assertTrue(material.pdf_file.name.startswith("learn_materials/pdfs/"))
+        self.assertTrue(material.preview_pdf_file.name.startswith("learn_materials/previews/"))
 
     def test_can_create_all_editable_admin_resources(self):
         category = self.assert_created(
@@ -349,6 +392,34 @@ class AdminResourceCreateTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertIn("File path must be an uploaded file", response.json()["error"])
+
+
+class UpcomingEventsTests(TestCase):
+    def test_site_data_excludes_past_events_from_upcoming_events(self):
+        Event.objects.create(
+            title="Past Event",
+            slug="past-event",
+            starts_at=timezone.now() - timedelta(days=1),
+            status=PublishStatus.PUBLISHED,
+        )
+        Event.objects.create(
+            title="Future Event",
+            slug="future-event",
+            starts_at=timezone.now() + timedelta(days=1),
+            status=PublishStatus.PUBLISHED,
+        )
+
+        response = self.client.get("/api/site-data/?lang=en")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            [event["eventId"] for event in response.json()["upcomingEvents"]],
+            ["future-event"],
+        )
+        self.assertEqual(
+            {event["id"] for event in response.json()["communityEvents"]},
+            {"past-event", "future-event"},
+        )
 
 
 class AIInsightTopicContextTests(TestCase):

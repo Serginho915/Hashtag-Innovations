@@ -60,6 +60,12 @@ const socialIcons = {
       <path fillRule="evenodd" clipRule="evenodd" d="M14 26.8346C12.5724 26.8346 11.7826 26.6815 10.5 26.2513L8.04346 27.4796C6.49202 28.2553 4.66663 27.1271 4.66663 25.3925V22.7513C2.15427 20.4086 1.16663 17.7075 1.16663 14.0013C1.16663 6.91365 6.91231 1.16797 14 1.16797C21.0876 1.16797 26.8333 6.91365 26.8333 14.0013C26.8333 21.0889 21.0876 26.8346 14 26.8346ZM6.99996 21.7367L6.2579 21.0447C4.30597 19.2247 3.49996 17.1899 3.49996 14.0013C3.49996 8.20232 8.20097 3.5013 14 3.5013C19.799 3.5013 24.5 8.20232 24.5 14.0013C24.5 19.8003 19.799 24.5013 14 24.5013C12.85 24.5013 12.3106 24.3975 11.2419 24.0391L10.3232 23.731L6.99996 25.3925V21.7367Z" fill="#0F0F0F" />
     </svg>
   ),
+  email: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2" y="4" width="20" height="16" rx="2.5" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M3 7L10.95 12.3C11.59 12.73 12.41 12.73 13.05 12.3L21 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
 };
 
 export const InsightDetailsPage: React.FC<InsightDetailsPageProps> = ({ insight, relatedInsights, lang }) => {
@@ -100,31 +106,43 @@ export const InsightDetailsPage: React.FC<InsightDetailsPageProps> = ({ insight,
   const shareTitle = encodeURIComponent(insight.title);
   const shareUrl = encodeURIComponent(absoluteShareUrl);
   const shareText = encodeURIComponent(`${insight.title} ${absoluteShareUrl}`);
+  const emailBody = encodeURIComponent(`${insight.title}\n\n${absoluteShareUrl}`);
   const shareLinks = [
     {
       label: 'Threads',
       href: `https://www.threads.net/intent/post?text=${shareText}`,
       icon: socialIcons.threads,
+      openInNewTab: true,
     },
     {
       label: 'X',
       href: `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}`,
       icon: socialIcons.x,
+      openInNewTab: true,
     },
     {
       label: 'Facebook',
       href: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`,
       icon: socialIcons.facebook,
+      openInNewTab: true,
     },
     {
       label: 'Telegram',
       href: `https://t.me/share/url?url=${shareUrl}&text=${shareTitle}`,
       icon: socialIcons.telegram,
+      openInNewTab: true,
     },
     {
       label: 'WhatsApp',
       href: `https://wa.me/?text=${shareText}`,
       icon: socialIcons.whatsapp,
+      openInNewTab: true,
+    },
+    {
+      label: 'Gmail',
+      href: `https://mail.google.com/mail/?view=cm&fs=1&su=${shareTitle}&body=${emailBody}`,
+      icon: socialIcons.email,
+      openInNewTab: true,
     },
   ];
   const bodySections = insight.bodySections?.length
@@ -343,7 +361,14 @@ export const InsightDetailsPage: React.FC<InsightDetailsPageProps> = ({ insight,
             <h2>{t.share}</h2>
             <div className={styles.socialLinks}>
               {shareLinks.map((link) => (
-                <a key={link.label} href={link.href} aria-label={link.label} target="_blank" rel="noreferrer">
+                <a
+                  key={link.label}
+                  href={link.href}
+                  aria-label={link.label}
+                  className={link.label === 'Gmail' ? styles.emailShareLink : undefined}
+                  target={link.openInNewTab ? '_blank' : undefined}
+                  rel={link.openInNewTab ? 'noreferrer' : undefined}
+                >
                   {link.icon}
                 </a>
               ))}
@@ -362,6 +387,7 @@ export const InsightDetailsPage: React.FC<InsightDetailsPageProps> = ({ insight,
                     title={article.title}
                     excerpt={article.excerpt || ''}
                     authorLabel={article.authorName ? article.authorLabel || (lang === 'bg' ? 'от' : 'by') : ''}
+                    authorName={article.authorName}
                     authorHref={article.authorExpertId ? `/${lang}/experts/${article.authorExpertId}` : undefined}
                     authorAvatarUrl={article.authorAvatarUrl}
                     readText={t.read}

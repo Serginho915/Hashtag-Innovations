@@ -8,6 +8,7 @@ interface ArticleTeaserCardProps {
   title: string;
   excerpt: string;
   authorLabel?: string;
+  authorName?: string;
   readText: string;
   readHref?: string;
   authorHref?: string;
@@ -20,6 +21,7 @@ export const ArticleTeaserCard: React.FC<ArticleTeaserCardProps> = ({
   title,
   excerpt,
   authorLabel,
+  authorName,
   readText,
   readHref,
   authorHref,
@@ -29,8 +31,8 @@ export const ArticleTeaserCard: React.FC<ArticleTeaserCardProps> = ({
 }) => {
   const Component = as;
   const classNames = [styles.card, className].filter(Boolean).join(' ');
-  const hasAuthor = Boolean(authorLabel || authorHref || authorAvatarUrl);
-  const authorAlt = authorLabel || title;
+  const hasAuthor = Boolean(authorLabel || authorName || authorHref || authorAvatarUrl);
+  const authorAlt = authorName || authorLabel || title;
   const avatar = authorAvatarUrl ? (
     <div className={styles.authorAvatarImageWrapper}>
       <Image src={authorAvatarUrl} alt={authorAlt} fill className={styles.authorAvatarImage} />
@@ -49,11 +51,15 @@ export const ArticleTeaserCard: React.FC<ArticleTeaserCardProps> = ({
             <div className={styles.authorGroup}>
               <span className={styles.authorLabel}>{authorLabel}</span>
               {authorHref ? (
-                <Link href={authorHref} aria-label={authorLabel || title} className={styles.authorLink}>
+                <Link href={authorHref} aria-label={authorName || authorLabel || title} className={styles.authorLink}>
                   {avatar}
+                  {authorName && <span className={styles.authorName}>{authorName}</span>}
                 </Link>
               ) : (
-                avatar
+                <>
+                  {avatar}
+                  {authorName && <span className={styles.authorName}>{authorName}</span>}
+                </>
               )}
             </div>
           )}

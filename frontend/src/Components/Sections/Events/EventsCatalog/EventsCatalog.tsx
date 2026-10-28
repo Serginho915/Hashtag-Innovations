@@ -14,6 +14,7 @@ interface EventsCatalogProps {
 }
 
 export const EventsCatalog: React.FC<EventsCatalogProps> = ({ events, lang }) => {
+  const [currentTimestamp] = useState(() => Date.now());
   const [activeTag, setActiveTag] = useState('all');
   const [activeLocation, setActiveLocation] = useState<string | null>(null);
   const [minPrice, setMinPrice] = useState('');
@@ -53,7 +54,9 @@ export const EventsCatalog: React.FC<EventsCatalogProps> = ({ events, lang }) =>
 
   const horizontalEvents = filteredEvents.slice(0, 2);
   const verticalEvents = filteredEvents.slice(2, 5);
-  const widgetEvents = filteredEvents;
+  const widgetEvents = filteredEvents
+    .filter((event) => new Date(event.date).getTime() >= currentTimestamp)
+    .sort((first, second) => new Date(first.date).getTime() - new Date(second.date).getTime());
 
   return (
     <div className={styles.catalogContainer}>

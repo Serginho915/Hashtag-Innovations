@@ -104,6 +104,19 @@
   gap: 8px;
 }
 
+.authorName {
+  min-width: 0;
+  max-width: 150px;
+  overflow: hidden;
+  color: #000;
+  font-size: 13px;
+  font-family: $font-manrope;
+  font-weight: 700;
+  line-height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .authorAvatarImageWrapper {
   width: 32px;
   height: 32px;

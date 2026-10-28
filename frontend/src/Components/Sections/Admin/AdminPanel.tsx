@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Image from "@tiptap/extension-image";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import styles from "./AdminPanel.module.scss";
 
@@ -87,8 +88,12 @@ const salePurchaseTypeOptions = ["consultation", "learn_material", "event_ticket
 const saleStatusOptions = ["pending_payment", "paid", "canceled"];
 const afterSalesStatusOptions = ["new", "in_progress", "waiting_customer", "resolved", "closed"];
 const afterSalesPriorityOptions = ["low", "medium", "high", "urgent"];
-const maxAdminUploadSizeMb = 15;
-const maxAdminUploadSizeBytes = maxAdminUploadSizeMb * 1024 * 1024;
+const maxAdminImageUploadSizeMb = 15;
+const maxAdminDocumentUploadSizeMb = 50;
+const uploadLimitMb = (field: AdminField) =>
+  field.accept?.includes("application/pdf")
+    ? maxAdminDocumentUploadSizeMb
+    : maxAdminImageUploadSizeMb;
 const resourceHelpText: Record<string, string> = {
   categories:
     "Categories group content by topic and type, so articles, events, learning materials and projects can be organized and filtered.",
@@ -837,6 +842,7 @@ interface ArticleSectionsEditorProps {
   label: string;
   value: FieldValue | undefined;
   onChange: (value: string) => void;
+  allowImages?: boolean;
 }
 
 const escapeHtml = (value: string) => value
@@ -891,10 +897,12 @@ const articleSectionsToHtml = (value: FieldValue | undefined) => {
   }).join("");
 };
 
-const ArticleSectionsEditor = ({ label, value, onChange }: ArticleSectionsEditorProps) => {
+const ArticleSectionsEditor = ({ label, value, onChange, allowImages = false }: ArticleSectionsEditorProps) => {
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [imageUploadError, setImageUploadError] = useState("");
   const htmlValue = useMemo(() => articleSectionsToHtml(value), [value]);
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [StarterKit, Image],
     content: htmlValue,
     immediatelyRender: false,
     editorProps: {
@@ -906,6 +914,53 @@ const ArticleSectionsEditor = ({ label, value, onChange }: ArticleSectionsEditor
       onChange(activeEditor.getHTML());
     },
   });
+
+  const uploadImage = async (file: File | undefined) => {
+    if (!file) {
+      return;
+    }
+
+    if (file.size > maxAdminImageUploadSizeMb * 1024 * 1024) {
+      setImageUploadError(`"${file.name}" is too large. Upload an image up to ${maxAdminImageUploadSizeMb} MB.`);
+      return;
+    }
+
+    setIsUploadingImage(true);
+    setImageUploadError("");
+    const formData = new FormData();
+    formData.append("image", file, file.name);
+    const response = await fetch("/admin/api/article-images", {
+      method: "POST",
+      body: formData,
+    }).catch(() => null);
+
+    if (!response) {
+      setImageUploadError("Could not connect to the image upload API.");
+      setIsUploadingImage(false);
+      return;
+    }
+
+    if (response.status === 401) {
+      window.location.assign("/admin/login");
+      return;
+    }
+
+    if (!response.ok) {
+      setImageUploadError(await readApiError(response));
+      setIsUploadingImage(false);
+      return;
+    }
+
+    const payload = await response.json().catch(() => null) as { url?: string } | null;
+    if (!payload?.url) {
+      setImageUploadError("The image upload API returned an invalid response.");
+      setIsUploadingImage(false);
+      return;
+    }
+
+    editor?.chain().focus().setImage({ src: payload.url, alt: file.name }).run();
+    setIsUploadingImage(false);
+  };
 
   useEffect(() => {
     if (!editor || editor.getHTML() === htmlValue) {
@@ -926,7 +981,22 @@ const ArticleSectionsEditor = ({ label, value, onChange }: ArticleSectionsEditor
           <button type="button" onClick={() => editor?.chain().focus().toggleBulletList().run()} className={editor?.isActive("bulletList") ? styles.activeToolButton : ""}>List</button>
           <button type="button" onClick={() => editor?.chain().focus().toggleOrderedList().run()} className={editor?.isActive("orderedList") ? styles.activeToolButton : ""}>1.</button>
           <button type="button" onClick={() => editor?.chain().focus().toggleBlockquote().run()} className={editor?.isActive("blockquote") ? styles.activeToolButton : ""}>Quote</button>
+          {allowImages && (
+            <label className={styles.imageUploadButton}>
+              <span>{isUploadingImage ? "Uploading..." : "Image"}</span>
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/gif,image/webp"
+                disabled={isUploadingImage}
+                onChange={(event) => {
+                  void uploadImage(event.target.files?.[0]);
+                  event.target.value = "";
+                }}
+              />
+            </label>
+          )}
         </div>
+        {imageUploadError && <p className={styles.inlineEditorError} role="alert">{imageUploadError}</p>}
         <EditorContent editor={editor} />
       </div>
     </div>
@@ -1669,6 +1739,7 @@ export const AdminPanel = () => {
           label={field.label}
           value={editingRecord[field.key]}
           onChange={(value) => updateEditingValue(field, value)}
+          allowImages={activeResource.key === "articles"}
         />
       );
     }
@@ -1847,9 +1918,12 @@ export const AdminPanel = () => {
                     const file = event.target.files?.[0];
 
                     if (file) {
-                      if (file.size > maxAdminUploadSizeBytes) {
+                      const maxUploadSizeMb = uploadLimitMb(field);
+                      const maxUploadSizeBytes = maxUploadSizeMb * 1024 * 1024;
+
+                      if (file.size > maxUploadSizeBytes) {
                         event.target.value = "";
-                        setMutationError(`"${file.name}" is too large. Upload a file up to ${maxAdminUploadSizeMb} MB.`);
+                        setMutationError(`"${file.name}" is too large. Upload a file up to ${maxUploadSizeMb} MB.`);
                         return;
                       }
 

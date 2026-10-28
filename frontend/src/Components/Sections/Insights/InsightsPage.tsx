@@ -51,16 +51,26 @@ const articleMatchesCategory = (article: NewsItem, category: CategoryId) => {
 export const InsightsPage: React.FC<InsightsPageProps> = ({ insights, relatedEvents, lang }) => {
   const t = translations[lang as keyof typeof translations] || translations.en;
   const [activeCategory, setActiveCategory] = useState<CategoryId>('all');
+  const [visibleGridCount, setVisibleGridCount] = useState(3);
   const filteredInsights = useMemo(
     () => insights.filter((article) => articleMatchesCategory(article, activeCategory)),
     [activeCategory, insights]
   );
   const hasFilteredInsights = filteredInsights.length > 0;
   const [featured, side, ...rest] = filteredInsights;
-  const gridArticles = rest.slice(0, 3);
+  const gridArticles = rest.slice(0, visibleGridCount);
+  const initialGridArticles = gridArticles.slice(0, 3);
+  const revealedArticleSections = Array.from(
+    { length: Math.ceil(Math.max(gridArticles.length - 3, 0) / 3) },
+    (_, sectionIndex) => gridArticles.slice(3 + sectionIndex * 3, 6 + sectionIndex * 3),
+  );
   const hasMoreArticles = rest.length > gridArticles.length;
   const popularArticles = insights.slice(0, 4);
   const newsletterId = 'insights-newsletter-email';
+
+  const showMoreArticles = () => {
+    setVisibleGridCount(Math.min(visibleGridCount + 3, rest.length));
+  };
 
   return (
     <section className={styles.insightsPage}>
@@ -85,7 +95,10 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ insights, relatedEve
                   <button
                     className={`${styles.categoryButton} ${activeCategory === categoryId ? styles.activeCategory : ''}`}
                     type="button"
-                    onClick={() => setActiveCategory(categoryId)}
+                    onClick={() => {
+                      setActiveCategory(categoryId);
+                      setVisibleGridCount(3);
+                    }}
                     aria-pressed={activeCategory === categoryId}
                   >
                     {activeCategory === categoryId && <span className={styles.categoryDot} aria-hidden="true" />}
@@ -109,14 +122,29 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ insights, relatedEve
             <section className={styles.middleRow}>
               <div className={styles.articlesColumn}>
                 <ul className={styles.gridArticles}>
-                  {gridArticles.map((article) => (
+                  {initialGridArticles.map((article) => (
                     <li key={article.id}>
                       <InsightCard article={article} lang={lang} />
                     </li>
                   ))}
+                  {revealedArticleSections.map((section) => (
+                    <li key={section[0]?.id} className={styles.revealedSection}>
+                      <ul className={styles.revealedGrid}>
+                        {section.map((article) => (
+                          <li key={article.id}>
+                            <InsightCard article={article} lang={lang} />
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  ))}
                 </ul>
                 {hasMoreArticles && (
-                  <button className={styles.showMoreButton} type="button">
+                  <button
+                    className={styles.showMoreButton}
+                    type="button"
+                    onClick={showMoreArticles}
+                  >
                     <span>{t.showMore}</span>
                     <span className={styles.chevron} aria-hidden="true" />
                   </button>
@@ -164,6 +192,7 @@ export const InsightsPage: React.FC<InsightsPageProps> = ({ insights, relatedEve
                 title={article.title}
                 excerpt={article.excerpt || ''}
                 authorLabel={article.authorName ? article.authorLabel || 'by' : ''}
+                authorName={article.authorName}
                 authorHref={article.authorExpertId ? `/${lang}/experts/${article.authorExpertId}` : undefined}
                 authorAvatarUrl={article.authorAvatarUrl}
                 readText={t.read}

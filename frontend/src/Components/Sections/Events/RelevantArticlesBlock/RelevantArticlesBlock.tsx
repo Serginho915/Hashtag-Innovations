@@ -34,6 +34,7 @@ export const RelevantArticlesBlock: React.FC<RelevantArticlesBlockProps> = ({
             title={article.title}
             excerpt={article.excerpt || ''}
             authorLabel={article.authorLabel || 'by'}
+            authorName={article.authorName}
             authorHref={article.authorExpertId ? `/${lang}/experts/${article.authorExpertId}` : undefined}
             authorAvatarUrl={article.authorAvatarUrl}
             readText={readText}

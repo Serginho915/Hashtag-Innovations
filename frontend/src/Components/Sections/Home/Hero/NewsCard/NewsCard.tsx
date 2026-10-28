@@ -7,12 +7,13 @@ interface NewsCardProps {
   title: string;
   excerpt: string;
   authorLabel: string;
+  authorName?: string;
   authorAvatarUrl?: string;
   authorExpertId?: string;
   lang: string;
 }
 
-export const NewsCard = ({ id, title, excerpt, authorLabel, authorAvatarUrl, authorExpertId, lang }: NewsCardProps) => {
+export const NewsCard = ({ id, title, excerpt, authorLabel, authorName, authorAvatarUrl, authorExpertId, lang }: NewsCardProps) => {
   const t = translations[lang] || translations.en;
   const articleUrl = `/${lang}/insights/${id}`;
 
@@ -22,6 +23,7 @@ export const NewsCard = ({ id, title, excerpt, authorLabel, authorAvatarUrl, aut
       title={title}
       excerpt={excerpt}
       authorLabel={authorLabel}
+      authorName={authorName}
       authorAvatarUrl={authorAvatarUrl}
       authorHref={authorExpertId ? `/${lang}/experts/${authorExpertId}` : undefined}
       readText={t.read}

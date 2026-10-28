@@ -283,6 +283,14 @@
     line-height: 28px;
   }
 
+  img {
+    width: min(690px, 100%);
+    height: auto;
+    display: block;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
   p,
   a {
     width: min(690px, 100%);
@@ -417,9 +425,12 @@
 }
 
 .socialLinks {
+  width: 100%;
+  max-width: 232px;
   display: flex;
   align-items: center;
-  gap: 23px;
+  justify-content: space-between;
+  gap: 12px;
 
   a {
     width: 28px;
@@ -442,6 +453,11 @@
       flex: 0 0 auto;
     }
   }
+}
+
+.emailShareLink svg {
+  transform: translateY(2px) scale(1.08);
+  transform-origin: center;
 }
 
 .relatedArticles {

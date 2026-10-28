@@ -135,7 +135,7 @@
   }
 
   .metaLeft {
-    gap: 60px;
+    gap: 24px;
     flex-wrap: nowrap;
   }
 
@@ -148,7 +148,7 @@
     }
 
     .metaLeft {
-      gap: 50px;
+      gap: 20px;
     }
   }
 
@@ -280,13 +280,18 @@
 }
 
 .metaLeft {
+  flex: 1 1 0;
+  width: 0;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   gap: 24px;
   min-width: 0;
+  overflow: hidden;
 
   @include mobile {
+    flex-basis: 100%;
+    width: 100%;
     gap: 12px;
     flex-wrap: wrap;
   }
@@ -297,6 +302,16 @@
   justify-content: flex-start;
   align-items: center;
   gap: 8px;
+  min-width: 0;
+
+  &:first-child {
+    flex: 0 0 auto;
+  }
+
+  &:last-child {
+    flex: 1 1 0;
+    overflow: hidden;
+  }
 }
 
 .metaIcon {
@@ -330,8 +345,53 @@
   }
 }
 
+.locationViewport {
+  flex: 1 1 0;
+  width: 0;
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.locationViewport.isScrolling {
+  mask-image: linear-gradient(to right, transparent 0, black 12px, black calc(100% - 12px), transparent 100%);
+}
+
+.locationTrack {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.locationValue {
+  flex: 0 0 auto;
+  padding-right: 40px;
+}
+
+.isScrolling .locationTrack {
+  animation: scrollLocation 12s linear infinite;
+}
+
+.isScrolling:hover .locationTrack {
+  animation-play-state: paused;
+}
+
+@keyframes scrollLocation {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .isScrolling .locationTrack {
+    animation: none;
+  }
+}
+
 /* ===== Price ===== */
 .priceContainer {
+  flex: 0 0 auto;
   padding: 4px 8px;
   background: rgba(192, 192, 210, 0.40);
   border-radius: 9999px;

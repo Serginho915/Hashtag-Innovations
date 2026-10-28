@@ -281,6 +281,58 @@
   }
 }
 
+.revealedSection {
+  grid-column: 1 / -1;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: 0fr;
+  list-style: none;
+  will-change: grid-template-rows, opacity;
+  animation: revealSection 760ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.revealedGrid {
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 42px;
+  overflow: hidden;
+  list-style: none;
+
+  @include laptop {
+    gap: 24px;
+  }
+
+  @include laptop-sm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+@keyframes revealSection {
+  from {
+    opacity: 0;
+    grid-template-rows: 0fr;
+  }
+
+  to {
+    opacity: 1;
+    grid-template-rows: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .revealedSection {
+    animation: none;
+    grid-template-rows: 1fr;
+  }
+}
+
 .showMoreButton {
   width: min(903px, 100%);
   padding: 16px 10px;

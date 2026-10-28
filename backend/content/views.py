@@ -16,6 +16,7 @@ import stripe
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
 from django.core.validators import validate_email
@@ -2630,6 +2631,33 @@ def admin_resources(request):
 
 
 @csrf_exempt
+@require_POST
+def admin_article_image_upload(request):
+    unauthorized = require_admin_api(request)
+    if unauthorized:
+        return unauthorized
+
+    image = request.FILES.get("image")
+    if not image:
+        return admin_error("Choose an image to upload.")
+
+    if image.size > 15 * 1024 * 1024:
+        return admin_error("Image must be 15 MB or smaller.")
+
+    extension = Path(image.name).suffix.lower()
+    if extension not in {".jpg", ".jpeg", ".png", ".gif", ".webp"}:
+        return admin_error("Use a JPG, PNG, GIF or WebP image.")
+
+    safe_stem = slugify(Path(image.name).stem, allow_unicode=True)[:80] or "article-image"
+    saved_name = default_storage.save(
+        f"articles/images/{safe_stem}-{uuid.uuid4().hex[:10]}{extension}",
+        image,
+    )
+    media_url = getattr(settings, "MEDIA_URL", "/media/")
+    return JsonResponse({"url": f"{media_url}{quote(saved_name, safe='/')}"}, status=201)
+
+
+@csrf_exempt
 @require_http_methods(["GET", "PATCH"])
 def admin_ai_insight_settings(request):
     unauthorized = require_admin_api(request)
@@ -2746,7 +2774,7 @@ def site_data(request):
     events = [serialize_event(event, lang) for event in events_queryset]
     upcoming_events = [
         serialize_upcoming_event(event, lang)
-        for event in events_queryset
+        for event in events_queryset.filter(starts_at__gte=timezone.now())
     ]
     textbooks = [
         serialize_material(material, lang)

@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './CommunityEventCard.module.scss';
 import { DiscoverButton } from '../../../../Common/Buttons/DiscoverButton/DiscoverButton.tsx';
 import { CommunitySpeaker } from '../../../../../Types/community.ts';
@@ -25,6 +27,45 @@ interface CommunityEventCardProps {
   useLocalizedContent?: boolean;
   showPrice?: boolean;
 }
+
+const AutoScrollingMetaText = ({ text }: { text: string }) => {
+  const viewportRef = useRef<HTMLSpanElement>(null);
+  const valueRef = useRef<HTMLSpanElement>(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    const value = valueRef.current;
+
+    if (!viewport || !value) return;
+
+    const updateOverflow = () => {
+      setIsOverflowing(value.scrollWidth > viewport.clientWidth);
+    };
+
+    updateOverflow();
+
+    const resizeObserver = new ResizeObserver(updateOverflow);
+    resizeObserver.observe(viewport);
+    resizeObserver.observe(value);
+
+    return () => resizeObserver.disconnect();
+  }, [text]);
+
+  return (
+    <span
+      ref={viewportRef}
+      className={`${styles.metaText} ${styles.locationViewport} ${isOverflowing ? styles.isScrolling : ''}`}
+      title={text}
+      aria-label={text}
+    >
+      <span className={styles.locationTrack} aria-hidden="true">
+        <span ref={valueRef} className={styles.locationValue}>{text}</span>
+        {isOverflowing && <span className={styles.locationValue}>{text}</span>}
+      </span>
+    </span>
+  );
+};
 
 export const CommunityEventCard: React.FC<CommunityEventCardProps> = ({
   eventId,
@@ -100,7 +141,7 @@ export const CommunityEventCard: React.FC<CommunityEventCardProps> = ({
                     <circle cx="8" cy="6" r="2" fill="white"/>
                   </svg>
                 </div>
-                <span className={styles.metaText}>{displayLoc}</span>
+                <AutoScrollingMetaText text={displayLoc} />
               </div>
             </div>
             
