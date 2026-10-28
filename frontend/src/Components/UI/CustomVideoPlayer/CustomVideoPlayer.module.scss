@@ -36,6 +36,16 @@
   }
 }
 
+.bigPlayButton[aria-disabled="true"],
+.controlButton[aria-disabled="true"] {
+  cursor: default;
+}
+
+.bigPlayButton[aria-disabled="true"]:hover {
+  transform: none;
+  background: rgba(0, 0, 0, 0.6);
+}
+
 .controlsBar {
   position: absolute;
   bottom: 0;

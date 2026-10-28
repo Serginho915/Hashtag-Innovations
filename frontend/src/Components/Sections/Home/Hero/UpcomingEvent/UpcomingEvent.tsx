@@ -25,16 +25,13 @@ export const UpcomingEvent = ({ lang, events }: UpcomingEventProps) => {
   futureEvents.sort((a: UpcomingEventData, b: UpcomingEventData) => new Date(a.dateIso).getTime() - new Date(b.dateIso).getTime());
 
   const nearestEvent = futureEvents[0];
-
-  if (!nearestEvent) {
-    return null;
-  }
-
-  const eventHref = nearestEvent.eventHref || `/${lang}/events/${nearestEvent.eventId || nearestEvent.id}`;
-  const dateObj = new Date(nearestEvent.dateIso);
+  const eventHref = nearestEvent
+    ? nearestEvent.eventHref || `/${lang}/events/${nearestEvent.eventId || nearestEvent.id}`
+    : '';
+  const dateObj = nearestEvent ? new Date(nearestEvent.dateIso) : null;
   const options: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'long' };
   const locale = lang === 'bg' ? 'bg-BG' : 'en-GB';
-  const formattedDate = dateObj.toLocaleDateString(locale, options);
+  const formattedDate = dateObj?.toLocaleDateString(locale, options) || '';
 
   return (
     <div className={styles.upcomingEvent}>
@@ -48,6 +45,7 @@ export const UpcomingEvent = ({ lang, events }: UpcomingEventProps) => {
           <CustomVideoPlayer 
             src="https://www.w3schools.com/html/mov_bbb.mp4"
             poster="https://placehold.co/346x169/000000/FFFFFF?text=Innovations+Video"
+            disabled
           />
         </div>
       </div>
@@ -59,45 +57,50 @@ export const UpcomingEvent = ({ lang, events }: UpcomingEventProps) => {
       </div>
 
       {/* Event Card */}
-      <div className={styles.eventCard}>
+      <div className={`${styles.eventCard} ${!nearestEvent ? styles.eventCardEmpty : ''}`}>
         <div className={styles.eventCardInner}>
-          <div className={styles.eventCardContent}>
-            <div className={styles.eventTitle}>
-              {nearestEvent.title}
-            </div>
+          {nearestEvent ? (
+            <div className={styles.eventCardContent}>
+              <div className={styles.eventTitle}>
+                {nearestEvent.title}
+              </div>
 
-            <div className={styles.eventSpeakerRow}>
-              <div className={styles.eventSpeakerLabel}>{t.speakerLabel}</div>
-              <AuthorLink name={nearestEvent.speakerName} expertId={nearestEvent.speakerExpertId} lang={lang} />
-            </div>
+              <div className={styles.eventSpeakerRow}>
+                <div className={styles.eventSpeakerLabel}>{t.speakerLabel}</div>
+                <AuthorLink name={nearestEvent.speakerName} expertId={nearestEvent.speakerExpertId} lang={lang} />
+              </div>
 
-            {/* Discover More Button */}
-            <DiscoverButton text={t.discoverMore} href={eventHref} />
+              <DiscoverButton text={t.discoverMore} href={eventHref} />
 
-            <div className={styles.eventDescription}>
-              <div className={styles.eventDescriptionInner}>
-                {nearestEvent.description}
+              <div className={styles.eventDescription}>
+                <div className={styles.eventDescriptionInner}>
+                  {nearestEvent.description}
+                </div>
+              </div>
+
+              <div className={styles.eventMetaRow}>
+                <div className={styles.eventMetaItem}>
+                  <svg className={styles.eventMetaIcon} viewBox="0 0 16 16" fill="none">
+                    <rect x="2" y="1.33" width="12" height="13.33" rx="1" stroke="#C0C0D2" strokeWidth="1.5" fill="none" />
+                    <line x1="2" y1="5.33" x2="14" y2="5.33" stroke="#C0C0D2" strokeWidth="1.5" />
+                  </svg>
+                  <div className={styles.eventMetaText}>{formattedDate}</div>
+                </div>
+                <div className={styles.eventMetaItem}>
+                  <svg className={styles.eventMetaIcon} viewBox="0 0 16 16" fill="none">
+                    <path d="M8 1.33C5.05 1.33 2.67 3.72 2.67 6.67C2.67 10.67 8 14.67 8 14.67C8 14.67 13.33 10.67 13.33 6.67C13.33 3.72 10.95 1.33 8 1.33Z" stroke="#C0C0D2" strokeWidth="1.5" fill="none" />
+                    <circle cx="8" cy="6.67" r="2" stroke="#C0C0D2" strokeWidth="1.5" fill="none" />
+                  </svg>
+                  <div className={styles.eventMetaText}>{nearestEvent.location}</div>
+                </div>
               </div>
             </div>
-
-            {/* Date + Location */}
-            <div className={styles.eventMetaRow}>
-              <div className={styles.eventMetaItem}>
-                <svg className={styles.eventMetaIcon} viewBox="0 0 16 16" fill="none">
-                  <rect x="2" y="1.33" width="12" height="13.33" rx="1" stroke="#C0C0D2" strokeWidth="1.5" fill="none" />
-                  <line x1="2" y1="5.33" x2="14" y2="5.33" stroke="#C0C0D2" strokeWidth="1.5" />
-                </svg>
-                <div className={styles.eventMetaText}>{formattedDate}</div>
-              </div>
-              <div className={styles.eventMetaItem}>
-                <svg className={styles.eventMetaIcon} viewBox="0 0 16 16" fill="none">
-                  <path d="M8 1.33C5.05 1.33 2.67 3.72 2.67 6.67C2.67 10.67 8 14.67 8 14.67C8 14.67 13.33 10.67 13.33 6.67C13.33 3.72 10.95 1.33 8 1.33Z" stroke="#C0C0D2" strokeWidth="1.5" fill="none" />
-                  <circle cx="8" cy="6.67" r="2" stroke="#C0C0D2" strokeWidth="1.5" fill="none" />
-                </svg>
-                <div className={styles.eventMetaText}>{nearestEvent.location}</div>
-              </div>
+          ) : (
+            <div className={styles.emptyEventCard} role="status">
+              <div className={styles.emptyEventTitle}>{t.emptyTitle}</div>
+              <p>{t.emptyDescription}</p>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
